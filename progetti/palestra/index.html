@@ -1,1 +1,1411 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX GYM — Forgia la tua Leggenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --pink: #e71dbd;
+    --pink-dim: rgba(231,29,189,0.18);
+    --dark: #080808;
+    --dark2: #0f0f0f;
+    --dark3: #161616;
+    --dark4: #1e1e1e;
+    --white: #ffffff;
+    --grey: #aaaaaa;
+    --light: #f0f0f0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 72px;
+    transition: background .4s, backdrop-filter .4s, box-shadow .4s;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(231,29,189,0.25);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .logo-hex {
+    width: 42px; height: 42px;
+    background: var(--pink);
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 16px; color: #fff; letter-spacing: 1px;
+  }
+  .logo-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 26px; letter-spacing: 3px; color: var(--white);
+  }
+  .logo-text span { color: var(--pink); }
+  .nav-links {
+    display: flex; align-items: center; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--grey);
+    font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--pink);
+    color: #fff !important;
+    padding: 10px 24px !important;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    font-weight: 600 !important;
+    transition: background .2s, transform .2s !important;
+  }
+  .nav-cta:hover { background: #c918a5 !important; transform: translateY(-1px); }
+
+  /* hamburger */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 26px; height: 2px;
+    background: var(--white); border-radius: 2px;
+    transition: all .3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none; position: fixed; top: 72px; left: 0; right: 0;
+    background: rgba(8,8,8,0.97);
+    backdrop-filter: blur(20px);
+    padding: 32px 5vw 40px;
+    flex-direction: column; gap: 0;
+    z-index: 999;
+    border-top: 1px solid rgba(231,29,189,0.2);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    text-decoration: none; color: var(--grey);
+    font-size: 14px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: color .2s;
+  }
+  .mobile-menu a:hover { color: var(--white); }
+  .mobile-menu .mob-cta {
+    margin-top: 28px;
+    background: var(--pink);
+    color: #fff;
+    text-align: center;
+    padding: 16px;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    border-bottom: none;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; height: 100vh; min-height: 700px;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('hero.jpg');
+    background-size: cover; background-position: center top;
+    filter: brightness(0.55) contrast(1.1);
+    transform: scale(1.04);
+    animation: heroZoom 12s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.04); }
+    to   { transform: scale(1.10); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, rgba(8,8,8,0.85) 35%, transparent 70%),
+                linear-gradient(to top, rgba(8,8,8,0.7) 0%, transparent 50%);
+  }
+  .hero-pink-stripe {
+    position: absolute; top: 0; bottom: 0;
+    left: 52%; width: 4px;
+    background: var(--pink);
+    box-shadow: 0 0 40px 8px rgba(231,29,189,0.6);
+    clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
+  }
+  .hero-ring {
+    position: absolute; right: 8%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(200px, 28vw, 420px);
+    height: clamp(200px, 28vw, 420px);
+    border: 1px solid rgba(231,29,189,0.25);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-ring::before {
+    content: ''; position: absolute; inset: 20px;
+    border: 1px solid rgba(231,29,189,0.15);
+    border-radius: 50%;
+  }
+  .hero-ring::after {
+    content: ''; position: absolute; inset: 40px;
+    border: 1px solid rgba(231,29,189,0.08);
+    border-radius: 50%;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5vw;
+    max-width: 820px;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--pink); font-weight: 600; margin-bottom: 24px;
+  }
+  .ping-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--pink); position: relative;
+  }
+  .ping-dot::after {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%; border: 1px solid var(--pink);
+    animation: ping 1.5s ease-out infinite;
+  }
+  @keyframes ping {
+    0%   { transform: scale(1); opacity: .8; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(60px, 9vw, 130px);
+    font-weight: 900; font-style: italic;
+    line-height: .92; letter-spacing: -1px;
+    text-transform: uppercase; color: var(--white);
+    margin-bottom: 28px;
+  }
+  .hero-title .pink { color: var(--pink); }
+  .hero-sub {
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: var(--grey); line-height: 1.7;
+    max-width: 480px; margin-bottom: 44px;
+    font-weight: 300;
+  }
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block;
+    background: var(--pink);
+    color: #fff;
+    padding: 16px 36px;
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: background .2s, transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover {
+    background: #c918a5;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(231,29,189,0.4);
+  }
+  .btn-ghost {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--white);
+    padding: 16px 36px;
+    font-size: 13px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: border-color .2s, transform .2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--pink);
+    transform: translateY(-2px);
+  }
+  .hero-stats {
+    position: absolute; bottom: 60px; right: 5vw;
+    display: flex; gap: 24px; z-index: 2;
+  }
+  .stat-tag {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 16px 24px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px; font-weight: 900; font-style: italic;
+    color: var(--pink); line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--grey); margin-top: 4px;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--pink); overflow: hidden;
+    padding: 14px 0; position: relative;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    width: max-content;
+    animation: marqueeScroll 22s linear infinite;
+  }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .marquee-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: #fff;
+    padding: 0 32px; white-space: nowrap;
+    opacity: .9;
+  }
+  .marquee-dot {
+    color: rgba(255,255,255,0.5);
+    padding: 0 8px;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 120px 5vw; }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--pink); font-weight: 600; margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(42px, 5.5vw, 80px);
+    font-weight: 900; font-style: italic;
+    text-transform: uppercase; line-height: .92;
+    color: var(--white); margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 15px; color: var(--grey);
+    line-height: 1.7; max-width: 520px;
+    font-weight: 300;
+  }
+
+  /* ── PROGRAMS ── */
+  #programmi { background: var(--dark2); }
+  .programs-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 64px; gap: 32px;
+    flex-wrap: wrap;
+  }
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .prog-card {
+    background: var(--dark3);
+    padding: 48px 36px;
+    position: relative; overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    transition: transform .3s, background .3s;
+    cursor: default;
+  }
+  .prog-card:hover { transform: translateY(-4px); background: var(--dark4); }
+  .prog-card.featured { background: var(--pink); }
+  .prog-card.featured:hover { background: #c918a5; }
+  .prog-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 80px; font-weight: 900; font-style: italic;
+    color: rgba(255,255,255,0.06);
+    line-height: 1; margin-bottom: -16px;
+    display: block;
+  }
+  .prog-card.featured .prog-num { color: rgba(255,255,255,0.15); }
+  .prog-icon {
+    width: 44px; height: 44px; margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .prog-icon svg { width: 32px; height: 32px; fill: var(--pink); }
+  .prog-card.featured .prog-icon svg { fill: #fff; }
+  .prog-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px; font-weight: 700; font-style: italic;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 12px; color: var(--white);
+  }
+  .prog-desc {
+    font-size: 13px; color: rgba(255,255,255,0.55);
+    line-height: 1.65; font-weight: 300;
+  }
+  .prog-card.featured .prog-desc { color: rgba(255,255,255,0.8); }
+
+  /* ── GYM BAND ── */
+  #gym-band {
+    padding: 0; position: relative; overflow: hidden;
+    height: clamp(340px, 45vw, 640px);
+    clip-path: polygon(0 6%, 100% 0%, 100% 94%, 0% 100%);
+    margin: -40px 0;
+  }
+  .gym-bg {
+    position: absolute; inset: -2px;
+    background-image: url('gym.jpg');
+    background-size: cover; background-position: center;
+    filter: brightness(0.45) contrast(1.15);
+  }
+  .gym-overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(231,29,189,0.15) 0%, transparent 65%);
+  }
+  .gym-glow {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 2px; height: 60%;
+    background: linear-gradient(to bottom, transparent, var(--pink), transparent);
+    box-shadow: 0 0 60px 20px rgba(231,29,189,0.35);
+  }
+  .gym-content {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center;
+    z-index: 2; padding: 0 5vw;
+  }
+  .gym-content .section-label { text-align: center; }
+  .gym-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(40px, 6vw, 90px);
+    font-weight: 900; font-style: italic;
+    text-transform: uppercase; color: var(--white);
+    line-height: .92; text-align: center;
+  }
+  .gym-title .pink { color: var(--pink); }
+
+  /* ── COACH ── */
+  #coach { background: var(--dark); }
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px; margin-top: 64px;
+  }
+  .coach-card {
+    position: relative; overflow: hidden;
+    height: clamp(400px, 50vw, 580px);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+    cursor: default;
+  }
+  .coach-img {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center top;
+    filter: brightness(0.6) contrast(1.1) saturate(0.85);
+    transition: transform .5s;
+  }
+  .coach-card:hover .coach-img { transform: scale(1.05); }
+  .coach-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 50%, transparent 100%);
+  }
+  .coach-accent {
+    position: absolute; top: 0; left: 24px;
+    width: 3px; height: 60px;
+    background: var(--pink);
+    box-shadow: 0 0 20px rgba(231,29,189,0.6);
+  }
+  .coach-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 32px 28px;
+  }
+  .coach-role {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--pink); font-weight: 600; margin-bottom: 8px;
+  }
+  .coach-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 900; font-style: italic;
+    text-transform: uppercase; color: var(--white);
+    margin-bottom: 16px;
+  }
+  .coach-bars { display: flex; flex-direction: column; gap: 8px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-label { font-size: 10px; color: var(--grey); letter-spacing: 1px; text-transform: uppercase; width: 90px; flex-shrink: 0; }
+  .bar-track {
+    flex: 1; height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; background: var(--pink);
+    border-radius: 2px;
+    width: 0;
+    transition: width 1.2s ease;
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+
+  /* ── SPLIT ── */
+  #split {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: clamp(500px, 60vw, 780px);
+  }
+  .split-img {
+    position: relative; overflow: hidden;
+    clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 100%, 0 100%);
+  }
+  .split-img-bg {
+    position: absolute; inset: 0;
+    background-image: url('split.jpg');
+    background-size: cover; background-position: center;
+    filter: brightness(0.55) contrast(1.1);
+    transition: transform .5s;
+  }
+  .split-img:hover .split-img-bg { transform: scale(1.04); }
+  .split-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, transparent 60%, var(--dark2) 100%);
+  }
+  .split-content {
+    background: var(--dark2);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 5vw 80px 60px;
+  }
+  .split-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 4vw, 64px);
+    font-weight: 900; font-style: italic;
+    text-transform: uppercase; line-height: .92;
+    color: var(--white); margin-bottom: 28px;
+  }
+  .split-title .pink { color: var(--pink); }
+  .split-text {
+    font-size: 15px; color: var(--grey);
+    line-height: 1.75; margin-bottom: 36px;
+    font-weight: 300;
+  }
+  .checklist { display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
+  .check-item {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 14px; color: var(--light); font-weight: 400;
+  }
+  .check-icon {
+    width: 22px; height: 22px; flex-shrink: 0;
+    background: var(--pink-dim); border: 1px solid rgba(231,29,189,0.4);
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-icon svg { width: 11px; height: 11px; }
+
+  /* ── PRICING ── */
+  #prezzi { background: var(--dark3); }
+  .pricing-header {
+    text-align: center; margin-bottom: 64px;
+  }
+  .pricing-header .section-sub { margin: 0 auto; }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px; max-width: 1100px; margin: 0 auto;
+  }
+  .price-card {
+    background: var(--dark4);
+    padding: 52px 40px;
+    position: relative; overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    transition: transform .3s;
+  }
+  .price-card:hover { transform: translateY(-6px); }
+  .price-card.popular {
+    background: var(--dark);
+    border: 1px solid rgba(231,29,189,0.4);
+    box-shadow: 0 0 60px rgba(231,29,189,0.12);
+  }
+  .popular-badge {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: var(--pink);
+    text-align: center; padding: 8px;
+    font-size: 10px; letter-spacing: 3px; font-weight: 700;
+    text-transform: uppercase; color: #fff;
+  }
+  .price-card.popular { padding-top: 60px; }
+  .price-tier {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--grey); font-weight: 600; margin-bottom: 20px;
+  }
+  .price-amount {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 72px; font-weight: 900; font-style: italic;
+    color: var(--white); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .price-amount sup { font-size: 28px; vertical-align: top; margin-top: 16px; display: inline-block; }
+  .price-period {
+    font-size: 12px; color: var(--grey);
+    letter-spacing: 1px; margin-bottom: 36px;
+  }
+  .price-divider {
+    height: 1px; background: rgba(255,255,255,0.08);
+    margin-bottom: 32px;
+  }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
+  .price-features li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--grey); font-weight: 300;
+  }
+  .price-features li svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .price-features li.yes { color: var(--light); }
+  .price-features li.yes svg { fill: var(--pink); }
+  .price-features li.no { opacity: .35; }
+  .price-features li.no svg { fill: var(--grey); }
+  .price-cta {
+    display: block; text-align: center;
+    padding: 15px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: all .2s;
+  }
+  .price-cta-ghost {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+  }
+  .price-cta-ghost:hover { border-color: var(--pink); }
+  .price-cta-filled {
+    background: var(--pink); color: #fff;
+  }
+  .price-cta-filled:hover { background: #c918a5; box-shadow: 0 8px 30px rgba(231,29,189,0.4); }
+
+  /* ── HOURS ── */
+  #orari {
+    background: var(--dark2);
+    padding: 80px 5vw;
+  }
+  .hours-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .hours-grid {
+    display: flex; flex-direction: column; gap: 0;
+    margin-top: 40px;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .hours-day {
+    font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--grey); font-weight: 500;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hours-day svg { width: 16px; height: 16px; fill: var(--pink); }
+  .hours-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700; font-style: italic;
+    color: var(--white);
+  }
+  .hours-time.always { color: var(--pink); }
+  .contact-box {
+    background: var(--dark3);
+    padding: 48px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+  }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .contact-item:last-child { margin-bottom: 0; }
+  .contact-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--pink-dim);
+    border: 1px solid rgba(231,29,189,0.3);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-icon svg { width: 18px; height: 18px; fill: var(--pink); }
+  .contact-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--grey); margin-bottom: 4px;
+  }
+  .contact-val {
+    font-size: 15px; color: var(--white); font-weight: 400;
+  }
+  .contact-val a { color: var(--white); text-decoration: none; }
+  .contact-val a:hover { color: var(--pink); }
+
+  /* ── CTA FINALE ── */
+  #cta-finale {
+    background: var(--dark);
+    text-align: center;
+    padding: 160px 5vw;
+    position: relative; overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(231,29,189,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-ring1, .cta-ring2 {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%; border: 1px solid rgba(231,29,189,0.12);
+    pointer-events: none;
+  }
+  .cta-ring1 { width: 500px; height: 500px; }
+  .cta-ring2 { width: 700px; height: 700px; border-color: rgba(231,29,189,0.06); }
+  .cta-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 7vw, 110px);
+    font-weight: 900; font-style: italic;
+    text-transform: uppercase; line-height: .92;
+    color: var(--white); position: relative; z-index: 2;
+    margin-bottom: 24px;
+  }
+  .cta-title .pink { color: var(--pink); }
+  .cta-sub {
+    font-size: 16px; color: var(--grey);
+    max-width: 480px; margin: 0 auto 48px;
+    line-height: 1.7; font-weight: 300;
+    position: relative; z-index: 2;
+  }
+  .cta-btns {
+    display: flex; gap: 16px; justify-content: center;
+    flex-wrap: wrap; position: relative; z-index: 2;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #040404;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 80px 5vw 40px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; margin-bottom: 60px;
+  }
+  .footer-brand p {
+    font-size: 13px; color: var(--grey);
+    line-height: 1.75; margin: 20px 0 28px;
+    font-weight: 300; max-width: 280px;
+  }
+  .social-row { display: flex; gap: 12px; }
+  .social-link {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: background .2s;
+  }
+  .social-link:hover { background: var(--pink-dim); border-color: rgba(231,29,189,0.4); }
+  .social-link svg { width: 16px; height: 16px; fill: var(--grey); }
+  .footer-col h4 {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--white); font-weight: 600; margin-bottom: 24px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col ul a {
+    font-size: 13px; color: var(--grey); text-decoration: none;
+    font-weight: 300; transition: color .2s;
+  }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-bottom p {
+    font-size: 12px; color: rgba(255,255,255,0.25);
+  }
+  .footer-bottom span { color: var(--pink); }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up.delay-1 { transition-delay: .15s; }
+  .fade-up.delay-2 { transition-delay: .30s; }
+  .fade-up.delay-3 { transition-delay: .45s; }
+  .fade-up.delay-4 { transition-delay: .60s; }
+  .fade-up.delay-5 { transition-delay: .75s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .programs-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+
+  @media (max-width: 900px) {
+    .coaches-grid { grid-template-columns: 1fr 1fr; }
+    .split { grid-template-columns: 1fr; }
+    #split { grid-template-columns: 1fr; min-height: auto; }
+    .split-img {
+      height: 360px;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), 0 100%);
+    }
+    .split-content { padding: 60px 5vw; }
+    .hours-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 80px 5vw; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-stats {
+      flex-direction: row; gap: 12px;
+      bottom: 32px; right: auto; left: 5vw;
+      right: 5vw; justify-content: center;
+    }
+    .stat-tag { padding: 12px 16px; }
+    .stat-num { font-size: 24px; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .coaches-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .programs-header { flex-direction: column; align-items: flex-start; }
+    .hero-ring { display: none; }
+    #orari { padding: 60px 5vw; }
+    .contact-box { padding: 32px 24px; }
+    #cta-finale { padding: 100px 5vw; }
+    .cta-ring1, .cta-ring2 { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 52px; }
+    .section-title { font-size: 38px; }
+    .hero-stats { gap: 8px; }
+    .stat-tag { padding: 10px 14px; }
+    .hero-ctas { flex-direction: column; }
+    .btn-primary, .btn-ghost { text-align: center; }
+    .cta-btns { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-hex">AX</div>
+    <span class="logo-text">APE<span>X</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#programmi">Programmi</a></li>
+    <li><a href="#coach">Coach</a></li>
+    <li><a href="#prezzi">Prezzi</a></li>
+    <li><a href="#orari">Orari</a></li>
+    <li><a href="tel:+390212345678" class="nav-cta">Prova Gratuita</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#programmi" onclick="closeMobile()">Programmi</a>
+  <a href="#coach" onclick="closeMobile()">Coach</a>
+  <a href="#prezzi" onclick="closeMobile()">Prezzi</a>
+  <a href="#orari" onclick="closeMobile()">Orari</a>
+  <a href="tel:+390212345678" class="mob-cta">Prova Gratuita 7 Giorni</a>
+</div>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-pink-stripe"></div>
+  <div class="hero-ring"></div>
+
+  <div class="hero-content">
+    <div class="hero-label">
+      <div class="ping-dot"></div>
+      Milano &mdash; Apertura H24
+    </div>
+    <h1 class="hero-title">
+      Forgia<br>la tua<br><span class="pink">Leggenda</span>
+    </h1>
+    <p class="hero-sub">
+      Non si tratta solo di sollevare pesi. Si tratta di costruire la versione migliore di te stesso, ogni singolo giorno.
+    </p>
+    <div class="hero-ctas">
+      <a href="tel:+390212345678" class="btn-primary">Prova Gratuita 7 Giorni</a>
+      <a href="#programmi" class="btn-ghost">I Nostri Programmi</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-tag">
+      <div class="stat-num">12+</div>
+      <div class="stat-lbl">Anni di Esperienza</div>
+    </div>
+    <div class="stat-tag">
+      <div class="stat-num">3K+</div>
+      <div class="stat-lbl">Atleti Formati</div>
+    </div>
+    <div class="stat-tag">
+      <div class="stat-num">98%</div>
+      <div class="stat-lbl">Soddisfazione</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MARQUEE ══════════════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Forza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Velocita</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Resistenza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Potenza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Disciplina</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Prestazione</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Evoluzione</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Dedizione</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Forza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Velocita</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Resistenza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Potenza</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Disciplina</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Prestazione</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Evoluzione</span><span class="marquee-dot">/</span>
+    <span class="marquee-item">Dedizione</span><span class="marquee-dot">/</span>
+  </div>
+</div>
+
+<!-- ══════════════════ PROGRAMMI ══════════════════ -->
+<section id="programmi">
+  <div class="programs-header">
+    <div>
+      <div class="section-label fade-up">I Nostri Programmi</div>
+      <h2 class="section-title fade-up delay-1">Allenati<br>con Scopo</h2>
+    </div>
+    <p class="section-sub fade-up delay-2">Ogni programma e progettato da esperti per massimizzare i tuoi risultati in meno tempo.</p>
+  </div>
+  <div class="programs-grid">
+    <div class="prog-card fade-up">
+      <span class="prog-num">01</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29l-1.43-1.43z"/></svg>
+      </div>
+      <div class="prog-name">Forza e Potenza</div>
+      <p class="prog-desc">Powerlifting, sollevamento pesi olimpico e programmi di forza massimale per costruire una base solida.</p>
+    </div>
+    <div class="prog-card featured fade-up delay-1">
+      <span class="prog-num">02</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>
+      </div>
+      <div class="prog-name">HIIT e Cardio Estremo</div>
+      <p class="prog-desc">Brucia grassi, aumenta la resistenza e sfida i tuoi limiti con sessioni ad alta intensita a intervalli.</p>
+    </div>
+    <div class="prog-card fade-up delay-2">
+      <span class="prog-num">03</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 5.5C7 4.12 8.12 3 9.5 3S12 4.12 12 5.5 10.88 8 9.5 8 7 6.88 7 5.5zM21 8h-6v2.5L12.26 13H9V11H5v10h4v-4h2.26l1.74-1.98V21h4v-9h4V8z"/></svg>
+      </div>
+      <div class="prog-name">Atletica da Combattimento</div>
+      <p class="prog-desc">Boxe, MMA e arti marziali miste. Tecniche di combattimento per la massima performance fisica e mentale.</p>
+    </div>
+    <div class="prog-card fade-up delay-3">
+      <span class="prog-num">04</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+      </div>
+      <div class="prog-name">Mobilita e Recupero</div>
+      <p class="prog-desc">Stretching attivo, yoga atletico e protocolli di recupero per mantenere il corpo sempre al massimo.</p>
+    </div>
+    <div class="prog-card fade-up delay-4">
+      <span class="prog-num">05</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.05zM1 21.99V21h15.03v.99c0 .55-.45 1-1.01 1H2.01c-.56 0-1.01-.45-1.01-1zm15.03-7c0-8-15.03-8-15.03 0h15.03zM1.02 17h15v2h-15z"/></svg>
+      </div>
+      <div class="prog-name">Coaching Nutrizionale</div>
+      <p class="prog-desc">Piani alimentari personalizzati da nutrizionisti sportivi certificati per ottimizzare performance e composizione corporea.</p>
+    </div>
+    <div class="prog-card fade-up delay-5">
+      <span class="prog-num">06</span>
+      <div class="prog-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+      </div>
+      <div class="prog-name">Performance Elite</div>
+      <p class="prog-desc">Programma esclusivo per atleti avanzati. Monitoraggio biometrico, analisi del movimento e coaching one-to-one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ GYM BAND ══════════════════ -->
+<div id="gym-band">
+  <div class="gym-bg"></div>
+  <div class="gym-overlay"></div>
+  <div class="gym-glow"></div>
+  <div class="gym-content">
+    <div class="section-label">La Nostra Struttura</div>
+    <h2 class="gym-title">Attrezzatura<br><span class="pink">di Livello Professionale</span></h2>
+  </div>
+</div>
+
+<!-- ══════════════════ COACH ══════════════════ -->
+<section id="coach">
+  <div class="fade-up">
+    <div class="section-label">Il Nostro Team</div>
+    <h2 class="section-title">Allenatori<br><span style="color:var(--pink)">d'Elite</span></h2>
+  </div>
+  <div class="coaches-grid">
+    <div class="coach-card fade-up delay-1">
+      <div class="coach-img" style="background-image:url('coach1.jpg')"></div>
+      <div class="coach-grad"></div>
+      <div class="coach-accent"></div>
+      <div class="coach-info">
+        <div class="coach-role">Head Coach &mdash; Forza</div>
+        <div class="coach-name">Marco Ferretti</div>
+        <div class="coach-bars">
+          <div class="bar-row">
+            <span class="bar-label">Forza</span>
+            <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Condizionamento</span>
+            <div class="bar-track"><div class="bar-fill" data-width="82"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="coach-card fade-up delay-2">
+      <div class="coach-img" style="background-image:url('coach2.jpg')"></div>
+      <div class="coach-grad"></div>
+      <div class="coach-accent"></div>
+      <div class="coach-info">
+        <div class="coach-role">Coach &mdash; HIIT e Cardio</div>
+        <div class="coach-name">Giulia Rossini</div>
+        <div class="coach-bars">
+          <div class="bar-row">
+            <span class="bar-label">Resistenza</span>
+            <div class="bar-track"><div class="bar-fill" data-width="97"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Mobilita</span>
+            <div class="bar-track"><div class="bar-fill" data-width="89"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="coach-card fade-up delay-3">
+      <div class="coach-img" style="background-image:url('coach3.jpg')"></div>
+      <div class="coach-grad"></div>
+      <div class="coach-accent"></div>
+      <div class="coach-info">
+        <div class="coach-role">Coach &mdash; Combattimento</div>
+        <div class="coach-name">Luca Conti</div>
+        <div class="coach-bars">
+          <div class="bar-row">
+            <span class="bar-label">Tecnica</span>
+            <div class="bar-track"><div class="bar-fill" data-width="98"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Forza</span>
+            <div class="bar-track"><div class="bar-fill" data-width="91"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SPLIT ══════════════════ -->
+<div id="split">
+  <div class="split-img">
+    <div class="split-img-bg"></div>
+    <div class="split-img-overlay"></div>
+  </div>
+  <div class="split-content fade-up">
+    <div class="section-label">Oltre i Limiti</div>
+    <h2 class="split-title">Non e una palestra.<br>E un <span class="pink">Sistema.</span></h2>
+    <p class="split-text">
+      Ogni dettaglio di APEX e progettato per portarti oltre quello che pensavi possibile. Dalla programmazione scientifica alla nutrizione avanzata, dal monitoraggio biometrico al recupero ottimale.
+    </p>
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#e71dbd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        Attrezzatura professionale aggiornata ogni anno
+      </div>
+      <div class="check-item">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#e71dbd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        App di tracking personalizzato inclusa
+      </div>
+      <div class="check-item">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#e71dbd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        Valutazione biometrica mensile gratuita
+      </div>
+      <div class="check-item">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#e71dbd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        Comunita di atleti motivati e supporto H24
+      </div>
+    </div>
+    <a href="tel:+390212345678" class="btn-primary">Chiama per Iniziare</a>
+  </div>
+</div>
+
+<!-- ══════════════════ PREZZI ══════════════════ -->
+<section id="prezzi">
+  <div class="pricing-header">
+    <div class="section-label fade-up">Piani di Abbonamento</div>
+    <h2 class="section-title fade-up delay-1">Scegli il tuo Piano</h2>
+    <p class="section-sub fade-up delay-2">Nessuna commissione nascosta. Nessun contratto a lungo termine. Solo risultati.</p>
+  </div>
+  <div class="pricing-grid">
+    <!-- STARTER -->
+    <div class="price-card fade-up">
+      <div class="price-tier">Starter</div>
+      <div class="price-amount"><sup>&euro;</sup>39</div>
+      <div class="price-period">al mese &mdash; IVA inclusa</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Accesso sala pesi
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Spogliatoi e docce
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Area cardio
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          2 lezioni di gruppo/mese
+        </li>
+        <li class="no">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          Coaching personalizzato
+        </li>
+        <li class="no">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          Accesso H24
+        </li>
+        <li class="no">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          Piano nutrizionale
+        </li>
+      </ul>
+      <a href="tel:+390212345678" class="price-cta price-cta-ghost">Chiama ora</a>
+    </div>
+    <!-- PREMIUM -->
+    <div class="price-card popular fade-up delay-1">
+      <div class="popular-badge">Piu Popolare</div>
+      <div class="price-tier">Premium</div>
+      <div class="price-amount"><sup>&euro;</sup>79</div>
+      <div class="price-period">al mese &mdash; IVA inclusa</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Accesso sala pesi
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Spogliatoi e docce
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Area cardio
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Lezioni di gruppo illimitate
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          4 sessioni coaching/mese
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Accesso H24
+        </li>
+        <li class="no">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          Piano nutrizionale
+        </li>
+      </ul>
+      <a href="tel:+390212345678" class="price-cta price-cta-filled">Chiama ora</a>
+    </div>
+    <!-- ELITE -->
+    <div class="price-card fade-up delay-2">
+      <div class="price-tier">Elite</div>
+      <div class="price-amount"><sup>&euro;</sup>149</div>
+      <div class="price-period">al mese &mdash; IVA inclusa</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Accesso sala pesi
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Spogliatoi e docce premium
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Area cardio
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Lezioni di gruppo illimitate
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Coaching illimitato
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Accesso H24 + guest pass
+        </li>
+        <li class="yes">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          Piano nutrizionale incluso
+        </li>
+      </ul>
+      <a href="tel:+390212345678" class="price-cta price-cta-ghost">Chiama ora</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ORARI ══════════════════ -->
+<section id="orari">
+  <div class="hours-inner">
+    <div>
+      <div class="section-label fade-up">Vieni a Trovarci</div>
+      <h2 class="section-title fade-up delay-1">Orari e<br>Contatti</h2>
+      <div class="hours-grid fade-up delay-2">
+        <div class="hours-row">
+          <div class="hours-day">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            Lunedi &mdash; Venerdi
+          </div>
+          <div class="hours-time">06:00 &mdash; 23:00</div>
+        </div>
+        <div class="hours-row">
+          <div class="hours-day">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            Sabato e Domenica
+          </div>
+          <div class="hours-time">08:00 &mdash; 21:00</div>
+        </div>
+        <div class="hours-row">
+          <div class="hours-day">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg>
+            Accesso H24 &mdash; Membri Elite
+          </div>
+          <div class="hours-time always">Sempre Aperti</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-box fade-up delay-2">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Indirizzo</div>
+          <div class="contact-val">Via della Vittoria 12, Milano</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Telefono</div>
+          <div class="contact-val"><a href="tel:+390212345678">+39 02 1234 5678</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val"><a href="mailto:info@apexgym.it">info@apexgym.it</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CTA FINALE ══════════════════ -->
+<section id="cta-finale">
+  <div class="cta-glow"></div>
+  <div class="cta-ring1"></div>
+  <div class="cta-ring2"></div>
+  <h2 class="cta-title fade-up">
+    Pronto a<br>Superare i<br><span class="pink">Tuoi Limiti?</span>
+  </h2>
+  <p class="cta-sub fade-up delay-1">
+    La tua trasformazione inizia con una sola chiamata. Prova gratuita di 7 giorni, nessun impegno.
+  </p>
+  <div class="cta-btns fade-up delay-2">
+    <a href="tel:+390212345678" class="btn-primary">Prova Gratuita 7 Giorni</a>
+    <a href="#prezzi" class="btn-ghost">Vedi i Prezzi</a>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo" style="text-decoration:none;">
+        <div class="logo-hex">AX</div>
+        <span class="logo-text">APE<span>X</span></span>
+      </a>
+      <p>La palestra premium di Milano progettata per chi non accetta la mediocrità. Forza, disciplina, risultati.</p>
+      <div class="social-row">
+        <a href="#" class="social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Programmi</h4>
+      <ul>
+        <li><a href="#programmi">Forza e Potenza</a></li>
+        <li><a href="#programmi">HIIT e Cardio</a></li>
+        <li><a href="#programmi">Combattimento</a></li>
+        <li><a href="#programmi">Mobilita</a></li>
+        <li><a href="#programmi">Nutrizione</a></li>
+        <li><a href="#programmi">Performance Elite</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Palestra</h4>
+      <ul>
+        <li><a href="#coach">Il Nostro Team</a></li>
+        <li><a href="#prezzi">Prezzi</a></li>
+        <li><a href="#orari">Orari</a></li>
+        <li><a href="tel:+390212345678">Contattaci</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legale</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Termini di Servizio</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">P.IVA 12345678901</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 <span>Nicola Martucci</span>. &mdash; Tutti i diritti riservati</p>
+    
+  </div>
+</footer>
+
+<script>
+  // ── Navbar scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ── Hamburger menu ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMobile() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  }
+
+  // ── IntersectionObserver fade-up ──
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // ── Bar fill animation ──
+  const bars = document.querySelectorAll('.bar-fill');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.width = e.target.dataset.width + '%';
+        barObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  bars.forEach(bar => barObserver.observe(bar));
+
+  // ── Smooth scroll for anchor links ──
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        closeMobile();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
