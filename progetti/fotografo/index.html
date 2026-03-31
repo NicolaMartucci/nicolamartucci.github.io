@@ -1,1 +1,1253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhotoFolio — Marco Bellini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --color-bg: #F5F2EC;
+      --color-bg-alt: #EDE9E1;
+      --color-dark: #1A1714;
+      --color-dark-80: rgba(26,23,20,0.8);
+      --color-dark-40: rgba(26,23,20,0.4);
+      --color-dark-10: rgba(26,23,20,0.1);
+      --color-accent: #C8A882;
+      --color-accent-light: #DCC4A4;
+      --color-muted: #7A7268;
+      --color-border: rgba(26,23,20,0.12);
+      --color-white: #FFFFFF;
+      --font-display: 'Fraunces', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --ease-out-expo: cubic-bezier(0.16,1,0.3,1);
+      --ease-in-out-circ: cubic-bezier(0.85,0,0.15,1);
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-dark);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+
+    /* ── Selection ── */
+    ::selection { background: var(--color-dark); color: var(--color-bg); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 2px; }
+
+    /* ── Typography ── */
+    .font-display { font-family: var(--font-display); }
+
+    /* ── Grain Overlay ── */
+    .grain-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 128px 128px;
+    }
+
+    /* ── Text Reveal ── */
+    .text-reveal-wrapper { overflow: hidden; display: inline-block; vertical-align: bottom; }
+    .text-reveal-content {
+      transform: translateY(110%); opacity: 0;
+      transition: transform 1.2s var(--ease-out-expo), opacity 0.8s ease;
+      display: block;
+    }
+    .reveal-active .text-reveal-content { transform: translateY(0); opacity: 1; }
+
+    /* ── Scroll Reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(2rem);
+      transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+    }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* ── Stagger Delays ── */
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+    .delay-500 { transition-delay: 0.5s; }
+    .delay-600 { transition-delay: 0.6s; }
+    .delay-700 { transition-delay: 0.7s; }
+    .delay-900 { transition-delay: 0.9s; }
+
+    /* ── Carousel ── */
+    .carousel-slide {
+      position: absolute; inset: 0;
+      transition: opacity 1.8s ease-in-out; opacity: 0; overflow: hidden;
+    }
+    .carousel-slide.active { opacity: 1; }
+    .carousel-slide img {
+      transform: scale(1); transition: transform 12s ease-out;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .carousel-slide.active img { transform: scale(1.08); }
+
+    /* ── Nav ── */
+    .nav-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+    /* ── Portfolio Grid ── */
+    .portfolio-item { overflow: hidden; position: relative; cursor: pointer; }
+    .portfolio-item img {
+      transition: transform 0.9s var(--ease-out-expo), filter 0.7s ease;
+      filter: grayscale(30%); width: 100%; height: 100%; object-fit: cover;
+    }
+    .portfolio-item:hover img { transform: scale(1.06); filter: grayscale(0%); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,23,20,0.75) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.5s ease;
+      display: flex; align-items: flex-end; padding: 1.5rem;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    /* ── Category Tabs ── */
+    .tab-btn {
+      position: relative; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted);
+      padding-bottom: 0.5rem; transition: color 0.3s ease;
+      cursor: pointer; background: none; border: none;
+    }
+    .tab-btn::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--color-dark);
+      transition: width 0.4s var(--ease-out-expo);
+    }
+    .tab-btn.active { color: var(--color-dark); }
+    .tab-btn.active::after { width: 100%; }
+    .tab-btn:hover { color: var(--color-dark); }
+
+    /* ── Form Inputs ── */
+    .form-input {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0.75rem 0; font-family: var(--font-body); font-size: 0.9375rem;
+      color: var(--color-dark); transition: border-color 0.3s ease; outline: none;
+    }
+    .form-input::placeholder { color: var(--color-muted); }
+    .form-input:focus { border-bottom-color: var(--color-accent); }
+    .form-textarea { resize: none; min-height: 120px; }
+
+    /* ── Writing vertical ── */
+    .writing-vertical {
+      writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+    }
+
+    /* ── No scrollbar ── */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── Scroll line animation ── */
+    @keyframes scrollLine { 0% { top: -40%; } 100% { top: 110%; } }
+
+    /* ── Page sections ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Header ── */
+    header {
+      position: fixed; top: 0; width: 100%; z-index: 50;
+      transition: background-color 0.7s ease, border-color 0.7s ease;
+    }
+    header.scrolled {
+      background-color: rgba(245,242,236,0.88);
+      border-bottom: 1px solid var(--color-border);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .header-nav {
+      width: 100%; padding: 0 2.5rem;
+      height: 5rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    }
+    @media (max-width: 768px) {
+      .header-nav { padding: 0 1.5rem; height: 4rem; grid-template-columns: 1fr auto 1fr; }
+    }
+    .logo {
+      font-family: var(--font-display); font-size: 1.125rem;
+      letter-spacing: -0.04em; color: var(--color-dark);
+    }
+    .desktop-nav { display: flex; align-items: center; gap: 2.5rem; justify-content: center; }
+    @media (max-width: 768px) { .desktop-nav { display: none; } }
+    .nav-link {
+      position: relative; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted);
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--color-dark); }
+    .nav-link.active-link { color: var(--color-dark); }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      height: 1px; background: var(--color-accent);
+      width: 0; transition: width 0.5s ease;
+    }
+    .nav-link.active-link::after { width: 100%; }
+    .hire-btn {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.625rem 1.25rem; border-radius: 9999px;
+      border: 1px solid var(--color-dark); color: var(--color-dark);
+      background: transparent; transition: all 0.4s ease;
+    }
+    .hire-btn:hover { background: var(--color-dark); color: var(--color-bg); }
+    @media (max-width: 768px) { .hire-btn { display: none; } }
+
+    /* ── Mobile Menu ── */
+    .burger { display: none; flex-direction: column; gap: 6px; padding: 8px; background: none; border: none; }
+    @media (max-width: 768px) { .burger { display: flex; } }
+    .burger span {
+      display: block; height: 1px; background: var(--color-dark);
+      transition: all 0.4s ease;
+    }
+    .burger span:nth-child(1) { width: 24px; }
+    .burger span:nth-child(2) { width: 16px; }
+    .burger span:nth-child(3) { width: 24px; }
+    .burger.open span:nth-child(1) { transform: rotate(45deg) translateY(5px); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: rotate(-45deg) translateY(-5px); }
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 40;
+      background-color: rgba(245,242,236,0.97);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.7s ease;
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu nav { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    .mobile-nav-link {
+      font-family: var(--font-display); font-size: 3rem; letter-spacing: -0.04em;
+      color: var(--color-dark); transition: color 0.3s ease;
+    }
+    .mobile-nav-link:hover { color: var(--color-accent); }
+    .mobile-hire-btn {
+      margin-top: 1rem; font-size: 0.875rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.75rem 2rem; border-radius: 9999px;
+      border: 1px solid var(--color-dark); color: var(--color-dark);
+    }
+
+    /* ── Hero Section ── */
+    .hero-section {
+      display: grid; grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .hero-section { grid-template-columns: 1fr; } }
+    .hero-carousel {
+      position: relative; overflow: hidden;
+      background: var(--color-dark); min-height: 70vh;
+    }
+    @media (min-width: 768px) { .hero-carousel { min-height: 100vh; } }
+
+    /* ── Portfolio Section ── */
+    .portfolio-section { padding: 5rem 0; }
+    @media (min-width: 768px) { .portfolio-section { padding: 8rem 0; } }
+    .section-container { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem; }
+    @media (min-width: 768px) { .section-container { padding: 0 2.5rem; } }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    @media (min-width: 768px) { .portfolio-grid { gap: 1rem; } }
+    .col-span-2 { grid-column: span 2; }
+    .row-span-2 { grid-row: span 2; }
+    .h-520 { height: 520px; }
+    .h-250 { height: 250px; }
+    .h-380 { height: 380px; }
+    .h-260 { height: 260px; }
+
+    /* ── About Teaser ── */
+    .about-teaser {
+      display: grid; grid-template-columns: 1fr;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .about-teaser { grid-template-columns: 5fr 7fr; } }
+    .about-teaser-img {
+      position: relative; overflow: hidden; min-height: 400px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) {
+      .about-teaser-img { min-height: 600px; border-bottom: none; border-right: 1px solid var(--color-border); }
+    }
+    .about-teaser-img img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; filter: grayscale(20%);
+    }
+    .about-teaser-content { padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+    @media (min-width: 768px) { .about-teaser-content { padding: 4rem; } }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      padding: 6rem 1.5rem; text-align: center; overflow: hidden;
+      position: relative; background: var(--color-dark);
+    }
+    @media (min-width: 768px) { .cta-section { padding: 10rem 2.5rem; } }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--color-border); }
+    .footer-inner {
+      max-width: 1440px; margin: 0 auto; padding: 2rem 1.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .footer-inner { flex-direction: row; justify-content: space-between; padding: 2rem 2.5rem; }
+    }
+    .footer-left { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    .footer-right { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .footer-link {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--color-muted); transition: color 0.3s ease;
+    }
+    .footer-link:hover { color: var(--color-dark); }
+
+    /* ── About Page ── */
+    .about-hero {
+      display: grid; grid-template-columns: 1fr;
+      min-height: 100vh; padding-top: 5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .about-hero { grid-template-columns: 5fr 7fr; } }
+    .about-hero-text {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2.5rem; padding-bottom: 4rem; min-height: 50vh;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) {
+      .about-hero-text { padding: 4rem; min-height: 100vh; border-bottom: none; border-right: 1px solid var(--color-border); }
+    }
+    .about-hero-img { position: relative; overflow: hidden; min-height: 50vh; }
+    @media (min-width: 768px) { .about-hero-img { min-height: 100vh; } }
+    .about-hero-img img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; filter: grayscale(15%);
+    }
+    .philosophy-section { padding: 5rem 0; border-bottom: 1px solid var(--color-border); }
+    @media (min-width: 768px) { .philosophy-section { padding: 8rem 0; } }
+    .bio-section { display: grid; grid-template-columns: 1fr; border-bottom: 1px solid var(--color-border); }
+    @media (min-width: 768px) { .bio-section { grid-template-columns: 7fr 5fr; } }
+    .bio-timeline {
+      padding: 2.5rem; border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .bio-timeline { padding: 4rem; border-bottom: none; border-right: 1px solid var(--color-border); } }
+    .bio-side { display: flex; flex-direction: column; }
+    .bio-side-img { position: relative; overflow: hidden; flex: 1; min-height: 300px; }
+    .bio-side-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(25%); }
+    .credentials-section { padding: 5rem 0; border-bottom: 1px solid var(--color-border); }
+    @media (min-width: 768px) { .credentials-section { padding: 8rem 0; } }
+    .about-cta-section {
+      padding: 6rem 1.5rem; display: grid; grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .about-cta-section { padding: 9rem 0; } }
+
+    /* ── Contact Page ── */
+    .contact-hero {
+      padding: 8rem 1.5rem 4rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .contact-hero { padding: 10rem 2.5rem 5rem; } }
+    .contact-hero-grid { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+    @media (min-width: 768px) { .contact-hero-grid { grid-template-columns: 8fr 4fr; } }
+    .contact-body { display: grid; grid-template-columns: 1fr; min-height: 70vh; }
+    @media (min-width: 768px) { .contact-body { grid-template-columns: 7fr 5fr; } }
+    .contact-form-col {
+      padding: 2.5rem; border-bottom: 1px solid var(--color-border);
+    }
+    @media (min-width: 768px) { .contact-form-col { padding: 4rem; border-bottom: none; border-right: 1px solid var(--color-border); } }
+    .contact-info-col { padding: 2.5rem; display: flex; flex-direction: column; gap: 3rem; }
+    @media (min-width: 768px) { .contact-info-col { padding: 4rem; } }
+
+    /* ── Utility classes ── */
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .inset-0 { inset: 0; }
+    .overflow-hidden { overflow: hidden; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .gap-8 { gap: 2rem; }
+    .gap-10 { gap: 2.5rem; }
+    .gap-12 { gap: 3rem; }
+    .flex-wrap { flex-wrap: wrap; }
+    .grid { display: grid; }
+    .grid-cols-3 { grid-template-columns: repeat(3,1fr); }
+    .grid-cols-1 { grid-template-columns: 1fr; }
+    @media (min-width: 768px) {
+      .md-grid-cols-3 { grid-template-columns: repeat(3,1fr); }
+      .md-grid-cols-12 { grid-template-columns: repeat(12,1fr); }
+    }
+    .text-center { text-align: center; }
+    .block { display: block; }
+    .inline-flex { display: inline-flex; }
+    .pointer-events-none { pointer-events: none; }
+    .z-10 { z-index: 10; }
+    .z-20 { z-index: 20; }
+    .rounded-full { border-radius: 9999px; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-sm { border-radius: 0.125rem; }
+    .uppercase { text-transform: uppercase; }
+    .italic { font-style: italic; }
+    .shrink-0 { flex-shrink: 0; }
+    .space-y-0 > * + * { margin-top: 0; }
+    .hidden { display: none; }
+    @media (min-width: 768px) { .md-hidden { display: none; } .md-flex { display: flex; } }
+    .transition-all { transition: all 0.3s ease; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .object-cover { object-fit: cover; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .mt-6 { margin-top: 1.5rem; }
+    .mt-8 { margin-top: 2rem; }
+    .mt-10 { margin-top: 2.5rem; }
+    .mt-12 { margin-top: 3rem; }
+    .mt-16 { margin-top: 4rem; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-10 { margin-bottom: 2.5rem; }
+    .mb-12 { margin-bottom: 3rem; }
+    .mb-16 { margin-bottom: 4rem; }
+    .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .p-6 { padding: 1.5rem; }
+    .p-10 { padding: 2.5rem; }
+    .p-12 { padding: 3rem; }
+    .pt-0 { padding-top: 0; }
+    .pb-1 { padding-bottom: 0.25rem; }
+    .pb-6 { padding-bottom: 1.5rem; }
+    .pb-8 { padding-bottom: 2rem; }
+    .leading-none { line-height: 1; }
+    .leading-tight { line-height: 1.25; }
+    .leading-snug { line-height: 1.375; }
+    .leading-relaxed { line-height: 1.625; }
+    .tracking-tightest { letter-spacing: -0.04em; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .tracking-wide { letter-spacing: 0.025em; }
+    .tracking-extra-wide { letter-spacing: 0.08em; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-base { font-size: 1rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .text-5xl { font-size: 3rem; }
+    .font-medium { font-weight: 500; }
+    .font-light { font-weight: 300; }
+    .not-italic { font-style: normal; }
+    .w-2 { width: 0.5rem; }
+    .w-8 { width: 2rem; }
+    .w-10 { width: 2.5rem; }
+    .w-12 { width: 3rem; }
+    .w-px { width: 1px; }
+    .h-px { height: 1px; }
+    .h-8 { height: 2rem; }
+    .h-12 { height: 3rem; }
+    .h-16 { height: 4rem; }
+    .h-2 { height: 0.5rem; }
+    .max-w-480 { max-width: 480px; }
+    .max-w-520 { max-width: 520px; }
+    .max-w-720 { max-width: 720px; }
+    .min-w-40 { min-width: 40px; }
+    .min-w-48 { min-width: 48px; }
+    .overflow-x-auto { overflow-x: auto; }
+    .cursor-default { cursor: default; }
+    .backdrop-blur { backdrop-filter: blur(8px); }
+    .group:hover .group-hover-w-16 { width: 4rem; }
+    .group:hover .group-hover-translate-x { transform: translateX(2px) translateY(-2px); }
+    .not-found-link { color: var(--color-accent); }
+    .not-found-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Grain Overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════════════ -->
+  <header id="site-header">
+    <nav class="header-nav" style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;">
+      <a href="#" class="logo" onclick="showPage('home'); return false;">PhotoFolio</a>
+      <div class="desktop-nav" style="display:flex;align-items:center;gap:2.5rem;justify-content:center;">
+        <a href="#" class="nav-link active-link" id="nav-work" onclick="showPage('home'); return false;">Lavori</a>
+        <a href="#" class="nav-link" id="nav-about" onclick="showPage('about'); return false;">Chi Sono</a>
+        <a href="#" class="nav-link" id="nav-contact" onclick="showPage('contact'); return false;">Contatti</a>
+      </div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="burger" id="burger-btn" aria-label="Apri menu" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <nav>
+      <a href="#" class="mobile-nav-link" onclick="showPage('home'); toggleMenu(); return false;">Lavori</a>
+      <a href="#" class="mobile-nav-link" onclick="showPage('about'); toggleMenu(); return false;">Chi Sono</a>
+      <a href="#" class="mobile-nav-link" onclick="showPage('contact'); toggleMenu(); return false;">Contatti</a>
+    </nav>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       HOME PAGE
+  ═══════════════════════════════════════════════════ -->
+  <div id="page-home" class="page active">
+
+    <!-- Sezione Hero -->
+    <section class="hero-section" style="border-bottom:1px solid var(--color-border)">
+      <!-- Carosello -->
+      <div class="hero-carousel" id="hero-carousel">
+        <div class="carousel-slide active">
+          <img src="https://images.unsplash.com/photo-1583429801731-c87234aa1238?w=1400&q=80" alt="Donna nella luce dorata del tramonto, ritratto con bokeh morbido" />
+        </div>
+        <div class="carousel-slide">
+          <img src="https://images.unsplash.com/photo-1618141991543-6fc74ee345e3?w=1400&q=80" alt="Paesaggio montano drammatico al tramonto con nuvole spazzate dal vento" />
+        </div>
+        <div class="carousel-slide">
+          <img src="https://img.rocket.new/generatedImages/rocket_gen_img_118462678-1772170680994.png" alt="Ritratto editoriale fashion con illuminazione da studio drammatica" />
+        </div>
+
+        <!-- Gradiente overlay -->
+        <div class="absolute inset-0 pointer-events-none z-10" style="background:linear-gradient(to top,rgba(26,23,20,0.7) 0%,rgba(26,23,20,0.15) 50%,transparent 100%)"></div>
+
+        <!-- Titolo Hero -->
+        <div class="absolute z-20" style="bottom:2rem;left:1.5rem;right:1.5rem;max-width:calc(100% - 3rem)" id="hero-title">
+          <h1 class="font-display leading-none tracking-tightest" style="font-size:clamp(3.5rem,9vw,8rem);color:#fff">
+            <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-200">Storie</span></span>
+            <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-400" style="font-style:italic;color:var(--color-accent-light)">Visive</span></span>
+          </h1>
+          <div class="flex items-center gap-2 mt-6 reveal delay-700" id="hero-badges" style="flex-wrap:wrap">
+            <span style="display:inline-block;padding:0.35rem 1rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.85);backdrop-filter:blur(8px);font-size:0.7rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;line-height:1.6">Ritratto</span>
+            <span style="display:inline-block;padding:0.35rem 1rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.85);backdrop-filter:blur(8px);font-size:0.7rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;line-height:1.6">Paesaggio</span>
+            <span style="display:inline-block;padding:0.35rem 1rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.85);backdrop-filter:blur(8px);font-size:0.7rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;line-height:1.6">Editoriale</span>
+          </div>
+        </div>
+
+        <!-- Indicatori slide -->
+        <div class="absolute z-20 flex gap-2" style="bottom:3rem;right:3rem" id="slide-indicators"></div>
+
+        <!-- Suggerimento scroll -->
+        <div class="absolute z-20 hidden" id="scroll-hint" style="right:2rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:0.75rem">
+          <span class="writing-vertical text-xs font-medium tracking-extra-wide uppercase" style="color:rgba(255,255,255,0.5)">Scorri</span>
+          <div class="w-px h-16 relative overflow-hidden" style="background:rgba(255,255,255,0.2)">
+            <div style="position:absolute;top:0;left:0;width:100%;background:var(--color-accent);height:40%;animation:scrollLine 2s ease-in-out infinite"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Sezione Portfolio -->
+    <section class="portfolio-section" id="portfolio">
+      <div class="section-container">
+        <!-- Intestazione -->
+        <div class="flex pb-6 mb-12" style="border-bottom:1px solid var(--color-border);flex-direction:column;gap:1.5rem">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem">
+            <div>
+              <span class="text-xs font-medium tracking-extra-wide uppercase block mb-3" style="color:var(--color-accent)">01 / Lavori Selezionati</span>
+              <h2 class="font-display tracking-tightest leading-none" style="font-size:clamp(2.5rem,5vw,4.5rem);color:var(--color-dark)">Portfolio</h2>
+            </div>
+            <div class="flex items-center gap-6 overflow-x-auto no-scrollbar pb-1" id="category-tabs">
+              <button class="tab-btn active" onclick="filterPortfolio('Tutti')">Tutti</button>
+              <button class="tab-btn" onclick="filterPortfolio('Ritratto')">Ritratto</button>
+              <button class="tab-btn" onclick="filterPortfolio('Paesaggio')">Paesaggio</button>
+              <button class="tab-btn" onclick="filterPortfolio('Editoriale')">Editoriale</button>
+              <button class="tab-btn" onclick="filterPortfolio('Commerciale')">Commerciale</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Griglia Bento -->
+        <div class="portfolio-grid" id="portfolio-grid">
+          <div class="portfolio-item col-span-2 row-span-2 h-520 rounded-sm reveal" data-category="Ritratto">
+            <img src="https://images.unsplash.com/photo-1588088502894-23a7a1775f89?w=900&q=80" alt="Donna avvolta nella calda luce dorata del tramonto, ritratto morbido" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Ritratto · 2025</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Ora d'Oro</h3></div></div>
+          </div>
+          <div class="portfolio-item h-250 rounded-sm reveal delay-100" data-category="Paesaggio">
+            <img src="https://images.unsplash.com/photo-1597037800874-00ca6b8ec353?w=600&q=80" alt="Vette alpine innevate riflesse in un lago di montagna immobile" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Paesaggio · 2025</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Silenzio Alpino</h3></div></div>
+          </div>
+          <div class="portfolio-item h-250 rounded-sm reveal delay-200" data-category="Editoriale">
+            <img src="https://img.rocket.new/generatedImages/rocket_gen_img_12fce48c1-1772727170404.png" alt="Geometria urbana architettonica con linee decise e ombre" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Editoriale · 2024</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Geometria Urbana</h3></div></div>
+          </div>
+          <div class="portfolio-item h-380 rounded-sm reveal delay-100" data-category="Commerciale">
+            <img src="https://img.rocket.new/generatedImages/rocket_gen_img_19b35e7d1-1772088037403.png" alt="Modella in abito bianco fluente su sfondo minimale" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Commerciale · 2025</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Deriva</h3></div></div>
+          </div>
+          <div class="portfolio-item col-span-2 h-380 rounded-sm reveal delay-200" data-category="Paesaggio">
+            <img src="https://images.unsplash.com/photo-1662756374124-2888bfea00fe?w=900&q=80" alt="Strada nel deserto che svanisce all'orizzonte al tramonto" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Paesaggio · 2024</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Strada nel Deserto</h3></div></div>
+          </div>
+          <div class="portfolio-item h-260 rounded-sm reveal delay-300" data-category="Ritratto">
+            <img src="https://img.rocket.new/generatedImages/rocket_gen_img_1595d3461-1772154247249.png" alt="Ritratto in bianco e nero, primo piano con illuminazione laterale drammatica" />
+            <div class="portfolio-overlay"><div><span class="text-xs font-medium tracking-extra-wide uppercase block mb-1" style="color:var(--color-accent-light)">Ritratto · 2024</span><h3 class="font-display text-xl tracking-tight" style="color:#fff">Monocromo</h3></div></div>
+          </div>
+        </div>
+
+        <!-- Vedi Tutti -->
+        <div class="mt-12 flex justify-center">
+          <button onclick="showPage('home')" class="inline-flex items-center gap-3 text-xs font-medium tracking-extra-wide uppercase px-8 py-3 rounded-full border transition-all" style="border-color:var(--color-dark);color:var(--color-dark);background:transparent"
+            onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'"
+            onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">
+            Vedi Tutti i Progetti
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Anteprima Chi Sono -->
+    <section class="about-teaser" id="about-teaser">
+      <div class="about-teaser-img">
+        <img src="https://img.rocket.new/generatedImages/rocket_gen_img_194815d28-1772380999820.png" alt="Il fotografo Marco Bellini con la macchina fotografica in studio con luce laterale drammatica" />
+        <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(135deg,rgba(26,23,20,0.3) 0%,transparent 60%)"></div>
+        <div class="absolute" style="top:2rem;left:2rem;padding:0.5rem 1rem;border-radius:9999px;background:rgba(245,242,236,0.9);color:var(--color-dark);font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;backdrop-filter:blur(8px)">Dal 2014</div>
+      </div>
+      <div class="about-teaser-content">
+        <span class="text-xs font-medium tracking-extra-wide uppercase block mb-8 reveal" style="color:var(--color-accent)">02 / Chi Sono</span>
+        <h2 class="font-display tracking-tightest leading-tight mb-8 reveal delay-100" style="font-size:clamp(2rem,4vw,3.5rem);color:var(--color-dark)">
+          Fotografo i momenti <span style="font-style:italic;color:var(--color-accent)">in-between</span> che rendono la vita straordinaria.
+        </h2>
+        <p class="text-base leading-relaxed mb-10 reveal delay-200" style="color:var(--color-muted);max-width:520px">
+          Basato a Milano, lavoro nel campo della fotografia di ritratto, paesaggio ed editoriale. Il mio approccio unisce precisione tecnica a un occhio intuitivo per la luce, producendo immagini che risultano al tempo stesso senza tempo e immediate.
+        </p>
+        <div class="flex items-center gap-8 reveal delay-300">
+          <a href="#" onclick="showPage('about'); return false;" class="inline-flex items-center gap-3 text-sm font-medium" style="color:var(--color-dark)" id="read-story-link">
+            <span class="h-px transition-all" id="story-line" style="width:2.5rem;background:var(--color-accent);display:inline-block"></span>
+            Leggi la Mia Storia
+          </a>
+          <div class="h-8 w-px" style="background:var(--color-border)"></div>
+          <div class="flex items-center gap-6">
+            <span class="text-xs font-medium tracking-wide" style="color:var(--color-muted)">📍 Milano</span>
+            <span class="text-xs font-medium tracking-wide" style="color:var(--color-muted)">🟢 Disponibile</span>
+          </div>
+        </div>
+        <div class="mt-16 pt-10 reveal delay-400" style="border-top:1px solid var(--color-border);display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem">
+          <div>
+            <h4 class="font-display text-lg mb-2 tracking-tight" style="color:var(--color-dark)">Luce</h4>
+            <p class="text-xs leading-relaxed" style="color:var(--color-muted)">Ogni immagine nasce dalla comprensione della qualità della luce disponibile.</p>
+          </div>
+          <div>
+            <h4 class="font-display text-lg mb-2 tracking-tight" style="color:var(--color-dark)">Momento</h4>
+            <p class="text-xs leading-relaxed" style="color:var(--color-muted)">L'istante decisivo tra ciò che era e ciò che sarà.</p>
+          </div>
+          <div>
+            <h4 class="font-display text-lg mb-2 tracking-tight" style="color:var(--color-dark)">Storia</h4>
+            <p class="text-xs leading-relaxed" style="color:var(--color-muted)">Ogni fotografia è una frase all'interno di una narrazione visiva più ampia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione CTA -->
+    <section class="cta-section" id="cta-section">
+      <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(200,168,130,0.12) 0%,transparent 70%)"></div>
+      <span class="text-xs font-medium tracking-extra-wide uppercase block mb-8 reveal" style="color:var(--color-accent)">Collaboriamo</span>
+      <h2 class="font-display tracking-tightest leading-none mb-10 reveal delay-100" style="font-size:clamp(3rem,8vw,7rem);color:var(--color-bg)">
+        Hai un progetto<br><span style="font-style:italic;color:var(--color-accent)">in mente?</span>
+      </h2>
+      <p class="text-base mb-12 mx-auto reveal delay-200" style="color:rgba(245,242,236,0.55);max-width:480px;line-height:1.7">
+        Dalle campagne commerciali ai progetti personali — porto la stessa cura e precisione a ogni incarico.
+      </p>
+      <div class="flex items-center justify-center gap-6 reveal delay-300">
+        <button onclick="showPage('contact')" class="inline-flex items-center gap-3 text-sm font-medium tracking-extra-wide uppercase px-8 py-4 rounded-full transition-all" style="background:var(--color-accent);color:var(--color-dark)"
+          onmouseover="this.style.background='var(--color-accent-light)';this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.background='var(--color-accent)';this.style.transform='translateY(0)'">
+          Avvia un Progetto
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button onclick="showPage('about')" class="text-sm font-medium tracking-extra-wide uppercase transition-colors" style="color:rgba(245,242,236,0.5);background:none;border:none"
+          onmouseover="this.style.color='var(--color-bg)'"
+          onmouseout="this.style.color='rgba(245,242,236,0.5)'">
+          Scopri di Più
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-left">
+          <a href="#" class="font-display text-base tracking-tightest" style="color:var(--color-dark)" onclick="showPage('home'); return false;">PhotoFolio</a>
+          <nav class="flex items-center gap-6">
+            <a href="#" class="footer-link" onclick="showPage('home'); return false;">Lavori</a>
+            <a href="#" class="footer-link" onclick="showPage('about'); return false;">Chi Sono</a>
+            <a href="#" class="footer-link" onclick="showPage('contact'); return false;">Contatti</a>
+          </nav>
+        </div>
+        <div class="footer-right">
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">Behance</a>
+          <a href="#" class="footer-link">Vsco</a>
+          <span class="text-xs" style="color:var(--color-muted)">© 2026 PhotoFolio</span>
+          <a href="#" class="footer-link">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGINA CHI SONO
+  ═══════════════════════════════════════════════════ -->
+  <div id="page-about" class="page">
+
+    <!-- Hero Chi Sono -->
+    <section class="about-hero">
+      <div class="about-hero-text">
+        <span class="text-xs font-medium tracking-extra-wide uppercase block mb-8 reveal" style="color:var(--color-accent)">Chi Sono</span>
+        <h1 class="font-display tracking-tightest leading-none" id="about-h1" style="font-size:clamp(3.5rem,7vw,6.5rem);color:var(--color-dark)">
+          <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-100">Marco</span></span>
+          <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-300" style="font-style:italic;color:var(--color-accent)">Bellini</span></span>
+        </h1>
+        <p class="mt-8 text-base leading-relaxed reveal delay-500" style="color:var(--color-muted);max-width:380px">
+          Fotografo pluripremiato con base a Milano. Specializzato in fotografia di ritratto, paesaggio ed editoriale per brand del lusso e pubblicazioni internazionali.
+        </p>
+        <div class="flex items-center gap-6 mt-10 reveal delay-700">
+          <div>
+            <div class="font-display text-3xl tracking-tightest" style="color:var(--color-dark)">12+</div>
+            <span class="text-xs font-medium tracking-extra-wide uppercase" style="color:var(--color-muted)">Anni</span>
+          </div>
+          <div class="w-px h-12" style="background:var(--color-border)"></div>
+          <div>
+            <div class="font-display text-3xl tracking-tightest" style="color:var(--color-dark)">340+</div>
+            <span class="text-xs font-medium tracking-extra-wide uppercase" style="color:var(--color-muted)">Progetti</span>
+          </div>
+          <div class="w-px h-12" style="background:var(--color-border)"></div>
+          <div>
+            <div class="font-display text-3xl tracking-tightest" style="color:var(--color-dark)">28</div>
+            <span class="text-xs font-medium tracking-extra-wide uppercase" style="color:var(--color-muted)">Premi</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-hero-img">
+        <img src="https://images.unsplash.com/photo-1608753857729-c11972151307?w=1200&q=80" alt="Marco Bellini fotografo con dolcevita nero, tiene la macchina fotografica con espressione pensierosa" />
+        <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(to right,rgba(245,242,236,0.15) 0%,transparent 30%)"></div>
+        <div class="absolute rounded-2xl p-6" style="bottom:2.5rem;right:2.5rem;background:rgba(245,242,236,0.92);backdrop-filter:blur(12px);border:1px solid var(--color-border)">
+          <div class="text-xs font-medium tracking-extra-wide uppercase mb-2" style="color:var(--color-accent)">Attualmente Disponibile</div>
+          <div class="font-display text-lg tracking-tight" style="color:var(--color-dark)">Prenotazioni aperte per il 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Filosofia -->
+    <section class="philosophy-section" id="philosophy-section">
+      <div class="section-container">
+        <div style="display:grid;grid-template-columns:1fr;gap:2.5rem">
+          <div style="display:grid;grid-template-columns:1fr" class="md-philosophy-grid">
+            <span class="text-xs font-medium tracking-extra-wide uppercase reveal" style="color:var(--color-accent)">La Mia Filosofia</span>
+          </div>
+          <div>
+            <h2 class="font-display tracking-tightest leading-tight mb-16 reveal delay-100" style="font-size:clamp(2rem,4vw,3.5rem);color:var(--color-dark);max-width:720px">
+              La fotografia è l'arte di congelare il tempo — <span style="font-style:italic;color:var(--color-accent)">e prendo questa responsabilità molto sul serio.</span>
+            </h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem">
+              <div class="reveal delay-200">
+                <div class="font-display text-5xl tracking-tightest mb-6" style="color:var(--color-accent);opacity:0.4">01</div>
+                <h3 class="font-display text-xl tracking-tight mb-4" style="color:var(--color-dark)">La luce è tutto</h3>
+                <p class="text-sm leading-relaxed" style="color:var(--color-muted)">Prima di prendere la fotocamera, studio la luce. Naturale o artificiale, la qualità della luce determina se un'immagine respira o soffoca. Aspetto. Mi adatto. Inseguo.</p>
+              </div>
+              <div class="reveal delay-300">
+                <div class="font-display text-5xl tracking-tightest mb-6" style="color:var(--color-accent);opacity:0.4">02</div>
+                <h3 class="font-display text-xl tracking-tight mb-4" style="color:var(--color-dark)">Pazienza prima della perfezione</h3>
+                <p class="text-sm leading-relaxed" style="color:var(--color-muted)">Le migliori fotografie raramente si scattano — si scoprono. Costruisco una relazione con il soggetto, che sia una persona o un paesaggio, finché il momento giusto non si rivela naturalmente.</p>
+              </div>
+              <div class="reveal delay-400">
+                <div class="font-display text-5xl tracking-tightest mb-6" style="color:var(--color-accent);opacity:0.4">03</div>
+                <h3 class="font-display text-xl tracking-tight mb-4" style="color:var(--color-dark)">La sottrazione come arte</h3>
+                <p class="text-sm leading-relaxed" style="color:var(--color-muted)">Sapere cosa escludere dall'inquadratura è importante quanto sapere cosa includere. Lo spazio negativo respira. La semplicità dura. La complessità sfuma.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Biografia -->
+    <section class="bio-section" id="bio-section">
+      <div class="bio-timeline">
+        <span class="text-xs font-medium tracking-extra-wide uppercase block mb-12 reveal" style="color:var(--color-accent)">Cronologia</span>
+        <div>
+          <div class="flex gap-8 pb-8 reveal" style="border-bottom:1px solid var(--color-border)">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2014</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Inizio della carriera fotografica professionale dopo gli studi di belle arti a Firenze.</p>
+          </div>
+          <div class="flex gap-8 py-8 reveal delay-100" style="border-bottom:1px solid var(--color-border)">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2016</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Prima copertina per Vogue Italia, con la collezione autunno/inverno.</p>
+          </div>
+          <div class="flex gap-8 py-8 reveal delay-200" style="border-bottom:1px solid var(--color-border)">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2018</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Mostra personale "Luce e Ombra" alla Galleria Carbone, Milano. Oltre 1.200 visitatori.</p>
+          </div>
+          <div class="flex gap-8 py-8 reveal delay-300" style="border-bottom:1px solid var(--color-border)">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2020</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Vincitore, World Photography Awards — categoria Ritratto.</p>
+          </div>
+          <div class="flex gap-8 py-8 reveal delay-400" style="border-bottom:1px solid var(--color-border)">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2022</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Campagne commerciali per Ferrari, Bulgari e Brunello Cucinelli.</p>
+          </div>
+          <div class="flex gap-8 pt-8 reveal delay-500">
+            <div class="font-display text-sm tracking-tight shrink-0 pt-1" style="color:var(--color-accent);min-width:48px">2025</div>
+            <p class="text-sm leading-relaxed" style="color:var(--color-dark)">Pubblicazione della monografia "Between Breaths" — edizione limitata di 500 copie.</p>
+          </div>
+        </div>
+      </div>
+      <div class="bio-side">
+        <div class="bio-side-img">
+          <img src="https://images.unsplash.com/photo-1595793550800-5bdd9d23b2fa?w=800&q=80" alt="Attrezzatura fotografica su superficie scura — fotocamera vintage e obiettivi" />
+        </div>
+        <div class="p-10" style="background:var(--color-dark)">
+          <blockquote class="font-display text-xl leading-snug tracking-tight" style="color:var(--color-bg);font-style:italic">
+            "Non scatto fotografie. Le creo — con pazienza, intenzione e uno sguardo onesto."
+          </blockquote>
+          <cite class="block mt-4 text-xs font-medium tracking-extra-wide uppercase not-italic" style="color:var(--color-accent)">— Marco Bellini</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sezione Riconoscimenti -->
+    <section class="credentials-section" id="credentials-section">
+      <div class="section-container">
+        <!-- Premi -->
+        <div style="display:grid;grid-template-columns:1fr;gap:2.5rem;margin-bottom:5rem">
+          <span class="text-xs font-medium tracking-extra-wide uppercase reveal" style="color:var(--color-accent)">Riconoscimenti</span>
+          <div>
+            <div class="flex flex-col py-6 reveal" style="border-bottom:1px solid var(--color-border)">
+              <div class="flex items-center gap-4"><span class="font-display text-sm tracking-tight" style="color:var(--color-accent);min-width:40px">2020</span><h3 class="font-display text-lg tracking-tight" style="color:var(--color-dark)">World Photography Awards</h3></div>
+              <span class="text-xs font-medium tracking-extra-wide uppercase mt-2" style="color:var(--color-muted)">Ritratto — Oro</span>
+            </div>
+            <div class="flex flex-col py-6 reveal delay-100" style="border-bottom:1px solid var(--color-border)">
+              <div class="flex items-center gap-4"><span class="font-display text-sm tracking-tight" style="color:var(--color-accent);min-width:40px">2022</span><h3 class="font-display text-lg tracking-tight" style="color:var(--color-dark)">Sony World Photography</h3></div>
+              <span class="text-xs font-medium tracking-extra-wide uppercase mt-2" style="color:var(--color-muted)">Professionisti — Selezione Finale</span>
+            </div>
+            <div class="flex flex-col py-6 reveal delay-200" style="border-bottom:1px solid var(--color-border)">
+              <div class="flex items-center gap-4"><span class="font-display text-sm tracking-tight" style="color:var(--color-accent);min-width:40px">2021</span><h3 class="font-display text-lg tracking-tight" style="color:var(--color-dark)">Prix de la Photographie Paris</h3></div>
+              <span class="text-xs font-medium tracking-extra-wide uppercase mt-2" style="color:var(--color-muted)">Editoriale — Argento</span>
+            </div>
+            <div class="flex flex-col py-6 reveal delay-300" style="border-bottom:1px solid var(--color-border)">
+              <div class="flex items-center gap-4"><span class="font-display text-sm tracking-tight" style="color:var(--color-accent);min-width:40px">2023</span><h3 class="font-display text-lg tracking-tight" style="color:var(--color-dark)">IPA International Photo Awards</h3></div>
+              <span class="text-xs font-medium tracking-extra-wide uppercase mt-2" style="color:var(--color-muted)">Moda — Oro</span>
+            </div>
+          </div>
+        </div>
+        <!-- Clienti -->
+        <div style="display:grid;grid-template-columns:1fr;gap:2.5rem">
+          <span class="text-xs font-medium tracking-extra-wide uppercase reveal" style="color:var(--color-accent)">Clienti</span>
+          <div class="flex flex-wrap gap-3">
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Vogue Italia</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-100 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Ferrari</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-200 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Bulgari</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-300 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">GQ Italia</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-100 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Brunello Cucinelli</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-200 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Monocle</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-300 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Wallpaper*</span>
+            <span class="px-5 py-2 rounded-full text-sm font-medium reveal delay-100 cursor-default transition-all" style="border:1px solid var(--color-border);color:var(--color-dark)" onmouseover="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--color-dark)'">Bottega Veneta</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Chi Sono -->
+    <section class="about-cta-section" id="about-cta-section">
+      <div style="grid-column:1;text-align:center;padding:0 1.5rem">
+        <h2 class="font-display tracking-tightest leading-tight mb-8 reveal" style="font-size:clamp(2.5rem,5vw,4.5rem);color:var(--color-dark)">
+          Pronti a creare <span style="font-style:italic;color:var(--color-accent)">qualcosa di duraturo</span> insieme?
+        </h2>
+        <p class="text-base leading-relaxed mb-10 mx-auto reveal delay-100" style="color:var(--color-muted);max-width:480px">
+          Che tu abbia bisogno di una campagna commerciale, ritratti editoriali o un progetto personale — iniziamo una conversazione.
+        </p>
+        <div class="flex items-center justify-center gap-6 reveal delay-200">
+          <button onclick="showPage('contact')" class="inline-flex items-center gap-3 text-sm font-medium tracking-extra-wide uppercase px-8 py-4 rounded-full transition-all" style="background:var(--color-dark);color:var(--color-bg)"
+            onmouseover="this.style.background='var(--color-accent)';this.style.color='var(--color-dark)'"
+            onmouseout="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'">
+            Contattami
+          </button>
+          <button onclick="showPage('home')" class="text-sm font-medium tracking-extra-wide uppercase transition-colors" style="color:var(--color-muted);background:none;border:none"
+            onmouseover="this.style.color='var(--color-dark)'"
+            onmouseout="this.style.color='var(--color-muted)'">
+            Vedi i Lavori
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-left">
+          <a href="#" class="font-display text-base tracking-tightest" style="color:var(--color-dark)" onclick="showPage('home'); return false;">PhotoFolio</a>
+          <nav class="flex items-center gap-6">
+            <a href="#" class="footer-link" onclick="showPage('home'); return false;">Lavori</a>
+            <a href="#" class="footer-link" onclick="showPage('about'); return false;">Chi Sono</a>
+            <a href="#" class="footer-link" onclick="showPage('contact'); return false;">Contatti</a>
+          </nav>
+        </div>
+        <div class="footer-right">
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">Behance</a>
+          <a href="#" class="footer-link">Vsco</a>
+          <span class="text-xs" style="color:var(--color-muted)">© 2026 PhotoFolio</span>
+          <a href="#" class="footer-link">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       PAGINA CONTATTI
+  ═══════════════════════════════════════════════════ -->
+  <div id="page-contact" class="page">
+
+    <!-- Hero Contatti -->
+    <section class="contact-hero">
+      <div class="contact-hero-grid">
+        <div>
+          <span class="text-xs font-medium tracking-extra-wide uppercase block mb-8 reveal" style="color:var(--color-accent)">Scrivimi</span>
+          <h1 class="font-display tracking-tightest leading-none" id="contact-h1" style="font-size:clamp(3.5rem,8vw,7.5rem);color:var(--color-dark)">
+            <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-100">Parliamo</span></span>
+            <span class="text-reveal-wrapper block"><span class="text-reveal-content delay-300" style="font-style:italic;color:var(--color-accent)">insieme.</span></span>
+          </h1>
+          <p class="mt-8 text-base leading-relaxed reveal delay-500" style="color:var(--color-muted);max-width:480px">
+            Raccontami del tuo progetto — commerciale, editoriale, ritratto o personale. Rispondo a tutte le richieste entro 24 ore.
+          </p>
+        </div>
+        <div class="flex flex-col justify-end gap-4 mt-10 reveal delay-400">
+          <div class="p-6 rounded-2xl" style="background:var(--color-dark)">
+            <div class="w-2 h-2 rounded-full mb-4" style="background:#4ADE80"></div>
+            <div class="text-xs font-medium tracking-extra-wide uppercase mb-1" style="color:rgba(245,242,236,0.5)">Disponibilità</div>
+            <div class="font-display text-xl tracking-tight" style="color:var(--color-bg)">Aperto per il 2026</div>
+            <p class="text-sm mt-2" style="color:rgba(245,242,236,0.45)">Prenotazioni disponibili da marzo in poi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Corpo Contatti -->
+    <section class="contact-body" id="contact-body">
+      <!-- Modulo -->
+      <div class="contact-form-col">
+        <div id="form-success" style="display:none;flex-direction:column;justify-content:center;min-height:400px">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mb-8" style="background:var(--color-accent);color:var(--color-dark)">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2 class="font-display text-4xl tracking-tightest mb-4" style="color:var(--color-dark)">Messaggio ricevuto.</h2>
+          <p style="color:var(--color-muted)">Grazie per avermi contattato. Ti risponderò entro 24 ore.</p>
+          <button onclick="resetForm()" class="mt-8 text-sm font-medium tracking-extra-wide uppercase inline-flex items-center gap-2" style="color:var(--color-accent);background:none;border:none">Invia un altro messaggio</button>
+        </div>
+        <form id="contact-form" onsubmit="submitForm(event)" style="display:flex;flex-direction:column;gap:2.5rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem" class="reveal">
+            <div>
+              <label class="text-xs font-medium tracking-extra-wide uppercase block mb-3" style="color:var(--color-muted)" for="name">Nome e Cognome</label>
+              <input id="name" type="text" required placeholder="Giulia Rossi" class="form-input" />
+            </div>
+            <div>
+              <label class="text-xs font-medium tracking-extra-wide uppercase block mb-3" style="color:var(--color-muted)" for="email">Indirizzo Email</label>
+              <input id="email" type="email" required placeholder="giulia@studio.com" class="form-input" />
+            </div>
+          </div>
+          <div class="reveal delay-100">
+            <label class="text-xs font-medium tracking-extra-wide uppercase block mb-4" style="color:var(--color-muted)">Tipo di Progetto</label>
+            <div class="flex flex-wrap gap-2" id="project-types">
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Campagna Commerciale</button>
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Editoriale / Rivista</button>
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Sessione Ritratto</button>
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Paesaggio / Viaggio</button>
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Matrimonio</button>
+              <button type="button" class="project-type-btn px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all" style="border:1px solid var(--color-border);color:var(--color-muted);background:transparent" onclick="selectProjectType(this)">Altro</button>
+            </div>
+          </div>
+          <div class="reveal delay-200">
+            <label class="text-xs font-medium tracking-extra-wide uppercase block mb-3" style="color:var(--color-muted)" for="budget">Budget Indicativo</label>
+            <input id="budget" type="text" placeholder="es. €5.000 – €10.000" class="form-input" />
+          </div>
+          <div class="reveal delay-300">
+            <label class="text-xs font-medium tracking-extra-wide uppercase block mb-3" style="color:var(--color-muted)" for="message">Raccontami del tuo progetto</label>
+            <textarea id="message" required placeholder="Descrivi la tua visione, le tempistiche e eventuali requisiti specifici..." class="form-input form-textarea"></textarea>
+          </div>
+          <div class="reveal delay-400">
+            <button type="submit" class="inline-flex items-center gap-3 text-sm font-medium tracking-extra-wide uppercase px-8 py-4 rounded-full transition-all" style="background:var(--color-dark);color:var(--color-bg)"
+              onmouseover="this.style.background='var(--color-accent)';this.style.color='var(--color-dark)'"
+              onmouseout="this.style.background='var(--color-dark)';this.style.color='var(--color-bg)'">
+              Invia Messaggio
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Info Studio -->
+      <div class="contact-info-col">
+        <div class="reveal">
+          <span class="text-xs font-medium tracking-extra-wide uppercase block mb-6" style="color:var(--color-accent)">Studio</span>
+          <div>
+            <div class="flex flex-col py-4" style="border-bottom:1px solid var(--color-border)">
+              <span class="text-xs font-medium tracking-extra-wide uppercase mb-1" style="color:var(--color-muted)">Indirizzo</span>
+              <span class="text-sm font-medium" style="color:var(--color-dark)">Via Tortona 31, Milano, 20144</span>
+            </div>
+            <div class="flex flex-col py-4" style="border-bottom:1px solid var(--color-border)">
+              <span class="text-xs font-medium tracking-extra-wide uppercase mb-1" style="color:var(--color-muted)">Email</span>
+              <span class="text-sm font-medium" style="color:var(--color-dark)">marco@photofol.io</span>
+            </div>
+            <div class="flex flex-col py-4" style="border-bottom:1px solid var(--color-border)">
+              <span class="text-xs font-medium tracking-extra-wide uppercase mb-1" style="color:var(--color-muted)">Telefono</span>
+              <span class="text-sm font-medium" style="color:var(--color-dark)">+39 02 4567 8900</span>
+            </div>
+            <div class="flex flex-col py-4" style="border-bottom:1px solid var(--color-border)">
+              <span class="text-xs font-medium tracking-extra-wide uppercase mb-1" style="color:var(--color-muted)">Tempo di Risposta</span>
+              <span class="text-sm font-medium" style="color:var(--color-dark)">Entro 24 ore</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal delay-200">
+          <span class="text-xs font-medium tracking-extra-wide uppercase block mb-6" style="color:var(--color-accent)">Seguimi</span>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <a href="#" class="flex items-center justify-between py-3" style="border-bottom:1px solid var(--color-border);color:var(--color-dark)">
+              <span class="text-sm font-medium">Instagram</span>
+              <span class="text-xs" style="color:var(--color-muted)">@marcobellini.photo</span>
+            </a>
+            <a href="#" class="flex items-center justify-between py-3" style="border-bottom:1px solid var(--color-border);color:var(--color-dark)">
+              <span class="text-sm font-medium">Behance</span>
+              <span class="text-xs" style="color:var(--color-muted)">marcobellini</span>
+            </a>
+            <a href="#" class="flex items-center justify-between py-3" style="border-bottom:1px solid var(--color-border);color:var(--color-dark)">
+              <span class="text-sm font-medium">VSCO</span>
+              <span class="text-xs" style="color:var(--color-muted)">marcobellini</span>
+            </a>
+          </div>
+        </div>
+        <div class="p-6 rounded-2xl reveal delay-300" style="background:var(--color-bg-alt);border:1px solid var(--color-border)">
+          <p class="text-sm leading-relaxed" style="color:var(--color-muted)">
+            <span class="font-medium" style="color:var(--color-dark)">Nota:</span> Accetto un numero limitato di progetti ogni anno per garantire che ogni cliente riceva la mia piena attenzione e cura.
+          </p>
+        </div>
+        <div class="reveal delay-400">
+          <a href="#" onclick="showPage('home'); return false;" class="inline-flex items-center gap-3 text-sm font-medium" style="color:var(--color-dark)">
+            <span style="width:2rem;height:1px;background:var(--color-accent);display:inline-block;transition:width 0.5s ease"></span>
+            Torna al Portfolio
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-left">
+          <a href="#" class="font-display text-base tracking-tightest" style="color:var(--color-dark)" onclick="showPage('home'); return false;">PhotoFolio</a>
+          <nav class="flex items-center gap-6">
+            <a href="#" class="footer-link" onclick="showPage('home'); return false;">Lavori</a>
+            <a href="#" class="footer-link" onclick="showPage('about'); return false;">Chi Sono</a>
+            <a href="#" class="footer-link" onclick="showPage('contact'); return false;">Contatti</a>
+          </nav>
+        </div>
+        <div class="footer-right">
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">Behance</a>
+          <a href="#" class="footer-link">Vsco</a>
+          <span class="text-xs" style="color:var(--color-muted)">© 2026 PhotoFolio</span>
+          <a href="#" class="footer-link">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════════════ -->
+  <script>
+    // ── Navigazione Pagine ──
+    let currentPage = 'home';
+
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Aggiorna stati attivi nella nav
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
+      const map = { home: 'nav-work', about: 'nav-about', contact: 'nav-contact' };
+      if (map[page]) document.getElementById(map[page]).classList.add('active-link');
+
+      // Attiva animazioni per la nuova pagina
+      setTimeout(() => {
+        triggerRevealAnimations();
+        if (page === 'home') initHeroAnimations();
+        if (page === 'about') initAboutAnimations();
+        if (page === 'contact') initContactAnimations();
+      }, 50);
+    }
+
+    // ── Header scroll ──
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('site-header');
+      if (window.scrollY > 40) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    }, { passive: true });
+
+    // ── Menu Mobile ──
+    function toggleMenu() {
+      const burger = document.getElementById('burger-btn');
+      const menu = document.getElementById('mobile-menu');
+      burger.classList.toggle('open');
+      menu.classList.toggle('open');
+    }
+
+    // ── Carosello ──
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicatorsContainer = document.getElementById('slide-indicators');
+
+    function buildIndicators() {
+      indicatorsContainer.innerHTML = '';
+      slides.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.setAttribute('aria-label', 'Vai alla slide ' + (i + 1));
+        btn.style.cssText = `height:6px;border-radius:3px;border:none;cursor:pointer;transition:all 0.5s ease;background:${i === 0 ? 'var(--color-accent)' : 'rgba(255,255,255,0.4)'};width:${i === 0 ? '24px' : '6px'}`;
+        btn.onclick = () => goToSlide(i);
+        indicatorsContainer.appendChild(btn);
+      });
+    }
+
+    function goToSlide(idx) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = idx;
+      slides[currentSlide].classList.add('active');
+      updateIndicators();
+    }
+
+    function updateIndicators() {
+      const btns = indicatorsContainer.querySelectorAll('button');
+      btns.forEach((btn, i) => {
+        btn.style.width = i === currentSlide ? '24px' : '6px';
+        btn.style.background = i === currentSlide ? 'var(--color-accent)' : 'rgba(255,255,255,0.4)';
+      });
+    }
+
+    setInterval(() => goToSlide((currentSlide + 1) % slides.length), 6000);
+    buildIndicators();
+
+    // ── Suggerimento scroll (desktop) ──
+    const scrollHint = document.getElementById('scroll-hint');
+    if (window.innerWidth >= 768) scrollHint.style.display = 'flex';
+
+    // ── Animazioni reveal allo scroll ──
+    function triggerRevealAnimations() {
+      const reveals = document.querySelectorAll('#page-' + currentPage + ' .reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(el => observer.observe(el));
+    }
+
+    // ── Animazione testo Hero ──
+    function initHeroAnimations() {
+      const heroTitle = document.getElementById('hero-title');
+      setTimeout(() => {
+        heroTitle.classList.add('reveal-active');
+        document.getElementById('hero-badges').classList.add('active');
+        document.querySelectorAll('.stat-cell.reveal').forEach(el => el.classList.add('active'));
+      }, 400);
+    }
+
+    function initAboutAnimations() {
+      const h1 = document.getElementById('about-h1');
+      setTimeout(() => { if (h1) h1.classList.add('reveal-active'); }, 300);
+    }
+
+    function initContactAnimations() {
+      const h1 = document.getElementById('contact-h1');
+      setTimeout(() => { if (h1) h1.classList.add('reveal-active'); }, 300);
+    }
+
+    // ── Filtro Portfolio ──
+    function filterPortfolio(category) {
+      // Aggiorna tab
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === category);
+      });
+      // Mostra/nascondi elementi
+      const items = document.querySelectorAll('#portfolio-grid .portfolio-item');
+      items.forEach(item => {
+        const cat = item.dataset.category;
+        if (category === 'Tutti' || cat === category) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // ── Modulo Contatti ──
+    function selectProjectType(btn) {
+      document.querySelectorAll('.project-type-btn').forEach(b => {
+        b.style.borderColor = 'var(--color-border)';
+        b.style.background = 'transparent';
+        b.style.color = 'var(--color-muted)';
+      });
+      btn.style.borderColor = 'var(--color-dark)';
+      btn.style.background = 'var(--color-dark)';
+      btn.style.color = 'var(--color-bg)';
+    }
+
+    function submitForm(e) {
+      e.preventDefault();
+      document.getElementById('contact-form').style.display = 'none';
+      const success = document.getElementById('form-success');
+      success.style.display = 'flex';
+    }
+
+    function resetForm() {
+      document.getElementById('contact-form').reset();
+      document.getElementById('contact-form').style.display = 'flex';
+      document.getElementById('form-success').style.display = 'none';
+      document.querySelectorAll('.project-type-btn').forEach(b => {
+        b.style.borderColor = 'var(--color-border)';
+        b.style.background = 'transparent';
+        b.style.color = 'var(--color-muted)';
+      });
+    }
+
+    // ── Inizializzazione ──
+    window.addEventListener('DOMContentLoaded', () => {
+      initHeroAnimations();
+      triggerRevealAnimations();
+    });
+  </script>
+</body>
+</html>
