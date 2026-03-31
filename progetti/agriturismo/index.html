@@ -1,1 +1,965 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Agriturismo Bellavista — Lusso, natura e tradizione nel cuore della Toscana." />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <title>Agriturismo Bellavista — Toscana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --gold:#c9a96e;--gold-light:#e8d5a3;--gold-dark:#a07840;
+      --cream:#faf7f2;--cream-dark:#f0ebe0;--brown:#1a1612;--brown-mid:#3d2f1e;
+      --stone:#8c7b6b;--white:#ffffff;
+      --font-serif:'Cormorant Garamond',Georgia,serif;
+      --font-sans:'Montserrat',Arial,sans-serif;
+      --transition:all 0.4s cubic-bezier(.25,.46,.45,.94);
+      --shadow-soft:0 20px 60px rgba(0,0,0,.12);
+      --shadow-gold:0 8px 32px rgba(201,169,110,.35);
+    }
+    html{scroll-behavior:smooth;font-size:16px}
+    body{font-family:var(--font-sans);background:var(--cream);color:var(--brown);overflow-x:hidden;line-height:1.7}
+    a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-style:none}
+    .section{padding:100px 0}.container{max-width:1200px;margin:0 auto;padding:0 40px}
+    .label{font-family:var(--font-sans);font-size:.7rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+    .title-lg{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;line-height:1.2;color:var(--brown)}
+    .title-md{font-family:var(--font-serif);font-size:clamp(1.4rem,3vw,2rem);font-weight:400;color:var(--brown)}
+    .gold-line{display:block;width:60px;height:1px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin:20px auto}
+    .gold-line.left{margin:20px 0}
+
+    /* BUTTONS */
+    .btn{display:inline-block;padding:14px 36px;font-family:var(--font-sans);font-size:.72rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;border:none;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden}
+    .btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.15);transform:translateX(-100%);transition:transform .4s ease}
+    .btn:hover::before{transform:translateX(0)}
+    .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--white);box-shadow:var(--shadow-gold)}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,169,110,.5)}
+    .btn-outline{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,.6)}
+    .btn-outline:hover{background:rgba(255,255,255,.12);border-color:var(--gold);color:var(--gold-light)}
+    .btn-outline-dark{background:transparent;color:var(--brown);border:1px solid var(--gold)}
+    .btn-outline-dark:hover{background:var(--gold);color:var(--white)}
+
+    /* ANIMATIONS */
+    .fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+    .fade-in-delay-1{transition-delay:.1s}.fade-in-delay-2{transition-delay:.2s}.fade-in-delay-3{transition-delay:.3s}
+
+    /* NAVBAR */
+    #navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:24px 0;transition:var(--transition)}
+    #navbar.scrolled{background:rgba(26,22,18,.97);backdrop-filter:blur(12px);padding:14px 0;box-shadow:0 2px 30px rgba(0,0,0,.3)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 40px}
+    .nav-logo .name{font-family:var(--font-serif);font-size:1.5rem;color:var(--white);letter-spacing:.05em;line-height:1}
+    .nav-logo .sub{font-size:.6rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:2px}
+    .nav-links{display:flex;align-items:center;gap:36px}
+    .nav-links a{font-size:.68rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8);transition:color .3s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+    .nav-links a:hover{color:var(--gold)}.nav-links a:hover::after{width:100%}
+    .nav-cta{padding:10px 24px!important;font-size:.65rem!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+    .hamburger span{display:block;width:24px;height:1.5px;background:var(--white);transition:var(--transition)}
+    .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+    .mobile-menu{display:none;position:fixed;inset:0;background:rgba(26,22,18,.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:36px}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{font-family:var(--font-serif);font-size:2rem;color:var(--white);font-weight:300;transition:color .3s}
+    .mobile-menu a:hover{color:var(--gold)}
+
+    /* HERO */
+    #hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,22,18,.75) 0%,rgba(26,22,18,.4) 50%,rgba(26,22,18,.7) 100%),url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1800&q=80') center/cover no-repeat;animation:heroZoom 20s ease-in-out infinite alternate}
+    @keyframes heroZoom{from{transform:scale(1.05)}to{transform:scale(1.12)}}
+    .hero-content{position:relative;z-index:2;text-align:center;padding:0 20px;max-width:900px}
+    .hero-badge{display:inline-flex;align-items:center;gap:12px;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.4);padding:8px 20px;margin-bottom:32px}
+    .hero-badge span{font-size:.65rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-light)}
+    .hero-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+    .hero-title{font-family:var(--font-serif);font-size:clamp(3rem,8vw,7rem);font-weight:300;color:var(--white);line-height:1;margin-bottom:8px;letter-spacing:.02em}
+    .hero-title em{font-style:italic;color:var(--gold-light)}
+    .hero-subtitle{font-family:var(--font-serif);font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:300;color:rgba(255,255,255,.75);margin-bottom:12px;letter-spacing:.1em}
+    .hero-tagline{font-size:.72rem;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:48px}
+    .hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.5);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;z-index:2}
+    .scroll-mouse{width:22px;height:36px;border:1px solid rgba(255,255,255,.4);border-radius:11px;display:flex;justify-content:center;padding-top:6px}
+    .scroll-mouse::before{content:'';width:3px;height:7px;background:var(--gold);border-radius:2px;animation:scrollBounce 2s infinite}
+    @keyframes scrollBounce{0%,100%{transform:translateY(0);opacity:1}80%{transform:translateY(10px);opacity:0}}
+
+    /* STRIP */
+    .intro-strip{background:var(--brown);padding:28px 0}
+    .intro-strip-inner{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
+    .intro-stat{text-align:center;color:var(--white)}
+    .intro-stat .num{font-family:var(--font-serif);font-size:2rem;font-weight:300;color:var(--gold);line-height:1}
+    .intro-stat .lbl{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:4px}
+    .intro-divider{width:1px;height:40px;background:rgba(255,255,255,.15)}
+
+    /* ABOUT */
+    #about{background:var(--cream)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .about-images{position:relative;height:560px}
+    .about-img-main{position:absolute;top:0;left:0;width:75%;height:80%;object-fit:cover;box-shadow:var(--shadow-soft)}
+    .about-img-accent{position:absolute;bottom:0;right:0;width:55%;height:50%;object-fit:cover;box-shadow:var(--shadow-soft);border:6px solid var(--cream)}
+    .about-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--gold);color:var(--white);width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;box-shadow:var(--shadow-gold)}
+    .about-badge .num{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;line-height:1}
+    .about-badge .txt{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;margin-top:2px}
+    .about-text p{font-size:.95rem;color:var(--stone);line-height:1.9;margin:16px 0}
+    .about-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+    .about-feature{display:flex;align-items:flex-start;gap:12px}
+    .about-feature .fa-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;color:var(--white);font-size:.85rem;flex-shrink:0;margin-top:2px}
+    .ft-name{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);margin-bottom:2px}
+    .ft-desc{font-size:.8rem;color:var(--stone)}
+
+    /* ROOMS */
+    #rooms{background:var(--cream-dark)}
+    .section-header{text-align:center;margin-bottom:60px}
+    .rooms-tabs{display:flex;justify-content:center;margin-bottom:48px;border-bottom:1px solid rgba(201,169,110,.3);flex-wrap:wrap}
+    .room-tab{padding:14px 28px;font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);cursor:pointer;border:none;background:none;position:relative;transition:color .3s}
+    .room-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s}
+    .room-tab.active{color:var(--gold)}.room-tab.active::after{transform:scaleX(1)}
+    .room-panel{display:none}
+    .room-panel.active{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
+    .room-img-wrap{position:relative;overflow:hidden;height:480px}
+    .room-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+    .room-img-wrap:hover img{transform:scale(1.05)}
+    .room-img-badge{position:absolute;top:24px;left:24px;background:rgba(26,22,18,.85);color:var(--gold);padding:6px 14px;font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;backdrop-filter:blur(6px)}
+    .room-price{display:flex;align-items:baseline;gap:6px;margin:20px 0}
+    .room-price .amount{font-family:var(--font-serif);font-size:2.5rem;font-weight:300;color:var(--brown)}
+    .room-price .per{font-size:.75rem;color:var(--stone);letter-spacing:.1em}
+    .room-info p{font-size:.92rem;color:var(--stone);line-height:1.9;margin-bottom:24px}
+    .room-amenities{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+    .amenity-tag{background:var(--cream);border:1px solid rgba(201,169,110,.3);padding:6px 14px;font-size:.68rem;letter-spacing:.1em;color:var(--stone);display:flex;align-items:center;gap:6px}
+    .amenity-tag i{color:var(--gold);font-size:.75rem}
+
+    /* POOL */
+    #pool{position:relative;background:linear-gradient(180deg,rgba(10,30,50,.85),rgba(10,40,60,.7)),url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1800&q=80') center/cover no-repeat fixed;padding:120px 0;color:var(--white)}
+    .pool-content{text-align:center;max-width:700px;margin:0 auto 80px}
+    .pool-content .label{color:var(--gold-light)}.pool-content .title-lg{color:var(--white);margin:16px 0}
+    .pool-content p{font-size:1rem;color:rgba(255,255,255,.7);line-height:1.9;margin-bottom:36px}
+    .pool-features{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:900px;margin:0 auto}
+    .pool-feature{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);padding:36px 24px;text-align:center;transition:var(--transition)}
+    .pool-feature:hover{background:rgba(201,169,110,.15);border-color:rgba(201,169,110,.4);transform:translateY(-4px)}
+    .pf-icon{width:56px;height:56px;background:rgba(201,169,110,.2);border:1px solid rgba(201,169,110,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.3rem;color:var(--gold-light)}
+    .pf-title{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);margin-bottom:8px}
+    .pf-desc{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.7}
+
+    /* RESTAURANT */
+    #restaurant{background:var(--cream)}
+    .restaurant-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+    .restaurant-img-wrap{position:relative;height:600px;overflow:hidden}
+    .restaurant-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+    .restaurant-img-wrap:hover img{transform:scale(1.04)}
+    .restaurant-quote{position:absolute;bottom:32px;left:32px;right:32px;background:rgba(26,22,18,.88);backdrop-filter:blur(8px);padding:24px 28px;color:var(--white)}
+    .restaurant-quote p{font-family:var(--font-serif);font-size:1.05rem;font-style:italic;color:var(--gold-light);margin-bottom:8px}
+    .restaurant-quote span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+    .menu-section{margin-bottom:40px}
+    .menu-section-title{font-size:.65rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(201,169,110,.25);padding-bottom:10px;margin-bottom:20px}
+    .menu-item{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05);gap:16px}
+    .menu-item-name{font-family:var(--font-serif);font-size:1.05rem;color:var(--brown);flex:1}
+    .menu-item-desc{font-size:.75rem;color:var(--stone);margin-top:2px;line-height:1.5}
+    .menu-item-price{font-family:var(--font-serif);font-size:1rem;color:var(--gold-dark);white-space:nowrap;flex-shrink:0}
+
+    /* EXPERIENCES */
+    #experiences{background:var(--cream-dark)}
+    .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
+    .exp-card{position:relative;height:340px;overflow:hidden;cursor:pointer}
+    .exp-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease;filter:brightness(.65)}
+    .exp-card:hover img{transform:scale(1.1);filter:brightness(.5)}
+    .exp-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:32px 28px;background:linear-gradient(to top,rgba(26,22,18,.9) 0%,transparent 60%);transition:var(--transition)}
+    .exp-card:hover .exp-overlay{padding-bottom:40px}
+    .exp-icon{width:44px;height:44px;background:rgba(201,169,110,.25);border:1px solid rgba(201,169,110,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1rem;color:var(--gold-light)}
+    .exp-name{font-family:var(--font-serif);font-size:1.3rem;color:var(--white);font-weight:300;margin-bottom:6px}
+    .exp-desc{font-size:.78rem;color:rgba(255,255,255,.7);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .5s ease}
+    .exp-card:hover .exp-desc{max-height:80px}
+
+    /* GALLERY */
+    #gallery{background:var(--brown);padding:80px 0}
+    #gallery .section-header .label{color:var(--gold)}
+    #gallery .section-header .title-lg{color:var(--white)}
+    .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:220px 220px;gap:4px;margin-top:48px}
+    .gallery-item{overflow:hidden;cursor:pointer}
+    .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 2}
+    .gallery-item:nth-child(4){grid-column:span 2}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,filter .6s ease;filter:brightness(.85)}
+    .gallery-item:hover img{transform:scale(1.08);filter:brightness(1)}
+
+    /* TESTIMONIALS */
+    #testimonials{background:var(--cream)}
+    .testimonials-wrap{max-width:800px;margin:0 auto;text-align:center}
+    .testimonial-slider{position:relative;min-height:200px;overflow:hidden}
+    .testimonial-slide{display:none;animation:fadeSlide .6s ease}
+    .testimonial-slide.active{display:block}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .t-stars{color:var(--gold);font-size:1.1rem;margin-bottom:24px;letter-spacing:3px}
+    .t-text{font-family:var(--font-serif);font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:300;font-style:italic;color:var(--brown);line-height:1.7;margin-bottom:28px}
+    .t-author{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--stone)}
+    .t-location{color:var(--gold)}
+    .t-dots{display:flex;justify-content:center;gap:8px;margin-top:40px}
+    .t-dot{width:8px;height:8px;border-radius:50%;background:rgba(201,169,110,.3);cursor:pointer;border:none;transition:background .3s}
+    .t-dot.active{background:var(--gold)}
+    .platforms{display:flex;justify-content:center;gap:40px;margin-top:56px;padding-top:40px;border-top:1px solid rgba(0,0,0,.08);flex-wrap:wrap}
+    .platform .score{font-family:var(--font-serif);font-size:2rem;font-weight:300;color:var(--gold);line-height:1}
+    .platform .pname{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-top:4px}
+
+    /* BOOKING CTA */
+    #booking{background:var(--brown);padding:120px 0}
+    .booking-inner{text-align:center;max-width:680px;margin:0 auto}
+    .booking-inner .label{color:var(--gold)}
+    .booking-inner .title-lg{color:var(--white);margin:16px 0 20px}
+    .booking-inner .subtitle{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:56px}
+    .booking-phone-box{background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.25);padding:52px 48px;backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;gap:28px}
+    .booking-phone-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--white);box-shadow:var(--shadow-gold)}
+    .booking-phone-label{font-size:.62rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+    .booking-phone-number{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--white);letter-spacing:.05em}
+    .booking-phone-number a{color:var(--gold-light);transition:color .3s}
+    .booking-phone-number a:hover{color:var(--gold)}
+    .booking-phone-note{font-size:.72rem;color:rgba(255,255,255,.35);letter-spacing:.1em}
+    .booking-hours{display:flex;align-items:center;gap:10px;background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.15);padding:12px 24px;font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.1em}
+    .booking-hours i{color:var(--gold);font-size:.85rem}
+
+    /* CONTACT */
+    #contact{background:var(--cream-dark)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+    .contact-info p{font-size:.92rem;color:var(--stone);line-height:1.9;margin-bottom:36px}
+    .contact-items{display:flex;flex-direction:column;gap:24px}
+    .contact-item{display:flex;align-items:flex-start;gap:16px}
+    .ci-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;box-shadow:var(--shadow-gold);color:var(--white)}
+    .ci-label{font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+    .ci-value{font-size:.9rem;color:var(--brown);line-height:1.5}
+    .map-placeholder{background:var(--brown-mid);height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--white);gap:12px;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;text-decoration:none}
+    .map-placeholder i{font-size:2.5rem;color:var(--gold)}
+    .map-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);position:relative}
+    .map-placeholder:hover{opacity:.85}
+    .social-links{display:flex;gap:14px;margin-top:36px}
+    .social-link{width:42px;height:42px;border:1px solid rgba(201,169,110,.35);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--stone);transition:var(--transition)}
+    .social-link:hover{background:var(--gold);border-color:var(--gold);color:var(--white);transform:translateY(-3px)}
+
+    /* FOOTER */
+    footer{background:#0f0d0a;padding:70px 0 0;color:rgba(255,255,255,.5)}
+    .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:48px;padding-bottom:60px}
+    .footer-brand .name{font-family:var(--font-serif);font-size:1.8rem;font-weight:300;color:var(--white);margin-bottom:4px}
+    .footer-brand .tagline{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+    .footer-brand p{font-size:.82rem;line-height:1.8;color:rgba(255,255,255,.4);margin-bottom:24px}
+    .footer-col h4{font-size:.65rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+    .footer-col ul{display:flex;flex-direction:column;gap:10px}
+    .footer-col ul li a{font-size:.82rem;color:rgba(255,255,255,.4);transition:color .3s}
+    .footer-col ul li a:hover{color:var(--gold)}
+    .newsletter-input{display:flex;margin-top:16px}
+    .newsletter-input input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.2);border-right:none;padding:12px 14px;font-family:var(--font-sans);font-size:.78rem;color:var(--white);outline:none}
+    .newsletter-input input::placeholder{color:rgba(255,255,255,.25)}
+    .newsletter-input button{background:var(--gold);border:none;padding:12px 18px;color:var(--white);cursor:pointer;font-size:.85rem;transition:background .3s}
+    .newsletter-input button:hover{background:var(--gold-dark)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding:24px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .footer-bottom p{font-size:.72rem;color:rgba(255,255,255,.3)}
+    .footer-bottom-links{display:flex;gap:24px}
+    .footer-bottom-links a{font-size:.68rem;color:rgba(255,255,255,.3);transition:color .3s}
+    .footer-bottom-links a:hover{color:var(--gold)}
+
+    /* BACK TO TOP */
+    #backToTop{position:fixed;bottom:32px;right:32px;width:48px;height:48px;background:var(--gold);border:none;color:var(--white);font-size:1.1rem;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:900;box-shadow:var(--shadow-gold);transition:var(--transition)}
+    #backToTop:hover{background:var(--gold-dark);transform:translateY(-3px)}
+    #backToTop.visible{display:flex}
+
+    /* COOKIE */
+    #cookieBanner{position:fixed;bottom:0;left:0;right:0;background:rgba(26,22,18,.97);backdrop-filter:blur(10px);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;z-index:9999;border-top:1px solid rgba(201,169,110,.2);flex-wrap:wrap}
+    #cookieBanner p{font-size:.78rem;color:rgba(255,255,255,.6);flex:1;min-width:240px}
+    #cookieBanner p a{color:var(--gold)}
+    .cookie-btns{display:flex;gap:12px;flex-shrink:0}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .section{padding:70px 0}.container{padding:0 20px}
+      .nav-links{display:none}.hamburger{display:flex}
+      .about-grid,.restaurant-grid,.contact-grid{grid-template-columns:1fr}
+      .about-images{height:380px}
+      .room-panel.active{grid-template-columns:1fr}.room-img-wrap{height:300px}
+      .pool-features{grid-template-columns:repeat(2,1fr)}
+      .exp-grid{grid-template-columns:1fr 1fr}
+      .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+      .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 1}
+      .gallery-item:nth-child(4){grid-column:span 1}
+      .footer-grid{grid-template-columns:1fr;gap:28px}
+      .intro-strip-inner{gap:24px}.intro-divider{display:none}
+      .booking-phone-box{padding:36px 24px}
+      .footer-bottom{flex-direction:column;text-align:center}
+      #cookieBanner{padding:16px 20px}
+    }
+    @media(max-width:480px){
+      .hero-ctas{flex-direction:column;align-items:center}
+      .pool-features{grid-template-columns:1fr}.exp-grid{grid-template-columns:1fr}
+      .rooms-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+      .room-tab{white-space:nowrap}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="name">Bellavista</div>
+      <div class="sub">Agriturismo · Toscana</div>
+    </a>
+    <div class="nav-links">
+      <a href="#about">La Tenuta</a>
+      <a href="#rooms">Camere</a>
+      <a href="#pool">Piscina</a>
+      <a href="#restaurant">Ristorante</a>
+      <a href="#experiences">Esperienze</a>
+      <a href="#gallery">Galleria</a>
+      <a href="#booking" class="btn btn-gold nav-cta">Prenota</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobileMenu()">La Tenuta</a>
+  <a href="#rooms" onclick="closeMobileMenu()">Camere</a>
+  <a href="#pool" onclick="closeMobileMenu()">Piscina</a>
+  <a href="#restaurant" onclick="closeMobileMenu()">Ristorante</a>
+  <a href="#experiences" onclick="closeMobileMenu()">Esperienze</a>
+  <a href="#gallery" onclick="closeMobileMenu()">Galleria</a>
+  <a href="#booking" onclick="closeMobileMenu()" class="btn btn-gold">Prenota ora</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span><i class="fa-solid fa-award" style="color:var(--gold);margin-right:6px"></i>Tuscany's Finest Award 2024</span>
+      <span class="dot"></span>
+    </div>
+    <h1 class="hero-title">Agriturismo<br><em>Bellavista</em></h1>
+    <p class="hero-subtitle">Nel cuore della Toscana</p>
+    <p class="hero-tagline">Siena &middot; Chianti &middot; Dal 1887</p>
+    <div class="hero-ctas">
+      <a href="#booking" class="btn btn-gold">Prenota il tuo soggiorno</a>
+      <a href="#about" class="btn btn-outline">Scopri la tenuta</a>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-mouse"></div>
+    <span>Scorri</span>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="intro-strip">
+  <div class="intro-strip-inner container">
+    <div class="intro-stat"><div class="num">137</div><div class="lbl">Anni di Storia</div></div>
+    <div class="intro-divider"></div>
+    <div class="intro-stat"><div class="num">12</div><div class="lbl">Suite Esclusive</div></div>
+    <div class="intro-divider"></div>
+    <div class="intro-stat"><div class="num">45</div><div class="lbl">Ettari di Tenuta</div></div>
+    <div class="intro-divider"></div>
+    <div class="intro-stat"><div class="num">9.8</div><div class="lbl">Score Ospiti</div></div>
+    <div class="intro-divider"></div>
+    <div class="intro-stat"><div class="num">1</div><div class="lbl">Stella Michelin</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-images fade-in">
+        <img class="about-img-main" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80" alt="Tenuta Bellavista" loading="lazy"/>
+        <img class="about-img-accent" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Colline toscane" loading="lazy"/>
+        <div class="about-badge"><span class="num">1887</span><span class="txt">Fondazione</span></div>
+      </div>
+      <div class="about-text fade-in fade-in-delay-2">
+        <p class="label">La nostra storia</p>
+        <h2 class="title-lg">Una tenuta con<br><em>cinque generazioni</em><br>di amore per la terra</h2>
+        <span class="gold-line left"></span>
+        <p>Nel cuore verde del Chianti Classico, a pochi chilometri dalle torri medievali di Siena, la famiglia Marchetti custodisce da cinque generazioni un angolo di paradiso toscano.</p>
+        <p>La nostra filosofia è semplice: rispettare la terra, celebrare la stagionalità, accogliere ogni ospite come si fa con un vecchio amico di famiglia.</p>
+        <div class="about-features">
+          <div class="about-feature">
+            <div class="fa-icon"><i class="fa-solid fa-wine-bottle"></i></div>
+            <div class="ft-text"><div class="ft-name">Vigneti Propri</div><div class="ft-desc">Chianti Classico DOCG</div></div>
+          </div>
+          <div class="about-feature">
+            <div class="fa-icon"><i class="fa-solid fa-seedling"></i></div>
+            <div class="ft-text"><div class="ft-name">Olio EVO</div><div class="ft-desc">400 ulivi centenari</div></div>
+          </div>
+          <div class="about-feature">
+            <div class="fa-icon"><i class="fa-solid fa-leaf"></i></div>
+            <div class="ft-text"><div class="ft-name">Bio Certificato</div><div class="ft-desc">Dal 1998</div></div>
+          </div>
+          <div class="about-feature">
+            <div class="fa-icon"><i class="fa-solid fa-solar-panel"></i></div>
+            <div class="ft-text"><div class="ft-name">Sostenibile</div><div class="ft-desc">100% energia rinnovabile</div></div>
+          </div>
+        </div>
+        <a href="#experiences" class="btn btn-outline-dark" style="margin-top:32px">Scopri le esperienze</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS -->
+<section id="rooms" class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <p class="label">Dove il riposo diventa arte</p>
+      <h2 class="title-lg">Camere &amp; Suite</h2>
+      <span class="gold-line"></span>
+      <p style="color:var(--stone);max-width:500px;margin:0 auto;font-size:.9rem">Ogni stanza è un mondo: arredi d'epoca, tessuti pregiati e viste mozzafiato sulle colline del Chianti.</p>
+    </div>
+    <div class="rooms-tabs">
+      <button class="room-tab active" onclick="switchRoom('suite',this)">Suite Marchetti</button>
+      <button class="room-tab" onclick="switchRoom('deluxe',this)">Deluxe</button>
+      <button class="room-tab" onclick="switchRoom('junior',this)">Junior Suite</button>
+      <button class="room-tab" onclick="switchRoom('family',this)">Family</button>
+    </div>
+
+    <div id="tab-suite" class="room-panel active">
+      <div class="room-img-wrap fade-in">
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80" alt="Suite Marchetti" loading="lazy"/>
+        <div class="room-img-badge">Nostra eccellenza</div>
+      </div>
+      <div class="room-info fade-in fade-in-delay-2">
+        <p class="label">La più esclusiva</p><h3 class="title-md">Suite Marchetti</h3><span class="gold-line left"></span>
+        <div class="room-price"><span class="amount">€ 480</span><span class="per">/ notte</span></div>
+        <p>Il fiore all'occhiello della tenuta. Un appartamento di 90 m² ricavato dall'ala nobile della villa cinquecentesca, con soffitti affrescati originali, parquet in rovere antico e terrazza privata con vista a 180° sulle colline.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag"><i class="fa-solid fa-bath"></i> Vasca free-standing</span>
+          <span class="amenity-tag"><i class="fa-solid fa-sun"></i> Terrazza privata</span>
+          <span class="amenity-tag"><i class="fa-solid fa-champagne-glasses"></i> Benvenuto Gourmet</span>
+          <span class="amenity-tag"><i class="fa-solid fa-fire"></i> Camino</span>
+          <span class="amenity-tag"><i class="fa-solid fa-tv"></i> TV 65"</span>
+          <span class="amenity-tag"><i class="fa-solid fa-concierge-bell"></i> Butler dedicato</span>
+        </div>
+        <a href="#booking" class="btn btn-gold">Prenota questa suite</a>
+      </div>
+    </div>
+
+    <div id="tab-deluxe" class="room-panel">
+      <div class="room-img-wrap fade-in">
+        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=900&q=80" alt="Camera Deluxe" loading="lazy"/>
+        <div class="room-img-badge">Più richiesta</div>
+      </div>
+      <div class="room-info fade-in fade-in-delay-2">
+        <p class="label">Raffinato comfort</p><h3 class="title-md">Camera Deluxe</h3><span class="gold-line left"></span>
+        <div class="room-price"><span class="amount">€ 290</span><span class="per">/ notte</span></div>
+        <p>Quaranta metri quadri di puro comfort toscano. Il letto a baldacchino in ferro battuto, il pavimento in cotto senese e la finestra incorniciata di glicine protagonisti di un soggiorno indimenticabile.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag"><i class="fa-solid fa-shower"></i> Doccia a pioggia</span>
+          <span class="amenity-tag"><i class="fa-solid fa-mountain-sun"></i> Vista vigneti</span>
+          <span class="amenity-tag"><i class="fa-solid fa-mug-hot"></i> Macchina caffè</span>
+          <span class="amenity-tag"><i class="fa-solid fa-bed"></i> King size</span>
+          <span class="amenity-tag"><i class="fa-solid fa-wifi"></i> Wi-Fi incluso</span>
+        </div>
+        <a href="#booking" class="btn btn-gold">Prenota questa camera</a>
+      </div>
+    </div>
+
+    <div id="tab-junior" class="room-panel">
+      <div class="room-img-wrap fade-in">
+        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb3?w=900&q=80" alt="Junior Suite" loading="lazy"/>
+        <div class="room-img-badge">Romantica</div>
+      </div>
+      <div class="room-info fade-in fade-in-delay-2">
+        <p class="label">Ideale per coppie</p><h3 class="title-md">Junior Suite</h3><span class="gold-line left"></span>
+        <div class="room-price"><span class="amount">€ 350</span><span class="per">/ notte</span></div>
+        <p>Sessanta metri quadri divisi tra camera da letto e salottino privato. Il bagno in marmo di Carrara con doppio lavabo e doccia walk-in completano un ambiente pensato per la massima privacy.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag"><i class="fa-solid fa-bath"></i> Vasca idromassaggio</span>
+          <span class="amenity-tag"><i class="fa-solid fa-couch"></i> Salotto privato</span>
+          <span class="amenity-tag"><i class="fa-solid fa-champagne-glasses"></i> Champagne</span>
+          <span class="amenity-tag"><i class="fa-solid fa-spa"></i> Amenities Bulgari</span>
+        </div>
+        <a href="#booking" class="btn btn-gold">Prenota questa suite</a>
+      </div>
+    </div>
+
+    <div id="tab-family" class="room-panel">
+      <div class="room-img-wrap fade-in">
+        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=900&q=80" alt="Suite Family" loading="lazy"/>
+        <div class="room-img-badge">Family friendly</div>
+      </div>
+      <div class="room-info fade-in fade-in-delay-2">
+        <p class="label">Per tutta la famiglia</p><h3 class="title-md">Suite Family</h3><span class="gold-line left"></span>
+        <div class="room-price"><span class="amount">€ 420</span><span class="per">/ notte</span></div>
+        <p>Due camere comunicanti per 110 m² totali. Soggiorno, cucina attrezzata e giardino privato recintato rendono questo spazio un vero appartamento immerso nel verde toscano.</p>
+        <div class="room-amenities">
+          <span class="amenity-tag"><i class="fa-solid fa-tree"></i> Giardino privato</span>
+          <span class="amenity-tag"><i class="fa-solid fa-utensils"></i> Cucina attrezzata</span>
+          <span class="amenity-tag"><i class="fa-solid fa-baby"></i> Culla bimbi</span>
+          <span class="amenity-tag"><i class="fa-solid fa-square-parking"></i> Parcheggio</span>
+        </div>
+        <a href="#booking" class="btn btn-gold">Prenota questa suite</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POOL -->
+<section id="pool">
+  <div class="container">
+    <div class="pool-content fade-in">
+      <p class="label">L'acqua incontra il cielo</p>
+      <h2 class="title-lg">La Piscina <em>Infinity</em></h2>
+      <span class="gold-line"></span>
+      <p>Sospesa tra cielo e colline, la nostra piscina a sfioro da 25 metri è il cuore pulsante dell'estate a Bellavista. Aperta da maggio a ottobre, riscaldata, con acqua salina biologica, circondata da lettini con vista sul tramonto.</p>
+      <a href="#booking" class="btn btn-gold">Prenota e goditi la piscina</a>
+    </div>
+    <div class="pool-features">
+      <div class="pool-feature fade-in">
+        <div class="pf-icon"><i class="fa-solid fa-person-swimming"></i></div>
+        <div class="pf-title">25 Metri</div>
+        <div class="pf-desc">Vasca a sfioro con vista panoramica sulle colline</div>
+      </div>
+      <div class="pool-feature fade-in fade-in-delay-1">
+        <div class="pf-icon"><i class="fa-solid fa-temperature-half"></i></div>
+        <div class="pf-title">Riscaldata</div>
+        <div class="pf-desc">Temperatura a 28°C da maggio a ottobre</div>
+      </div>
+      <div class="pool-feature fade-in fade-in-delay-2">
+        <div class="pf-icon"><i class="fa-solid fa-droplet"></i></div>
+        <div class="pf-title">Acqua Salina</div>
+        <div class="pf-desc">Sistema biologico, delicata sulla pelle</div>
+      </div>
+      <div class="pool-feature fade-in fade-in-delay-1">
+        <div class="pf-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+        <div class="pf-title">Solarium</div>
+        <div class="pf-desc">Lettini riservati con ombrelloni e bar</div>
+      </div>
+      <div class="pool-feature fade-in fade-in-delay-2">
+        <div class="pf-icon"><i class="fa-solid fa-martini-glass"></i></div>
+        <div class="pf-title">Pool Bar</div>
+        <div class="pf-desc">Cocktail artigianali e spuntini gourmet</div>
+      </div>
+      <div class="pool-feature fade-in fade-in-delay-3">
+        <div class="pf-icon"><i class="fa-solid fa-wine-glass"></i></div>
+        <div class="pf-title">Sunset Aperitivo</div>
+        <div class="pf-desc">Ogni sera: Prosecco e stuzzichini al tramonto</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESTAURANT -->
+<section id="restaurant" class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <p class="label">Una stella Michelin · Dal 2019</p>
+      <h2 class="title-lg">Ristorante <em>La Quercia</em></h2>
+      <span class="gold-line"></span>
+    </div>
+    <div class="restaurant-grid">
+      <div class="restaurant-img-wrap fade-in">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Ristorante La Quercia" loading="lazy"/>
+        <div class="restaurant-quote">
+          <p>"La cucina è memoria, territorio, emozione. Ogni piatto è una storia di Toscana."</p>
+          <span>— Chef Luca Ferri, Executive Chef</span>
+        </div>
+      </div>
+      <div class="fade-in fade-in-delay-2">
+        <div class="menu-section">
+          <div class="menu-section-title">Antipasti</div>
+          <div class="menu-item"><div><div class="menu-item-name">Crostini Toscani</div><div class="menu-item-desc">Fegatini di pollo, cipolla caramellata, salvia fritta</div></div><div class="menu-item-price">€ 14</div></div>
+          <div class="menu-item"><div><div class="menu-item-name">Panzanella di Mare</div><div class="menu-item-desc">Gamberi rossi, pomodori datterini, basilico</div></div><div class="menu-item-price">€ 22</div></div>
+          <div class="menu-item"><div><div class="menu-item-name">Lardo di Colonnata</div><div class="menu-item-desc">Con miele di castagno e pane di Altamura tostato</div></div><div class="menu-item-price">€ 16</div></div>
+        </div>
+        <div class="menu-section">
+          <div class="menu-section-title">Primi Piatti</div>
+          <div class="menu-item"><div><div class="menu-item-name">Pici all'Aglione</div><div class="menu-item-desc">Pasta fresca, pomodoro San Marzano, aglio rosa</div></div><div class="menu-item-price">€ 22</div></div>
+          <div class="menu-item"><div><div class="menu-item-name">Risotto al Tartufo Nero</div><div class="menu-item-desc">Carnaroli, burro di bufala, Parmigiano 36 mesi</div></div><div class="menu-item-price">€ 34</div></div>
+          <div class="menu-item"><div><div class="menu-item-name">Ribollita della Nonna</div><div class="menu-item-desc">La ricetta della famiglia Marchetti, dal 1920</div></div><div class="menu-item-price">€ 18</div></div>
+        </div>
+        <div class="menu-section">
+          <div class="menu-section-title">Secondi Piatti</div>
+          <div class="menu-item"><div><div class="menu-item-name">Bistecca alla Fiorentina</div><div class="menu-item-desc">Chianina IGP, 1kg min., sale Maldon, olio EVO</div></div><div class="menu-item-price">€ 65</div></div>
+          <div class="menu-item"><div><div class="menu-item-name">Piccione al Vin Santo</div><div class="menu-item-desc">Con polenta bianca e funghi porcini</div></div><div class="menu-item-price">€ 38</div></div>
+        </div>
+        <a href="#booking" class="btn btn-outline-dark">Prenota un tavolo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section id="experiences" class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <p class="label">Oltre il soggiorno</p>
+      <h2 class="title-lg">Esperienze <em>Uniche</em></h2>
+      <span class="gold-line"></span>
+    </div>
+    <div class="exp-grid">
+      <article class="exp-card fade-in">
+        <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600&q=80" alt="Vendemmia" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-wine-bottle"></i></div>
+          <h3 class="exp-name">Vendemmia Guidata</h3>
+          <p class="exp-desc">Raccogliete l'uva con i nostri contadini e scoprite i segreti del Chianti Classico DOCG.</p>
+        </div>
+      </article>
+      <article class="exp-card fade-in fade-in-delay-1">
+        <img src="https://images.unsplash.com/photo-1488747279002-c8523379faaa?w=600&q=80" alt="Equitazione" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-horse"></i></div>
+          <h3 class="exp-name">Equitazione</h3>
+          <p class="exp-desc">Passeggiate a cavallo guidate tra i poderi e i boschi della tenuta.</p>
+        </div>
+      </article>
+      <article class="exp-card fade-in fade-in-delay-2">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Cooking Class" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-hat-chef"></i></div>
+          <h3 class="exp-name">Cooking Class</h3>
+          <p class="exp-desc">Imparate dall'Executive Chef i segreti della cucina toscana con ingredienti a km 0.</p>
+        </div>
+      </article>
+      <article class="exp-card fade-in">
+        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80" alt="E-Bike" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-person-biking"></i></div>
+          <h3 class="exp-name">E-Bike Tour</h3>
+          <p class="exp-desc">Esplorate le strade bianche del Chianti in sella alle nostre e-bike di ultima generazione.</p>
+        </div>
+      </article>
+      <article class="exp-card fade-in fade-in-delay-1">
+        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80" alt="Yoga" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-spa"></i></div>
+          <h3 class="exp-name">Yoga &amp; Meditazione</h3>
+          <p class="exp-desc">Sessioni all'alba tra i vigneti o al tramonto in riva alla piscina.</p>
+        </div>
+      </article>
+      <article class="exp-card fade-in fade-in-delay-2">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Wine Tasting" loading="lazy"/>
+        <div class="exp-overlay">
+          <div class="exp-icon"><i class="fa-solid fa-wine-glass-empty"></i></div>
+          <h3 class="exp-name">Wine Tasting</h3>
+          <p class="exp-desc">Degustazione guidata in cantina: 6 etichette abbinate a formaggi e salumi locali.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header fade-in">
+      <p class="label">Immagini che parlano</p>
+      <h2 class="title-lg">La nostra <em>Galleria</em></h2>
+      <span class="gold-line"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item fade-in"><img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=800&q=80" alt="Villa Bellavista" loading="lazy"/></div>
+      <div class="gallery-item fade-in fade-in-delay-1"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80" alt="Piscina infinity" loading="lazy"/></div>
+      <div class="gallery-item fade-in fade-in-delay-2"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Cena in terrazza" loading="lazy"/></div>
+      <div class="gallery-item fade-in fade-in-delay-3"><img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Vigneti del Chianti" loading="lazy"/></div>
+      <div class="gallery-item fade-in fade-in-delay-1"><img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80" alt="Suite Marchetti" loading="lazy"/></div>
+      <div class="gallery-item fade-in fade-in-delay-2"><img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600&q=80" alt="Vendemmia" loading="lazy"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <p class="label">Cosa dicono i nostri ospiti</p>
+      <h2 class="title-lg">Storie di <em>Felicità</em></h2>
+      <span class="gold-line"></span>
+    </div>
+    <div class="testimonials-wrap">
+      <div class="testimonial-slider">
+        <div class="testimonial-slide active">
+          <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="t-text">"Un posto che ti entra nel cuore. La Suite Marchetti è pura magia: ci siamo svegliati ogni mattina con quella luce dorata toscana che filtrava dai vetri antichi. Il ristorante La Quercia è semplicemente straordinario."</p>
+          <p class="t-author">Marco &amp; Giulia R. — <span class="t-location">Milano</span></p>
+        </div>
+        <div class="testimonial-slide">
+          <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="t-text">"We've stayed in luxury hotels around the world, but Bellavista is something else entirely. The authenticity, the warmth of the Marchetti family, the cooking class with Chef Ferri — memories we'll cherish forever."</p>
+          <p class="t-author">James &amp; Sarah T. — <span class="t-location">London, UK</span></p>
+        </div>
+        <div class="testimonial-slide">
+          <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="t-text">"La piscina infinity al tramonto con un bicchiere di Chianti in mano è un'immagine che porterò con me per sempre. Il personale è di una gentilezza rara, sempre disponibile senza mai essere invadente."</p>
+          <p class="t-author">Sophie M. — <span class="t-location">Paris, France</span></p>
+        </div>
+        <div class="testimonial-slide">
+          <div class="t-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="t-text">"Il tour in e-bike tra le strade bianche del Chianti è stato indimenticabile. La colazione con i prodotti della fattoria ogni mattina è un rito che mi manca già. Torneremo sicuramente!"</p>
+          <p class="t-author">Famiglia Rossi — <span class="t-location">Roma</span></p>
+        </div>
+      </div>
+      <div class="t-dots">
+        <button class="t-dot active" onclick="goToSlide(0)"></button>
+        <button class="t-dot" onclick="goToSlide(1)"></button>
+        <button class="t-dot" onclick="goToSlide(2)"></button>
+        <button class="t-dot" onclick="goToSlide(3)"></button>
+      </div>
+      <div class="platforms">
+        <div class="platform"><div class="score">9.8</div><div class="pname">Booking.com</div></div>
+        <div class="platform"><div class="score">5.0</div><div class="pname">Google Reviews</div></div>
+        <div class="platform"><div class="score">5/5</div><div class="pname">TripAdvisor</div></div>
+        <div class="platform"><div class="score">9.9</div><div class="pname">Relais &amp; Châteaux</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING — PHONE CTA -->
+<section id="booking">
+  <div class="container">
+    <div class="booking-inner">
+      <p class="label">Inizia la tua esperienza</p>
+      <h2 class="title-lg">Prenota il tuo <em>Soggiorno</em></h2>
+      <p class="subtitle">Siamo a tua disposizione per creare il soggiorno perfetto, su misura per te.<br>Chiamaci direttamente e ti seguiremo passo dopo passo.</p>
+      <div class="booking-phone-box">
+        <div class="booking-phone-icon">
+          <i class="fa-solid fa-phone"></i>
+        </div>
+        <div class="booking-phone-label">Numero di prenotazione</div>
+        <div class="booking-phone-number">
+          <a href="tel:+390577123456">+39 0577 123 456</a>
+        </div>
+        <div class="booking-hours">
+          <i class="fa-regular fa-clock"></i>
+          Disponibili tutti i giorni &nbsp;|&nbsp; 08:00 – 22:00
+        </div>
+        <div class="booking-phone-note">Risposta garantita entro poche ore &nbsp;·&nbsp; Nessun pagamento anticipato</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <p class="label">Siamo qui per voi</p>
+        <h2 class="title-lg">Dove <em>siamo</em></h2>
+        <span class="gold-line left"></span>
+        <p>Immersi nel verde del Chianti Classico, a 18 km da Siena e 45 km da Firenze. Raggiungibili in auto o con il nostro servizio transfer privato.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div><div class="ci-label">Indirizzo</div><div class="ci-value">Strada del Chianti, 88<br>53010 Castellina in Chianti (SI)</div></div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa-solid fa-phone"></i></div>
+            <div><div class="ci-label">Telefono</div><div class="ci-value"><a href="tel:+390577123456" style="color:inherit">+39 0577 123 456</a></div></div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div><div class="ci-label">Email</div><div class="ci-value"><a href="mailto:info@agriturismobellvista.it" style="color:inherit">info@agriturismobellvista.it</a></div></div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa-regular fa-clock"></i></div>
+            <div><div class="ci-label">Ricevimento</div><div class="ci-value">Tutti i giorni: 08:00 – 22:00</div></div>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Instagram" onclick="return false"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link" title="Facebook" onclick="return false"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link" title="TripAdvisor" onclick="return false"><i class="fa-brands fa-tripadvisor"></i></a>
+        </div>
+      </div>
+      <div class="fade-in fade-in-delay-2">
+        <a href="https://maps.google.com/?q=Castellina+in+Chianti+Siena" target="_blank" rel="noopener noreferrer" class="map-placeholder">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span class="map-label">Visualizza su Google Maps</span>
+        </a>
+        <div style="margin-top:28px;background:var(--cream);border:1px solid rgba(201,169,110,.2);padding:28px">
+          <p style="font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Come raggiungere</p>
+          <ul style="display:flex;flex-direction:column;gap:10px">
+            <li style="font-size:.85rem;color:var(--stone);display:flex;gap:12px;align-items:flex-start"><i class="fa-solid fa-car" style="color:var(--gold);margin-top:3px;flex-shrink:0"></i> A1 Milano–Napoli, uscita Firenze Certosa + SS2 Cassia</li>
+            <li style="font-size:.85rem;color:var(--stone);display:flex;gap:12px;align-items:flex-start"><i class="fa-solid fa-train" style="color:var(--gold);margin-top:3px;flex-shrink:0"></i> Treno fino a Siena, poi taxi o transfer</li>
+            <li style="font-size:.85rem;color:var(--stone);display:flex;gap:12px;align-items:flex-start"><i class="fa-solid fa-plane-arrival" style="color:var(--gold);margin-top:3px;flex-shrink:0"></i> Aeroporto Firenze (55 min) o Pisa (90 min)</li>
+            <li style="font-size:.85rem;color:var(--gold-dark);display:flex;gap:12px;align-items:flex-start"><i class="fa-solid fa-van-shuttle" style="color:var(--gold-dark);margin-top:3px;flex-shrink:0"></i> Transfer privato su prenotazione</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="name">Bellavista</div>
+        <div class="tagline">Agriturismo · Toscana dal 1887</div>
+        <p>Un angolo di paradiso nel cuore del Chianti Classico, dove la tradizione toscana si fonde con il lusso contemporaneo.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Instagram" onclick="return false"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link" title="Facebook" onclick="return false"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link" title="TripAdvisor" onclick="return false"><i class="fa-brands fa-tripadvisor"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>La tenuta</h4>
+        <ul>
+          <li><a href="#about">La nostra storia</a></li>
+          <li><a href="#rooms">Camere &amp; Suite</a></li>
+          <li><a href="#pool">Piscina Infinity</a></li>
+          <li><a href="#restaurant">Ristorante</a></li>
+          <li><a href="#experiences">Esperienze</a></li>
+          <li><a href="#gallery">Galleria</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informazioni</h4>
+        <ul>
+          <li><a href="#booking">Prenotazioni</a></li>
+          <li><a href="#contact">Come raggiungerci</a></li>
+          <li><a href="#" onclick="return false">Gift Card</a></li>
+          <li><a href="#" onclick="return false">Matrimoni &amp; Eventi</a></li>
+          <li><a href="#" onclick="return false">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.7">Ricevi offerte esclusive e novità in anteprima.</p>
+        <div class="newsletter-input">
+          <input type="email" id="newsletterEmail" placeholder="La tua email" maxlength="150"/>
+          <button onclick="subscribeNewsletter()"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <p id="newsletterMsg" style="font-size:.72rem;margin-top:10px;min-height:18px;color:var(--gold);display:none"></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Nicola Martucci Tutti i diritti riservati.</p>
+      <div class="footer-bottom-links">
+        <a href="#" onclick="return false">Privacy Policy</a>
+        <a href="#" onclick="return false">Cookie Policy</a>
+        <a href="#" onclick="return false">Termini &amp; Condizioni</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" onclick="scrollToTop()" aria-label="Torna in cima">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<!-- COOKIE BANNER -->
+<div id="cookieBanner">
+  <p>Utilizziamo cookie tecnici e, previo consenso, cookie di analisi per migliorare la tua esperienza. <a href="#" onclick="return false">Cookie Policy</a>.</p>
+  <div class="cookie-btns">
+    <button class="btn btn-outline" onclick="rejectCookies()" style="padding:10px 20px;font-size:.65rem">Solo Necessari</button>
+    <button class="btn btn-gold" onclick="acceptCookies()" style="padding:10px 20px;font-size:.65rem">Accetta Tutti</button>
+  </div>
+</div>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar scroll
+  var nb = document.getElementById('navbar');
+  window.addEventListener('scroll', function(){
+    nb.classList.toggle('scrolled', window.scrollY > 80);
+  }, {passive: true});
+
+  // Hamburger
+  var hb = document.getElementById('hamburger'), mm = document.getElementById('mobileMenu');
+  hb.addEventListener('click', function(){
+    var o = hb.classList.toggle('open');
+    mm.classList.toggle('open', o);
+    hb.setAttribute('aria-expanded', o.toString());
+    document.body.style.overflow = o ? 'hidden' : '';
+  });
+  function closeMobileMenu(){
+    hb.classList.remove('open');
+    mm.classList.remove('open');
+    hb.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && mm.classList.contains('open')) closeMobileMenu();
+  });
+
+  // Rooms tabs
+  function switchRoom(id, btn){
+    document.querySelectorAll('.room-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.room-tab').forEach(function(t){ t.classList.remove('active'); });
+    var p = document.getElementById('tab-' + id);
+    if(p) p.classList.add('active');
+    if(btn) btn.classList.add('active');
+  }
+
+  // Testimonials slider
+  var cur = 0;
+  var sls = document.querySelectorAll('.testimonial-slide');
+  var dts = document.querySelectorAll('.t-dot');
+  var iv;
+  function goToSlide(n){
+    sls[cur].classList.remove('active');
+    dts[cur].classList.remove('active');
+    cur = (n + sls.length) % sls.length;
+    sls[cur].classList.add('active');
+    dts[cur].classList.add('active');
+  }
+  function startSl(){ iv = setInterval(function(){ goToSlide(cur + 1); }, 5000); }
+  startSl();
+  var sl = document.querySelector('.testimonial-slider');
+  sl.addEventListener('mouseenter', function(){ clearInterval(iv); });
+  sl.addEventListener('mouseleave', startSl);
+
+  // Scroll animations
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, {threshold: .12, rootMargin: '0px 0px -40px 0px'});
+  document.querySelectorAll('.fade-in').forEach(function(el){ obs.observe(el); });
+
+  // Back to top
+  var btt = document.getElementById('backToTop');
+  window.addEventListener('scroll', function(){
+    btt.classList.toggle('visible', window.scrollY > 500);
+  }, {passive: true});
+  function scrollToTop(){ window.scrollTo({top: 0, behavior: 'smooth'}); }
+
+  // Cookie
+  function acceptCookies(){ try{ localStorage.setItem('cookieConsent','all'); }catch(e){} hideCB(); }
+  function rejectCookies(){ try{ localStorage.setItem('cookieConsent','essential'); }catch(e){} hideCB(); }
+  function hideCB(){
+    var b = document.getElementById('cookieBanner');
+    b.style.transition = 'opacity .4s, transform .4s';
+    b.style.opacity = '0';
+    b.style.transform = 'translateY(100%)';
+    setTimeout(function(){ b.style.display = 'none'; }, 400);
+  }
+  (function(){
+    try{ if(localStorage.getItem('cookieConsent')) document.getElementById('cookieBanner').style.display = 'none'; }catch(e){}
+  })();
+
+  // Newsletter
+  function subscribeNewsletter(){
+    var el = document.getElementById('newsletterEmail');
+    var mg = document.getElementById('newsletterMsg');
+    var v = (el.value || '').trim();
+    if(!v || !/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(v)){
+      mg.textContent = 'Email non valida.';
+      mg.style.color = '#e07070';
+      mg.style.display = 'block';
+      return;
+    }
+    mg.textContent = '✓ Iscrizione completata! Grazie.';
+    mg.style.color = 'var(--gold)';
+    mg.style.display = 'block';
+    el.value = '';
+  }
+</script>
+</body>
+</html>
