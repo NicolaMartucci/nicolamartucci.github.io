@@ -1,1 +1,1516 @@
-
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuttoApricena — CMS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #181b24;
+    --bg3: #1e2130;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --accent: #e63946;
+    --accent2: #ff6b6b;
+    --gold: #f4a261;
+    --text: #e8eaf0;
+    --text2: #9ba3b8;
+    --text3: #6b7490;
+    --success: #2ecc71;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --radius: 10px;
+    --radius2: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+ 
+  /* LOGIN */
+  #login-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: var(--bg);
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(230,57,70,0.08) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, rgba(244,162,97,0.06) 0%, transparent 50%);
+  }
+  .login-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius2); padding: 48px 40px; width: 400px;
+  }
+  .login-logo { text-align: center; margin-bottom: 32px; }
+  .login-logo .brand { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 700; }
+  .login-logo .brand span { color: var(--accent); }
+  .login-logo .sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .login-field { margin-bottom: 16px; }
+  .login-field label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .login-field input {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 11px 14px; color: var(--text);
+    font-size: 14px; font-family: 'Inter', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-field input:focus { border-color: var(--accent); }
+  .btn-login {
+    width: 100%; background: var(--accent); border: none; border-radius: var(--radius);
+    padding: 12px; color: #fff; font-size: 15px; font-weight: 600;
+    cursor: pointer; margin-top: 8px; transition: background 0.2s;
+    font-family: 'Sora', sans-serif;
+  }
+  .btn-login:hover { background: var(--accent2); }
+  .login-error { color: var(--danger); font-size: 13px; text-align: center; margin-top: 12px; display: none; }
+ 
+  /* LAYOUT */
+  #app { display: none; height: 100vh; flex-direction: column; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 56px; background: var(--bg2);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .topbar-brand { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; }
+  .topbar-brand span { color: var(--accent); }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .role-badge {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .role-admin { background: rgba(230,57,70,0.15); color: var(--accent); border: 1px solid rgba(230,57,70,0.3); }
+  .role-editor { background: rgba(244,162,97,0.15); color: var(--gold); border: 1px solid rgba(244,162,97,0.3); }
+  .btn-logout { background: transparent; border: 1px solid var(--border2); border-radius: var(--radius); padding: 6px 14px; color: var(--text2); cursor: pointer; font-size: 13px; transition: all 0.2s; }
+  .btn-logout:hover { border-color: var(--accent); color: var(--accent); }
+  .main-layout { display: flex; flex: 1; overflow: hidden; }
+  .sidebar {
+    width: 220px; background: var(--bg2); border-right: 1px solid var(--border);
+    padding: 16px 0; flex-shrink: 0; overflow-y: auto;
+  }
+  .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
+  .sidebar-label { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 8px 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+    border-radius: var(--radius); color: var(--text2); cursor: pointer;
+    font-size: 13.5px; font-weight: 500; transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: rgba(230,57,70,0.12); color: var(--accent); border-color: rgba(230,57,70,0.2); }
+  .nav-item .icon { font-size: 15px; width: 18px; text-align: center; }
+  .content { flex: 1; overflow-y: auto; padding: 28px 32px; }
+  .page { display: none; }
+  .page.active { display: block; }
+ 
+  /* PAGE HEADERS */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .page-title { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; }
+  .page-title small { font-size: 13px; font-weight: 400; color: var(--text2); margin-left: 8px; font-family: 'Inter', sans-serif; }
+ 
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--radius); font-size: 13.5px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; font-family: 'Inter', sans-serif; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border2); }
+  .btn-secondary:hover { border-color: var(--text2); }
+  .btn-success { background: rgba(46,204,113,0.15); color: var(--success); border: 1px solid rgba(46,204,113,0.3); }
+  .btn-success:hover { background: rgba(46,204,113,0.25); }
+  .btn-danger { background: rgba(231,76,60,0.12); color: var(--danger); border: 1px solid rgba(231,76,60,0.25); }
+  .btn-danger:hover { background: rgba(231,76,60,0.22); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+ 
+  /* CARDS */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius2); padding: 24px; margin-bottom: 20px; }
+  .card-title { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+ 
+  /* FORM ELEMENTS */
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; letter-spacing: 0.04em; }
+  .form-input, .form-textarea, .form-select {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 10px 13px; color: var(--text);
+    font-size: 14px; font-family: 'Inter', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 100px; }
+  .form-select option { background: var(--bg3); }
+  .form-row { display: grid; gap: 16px; }
+  .form-row.cols2 { grid-template-columns: 1fr 1fr; }
+  .form-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+ 
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+  .data-table td { padding: 13px 14px; border-bottom: 1px solid var(--border); font-size: 13.5px; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg3); }
+  .td-actions { display: flex; gap: 6px; align-items: center; }
+ 
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: rgba(46,204,113,0.15); color: #2ecc71; }
+  .badge-orange { background: rgba(244,162,97,0.15); color: var(--gold); }
+  .badge-red { background: rgba(231,76,60,0.12); color: var(--danger); }
+  .badge-blue { background: rgba(52,152,219,0.15); color: #3498db; }
+ 
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 1000; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: var(--radius2); padding: 32px; width: 600px; max-width: 95vw;
+    max-height: 85vh; overflow-y: auto;
+  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .modal-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; }
+  .modal-close { background: transparent; border: none; color: var(--text2); cursor: pointer; font-size: 20px; padding: 4px; }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px; }
+ 
+  /* IMAGE UPLOAD */
+  .img-upload-zone {
+    border: 2px dashed var(--border2); border-radius: var(--radius);
+    padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s;
+    background: var(--bg3);
+  }
+  .img-upload-zone:hover { border-color: var(--accent); background: rgba(230,57,70,0.05); }
+  .img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: var(--radius); margin-top: 12px; display: none; }
+  .img-preview.visible { display: block; }
+ 
+  /* DRAG HANDLE */
+  .drag-handle { cursor: grab; color: var(--text3); font-size: 14px; padding: 4px; }
+  .drag-handle:active { cursor: grabbing; }
+ 
+  /* SPONSOR GRID */
+  .sponsor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .sponsor-card {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; text-align: center; position: relative;
+  }
+  .sponsor-card img { max-width: 120px; max-height: 60px; object-fit: contain; margin-bottom: 8px; }
+  .sponsor-card .name { font-size: 12px; color: var(--text2); }
+  .sponsor-card .remove-sponsor {
+    position: absolute; top: 6px; right: 6px; background: rgba(231,76,60,0.2);
+    border: none; border-radius: 50%; width: 22px; height: 22px; color: var(--danger);
+    cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;
+  }
+ 
+  /* TABS */
+  .tab-bar { display: flex; gap: 4px; background: var(--bg3); padding: 4px; border-radius: var(--radius); margin-bottom: 24px; width: fit-content; }
+  .tab-btn { padding: 7px 18px; border-radius: 8px; border: none; background: transparent; color: var(--text2); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .tab-btn.active { background: var(--bg2); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+ 
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius2); padding: 20px; }
+  .stat-number { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .stat-label { font-size: 12px; color: var(--text2); }
+  .stat-icon { font-size: 22px; margin-bottom: 8px; }
+ 
+  /* ALERTS */
+  .alert { padding: 12px 16px; border-radius: var(--radius); font-size: 13.5px; margin-bottom: 16px; display: none; }
+  .alert.visible { display: block; }
+  .alert-success { background: rgba(46,204,113,0.12); color: var(--success); border: 1px solid rgba(46,204,113,0.25); }
+  .alert-error { background: rgba(231,76,60,0.12); color: var(--danger); border: 1px solid rgba(231,76,60,0.25); }
+ 
+  /* SORTABLE DRAG */
+  .sortable-item { cursor: default; }
+  .sortable-item.dragging { opacity: 0.4; }
+ 
+  /* SECTION POSITIONS */
+  .sections-list { display: flex; flex-direction: column; gap: 8px; }
+  .section-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 16px;
+  }
+  .section-row .drag-handle { font-size: 16px; }
+  .section-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .section-toggle { display: flex; align-items: center; gap: 8px; }
+  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .slider-toggle { position: absolute; cursor: pointer; inset: 0; background: var(--border2); border-radius: 20px; transition: 0.2s; }
+  .slider-toggle:before { content: ''; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+  .toggle input:checked + .slider-toggle { background: var(--accent); }
+  .toggle input:checked + .slider-toggle:before { transform: translateX(16px); }
+ 
+  /* LOGO PREVIEW */
+  .logo-preview-box { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; margin-bottom: 16px; }
+  .logo-preview-box img { max-height: 80px; max-width: 240px; object-fit: contain; }
+ 
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .sidebar { width: 60px; }
+    .sidebar .nav-item span, .sidebar .sidebar-label, .nav-item .label { display: none; }
+    .nav-item { justify-content: center; }
+    .content { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="brand">Tutto<span>Apricena</span></div>
+      <div class="sub">Pannello di Amministrazione</div>
+    </div>
+    <div class="form-group login-field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" />
+    </div>
+    <div class="form-group login-field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <button class="btn-login" onclick="doLogin()">Accedi al CMS</button>
+    <div class="login-error" id="login-error">❌ Credenziali non corrette</div>
+  </div>
+</div>
+ 
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand">Tutto<span>Apricena</span> <span style="font-size:12px;color:var(--text3);font-weight:400;margin-left:4px;">CMS</span></div>
+    <div class="topbar-right">
+      <span id="topbar-username" style="font-size:13px;color:var(--text2);"></span>
+      <span id="topbar-role" class="role-badge"></span>
+      <button class="btn-logout" onclick="doLogout()">Esci</button>
+    </div>
+  </div>
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Generale</div>
+        <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+          <span class="icon">🏠</span><span class="label">Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="showPage('identita')" id="nav-identita">
+          <span class="icon">🎨</span><span class="label">Identità Sito</span>
+        </div>
+        <div class="nav-item" onclick="showPage('hero')" id="nav-hero">
+          <span class="icon">🖼</span><span class="label">Hero & Banner</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Contenuti</div>
+        <div class="nav-item" onclick="showPage('notizie')" id="nav-notizie">
+          <span class="icon">📰</span><span class="label">Notizie</span>
+        </div>
+        <div class="nav-item" onclick="showPage('eventi')" id="nav-eventi">
+          <span class="icon">📅</span><span class="label">Eventi</span>
+        </div>
+        <div class="nav-item" onclick="showPage('sponsor')" id="nav-sponsor" data-admin-only>
+          <span class="icon">🤝</span><span class="label">Sponsor</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Layout</div>
+        <div class="nav-item" onclick="showPage('layout')" id="nav-layout" data-admin-only>
+          <span class="icon">📐</span><span class="label">Sezioni & Layout</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Impostazioni</div>
+        <div class="nav-item" onclick="showPage('utenti')" id="nav-utenti" data-admin-only>
+          <span class="icon">👥</span><span class="label">Utenti</span>
+        </div>
+        <div class="nav-item" onclick="showPage('esporta')" id="nav-esporta">
+          <span class="icon">📦</span><span class="label">Esporta / Importa</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="content">
+ 
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-title">Dashboard <small>Benvenuto nel CMS</small></div>
+          <button class="btn btn-success" onclick="showPage('esporta')">⬇ Esporta Sito</button>
+        </div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div class="card">
+            <div class="card-title">📰 Ultime Notizie</div>
+            <div id="dash-notizie"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">📅 Prossimi Eventi</div>
+            <div id="dash-eventi"></div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- IDENTITÀ SITO -->
+      <div class="page" id="page-identita">
+        <div class="page-header"><div class="page-title">Identità Sito</div><button class="btn btn-primary" onclick="saveIdentita()">💾 Salva Modifiche</button></div>
+        <div class="alert alert-success" id="alert-identita">✅ Modifiche salvate con successo!</div>
+        <div class="card">
+          <div class="card-title">🎨 Logo</div>
+          <div class="logo-preview-box"><img id="logo-preview-img" src="" alt="Logo" onerror="this.style.display='none'" /><span id="logo-preview-text" style="color:var(--text3);font-size:13px;">Nessun logo caricato</span></div>
+          <div class="img-upload-zone" onclick="document.getElementById('logo-file').click()">
+            <div style="font-size:24px;margin-bottom:8px;">📁</div>
+            <div style="font-size:13px;color:var(--text2);">Clicca per caricare il logo (PNG, SVG, JPG)</div>
+            <input type="file" id="logo-file" accept="image/*" style="display:none" onchange="handleLogoUpload(this)" />
+          </div>
+          <div class="form-group" style="margin-top:14px;">
+            <label class="form-label">Oppure inserisci URL del logo</label>
+            <input class="form-input" id="logo-url" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📝 Testi Principali</div>
+          <div class="form-row cols2">
+            <div class="form-group">
+              <label class="form-label">Nome Sito</label>
+              <input class="form-input" id="id-nome" placeholder="TuttoApricena" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Slogan / Tagline</label>
+              <input class="form-input" id="id-slogan" placeholder="Il portale di Apricena" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descrizione Sito (meta)</label>
+            <textarea class="form-textarea" id="id-descrizione" rows="3" placeholder="Descrizione breve del sito per SEO..."></textarea>
+          </div>
+          <div class="form-row cols2">
+            <div class="form-group">
+              <label class="form-label">Email di contatto</label>
+              <input class="form-input" id="id-email" type="email" placeholder="info@tuttoapricena.it" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Colore Accent (hex)</label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input class="form-input" id="id-colore" type="text" placeholder="#e63946" style="flex:1;" />
+                <input type="color" id="id-colore-picker" style="width:44px;height:44px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:transparent;" oninput="document.getElementById('id-colore').value=this.value" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔗 Social & Link</div>
+          <div class="form-row cols2">
+            <div class="form-group"><label class="form-label">Facebook</label><input class="form-input" id="id-fb" placeholder="https://facebook.com/..." /></div>
+            <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="id-ig" placeholder="https://instagram.com/..." /></div>
+            <div class="form-group"><label class="form-label">Twitter / X</label><input class="form-input" id="id-tw" placeholder="https://x.com/..." /></div>
+            <div class="form-group"><label class="form-label">YouTube</label><input class="form-input" id="id-yt" placeholder="https://youtube.com/..." /></div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- HERO & BANNER -->
+      <div class="page" id="page-hero">
+        <div class="page-header"><div class="page-title">Hero & Banner</div><button class="btn btn-primary" onclick="saveHero()">💾 Salva</button></div>
+        <div class="alert alert-success" id="alert-hero">✅ Salvato!</div>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchHeroTab('hero-main')">Hero Principale</button>
+          <button class="tab-btn" onclick="switchHeroTab('hero-news')">Banner Notizie</button>
+          <button class="tab-btn" onclick="switchHeroTab('hero-eventi')">Banner Eventi</button>
+          <button class="tab-btn" onclick="switchHeroTab('hero-custom')">Banner Custom</button>
+        </div>
+        <div id="hero-main" class="hero-tab-content">
+          <div class="card">
+            <div class="card-title">🖼 Immagine Hero Principale</div>
+            <div class="img-upload-zone" onclick="document.getElementById('hero-file-main').click()" id="hero-drop-main">
+              <div style="font-size:28px;margin-bottom:8px;">🖼</div>
+              <div style="font-size:13px;color:var(--text2);">Clicca o trascina per caricare l'immagine hero (1920x600 consigliato)</div>
+              <input type="file" id="hero-file-main" accept="image/*" style="display:none" onchange="handleHeroUpload(this,'main')" />
+            </div>
+            <img id="hero-preview-main" class="img-preview" src="" />
+            <div class="form-group" style="margin-top:14px;"><label class="form-label">Oppure URL immagine</label><input class="form-input" id="hero-url-main" placeholder="https://..." /></div>
+            <div class="form-row cols2" style="margin-top:8px;">
+              <div class="form-group"><label class="form-label">Titolo Hero</label><input class="form-input" id="hero-title-main" placeholder="Benvenuti a Apricena" /></div>
+              <div class="form-group"><label class="form-label">Sottotitolo</label><input class="form-input" id="hero-sub-main" placeholder="Il portale della città" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Testo bottone CTA</label><input class="form-input" id="hero-cta-main" placeholder="Scopri di più" /></div>
+            <div class="form-group"><label class="form-label">Link bottone CTA</label><input class="form-input" id="hero-ctalink-main" placeholder="#notizie" /></div>
+            <div class="form-group"><label class="form-label">Overlay colore (rgba)</label><input class="form-input" id="hero-overlay-main" placeholder="rgba(0,0,0,0.4)" /></div>
+          </div>
+        </div>
+        <div id="hero-news" class="hero-tab-content" style="display:none;">
+          <div class="card">
+            <div class="card-title">📰 Banner Sezione Notizie</div>
+            <div class="img-upload-zone" onclick="document.getElementById('hero-file-news').click()"><div style="font-size:24px;">🖼</div><div style="font-size:13px;color:var(--text2);">Carica immagine banner notizie</div><input type="file" id="hero-file-news" accept="image/*" style="display:none" onchange="handleHeroUpload(this,'news')" /></div>
+            <img id="hero-preview-news" class="img-preview" />
+            <div class="form-group" style="margin-top:12px;"><label class="form-label">Titolo Sezione</label><input class="form-input" id="hero-title-news" placeholder="Ultime Notizie" /></div>
+          </div>
+        </div>
+        <div id="hero-eventi" class="hero-tab-content" style="display:none;">
+          <div class="card">
+            <div class="card-title">📅 Banner Sezione Eventi</div>
+            <div class="img-upload-zone" onclick="document.getElementById('hero-file-eventi').click()"><div style="font-size:24px;">🖼</div><div style="font-size:13px;color:var(--text2);">Carica immagine banner eventi</div><input type="file" id="hero-file-eventi" accept="image/*" style="display:none" onchange="handleHeroUpload(this,'eventi')" /></div>
+            <img id="hero-preview-eventi" class="img-preview" />
+            <div class="form-group" style="margin-top:12px;"><label class="form-label">Titolo Sezione</label><input class="form-input" id="hero-title-eventi" placeholder="Eventi in Programma" /></div>
+          </div>
+        </div>
+        <div id="hero-custom" class="hero-tab-content" style="display:none;">
+          <div class="card">
+            <div class="card-title">✏️ Banner Personalizzato</div>
+            <div class="img-upload-zone" onclick="document.getElementById('hero-file-custom').click()"><div style="font-size:24px;">🖼</div><div style="font-size:13px;color:var(--text2);">Carica immagine banner custom</div><input type="file" id="hero-file-custom" accept="image/*" style="display:none" onchange="handleHeroUpload(this,'custom')" /></div>
+            <img id="hero-preview-custom" class="img-preview" />
+            <div class="form-row cols2" style="margin-top:12px;">
+              <div class="form-group"><label class="form-label">Titolo</label><input class="form-input" id="hero-title-custom" /></div>
+              <div class="form-group"><label class="form-label">Sottotitolo</label><input class="form-input" id="hero-sub-custom" /></div>
+            </div>
+            <div class="form-group"><label class="form-label">Testo bottone</label><input class="form-input" id="hero-cta-custom" /></div>
+            <div class="form-group"><label class="form-label">Link bottone</label><input class="form-input" id="hero-ctalink-custom" /></div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- NOTIZIE -->
+      <div class="page" id="page-notizie">
+        <div class="page-header">
+          <div class="page-title">Notizie <small id="notizie-count"></small></div>
+          <button class="btn btn-primary" onclick="openNotiziaModal()">+ Nuova Notizia</button>
+        </div>
+        <div class="alert alert-success" id="alert-notizie">✅ Operazione completata!</div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Titolo</th><th>Categoria</th><th>Data</th><th>Stato</th><th>In evidenza</th><th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="notizie-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+ 
+      <!-- EVENTI -->
+      <div class="page" id="page-eventi">
+        <div class="page-header">
+          <div class="page-title">Eventi <small id="eventi-count"></small></div>
+          <button class="btn btn-primary" onclick="openEventoModal()">+ Nuovo Evento</button>
+        </div>
+        <div class="alert alert-success" id="alert-eventi">✅ Operazione completata!</div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Titolo</th><th>Data Evento</th><th>Luogo</th><th>Categoria</th><th>Stato</th><th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="eventi-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+ 
+      <!-- SPONSOR -->
+      <div class="page" id="page-sponsor">
+        <div class="page-header">
+          <div class="page-title">Sponsor</div>
+          <button class="btn btn-primary" onclick="openSponsorModal()">+ Aggiungi Sponsor</button>
+        </div>
+        <div class="alert alert-success" id="alert-sponsor">✅ Sponsor aggiornati!</div>
+        <div class="card">
+          <div class="card-title">🔀 Posizione nella Home</div>
+          <div class="form-group">
+            <label class="form-label">Dove mostrare gli sponsor nella homepage</label>
+            <select class="form-select" id="sponsor-position" onchange="saveSponsorSettings()">
+              <option value="before-news">Prima delle notizie</option>
+              <option value="after-news">Dopo le notizie</option>
+              <option value="before-events">Prima degli eventi</option>
+              <option value="after-events">Dopo gli eventi</option>
+              <option value="footer">Solo nel footer</option>
+              <option value="hidden">Non mostrare</option>
+            </select>
+          </div>
+          <div class="form-row cols3">
+            <div class="form-group">
+              <label class="form-label">Titolo sezione</label>
+              <input class="form-input" id="sponsor-section-title" placeholder="I nostri sponsor" onchange="saveSponsorSettings()" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Colonne per riga</label>
+              <select class="form-select" id="sponsor-cols" onchange="saveSponsorSettings()">
+                <option value="3">3 colonne</option>
+                <option value="4">4 colonne</option>
+                <option value="5">5 colonne</option>
+                <option value="6">6 colonne</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stile</label>
+              <select class="form-select" id="sponsor-style" onchange="saveSponsorSettings()">
+                <option value="logo-only">Solo logo</option>
+                <option value="logo-name">Logo + nome</option>
+                <option value="card">Card con link</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🤝 Lista Sponsor (<span id="sponsor-count">0</span>)</div>
+          <div class="sponsor-grid" id="sponsor-grid"></div>
+          <div id="sponsor-empty" style="color:var(--text3);font-size:13px;text-align:center;padding:20px;display:none;">Nessuno sponsor aggiunto. Clicca "+ Aggiungi Sponsor"</div>
+        </div>
+      </div>
+ 
+      <!-- LAYOUT SEZIONI -->
+      <div class="page" id="page-layout">
+        <div class="page-header">
+          <div class="page-title">Sezioni & Layout</div>
+          <button class="btn btn-primary" onclick="saveLayout()">💾 Salva Ordine</button>
+        </div>
+        <div class="alert alert-success" id="alert-layout">✅ Layout salvato!</div>
+        <div class="card">
+          <div class="card-title">🔀 Trascina per riordinare le sezioni della homepage</div>
+          <div class="sections-list" id="sections-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📰 Disposizione Tab Notizie</div>
+          <div class="form-row cols2">
+            <div class="form-group">
+              <label class="form-label">Layout notizie</label>
+              <select class="form-select" id="news-layout">
+                <option value="grid">Griglia (3 colonne)</option>
+                <option value="list">Lista verticale</option>
+                <option value="featured-top">Grande in evidenza + griglia</option>
+                <option value="carousel">Carosello</option>
+                <option value="tabs-category">Tab per categoria</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notizie per pagina</label>
+              <select class="form-select" id="news-perpage">
+                <option value="6">6</option>
+                <option value="9">9</option>
+                <option value="12">12</option>
+                <option value="all">Tutte</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ordine visualizzazione</label>
+              <select class="form-select" id="news-order">
+                <option value="newest">Più recenti prima</option>
+                <option value="oldest">Più vecchie prima</option>
+                <option value="featured">In evidenza prima</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tab categorie attive</label>
+              <select class="form-select" id="news-tabs">
+                <option value="all">Tutte le notizie (no tab)</option>
+                <option value="show">Mostra tab per categoria</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- UTENTI -->
+      <div class="page" id="page-utenti">
+        <div class="page-header">
+          <div class="page-title">Gestione Utenti</div>
+          <button class="btn btn-primary" onclick="openUserModal()">+ Aggiungi Utente</button>
+        </div>
+        <div class="alert alert-success" id="alert-utenti">✅ Utente salvato!</div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table class="data-table">
+            <thead><tr><th>Username</th><th>Ruolo</th><th>Creato</th><th>Azioni</th></tr></thead>
+            <tbody id="utenti-tbody"></tbody>
+          </table>
+        </div>
+        <div class="card" style="margin-top:20px;">
+          <div class="card-title">🔑 Info Ruoli</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13.5px;">
+            <div style="background:var(--bg3);padding:14px;border-radius:var(--radius);">
+              <div style="font-weight:600;color:var(--accent);margin-bottom:6px;">Admin</div>
+              <div style="color:var(--text2);line-height:1.6;">Accesso completo: identità sito, hero, notizie, eventi, sponsor, layout, gestione utenti, esportazione.</div>
+            </div>
+            <div style="background:var(--bg3);padding:14px;border-radius:var(--radius);">
+              <div style="font-weight:600;color:var(--gold);margin-bottom:6px;">Editor</div>
+              <div style="color:var(--text2);line-height:1.6;">Può creare, modificare ed eliminare solo <strong>notizie</strong> ed <strong>eventi</strong>. Non può modificare l'aspetto del sito.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ESPORTA / IMPORTA -->
+      <div class="page" id="page-esporta">
+        <div class="page-header"><div class="page-title">Esporta & Importa</div></div>
+        <div class="card">
+          <div class="card-title">⬇️ Esporta Dati Sito</div>
+          <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Scarica un file <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">tuttoapricena-data.json</code> con tutti i contenuti del sito (notizie, eventi, sponsor, impostazioni, layout). Carica questo file su GitHub nella cartella <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">assets/</code> per aggiornare il sito.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-success" onclick="exportData()">⬇️ Scarica tuttoapricena-data.json</button>
+            <button class="btn btn-secondary" onclick="exportHtml()">⬇️ Scarica index.html aggiornato</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">⬆️ Importa Dati</div>
+          <p style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Carica un file JSON precedentemente esportato per ripristinare o trasferire i dati.</p>
+          <div class="img-upload-zone" onclick="document.getElementById('import-file').click()">
+            <div style="font-size:24px;margin-bottom:8px;">📂</div>
+            <div style="font-size:13px;color:var(--text2);">Clicca per scegliere il file JSON da importare</div>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)" />
+          </div>
+          <div class="alert alert-success" id="alert-import" style="margin-top:12px;">✅ Dati importati con successo!</div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Istruzioni GitHub</div>
+          <ol style="font-size:13.5px;color:var(--text2);line-height:2;padding-left:20px;">
+            <li>Esporta il file <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;">tuttoapricena-data.json</code></li>
+            <li>Vai su <strong>GitHub</strong> nel repo del sito</li>
+            <li>Naviga nella cartella <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;">assets/</code></li>
+            <li>Carica il file (drag & drop o "Add file")</li>
+            <li>Il sito leggerà automaticamente i nuovi dati</li>
+            <li>Per il <strong>logo o immagini</strong>: carica prima le immagini in <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;">assets/img/</code> e usa percorsi relativi nel CMS</li>
+          </ol>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL NOTIZIA -->
+<div class="modal-overlay" id="modal-notizia">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-notizia-title">Nuova Notizia</div>
+      <button class="modal-close" onclick="closeModal('modal-notizia')">✕</button>
+    </div>
+    <input type="hidden" id="notizia-edit-id" value="" />
+    <div class="form-group"><label class="form-label">Titolo *</label><input class="form-input" id="n-titolo" placeholder="Titolo della notizia" /></div>
+    <div class="form-row cols2">
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" id="n-categoria">
+          <option value="attualita">Attualità</option>
+          <option value="sport">Sport</option>
+          <option value="cultura">Cultura</option>
+          <option value="politica">Politica</option>
+          <option value="economia">Economia</option>
+          <option value="cronaca">Cronaca</option>
+          <option value="altro">Altro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data Pubblicazione</label>
+        <input class="form-input" id="n-data" type="date" />
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Autore</label><input class="form-input" id="n-autore" placeholder="Redazione TuttoApricena" /></div>
+    <div class="form-group"><label class="form-label">Sommario / Occhiello</label><textarea class="form-textarea" id="n-sommario" rows="2" placeholder="Breve descrizione che appare nelle anteprime..."></textarea></div>
+    <div class="form-group"><label class="form-label">Testo Completo</label><textarea class="form-textarea" id="n-testo" rows="6" placeholder="Testo completo della notizia..."></textarea></div>
+    <div class="form-group">
+      <label class="form-label">Immagine</label>
+      <div class="img-upload-zone" onclick="document.getElementById('n-img-file').click()">
+        <div style="font-size:20px;">🖼</div><div style="font-size:12px;color:var(--text2);">Carica immagine notizia</div>
+        <input type="file" id="n-img-file" accept="image/*" style="display:none" onchange="handleModalImg(this,'n-img-url','n-img-preview')" />
+      </div>
+      <input class="form-input" id="n-img-url" placeholder="Oppure URL immagine" style="margin-top:8px;" />
+      <img id="n-img-preview" class="img-preview" />
+    </div>
+    <div class="form-row cols2">
+      <div class="form-group">
+        <label class="form-label">Stato</label>
+        <select class="form-select" id="n-stato">
+          <option value="pubblicata">Pubblicata</option>
+          <option value="bozza">Bozza</option>
+          <option value="archiviata">Archiviata</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">In evidenza</label>
+        <select class="form-select" id="n-evidenza">
+          <option value="0">No</option>
+          <option value="1">Sì — mostra in primo piano</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Tag (separati da virgola)</label><input class="form-input" id="n-tag" placeholder="apricena, comune, notizie" /></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-notizia')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveNotizia()">💾 Salva Notizia</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL EVENTO -->
+<div class="modal-overlay" id="modal-evento">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-evento-title">Nuovo Evento</div>
+      <button class="modal-close" onclick="closeModal('modal-evento')">✕</button>
+    </div>
+    <input type="hidden" id="evento-edit-id" value="" />
+    <div class="form-group"><label class="form-label">Titolo *</label><input class="form-input" id="e-titolo" placeholder="Nome dell'evento" /></div>
+    <div class="form-row cols2">
+      <div class="form-group"><label class="form-label">Data inizio *</label><input class="form-input" id="e-data-start" type="datetime-local" /></div>
+      <div class="form-group"><label class="form-label">Data fine</label><input class="form-input" id="e-data-end" type="datetime-local" /></div>
+    </div>
+    <div class="form-row cols2">
+      <div class="form-group"><label class="form-label">Luogo</label><input class="form-input" id="e-luogo" placeholder="Piazza Municipio, Apricena" /></div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" id="e-categoria">
+          <option value="festa">Festa / Sagra</option>
+          <option value="sport">Sportivo</option>
+          <option value="cultura">Culturale</option>
+          <option value="religioso">Religioso</option>
+          <option value="mercato">Mercato / Fiera</option>
+          <option value="musica">Concerto / Musica</option>
+          <option value="altro">Altro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Descrizione</label><textarea class="form-textarea" id="e-descrizione" rows="4" placeholder="Descrivi l'evento..."></textarea></div>
+    <div class="form-group">
+      <label class="form-label">Immagine</label>
+      <div class="img-upload-zone" onclick="document.getElementById('e-img-file').click()">
+        <div style="font-size:20px;">🖼</div><div style="font-size:12px;color:var(--text2);">Carica immagine evento</div>
+        <input type="file" id="e-img-file" accept="image/*" style="display:none" onchange="handleModalImg(this,'e-img-url','e-img-preview')" />
+      </div>
+      <input class="form-input" id="e-img-url" placeholder="Oppure URL immagine" style="margin-top:8px;" />
+      <img id="e-img-preview" class="img-preview" />
+    </div>
+    <div class="form-row cols2">
+      <div class="form-group"><label class="form-label">Organizzatore</label><input class="form-input" id="e-org" placeholder="Comune di Apricena" /></div>
+      <div class="form-group">
+        <label class="form-label">Stato</label>
+        <select class="form-select" id="e-stato">
+          <option value="programmato">Programmato</option>
+          <option value="in-corso">In corso</option>
+          <option value="concluso">Concluso</option>
+          <option value="annullato">Annullato</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Link esterno (per info)</label><input class="form-input" id="e-link" placeholder="https://..." /></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-evento')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveEvento()">💾 Salva Evento</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL SPONSOR -->
+<div class="modal-overlay" id="modal-sponsor">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Aggiungi Sponsor</div>
+      <button class="modal-close" onclick="closeModal('modal-sponsor')">✕</button>
+    </div>
+    <input type="hidden" id="sponsor-edit-id" value="" />
+    <div class="form-group"><label class="form-label">Nome Sponsor *</label><input class="form-input" id="s-nome" placeholder="Nome dell'azienda" /></div>
+    <div class="form-group">
+      <label class="form-label">Logo</label>
+      <div class="img-upload-zone" onclick="document.getElementById('s-img-file').click()">
+        <div style="font-size:20px;">🏢</div><div style="font-size:12px;color:var(--text2);">Carica logo sponsor</div>
+        <input type="file" id="s-img-file" accept="image/*" style="display:none" onchange="handleModalImg(this,'s-logo-url','s-logo-preview')" />
+      </div>
+      <input class="form-input" id="s-logo-url" placeholder="Oppure URL logo" style="margin-top:8px;" />
+      <img id="s-logo-preview" class="img-preview" />
+    </div>
+    <div class="form-group"><label class="form-label">Sito web sponsor</label><input class="form-input" id="s-sito" placeholder="https://..." /></div>
+    <div class="form-group">
+      <label class="form-label">Livello / Tier</label>
+      <select class="form-select" id="s-tier">
+        <option value="gold">Gold</option>
+        <option value="silver">Silver</option>
+        <option value="bronze">Bronze</option>
+        <option value="partner">Partner</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-sponsor')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveSponsor()">💾 Salva Sponsor</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- MODAL UTENTE -->
+<div class="modal-overlay" id="modal-utente">
+  <div class="modal" style="width:440px;">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-utente-title">Nuovo Utente</div>
+      <button class="modal-close" onclick="closeModal('modal-utente')">✕</button>
+    </div>
+    <input type="hidden" id="utente-edit-id" value="" />
+    <div class="form-group"><label class="form-label">Username *</label><input class="form-input" id="u-username" placeholder="es. mario_rossi" /></div>
+    <div class="form-group"><label class="form-label">Password *</label><input class="form-input" id="u-password" type="password" placeholder="Minimo 6 caratteri" /></div>
+    <div class="form-group">
+      <label class="form-label">Ruolo</label>
+      <select class="form-select" id="u-ruolo">
+        <option value="editor">Editor (solo notizie ed eventi)</option>
+        <option value="admin">Admin (accesso completo)</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-utente')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveUtente()">💾 Salva Utente</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- CONFERMA ELIMINA -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal" style="width:380px;text-align:center;">
+    <div style="font-size:36px;margin-bottom:12px;">🗑️</div>
+    <div class="modal-title" style="margin-bottom:8px;">Conferma eliminazione</div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:24px;" id="confirm-msg">Sei sicuro di voler eliminare questo elemento?</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-secondary" onclick="closeModal('modal-confirm')">Annulla</button>
+      <button class="btn btn-danger" id="confirm-btn">Elimina</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+// ===== STATE =====
+let currentUser = null;
+let db = loadDB();
+ 
+function loadDB() {
+  const stored = localStorage.getItem('ta_cms_db');
+  if (stored) return JSON.parse(stored);
+  return getDefaultDB();
+}
+ 
+function getDefaultDB() {
+  return {
+    utenti: [
+      { id: 'u1', username: 'admin', passwordHash: hashPwd('admin123'), ruolo: 'admin', creato: '2024-01-01' },
+    ],
+    identita: {
+      nome: 'TuttoApricena',
+      slogan: 'Il portale di Apricena',
+      descrizione: 'Notizie, eventi e informazioni su Apricena.',
+      email: 'info@tuttoapricena.it',
+      colore: '#e63946',
+      logo: '',
+      social: { fb: '', ig: '', tw: '', yt: '' }
+    },
+    hero: {
+      main: { url: '', title: 'Benvenuti ad Apricena', sub: '', cta: 'Leggi le notizie', ctalink: '#notizie', overlay: 'rgba(0,0,0,0.4)' },
+      news: { url: '', title: 'Ultime Notizie' },
+      eventi: { url: '', title: 'Eventi in Programma' },
+      custom: { url: '', title: '', sub: '', cta: '', ctalink: '' }
+    },
+    notizie: [],
+    eventi: [],
+    sponsor: [],
+    sponsorSettings: { position: 'after-news', sectionTitle: 'I nostri sponsor', cols: '4', style: 'logo-name' },
+    layout: {
+      sections: [
+        { id: 'hero', label: 'Hero Principale', icon: '🖼', visible: true },
+        { id: 'notizie', label: 'Sezione Notizie', icon: '📰', visible: true },
+        { id: 'eventi', label: 'Sezione Eventi', icon: '📅', visible: true },
+        { id: 'sponsor', label: 'Sponsor', icon: '🤝', visible: true },
+        { id: 'contatti', label: 'Contatti', icon: '📞', visible: true },
+        { id: 'footer', label: 'Footer', icon: '📄', visible: true },
+      ],
+      newsLayout: 'grid',
+      newsPerPage: '9',
+      newsOrder: 'newest',
+      newsTabs: 'all'
+    }
+  };
+}
+ 
+function saveDB() {
+  localStorage.setItem('ta_cms_db', JSON.stringify(db));
+}
+ 
+// ===== AUTH =====
+function hashPwd(p) {
+  let h = 0;
+  for (let i = 0; i < p.length; i++) { h = Math.imul(31, h) + p.charCodeAt(i) | 0; }
+  return h.toString(36);
+}
+ 
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const hash = hashPwd(pass);
+  const u = db.utenti.find(x => x.username === user && x.passwordHash === hash);
+  if (!u) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  currentUser = u;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('topbar-username').textContent = u.username;
+  const roleEl = document.getElementById('topbar-role');
+  roleEl.textContent = u.ruolo === 'admin' ? 'Admin' : 'Editor';
+  roleEl.className = 'role-badge ' + (u.ruolo === 'admin' ? 'role-admin' : 'role-editor');
+  applyRoleRestrictions();
+  refreshAll();
+}
+ 
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+ 
+function applyRoleRestrictions() {
+  if (currentUser.ruolo !== 'admin') {
+    document.querySelectorAll('[data-admin-only]').forEach(el => el.style.display = 'none');
+  }
+}
+ 
+// ===== NAVIGATION =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  if (id === 'dashboard') refreshDashboard();
+  if (id === 'notizie') renderNotizie();
+  if (id === 'eventi') renderEventi();
+  if (id === 'sponsor') renderSponsor();
+  if (id === 'layout') renderLayout();
+  if (id === 'utenti') renderUtenti();
+  if (id === 'identita') loadIdentitaForm();
+  if (id === 'hero') loadHeroForm();
+}
+ 
+// ===== REFRESH ALL =====
+function refreshAll() {
+  refreshDashboard();
+  loadIdentitaForm();
+  loadHeroForm();
+  renderNotizie();
+  renderEventi();
+  renderSponsor();
+  renderLayout();
+  renderUtenti();
+}
+ 
+// ===== DASHBOARD =====
+function refreshDashboard() {
+  const sg = document.getElementById('stats-grid');
+  const nPub = db.notizie.filter(n => n.stato === 'pubblicata').length;
+  const eUpcoming = db.eventi.filter(e => e.stato === 'programmato').length;
+  sg.innerHTML = `
+    <div class="stat-card"><div class="stat-icon">📰</div><div class="stat-number" style="color:var(--accent)">${db.notizie.length}</div><div class="stat-label">Notizie totali</div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-number" style="color:var(--success)">${nPub}</div><div class="stat-label">Notizie pubblicate</div></div>
+    <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-number" style="color:var(--gold)">${db.eventi.length}</div><div class="stat-label">Eventi totali</div></div>
+    <div class="stat-card"><div class="stat-icon">🤝</div><div class="stat-number" style="color:#3498db">${db.sponsor.length}</div><div class="stat-label">Sponsor attivi</div></div>
+  `;
+  const dn = document.getElementById('dash-notizie');
+  const recent = [...db.notizie].sort((a,b) => new Date(b.data) - new Date(a.data)).slice(0,4);
+  dn.innerHTML = recent.length ? recent.map(n => `
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
+      <span class="badge ${n.stato==='pubblicata'?'badge-green':n.stato==='bozza'?'badge-orange':'badge-red'}" style="flex-shrink:0">${n.stato}</span>
+      <span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${n.titolo}</span>
+      <span style="font-size:11px;color:var(--text3)">${n.data||''}</span>
+    </div>`).join('') : '<p style="color:var(--text3);font-size:13px;padding:12px 0;">Nessuna notizia ancora.</p>';
+  const de = document.getElementById('dash-eventi');
+  const upcomingEventi = [...db.eventi].filter(e=>e.stato!=='concluso'&&e.stato!=='annullato').slice(0,4);
+  de.innerHTML = upcomingEventi.length ? upcomingEventi.map(e => `
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:18px">📅</span>
+      <span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.titolo}</span>
+      <span style="font-size:11px;color:var(--text3)">${e.dataStart?e.dataStart.substring(0,10):''}</span>
+    </div>`).join('') : '<p style="color:var(--text3);font-size:13px;padding:12px 0;">Nessun evento programmato.</p>';
+}
+ 
+// ===== IDENTITÀ =====
+function loadIdentitaForm() {
+  const d = db.identita;
+  document.getElementById('id-nome').value = d.nome || '';
+  document.getElementById('id-slogan').value = d.slogan || '';
+  document.getElementById('id-descrizione').value = d.descrizione || '';
+  document.getElementById('id-email').value = d.email || '';
+  document.getElementById('id-colore').value = d.colore || '';
+  document.getElementById('id-colore-picker').value = d.colore || '#e63946';
+  document.getElementById('logo-url').value = d.logo || '';
+  document.getElementById('id-fb').value = d.social?.fb || '';
+  document.getElementById('id-ig').value = d.social?.ig || '';
+  document.getElementById('id-tw').value = d.social?.tw || '';
+  document.getElementById('id-yt').value = d.social?.yt || '';
+  updateLogoPreview(d.logo);
+}
+ 
+function updateLogoPreview(src) {
+  const img = document.getElementById('logo-preview-img');
+  const txt = document.getElementById('logo-preview-text');
+  if (src) { img.src = src; img.style.display = 'block'; txt.style.display = 'none'; }
+  else { img.style.display = 'none'; txt.style.display = 'block'; }
+}
+ 
+function handleLogoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('logo-url').value = e.target.result;
+    updateLogoPreview(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+ 
+function saveIdentita() {
+  db.identita = {
+    nome: document.getElementById('id-nome').value,
+    slogan: document.getElementById('id-slogan').value,
+    descrizione: document.getElementById('id-descrizione').value,
+    email: document.getElementById('id-email').value,
+    colore: document.getElementById('id-colore').value,
+    logo: document.getElementById('logo-url').value,
+    social: {
+      fb: document.getElementById('id-fb').value,
+      ig: document.getElementById('id-ig').value,
+      tw: document.getElementById('id-tw').value,
+      yt: document.getElementById('id-yt').value
+    }
+  };
+  saveDB();
+  showAlert('alert-identita');
+}
+ 
+// ===== HERO =====
+function switchHeroTab(id) {
+  document.querySelectorAll('.hero-tab-content').forEach(t => t.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+  document.querySelectorAll('#page-hero .tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+ 
+function loadHeroForm() {
+  const h = db.hero;
+  ['main','news','eventi','custom'].forEach(k => {
+    const d = h[k] || {};
+    Object.keys(d).forEach(field => {
+      const el = document.getElementById(`hero-${field}-${k}`);
+      if (el) el.value = d[field] || '';
+    });
+    if (d.url) {
+      const prev = document.getElementById(`hero-preview-${k}`);
+      if (prev) { prev.src = d.url; prev.classList.add('visible'); }
+    }
+  });
+}
+ 
+function handleHeroUpload(input, key) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = document.getElementById(`hero-url-${key}`);
+    if (url) url.value = e.target.result;
+    const prev = document.getElementById(`hero-preview-${key}`);
+    if (prev) { prev.src = e.target.result; prev.classList.add('visible'); }
+  };
+  reader.readAsDataURL(file);
+}
+ 
+function saveHero() {
+  ['main','news','eventi','custom'].forEach(k => {
+    db.hero[k] = db.hero[k] || {};
+    ['url','title','sub','cta','ctalink','overlay'].forEach(f => {
+      const el = document.getElementById(`hero-${f}-${k}`);
+      if (el) db.hero[k][f] = el.value;
+    });
+  });
+  saveDB();
+  showAlert('alert-hero');
+}
+ 
+// ===== NOTIZIE =====
+function renderNotizie() {
+  const tbody = document.getElementById('notizie-tbody');
+  document.getElementById('notizie-count').textContent = db.notizie.length + ' notizie';
+  if (!db.notizie.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px;">Nessuna notizia. Clicca "+ Nuova Notizia" per iniziare.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...db.notizie].sort((a,b)=>new Date(b.data)-new Date(a.data)).map(n => `
+    <tr>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+        ${n.immagine ? `<img src="${n.immagine}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;margin-right:8px;vertical-align:middle;" />` : ''}
+        <strong>${n.titolo}</strong>
+      </td>
+      <td><span class="badge badge-blue">${n.categoria}</span></td>
+      <td style="color:var(--text2);font-size:13px;">${n.data || ''}</td>
+      <td><span class="badge ${n.stato==='pubblicata'?'badge-green':n.stato==='bozza'?'badge-orange':'badge-red'}">${n.stato}</span></td>
+      <td>${n.evidenza=='1'?'<span style="color:var(--gold)">⭐ Sì</span>':'<span style="color:var(--text3)">—</span>'}</td>
+      <td class="td-actions">
+        <button class="btn btn-secondary btn-sm" onclick='editNotizia("${n.id}")'>✏️</button>
+        <button class="btn btn-danger btn-sm" onclick='confirmDelete("notizia","${n.id}","${n.titolo.replace(/"/g,"'")}")'>🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+ 
+function openNotiziaModal(id) {
+  document.getElementById('notizia-edit-id').value = '';
+  ['n-titolo','n-autore','n-sommario','n-testo','n-img-url','n-tag'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('n-data').value = new Date().toISOString().substring(0,10);
+  document.getElementById('n-stato').value = 'pubblicata';
+  document.getElementById('n-evidenza').value = '0';
+  document.getElementById('n-categoria').value = 'attualita';
+  document.getElementById('n-img-preview').className = 'img-preview';
+  document.getElementById('modal-notizia-title').textContent = 'Nuova Notizia';
+  openModal('modal-notizia');
+}
+ 
+function editNotizia(id) {
+  const n = db.notizie.find(x => x.id === id);
+  if (!n) return;
+  document.getElementById('notizia-edit-id').value = id;
+  document.getElementById('n-titolo').value = n.titolo || '';
+  document.getElementById('n-autore').value = n.autore || '';
+  document.getElementById('n-sommario').value = n.sommario || '';
+  document.getElementById('n-testo').value = n.testo || '';
+  document.getElementById('n-img-url').value = n.immagine || '';
+  document.getElementById('n-tag').value = (n.tag || []).join(', ');
+  document.getElementById('n-data').value = n.data || '';
+  document.getElementById('n-stato').value = n.stato || 'pubblicata';
+  document.getElementById('n-evidenza').value = n.evidenza || '0';
+  document.getElementById('n-categoria').value = n.categoria || 'attualita';
+  if (n.immagine) { const p = document.getElementById('n-img-preview'); p.src = n.immagine; p.classList.add('visible'); }
+  document.getElementById('modal-notizia-title').textContent = 'Modifica Notizia';
+  openModal('modal-notizia');
+}
+ 
+function saveNotizia() {
+  const titolo = document.getElementById('n-titolo').value.trim();
+  if (!titolo) { alert('Il titolo è obbligatorio'); return; }
+  const id = document.getElementById('notizia-edit-id').value;
+  const data = {
+    id: id || 'n_' + Date.now(),
+    titolo,
+    autore: document.getElementById('n-autore').value,
+    sommario: document.getElementById('n-sommario').value,
+    testo: document.getElementById('n-testo').value,
+    immagine: document.getElementById('n-img-url').value,
+    tag: document.getElementById('n-tag').value.split(',').map(t=>t.trim()).filter(Boolean),
+    data: document.getElementById('n-data').value,
+    stato: document.getElementById('n-stato').value,
+    evidenza: document.getElementById('n-evidenza').value,
+    categoria: document.getElementById('n-categoria').value,
+  };
+  if (id) {
+    const idx = db.notizie.findIndex(x => x.id === id);
+    db.notizie[idx] = data;
+  } else {
+    db.notizie.unshift(data);
+  }
+  saveDB(); closeModal('modal-notizia'); renderNotizie(); showAlert('alert-notizie');
+}
+ 
+// ===== EVENTI =====
+function renderEventi() {
+  const tbody = document.getElementById('eventi-tbody');
+  document.getElementById('eventi-count').textContent = db.eventi.length + ' eventi';
+  if (!db.eventi.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px;">Nessun evento. Clicca "+ Nuovo Evento" per iniziare.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...db.eventi].sort((a,b)=>new Date(a.dataStart)-new Date(b.dataStart)).map(e => `
+    <tr>
+      <td><strong>${e.titolo}</strong></td>
+      <td style="color:var(--text2);font-size:13px;">${e.dataStart?e.dataStart.substring(0,10):''}</td>
+      <td style="color:var(--text2);font-size:13px;">${e.luogo||'—'}</td>
+      <td><span class="badge badge-blue">${e.categoria}</span></td>
+      <td><span class="badge ${e.stato==='programmato'?'badge-green':e.stato==='in-corso'?'badge-orange':e.stato==='annullato'?'badge-red':'badge-blue'}">${e.stato}</span></td>
+      <td class="td-actions">
+        <button class="btn btn-secondary btn-sm" onclick='editEvento("${e.id}")'>✏️</button>
+        <button class="btn btn-danger btn-sm" onclick='confirmDelete("evento","${e.id}","${e.titolo.replace(/"/g,"'")}")'>🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+ 
+function openEventoModal() {
+  document.getElementById('evento-edit-id').value = '';
+  ['e-titolo','e-data-start','e-data-end','e-luogo','e-descrizione','e-org','e-link','e-img-url'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('e-stato').value = 'programmato';
+  document.getElementById('e-categoria').value = 'festa';
+  document.getElementById('e-img-preview').className = 'img-preview';
+  document.getElementById('modal-evento-title').textContent = 'Nuovo Evento';
+  openModal('modal-evento');
+}
+ 
+function editEvento(id) {
+  const e = db.eventi.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('evento-edit-id').value = id;
+  document.getElementById('e-titolo').value = e.titolo || '';
+  document.getElementById('e-data-start').value = e.dataStart || '';
+  document.getElementById('e-data-end').value = e.dataEnd || '';
+  document.getElementById('e-luogo').value = e.luogo || '';
+  document.getElementById('e-descrizione').value = e.descrizione || '';
+  document.getElementById('e-org').value = e.organizzatore || '';
+  document.getElementById('e-link').value = e.link || '';
+  document.getElementById('e-img-url').value = e.immagine || '';
+  document.getElementById('e-stato').value = e.stato || 'programmato';
+  document.getElementById('e-categoria').value = e.categoria || 'festa';
+  if (e.immagine) { const p = document.getElementById('e-img-preview'); p.src = e.immagine; p.classList.add('visible'); }
+  document.getElementById('modal-evento-title').textContent = 'Modifica Evento';
+  openModal('modal-evento');
+}
+ 
+function saveEvento() {
+  const titolo = document.getElementById('e-titolo').value.trim();
+  if (!titolo) { alert('Il titolo è obbligatorio'); return; }
+  const id = document.getElementById('evento-edit-id').value;
+  const data = {
+    id: id || 'e_' + Date.now(),
+    titolo,
+    dataStart: document.getElementById('e-data-start').value,
+    dataEnd: document.getElementById('e-data-end').value,
+    luogo: document.getElementById('e-luogo').value,
+    descrizione: document.getElementById('e-descrizione').value,
+    organizzatore: document.getElementById('e-org').value,
+    link: document.getElementById('e-link').value,
+    immagine: document.getElementById('e-img-url').value,
+    stato: document.getElementById('e-stato').value,
+    categoria: document.getElementById('e-categoria').value,
+  };
+  if (id) { const idx = db.eventi.findIndex(x => x.id === id); db.eventi[idx] = data; }
+  else { db.eventi.unshift(data); }
+  saveDB(); closeModal('modal-evento'); renderEventi(); showAlert('alert-eventi');
+}
+ 
+// ===== SPONSOR =====
+function renderSponsor() {
+  const grid = document.getElementById('sponsor-grid');
+  const empty = document.getElementById('sponsor-empty');
+  document.getElementById('sponsor-count').textContent = db.sponsor.length;
+  const s = db.sponsorSettings;
+  document.getElementById('sponsor-position').value = s.position || 'after-news';
+  document.getElementById('sponsor-section-title').value = s.sectionTitle || '';
+  document.getElementById('sponsor-cols').value = s.cols || '4';
+  document.getElementById('sponsor-style').value = s.style || 'logo-name';
+  if (!db.sponsor.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = db.sponsor.map(s => `
+    <div class="sponsor-card">
+      ${s.logo ? `<img src="${s.logo}" onerror="this.style.display='none'" />` : '<div style="width:80px;height:40px;background:var(--border);border-radius:4px;margin:0 auto 8px;"></div>'}
+      <div class="name">${s.nome}</div>
+      <div style="font-size:10px;margin-top:3px;" class="badge ${s.tier==='gold'?'badge-orange':s.tier==='silver'?'badge-blue':'badge-green'}">${s.tier}</div>
+      <button class="remove-sponsor" onclick='confirmDelete("sponsor","${s.id}","${s.nome}")'>✕</button>
+    </div>`).join('');
+}
+ 
+function openSponsorModal() {
+  document.getElementById('sponsor-edit-id').value = '';
+  ['s-nome','s-logo-url','s-sito'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('s-tier').value = 'partner';
+  document.getElementById('s-logo-preview').className = 'img-preview';
+  openModal('modal-sponsor');
+}
+ 
+function saveSponsor() {
+  const nome = document.getElementById('s-nome').value.trim();
+  if (!nome) { alert('Il nome è obbligatorio'); return; }
+  db.sponsor.push({
+    id: 's_' + Date.now(),
+    nome,
+    logo: document.getElementById('s-logo-url').value,
+    sito: document.getElementById('s-sito').value,
+    tier: document.getElementById('s-tier').value,
+  });
+  saveDB(); closeModal('modal-sponsor'); renderSponsor(); showAlert('alert-sponsor');
+}
+ 
+function saveSponsorSettings() {
+  db.sponsorSettings = {
+    position: document.getElementById('sponsor-position').value,
+    sectionTitle: document.getElementById('sponsor-section-title').value,
+    cols: document.getElementById('sponsor-cols').value,
+    style: document.getElementById('sponsor-style').value,
+  };
+  saveDB();
+}
+ 
+// ===== LAYOUT =====
+function renderLayout() {
+  const list = document.getElementById('sections-list');
+  list.innerHTML = db.layout.sections.map((s, i) => `
+    <div class="section-row sortable-item" draggable="true" data-idx="${i}" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dropSection(event)">
+      <span class="drag-handle">⠿</span>
+      <span style="font-size:18px">${s.icon}</span>
+      <span class="section-name">${s.label}</span>
+      <div class="section-toggle">
+        <label class="toggle"><input type="checkbox" ${s.visible?'checked':''} onchange="toggleSection(${i},this.checked)" /><span class="slider-toggle"></span></label>
+        <span style="font-size:12px;color:var(--text2)">${s.visible?'Visibile':'Nascosta'}</span>
+      </div>
+    </div>`).join('');
+  document.getElementById('news-layout').value = db.layout.newsLayout || 'grid';
+  document.getElementById('news-perpage').value = db.layout.newsPerPage || '9';
+  document.getElementById('news-order').value = db.layout.newsOrder || 'newest';
+  document.getElementById('news-tabs').value = db.layout.newsTabs || 'all';
+}
+ 
+let dragSrcIdx = null;
+function dragStart(e) { dragSrcIdx = parseInt(e.currentTarget.dataset.idx); e.currentTarget.classList.add('dragging'); }
+function dragOver(e) { e.preventDefault(); }
+function dropSection(e) {
+  e.preventDefault();
+  const targetIdx = parseInt(e.currentTarget.dataset.idx);
+  if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+  const arr = db.layout.sections;
+  const item = arr.splice(dragSrcIdx, 1)[0];
+  arr.splice(targetIdx, 0, item);
+  dragSrcIdx = null;
+  document.querySelectorAll('.sortable-item').forEach(el => el.classList.remove('dragging'));
+  renderLayout();
+}
+ 
+function toggleSection(idx, val) { db.layout.sections[idx].visible = val; renderLayout(); }
+ 
+function saveLayout() {
+  db.layout.newsLayout = document.getElementById('news-layout').value;
+  db.layout.newsPerPage = document.getElementById('news-perpage').value;
+  db.layout.newsOrder = document.getElementById('news-order').value;
+  db.layout.newsTabs = document.getElementById('news-tabs').value;
+  saveDB();
+  showAlert('alert-layout');
+}
+ 
+// ===== UTENTI =====
+function renderUtenti() {
+  const tbody = document.getElementById('utenti-tbody');
+  tbody.innerHTML = db.utenti.map(u => `
+    <tr>
+      <td><strong>${u.username}</strong></td>
+      <td><span class="badge ${u.ruolo==='admin'?'badge-red':'badge-orange'}">${u.ruolo}</span></td>
+      <td style="color:var(--text2);font-size:13px;">${u.creato || '—'}</td>
+      <td class="td-actions">
+        ${u.id !== 'u1' ? `<button class="btn btn-danger btn-sm" onclick='confirmDelete("utente","${u.id}","${u.username}")'>🗑️</button>` : '<span style="color:var(--text3);font-size:12px;">Account principale</span>'}
+      </td>
+    </tr>`).join('');
+}
+ 
+function openUserModal() {
+  document.getElementById('utente-edit-id').value = '';
+  ['u-username','u-password'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('u-ruolo').value = 'editor';
+  document.getElementById('modal-utente-title').textContent = 'Nuovo Utente';
+  openModal('modal-utente');
+}
+ 
+function saveUtente() {
+  const username = document.getElementById('u-username').value.trim();
+  const pass = document.getElementById('u-password').value;
+  if (!username || pass.length < 6) { alert('Username e password (min 6 caratteri) obbligatori'); return; }
+  if (db.utenti.find(u => u.username === username)) { alert('Username già esistente'); return; }
+  db.utenti.push({
+    id: 'u_' + Date.now(),
+    username,
+    passwordHash: hashPwd(pass),
+    ruolo: document.getElementById('u-ruolo').value,
+    creato: new Date().toISOString().substring(0,10)
+  });
+  saveDB(); closeModal('modal-utente'); renderUtenti(); showAlert('alert-utenti');
+}
+ 
+// ===== DELETE =====
+function confirmDelete(type, id, name) {
+  document.getElementById('confirm-msg').textContent = `Eliminare "${name}"? Questa azione non può essere annullata.`;
+  document.getElementById('confirm-btn').onclick = () => doDelete(type, id);
+  openModal('modal-confirm');
+}
+ 
+function doDelete(type, id) {
+  if (type === 'notizia') db.notizie = db.notizie.filter(x => x.id !== id);
+  if (type === 'evento') db.eventi = db.eventi.filter(x => x.id !== id);
+  if (type === 'sponsor') db.sponsor = db.sponsor.filter(x => x.id !== id);
+  if (type === 'utente') db.utenti = db.utenti.filter(x => x.id !== id);
+  saveDB();
+  closeModal('modal-confirm');
+  if (type === 'notizia') { renderNotizie(); showAlert('alert-notizie'); }
+  if (type === 'evento') { renderEventi(); showAlert('alert-eventi'); }
+  if (type === 'sponsor') { renderSponsor(); showAlert('alert-sponsor'); }
+  if (type === 'utente') renderUtenti();
+  refreshDashboard();
+}
+ 
+// ===== EXPORT / IMPORT =====
+function exportData() {
+  const json = JSON.stringify(db, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tuttoapricena-data.json';
+  a.click();
+}
+ 
+function exportHtml() {
+  const d = db.identita;
+  const notizie = db.notizie.filter(n => n.stato === 'pubblicata').slice(0,6);
+  const eventi = db.eventi.filter(e => e.stato === 'programmato').slice(0,4);
+  const html = `<!-- TuttoApricena — Generato dal CMS il ${new Date().toLocaleDateString('it-IT')} -->
+<!-- Sostituisci il blocco dei dati nell'index.html principale con questi valori -->
+<script>
+window.TA_DATA = ${JSON.stringify({identita: d, hero: db.hero, notizie, eventi, sponsor: db.sponsor, sponsorSettings: db.sponsorSettings, layout: db.layout}, null, 2)};
+<\/script>`;
+  const blob = new Blob([html], {type: 'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tuttoapricena-data-snippet.html';
+  a.click();
+}
+ 
+function importData(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.notizie && !imported.eventi) throw new Error('Formato non valido');
+      db = { ...getDefaultDB(), ...imported };
+      saveDB(); refreshAll();
+      showAlert('alert-import');
+    } catch(err) { alert('Errore: file non valido. ' + err.message); }
+  };
+  reader.readAsText(file);
+}
+ 
+// ===== HELPERS =====
+function handleModalImg(input, urlId, previewId) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById(urlId).value = e.target.result;
+    const prev = document.getElementById(previewId);
+    prev.src = e.target.result; prev.classList.add('visible');
+  };
+  reader.readAsDataURL(file);
+}
+ 
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+ 
+function showAlert(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('visible');
+  setTimeout(() => el.classList.remove('visible'), 3000);
+}
+ 
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
+});
+ 
+// Auto-login check
+const savedUser = sessionStorage.getItem('ta_logged_user');
+if (savedUser) {
+  const u = db.utenti.find(x => x.username === savedUser);
+  if (u) { document.getElementById('login-user').value = u.username; }
+}
+ 
+// Save session on login
+const origLogin = doLogin;
+window.doLogin = function() {
+  origLogin();
+  if (currentUser) sessionStorage.setItem('ta_logged_user', currentUser.username);
+};
+</script>
+</body>
+</html>
+ 
