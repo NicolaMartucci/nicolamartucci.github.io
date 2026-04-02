@@ -363,17 +363,17 @@ tbody tr:hover td{background:var(--paper2)}
 
     <div class="gh-setup" id="gh-setup-notice">
       <strong>Prima configurazione</strong>
-      Inserisci il tuo GitHub Personal Access Token per abilitare la sincronizzazione live con il sito.
+      Inserisci il tuo Personal Acces per abilitare la sincronizzazione live con il sito.
     </div>
 
     <div class="fld"><label>Username</label><input id="l-user" type="text" placeholder="admin" autocomplete="username"/></div>
     <div class="fld"><label>Password</label><input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/></div>
     <div id="gh-token-field" class="fld" style="display:none">
-      <label>GitHub Token (da impostare una volta)</label>
+      <label>GitHub (da impostare una volta)</label>
       <input id="l-ghtoken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
     </div>
     <div class="fld" style="display:none" id="gh-token-toggle-row">
-      <a href="#" style="font-size:12px;color:var(--red)" onclick="toggleGhTokenField(event)">⚙ Configura GitHub Token</a>
+      <a href="#" style="font-size:12px;color:var(--red)" onclick="toggleGhTokenField(event)">⚙ Configura GitHub</a>
     </div>
     <button class="btn-login" onclick="login()">Accedi</button>
     <div class="login-err" id="l-err">Credenziali non valide</div>
@@ -492,7 +492,7 @@ tbody tr:hover td{background:var(--paper2)}
         </div>
         <div class="gh-banner" id="dash-gh-warn">
           <span style="font-size:18px;flex-shrink:0">⚠</span>
-          <div><strong>GitHub non configurato</strong>Le modifiche che fai qui NON vengono pubblicate finché non configuri il GitHub Token. <a href="#" onclick="go('github')" style="color:var(--amber);font-weight:500">Configura ora →</a></div>
+          <div><strong>GitHub non configurato</strong>Le modifiche che fai qui NON vengono pubblicate finché non configuri il GitHub. <a href="#" onclick="go('github')" style="color:var(--amber);font-weight:500">Configura ora →</a></div>
         </div>
         <div class="stats-row" id="dash-stats"></div>
         <div class="two-col">
@@ -755,7 +755,7 @@ tbody tr:hover td{background:var(--paper2)}
             <div class="fg"><label>Branch</label><input id="gh-branch" placeholder="main" value="main"/></div>
             <div class="fg"><label>Percorso file dati (nel repo)</label><input id="gh-path" placeholder="tuttoapricena/assets/data.json" value="tuttoapricena/assets/data.json"/></div>
             <div class="fg" style="grid-column:span 2">
-              <label>Personal Access Token</label>
+              <label>Personal Access T</label>
               <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
               <span style="font-size:11px;color:var(--ink3);margin-top:4px;display:block">Genera su github.com → Settings → Developer settings → Personal access tokens → Fine-grained. Permessi: <strong>Contents: read & write</strong></span>
             </div>
