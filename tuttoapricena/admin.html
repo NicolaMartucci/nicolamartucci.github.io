@@ -362,23 +362,24 @@ tbody tr:hover td{background:var(--paper2)}
     </div>
 
     <div class="gh-setup" id="gh-setup-notice">
-      <strong>Prima configurazione</strong>
-      Inserisci il tuo GitHub Personal Access Token per abilitare la sincronizzazione live con il sito.
-    </div>
-
-    <div class="fld"><label>Username</label><input id="l-user" type="text" placeholder="admin" autocomplete="username"/></div>
-    <div class="fld"><label>Password</label><input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/></div>
-    <div id="gh-token-field" class="fld" style="display:none">
-      <label>GitHub Token (da impostare una volta)</label>
-      <input id="l-ghtoken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
-    </div>
-    <div class="fld" style="display:none" id="gh-token-toggle-row">
-      <a href="#" style="font-size:12px;color:var(--red)" onclick="toggleGhTokenField(event)">⚙ Configura GitHub Token</a>
-    </div>
-    <button class="btn-login" onclick="login()">Accedi</button>
-    <div class="login-err" id="l-err">Credenziali non valide</div>
-  </div>
+  <strong>Prima configurazione</strong>
+  Inserisci il tuo GitHub Personal Access Token per abilitare la sincronizzazione live con il sito.
 </div>
+
+<div class="fld"><label>Username</label><input id="l-user" type="text" placeholder="admin" autocomplete="username"/></div>
+<div class="fld"><label>Password</label><input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"/></div>
+<div id="gh-token-field" class="fld" style="display:none">
+  <label>GitHub Token (da impostare una volta)</label>
+  <input id="l-ghtoken" type="password" placeholder="Incolla qui il tuo token"/>
+  <small style="color:#666;font-size:11px;display:block;margin-top:4px">
+    ⚠️ Il token rimane solo nel tuo browser, non viene mai inviato a server esterni
+  </small>
+</div>
+<div class="fld" style="display:none" id="gh-token-toggle-row">
+  <a href="#" style="font-size:12px;color:var(--red)" onclick="toggleGhTokenField(event)">⚙ Configura GitHub Token</a>
+</div>
+<button class="btn-login" onclick="login()">Accedi</button>
+<div class="login-err" id="l-err">Credenziali non valide</div>
 
 <!-- ══════════ APP ══════════ -->
 <div id="app" style="display:flex">
