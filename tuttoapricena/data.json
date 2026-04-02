@@ -1,0 +1,44 @@
+{
+  "identita": {
+    "nome": "TuttoApricena",
+    "tag": "Il portale di Apricena",
+    "desc": "Notizie, eventi e informazioni su Apricena.",
+    "email": "",
+    "colore": "#c0392b",
+    "logo": "",
+    "social": { "fb": "", "ig": "", "tw": "", "yt": "" }
+  },
+  "hero": {
+    "home": { "url": "", "title": "Benvenuti ad Apricena", "sub": "", "cta": "Leggi le notizie", "ctalink": "#notizie" },
+    "news": { "url": "", "title": "Ultime notizie" },
+    "events": { "url": "", "title": "Eventi in programma" }
+  },
+  "footer": {
+    "copy": "© 2025 TuttoApricena. Tutti i diritti riservati.",
+    "slogan": "TuttoApricena",
+    "desc": "Il portale di informazione della città di Apricena.",
+    "addr": "Apricena (FG), Italia",
+    "email": "",
+    "tel": "",
+    "piva": "",
+    "links": []
+  },
+  "notizie": [],
+  "eventi": [],
+  "sponsor": [],
+  "sponsorSettings": { "position": "after-news", "title": "I nostri sponsor", "cols": "4" },
+  "layout": {
+    "sections": [
+      { "id": "hero", "label": "Hero principale", "icon": "🖼", "vis": true },
+      { "id": "notizie", "label": "Notizie", "icon": "📰", "vis": true },
+      { "id": "eventi", "label": "Eventi", "icon": "📅", "vis": true },
+      { "id": "sponsor", "label": "Sponsor", "icon": "🤝", "vis": true },
+      { "id": "contatti", "label": "Contatti", "icon": "📞", "vis": true },
+      { "id": "footer", "label": "Footer", "icon": "📄", "vis": true }
+    ],
+    "newsLayout": "grid",
+    "newsPerPage": "9",
+    "newsOrder": "newest",
+    "newsTabs": "hide"
+  }
+}
