@@ -15,7 +15,7 @@
   <body>
     <div id="root"></div>
     <script>
-fetch('/tuttoapricena/assets/data.json?v='+Date.now())
+fetch('/tuttoapricena/data.json?v='+Date.now())
   .then(r=>r.json()).then(d=>{window.TA_DATA=d;});
 </script>
   </body>
