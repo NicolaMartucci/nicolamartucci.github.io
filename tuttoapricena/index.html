@@ -22,5 +22,26 @@
     .catch(()=>{});
 })();
 </script>
+
+<script>
+document.addEventListener('ta-ready', function() {
+  const dati = window.TA_DATA;
+  
+  // Esempio: mostra notizie
+  const notizie = dati.notizie || [];
+  const container = document.getElementById('notizie-lista');
+  if (container) {
+    container.innerHTML = notizie
+      .filter(n => n.status === 'pubblicata')
+      .slice(0, 6)
+      .map(n => `
+        <article>
+          <h3>${n.title}</h3>
+          <p>${n.summary}</p>
+        </article>
+      `).join('');
+  }
+});
+</script>
   </body>
 </html>
