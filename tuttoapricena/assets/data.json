@@ -1,4 +1,13 @@
 {
+  "site": {
+    "title": "TuttoApricena",
+    "subtitle": "Il portale di Apricena",
+    "logo": "",
+    "primaryColor": "#2d7a4f",
+    "facebook": "",
+    "instagram": "",
+    "email": ""
+  },
   "notizie": [
     {
       "id": "n001",
@@ -14,5 +23,9 @@
       "evidenza": false,
       "updatedAt": "2026-04-03T13:33:31.289Z"
     }
-  ]
+  ],
+  "eventi": [],
+  "servizi": [],
+  "sponsor": [],
+  "locali": []
 }
