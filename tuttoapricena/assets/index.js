@@ -107,7 +107,7 @@
           ${n.categoria ? `<span class="card-category">${esc(n.categoria)}</span>` : ''}
           <div class="news-item-title">${esc(n.titolo)}</div>
           <div class="card-date">${formatDate(n.data)}</div>
-          <div class="news-item-excerpt">${esc(n.testo)}</div>
+          <div class="news-item-excerpt">${esc(n.contenuto)}</div>
         </div>
       </div>`).join('');
   }
