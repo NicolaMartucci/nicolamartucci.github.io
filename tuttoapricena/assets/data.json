@@ -40,31 +40,9 @@
     "piva": "",
     "links": []
   },
-  "notizie": [
-    {
-      "id": "n1775214974748",
-      "title": "prova",
-      "cat": "sport",
-      "date": "2026-04-03",
-      "author": "",
-      "summary": "aaaaaa",
-      "body": "aaaaaaaaa",
-      "img": "",
-      "status": "pubblicata",
-      "featured": "0",
-      "tags": []
-    }
-  ],
+  "notizie": [],
   "eventi": [],
-  "sponsor": [
-    {
-      "id": "s1775215112117",
-      "nome": "nicola martucci",
-      "logo": "",
-      "sito": "",
-      "tier": "partner"
-    }
-  ],
+  "sponsor": [],
   "sponsorSettings": {
     "position": "after-news",
     "title": "I nostri sponsor",
