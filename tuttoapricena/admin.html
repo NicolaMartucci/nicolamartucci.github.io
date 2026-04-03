@@ -104,6 +104,7 @@ input,select,textarea,button{font-family:var(--ff);font-size:14px;color:var(--t1
 .bblu{background:var(--blu-l);color:var(--blu);border:1px solid var(--blu-b)}.bblu:hover{background:#dbeafe}
 .bsm{padding:5px 9px;font-size:12px}
 .bico{padding:5px;border-radius:var(--r)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
 /* CARDS */
 .card{background:var(--w);border:1px solid var(--bd);border-radius:var(--r2);padding:20px}
@@ -137,7 +138,7 @@ tbody tr:hover td{background:var(--g1)}
 /* BADGES */
 .bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
 .bok2{background:var(--grn-l);color:var(--grn)}.bred{background:var(--red-l);color:var(--red)}
-.bwrn{background:var(--amb-l);color:var(--amb)}.bblu2{background:var(--blu-l);color:var(--blu)}
+.bwrn{background:var(--amb-l);color:var(--amb)}.bblu{background:var(--blu-l);color:var(--blu)}
 .bgry{background:var(--g2);color:var(--t3)}
 
 /* ALERTS */
@@ -227,9 +228,6 @@ tbody tr:hover td{background:var(--g1)}
 .emtxt{font-size:13px}
 #toast{position:fixed;bottom:20px;right:20px;padding:11px 16px;border-radius:var(--r2);font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--s3);opacity:0;transition:opacity .22s;pointer-events:none;max-width:300px}
 #toast.on{opacity:1}
-
-/* PUBLISH STATUS */
-.pub-status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);padding:4px 10px;border-radius:var(--r);background:var(--g1);border:1px solid var(--bd)}
 </style>
 </head>
 <body>
@@ -286,14 +284,6 @@ tbody tr:hover td{background:var(--g1)}
     <div class="topbar">
       <span class="tbc" id="tbc">Dashboard</span>
       <div class="tbr">
-        <div class="pub-status" id="pub-status-bar" style="display:none">
-          <div class="sdot ok" id="pub-dot"></div>
-          <span id="pub-status-txt">Sito sincronizzato</span>
-        </div>
-        <button class="btn bg" id="syncbtn" onclick="syncFrom()" style="display:none">
-          <svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M1 6A5 5 0 1 0 6 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 2v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Sincronizza
-        </button>
         <button class="btn bok" id="pubbtn" onclick="publishNow()" style="display:none">
           <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v6.5M3.5 5L6 7.5 8.5 5M1 10h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Pubblica sul sito
@@ -306,15 +296,9 @@ tbody tr:hover td{background:var(--g1)}
 <!-- DASHBOARD -->
 <div class="page on" id="p-dash">
   <div class="ph"><div class="phl"><h1>Dashboard</h1><p>Panoramica di TuttoApricena</p></div>
-    <div class="phr">
-      <button class="btn bg" onclick="syncFrom()">
-        <svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M1 6A5 5 0 1 0 6 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 2v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Sincronizza dal sito
-      </button>
-    </div>
+    <div class="phr"><button class="btn bg" onclick="syncFrom()"><svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M1 6A5 5 0 1 0 6 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 2v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sincronizza dal sito</button></div>
   </div>
-  <div class="al alwrn" id="ghwarn" style="margin-bottom:14px">⚠ GitHub non configurato — configura il token per pubblicare le modifiche. <a href="#" onclick="go('github')" style="font-weight:600;margin-left:5px">Configura →</a></div>
-  <div class="al alwrn" id="dirty-warn" style="margin-bottom:14px">⚠ Ci sono modifiche non pubblicate. <a href="#" onclick="publishNow()" style="font-weight:600;margin-left:5px">Pubblica ora →</a></div>
+  <div class="al alwrn on" id="ghwarn" style="margin-bottom:14px">⚠ GitHub non configurato — configura il token per pubblicare le modifiche. <a href="#" onclick="go('github')" style="font-weight:600;margin-left:5px">Configura →</a></div>
   <div class="stats" id="dstats"></div>
   <div class="g2"><div class="card"><div class="chd">Ultime notizie</div><div id="dnews"></div></div><div class="card"><div class="chd">Prossimi eventi</div><div id="devs"></div></div></div>
 </div>
@@ -508,15 +492,15 @@ tbody tr:hover td{background:var(--g1)}
     <div class="chd">⚙️ Configurazione pubblicazione</div>
     <div class="al alwrn on" style="margin-bottom:14px">🔒 Il token viene salvato <strong>solo nel browser</strong> e non è mai incluso nei file caricati su GitHub.</div>
     <div class="g2">
-      <div class="fg"><label>Owner GitHub</label><input id="gh-owner" placeholder="NicolaMartucci"/><div class="fhint">Il tuo username GitHub</div></div>
-      <div class="fg"><label>Repository</label><input id="gh-repo" placeholder="nicolamartucci.github.io"/><div class="fhint">Nome esatto del repository</div></div>
-      <div class="fg"><label>Branch</label><input id="gh-branch" placeholder="main"/><div class="fhint">Di solito "main" o "master"</div></div>
-      <div class="fg"><label>Percorso file dati</label><input id="gh-path" placeholder="tuttoapricena/assets/data.json"/><div class="fhint">Percorso relativo alla root del repo</div></div>
+      <div class="fg"><label>Owner GitHub</label><input id="gh-owner" value="NicolaMartucci"/><div class="fhint">Il tuo username GitHub</div></div>
+      <div class="fg"><label>Repository</label><input id="gh-repo" value="nicolamartucci.github.io"/><div class="fhint">Nome esatto del repository</div></div>
+      <div class="fg"><label>Branch</label><input id="gh-branch" value="main"/><div class="fhint">Di solito "main" o "master"</div></div>
+      <div class="fg"><label>Percorso file dati</label><input id="gh-path" value="tuttoapricena/assets/data.json"/><div class="fhint">Percorso relativo alla root del repo</div></div>
       <div class="fg" style="grid-column:span 2">
         <label>Personal Access Token</label>
         <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password"/>
         <div class="fhint">
-          <strong>Come generarlo:</strong> github.com → avatar → Settings → Developer settings → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token<br/>
+          <strong>Come generarlo:</strong> github.com → avatar in alto a destra → Settings → Developer settings (in fondo) → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token<br/>
           Permesso necessario: Repository permissions → <strong>Contents: Read and Write</strong>
         </div>
       </div>
@@ -662,13 +646,37 @@ tbody tr:hover td{background:var(--g1)}
 
 <script>
 // ══════════════════════════════════════════════════════
-// UTILS BASE — definite prima di tutto il resto
+// CODIFICA/DECODIFICA UTF-8 BASE64 MODERNI
 // ══════════════════════════════════════════════════════
-const E  = id => document.getElementById(id);
-const V  = id => { const e = E(id); return e ? e.value : ''; };
-const SV = (id, v) => { const e = E(id); if (e) e.value = (v === null || v === undefined) ? '' : String(v); };
+function utf8ToBase64(str) {
+  try {
+    // Metodo moderno con TextEncoder
+    const bytes = new TextEncoder().encode(str);
+    const binString = Array.from(bytes, byte => String.fromCodePoint(byte)).join('');
+    return btoa(binString);
+  } catch (e) {
+    console.error('Errore encoding UTF-8:', e);
+    // Fallback
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode('0x' + p1)));
+  }
+}
 
-// FNV-1a 32-bit hash per le password
+function base64ToUtf8(base64) {
+  try {
+    // Metodo moderno con TextDecoder
+    const binString = atob(base64);
+    const bytes = Uint8Array.from(binString, m => m.codePointAt(0));
+    return new TextDecoder().decode(bytes);
+  } catch (e) {
+    console.error('Errore decoding UTF-8:', e);
+    // Fallback
+    return decodeURIComponent(Array.prototype.map.call(atob(base64), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// FNV-1a 32-bit hash — usato per le password
+// ══════════════════════════════════════════════════════
 function H(s) {
   let h = 2166136261 >>> 0;
   for (let i = 0; i < s.length; i++) {
@@ -678,35 +686,29 @@ function H(s) {
   return h.toString(16);
 }
 
+// Costanti predefinite dell'admin
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
 const ADMIN_HASH = H(ADMIN_PASS);
 
 function tod() { return new Date().toISOString().substring(0, 10); }
 
-// ══════════════════════════════════════════════════════
-// DB
-// ══════════════════════════════════════════════════════
 function defDB() {
   return {
     users: [{ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() }],
     identita: { nome: 'TuttoApricena', tag: 'Il portale di Apricena', desc: '', email: '', col: '#d63031', logo: '', social: { fb: '', ig: '', tw: '', yt: '' } },
-    hero: {
-      home: { url: '', title: 'Benvenuti ad Apricena', sub: '', cta: 'Scopri le notizie', ctalink: '#notizie' },
-      news: { url: '', title: 'Ultime notizie' },
-      events: { url: '', title: 'Eventi in programma' }
-    },
+    hero: { home: { url: '', title: 'Benvenuti ad Apricena', sub: '', cta: 'Scopri le notizie', ctalink: '#notizie' }, news: { url: '', title: 'Ultime notizie' }, events: { url: '', title: 'Eventi in programma' } },
     footer: { copy: '© 2025 TuttoApricena. Tutti i diritti riservati.', slogan: 'TuttoApricena', desc: '', addr: 'Apricena (FG), Italia', email: '', tel: '', piva: '', links: [] },
     notizie: [], eventi: [], sponsor: [],
     sponsorSettings: { position: 'after-news', title: 'I nostri sponsor', cols: '4' },
     layout: {
       sections: [
-        { id: 'hero',     label: 'Hero principale', icon: '🖼', vis: true },
-        { id: 'notizie',  label: 'Notizie',          icon: '📰', vis: true },
-        { id: 'eventi',   label: 'Eventi',            icon: '📅', vis: true },
-        { id: 'sponsor',  label: 'Sponsor',           icon: '🤝', vis: true },
-        { id: 'contatti', label: 'Contatti',          icon: '📞', vis: true },
-        { id: 'footer',   label: 'Footer',            icon: '📄', vis: true }
+        { id: 'hero', label: 'Hero principale', icon: '🖼', vis: true },
+        { id: 'notizie', label: 'Notizie', icon: '📰', vis: true },
+        { id: 'eventi', label: 'Eventi', icon: '📅', vis: true },
+        { id: 'sponsor', label: 'Sponsor', icon: '🤝', vis: true },
+        { id: 'contatti', label: 'Contatti', icon: '📞', vis: true },
+        { id: 'footer', label: 'Footer', icon: '📄', vis: true }
       ],
       newsLayout: 'grid', newsPerPage: '9', newsOrder: 'newest', newsTabs: 'hide'
     },
@@ -720,18 +722,12 @@ function loadDB() {
     if (!raw) return defDB();
     const parsed = JSON.parse(raw);
     if (!parsed.users) parsed.users = [];
-    // Garantisce che l'admin principale esista sempre
     const adminIdx = parsed.users.findIndex(u => u.id === 'u1');
     if (adminIdx < 0) {
       parsed.users.unshift({ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() });
     } else if (!parsed.users[adminIdx].hash) {
       parsed.users[adminIdx].hash = ADMIN_HASH;
     }
-    // Garantisce struttura github nel DB
-    if (!parsed.github) parsed.github = defDB().github;
-    // Garantisce struttura layout
-    if (!parsed.layout) parsed.layout = defDB().layout;
-    if (!parsed.layout.sections) parsed.layout.sections = defDB().layout.sections;
     return parsed;
   } catch (e) {
     console.warn('DB corrotto, ripristino dal default', e);
@@ -739,28 +735,21 @@ function loadDB() {
   }
 }
 
-let DB    = loadDB();
-let CU    = null;
-let ftLinks = [];
-let dragIdx = null;
-let dirty = false; // true = ci sono modifiche locali non ancora pubblicate su GitHub
+let DB = loadDB();
+let CU = null, ftLinks = [], dragIdx = null, dirty = false;
 
-// Token GitHub — mai nel DB, solo in localStorage
 const getTok = () => localStorage.getItem('ta_tok') || '';
 const setTok = t => t ? localStorage.setItem('ta_tok', t) : localStorage.removeItem('ta_tok');
 
 function saveDB() {
-  // Salva in localStorage senza il token
   const d = JSON.parse(JSON.stringify(DB));
   delete d.github?.token;
   localStorage.setItem('ta_db', JSON.stringify(d));
   dirty = true;
   syncUI();
+  toast('💾 Modifiche salvate localmente', false);
 }
 
-// ══════════════════════════════════════════════════════
-// RESET DB
-// ══════════════════════════════════════════════════════
 function resetDB() {
   if (!confirm('Questa operazione cancellerà tutti i dati salvati nel browser e ripristinerà le credenziali predefinite (admin / admin123). Continuare?')) return;
   localStorage.removeItem('ta_db');
@@ -774,22 +763,17 @@ function resetDB() {
   toast('✓ Dati ripristinati. Usa admin / admin123');
 }
 
-// ══════════════════════════════════════════════════════
-// LOGIN / LOGOUT
-// ══════════════════════════════════════════════════════
+// ── LOGIN
 function doLogin() {
-  const u = V('lu').trim();
-  const p = V('lp');
+  const u = V('lu').trim(), p = V('lp');
   const rem = document.getElementById('lrem').checked;
   const hashed = H(p);
-
   const found = DB.users.find(x => x.username === u && x.hash === hashed);
   if (!found) {
     E('lerr').classList.add('x');
     return;
   }
   E('lerr').classList.remove('x');
-
   if (rem) {
     localStorage.setItem('ta_ru', u);
     localStorage.setItem('ta_rp', p);
@@ -799,112 +783,55 @@ function doLogin() {
     localStorage.removeItem('ta_rp');
     localStorage.removeItem('ta_rem');
   }
-
   CU = found;
   E('LS').style.display = 'none';
   E('APP').style.display = 'flex';
   E('nav-av').textContent = u[0].toUpperCase();
   E('nav-nm').textContent = u;
   E('nav-rl').textContent = found.role === 'admin' ? 'Administrator' : 'Editor';
-
-  // Nascondi elementi admin-only per gli editor
-  if (found.role !== 'admin') {
-    document.querySelectorAll('.admin-only').forEach(x => x.style.display = 'none');
-  }
-
+  if (found.role !== 'admin') document.querySelectorAll('.admin-only').forEach(x => x.style.display = 'none');
   go('dash');
   syncUI();
 }
 
 function doLogout() {
   CU = null;
-  dirty = false;
   E('APP').style.display = 'none';
   E('LS').style.display = 'flex';
   E('lp').value = '';
 }
 
-// ══════════════════════════════════════════════════════
-// NAVIGAZIONE
-// ══════════════════════════════════════════════════════
-const crumbs = {
-  dash: 'Dashboard', identita: 'Identità & Logo', hero: 'Hero & Banner',
-  footer: 'Footer', notizie: 'Notizie', eventi: 'Eventi',
-  sponsor: 'Sponsor', layout: 'Sezioni & Ordine', utenti: 'Utenti', github: 'GitHub & Sync'
-};
-
+// ── NAVIGATION
+const crumbs = { dash: 'Dashboard', identita: 'Identità & Logo', hero: 'Hero & Banner', footer: 'Footer', notizie: 'Notizie', eventi: 'Eventi', sponsor: 'Sponsor', layout: 'Sezioni & Ordine', utenti: 'Utenti', github: 'GitHub & Sync' };
 function go(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
   const pg = E('p-' + id); if (pg) pg.classList.add('on');
   const ni = E('ni-' + id); if (ni) ni.classList.add('on');
   E('tbc').textContent = crumbs[id] || id;
-
-  const tok = getTok();
-  E('pubbtn').style.display  = tok ? 'flex' : 'none';
-  E('syncbtn').style.display = tok ? 'flex' : 'none';
-  E('pub-status-bar').style.display = tok ? 'flex' : 'none';
-
-  if (id === 'dash')     { rDash(); }
-  if (id === 'identita') { lId(); }
-  if (id === 'hero')     { lHero(); }
-  if (id === 'footer')   { lFt(); }
-  if (id === 'notizie')  { rNews(); }
-  if (id === 'eventi')   { rEv(); }
-  if (id === 'sponsor')  { rSpon(); lSponSet(); }
-  if (id === 'layout')   { rLay(); }
-  if (id === 'utenti')   { rUsers(); }
-  if (id === 'github')   { lGh(); }
+  E('pubbtn').style.display = getTok() ? 'flex' : 'none';
+  if (id === 'dash') rDash();
+  if (id === 'identita') lId();
+  if (id === 'hero') lHero();
+  if (id === 'footer') lFt();
+  if (id === 'notizie') rNews();
+  if (id === 'eventi') rEv();
+  if (id === 'sponsor') { rSpon(); lSponSet(); }
+  if (id === 'layout') rLay();
+  if (id === 'utenti') rUsers();
+  if (id === 'github') lGh();
 }
 
-// ══════════════════════════════════════════════════════
-// SYNC UI — aggiorna indicatori stato
-// ══════════════════════════════════════════════════════
+// ── SYNC UI
 function syncUI() {
-  const tok = getTok();
-  const sd  = E('sdot');
-  const sl  = E('slabel');
-  const gw  = E('ghwarn');
-  const dw  = E('dirty-warn');
-  const pd  = E('pub-dot');
-  const pt  = E('pub-status-txt');
-
-  // Barra laterale e avvisi dashboard
-  if (!tok) {
-    sd.className = 'sdot err';
-    sl.textContent = 'GitHub non configurato';
-    if (gw) gw.classList.add('on');
-    if (dw) dw.classList.remove('on');
-    if (pd) pd.className = 'sdot err';
-    if (pt) pt.textContent = 'GitHub non configurato';
-  } else if (dirty) {
-    sd.className = 'sdot busy';
-    sl.textContent = 'Modifiche non pubblicate';
-    if (gw) gw.classList.remove('on');
-    if (dw) dw.classList.add('on');
-    if (pd) pd.className = 'sdot busy';
-    if (pt) pt.textContent = 'Modifiche non pubblicate';
-  } else {
-    sd.className = 'sdot ok';
-    sl.textContent = 'Sito aggiornato';
-    if (gw) gw.classList.remove('on');
-    if (dw) dw.classList.remove('on');
-    if (pd) pd.className = 'sdot ok';
-    if (pt) pt.textContent = 'Sito aggiornato ✓';
-  }
-
-  // Topbar buttons
-  const pubbtn  = E('pubbtn');
-  const syncbtn = E('syncbtn');
-  const psbar   = E('pub-status-bar');
-  if (pubbtn)  pubbtn.style.display  = tok ? 'flex' : 'none';
-  if (syncbtn) syncbtn.style.display = tok ? 'flex' : 'none';
-  if (psbar)   psbar.style.display   = tok ? 'flex' : 'none';
+  const tok = getTok(), sd = E('sdot'), sl = E('slabel'), gw = E('ghwarn');
+  if (!tok) { sd.className = 'sdot err'; sl.textContent = 'GitHub non configurato'; if (gw) gw.classList.add('on'); }
+  else if (dirty) { sd.className = 'sdot busy'; sl.textContent = 'Modifiche in attesa...'; if (gw) gw.classList.remove('on'); }
+  else { sd.className = 'sdot ok'; sl.textContent = 'Sito aggiornato'; if (gw) gw.classList.remove('on'); }
+  E('pubbtn').style.display = tok ? 'flex' : 'none';
 }
 
-// ══════════════════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════════════════
+// ── DASHBOARD
 function rDash() {
   const nP = DB.notizie.filter(x => x.status === 'pubblicata').length;
   E('dstats').innerHTML = `
@@ -912,472 +839,72 @@ function rDash() {
     <div class="stat grn"><div class="statn">${nP}</div><div class="statl">Pubblicate</div></div>
     <div class="stat amb"><div class="statn">${DB.eventi.length}</div><div class="statl">Eventi</div></div>
     <div class="stat blu"><div class="statn">${DB.sponsor.length}</div><div class="statl">Sponsor</div></div>`;
-
   const news = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
   E('dnews').innerHTML = news.length ? news.map(n => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:pointer" onclick="editNews('${n.id}')">
       ${n.img ? `<img src="${n.img}" style="width:29px;height:29px;border-radius:5px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>` : '<div style="width:29px;height:29px;background:var(--g2);border-radius:5px;flex-shrink:0"></div>'}
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(n.title)}</div>
-        <div style="font-size:11px;color:var(--t3)">${n.date || ''}</div>
-      </div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.title}</div><div style="font-size:11px;color:var(--t3)">${n.date || ''}</div></div>
       <span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status}</span>
-    </div>`).join('')
-    : '<div class="empty" style="padding:16px"><div class="emico">📰</div><div class="emtxt">Nessuna notizia</div></div>';
-
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📰</div><div class="emtxt">Nessuna notizia</div></div>';
   const evs = [...DB.eventi].filter(e => e.status !== 'concluso' && e.status !== 'annullato').slice(0, 5);
   E('devs').innerHTML = evs.length ? evs.map(e => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)">
       <div style="width:29px;height:29px;background:var(--amb-l);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📅</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</div>
-        <div style="font-size:11px;color:var(--t3)">${e.start ? e.start.substring(0, 10) : ''}</div>
-      </div>
-    </div>`).join('')
-    : '<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
-
-  syncUI(); // aggiorna avvisi
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div><div style="font-size:11px;color:var(--t3)">${e.start ? e.start.substring(0, 10) : ''}</div></div>
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
 }
 
-// ══════════════════════════════════════════════════════
-// IDENTITÀ
-// ══════════════════════════════════════════════════════
-function lId() {
-  const d = DB.identita || {};
-  SV('id-nome', d.nome || '');
-  SV('id-tag',  d.tag  || '');
-  SV('id-desc', d.desc || '');
-  SV('id-email',d.email|| '');
-  SV('id-col',  d.col  || '');
-  E('id-col-sw').value = d.col || '#d63031';
-  SV('id-fb', d.social?.fb || '');
-  SV('id-ig', d.social?.ig || '');
-  SV('id-tw', d.social?.tw || '');
-  SV('id-yt', d.social?.yt || '');
-  SV('logo-url', d.logo || '');
-  if (d.logo) prevUrl(d.logo, 'logo-img');
-}
+// ── IDENTITÀ
+function lId() { const d = DB.identita; SV('id-nome', d.nome || ''); SV('id-tag', d.tag || ''); SV('id-desc', d.desc || ''); SV('id-email', d.email || ''); SV('id-col', d.col || ''); E('id-col-sw').value = d.col || '#d63031'; SV('id-fb', d.social?.fb || ''); SV('id-ig', d.social?.ig || ''); SV('id-tw', d.social?.tw || ''); SV('id-yt', d.social?.yt || ''); SV('logo-url', d.logo || ''); if (d.logo) prevUrl(d.logo, 'logo-img'); }
+function saveId() { DB.identita = { nome: V('id-nome'), tag: V('id-tag'), desc: V('id-desc'), email: V('id-email'), col: V('id-col'), logo: V('logo-url'), social: { fb: V('id-fb'), ig: V('id-ig'), tw: V('id-tw'), yt: V('id-yt') } }; saveDB(); al('a-id'); }
 
-function saveId() {
-  DB.identita = {
-    nome:  V('id-nome'),
-    tag:   V('id-tag'),
-    desc:  V('id-desc'),
-    email: V('id-email'),
-    col:   V('id-col'),
-    logo:  V('logo-url'),
-    social: { fb: V('id-fb'), ig: V('id-ig'), tw: V('id-tw'), yt: V('id-yt') }
-  };
-  saveDB();
-  al('a-id');
-  toast('✓ Identità salvata');
-}
+// ── HERO
+function lHero() { const h = DB.hero; SV('hh-url', h.home?.url || ''); SV('hh-title', h.home?.title || ''); SV('hh-sub', h.home?.sub || ''); SV('hh-cta', h.home?.cta || ''); SV('hh-ctalink', h.home?.ctalink || ''); if (h.home?.url) prevUrl(h.home.url, 'hh-p'); SV('hn-url', h.news?.url || ''); SV('hn-title', h.news?.title || ''); if (h.news?.url) prevUrl(h.news.url, 'hn-p'); SV('he-url', h.events?.url || ''); SV('he-title', h.events?.title || ''); if (h.events?.url) prevUrl(h.events.url, 'he-p'); }
+function saveHero() { DB.hero = { home: { url: V('hh-url'), title: V('hh-title'), sub: V('hh-sub'), cta: V('hh-cta'), ctalink: V('hh-ctalink') }, news: { url: V('hn-url'), title: V('hn-title') }, events: { url: V('he-url'), title: V('he-title') } }; saveDB(); al('a-hero'); }
+function htab(id, btn) { ['h-home', 'h-news', 'h-ev'].forEach(t => E(t).style.display = 'none'); E(id).style.display = 'block'; document.querySelectorAll('#p-hero .tab').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
 
-// ══════════════════════════════════════════════════════
-// HERO
-// ══════════════════════════════════════════════════════
-function lHero() {
-  const h = DB.hero || {};
-  SV('hh-url',    h.home?.url     || '');
-  SV('hh-title',  h.home?.title   || '');
-  SV('hh-sub',    h.home?.sub     || '');
-  SV('hh-cta',    h.home?.cta     || '');
-  SV('hh-ctalink',h.home?.ctalink || '');
-  if (h.home?.url) prevUrl(h.home.url, 'hh-p');
-  SV('hn-url',   h.news?.url   || '');
-  SV('hn-title', h.news?.title || '');
-  if (h.news?.url) prevUrl(h.news.url, 'hn-p');
-  SV('he-url',   h.events?.url   || '');
-  SV('he-title', h.events?.title || '');
-  if (h.events?.url) prevUrl(h.events.url, 'he-p');
-}
-
-function saveHero() {
-  DB.hero = {
-    home:   { url: V('hh-url'), title: V('hh-title'), sub: V('hh-sub'), cta: V('hh-cta'), ctalink: V('hh-ctalink') },
-    news:   { url: V('hn-url'), title: V('hn-title') },
-    events: { url: V('he-url'), title: V('he-title') }
-  };
-  saveDB();
-  al('a-hero');
-  toast('✓ Hero salvato');
-}
-
-function htab(id, btn) {
-  ['h-home','h-news','h-ev'].forEach(t => E(t).style.display = 'none');
-  E(id).style.display = 'block';
-  document.querySelectorAll('#p-hero .tab').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-}
-
-// ══════════════════════════════════════════════════════
-// FOOTER
-// ══════════════════════════════════════════════════════
-function lFt() {
-  const f = DB.footer || {};
-  SV('ft-copy',   f.copy   || '');
-  SV('ft-slogan', f.slogan || '');
-  SV('ft-desc',   f.desc   || '');
-  SV('ft-addr',   f.addr   || '');
-  SV('ft-email',  f.email  || '');
-  SV('ft-tel',    f.tel    || '');
-  SV('ft-piva',   f.piva   || '');
-  ftLinks = [...(f.links || [])];
-  rFtLinks();
-  updFtPrev();
-}
-
-function saveFooter() {
-  DB.footer = {
-    copy:   V('ft-copy'),
-    slogan: V('ft-slogan'),
-    desc:   V('ft-desc'),
-    addr:   V('ft-addr'),
-    email:  V('ft-email'),
-    tel:    V('ft-tel'),
-    piva:   V('ft-piva'),
-    links:  ftLinks
-  };
-  saveDB();
-  al('a-footer');
-  updFtPrev();
-  toast('✓ Footer salvato');
-}
-
-function rFtLinks() {
-  const c = E('ft-links');
-  if (!ftLinks.length) {
-    c.innerHTML = '<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>';
-    return;
-  }
-  c.innerHTML = ftLinks.map((l, i) => `
-    <div style="display:flex;gap:6px;align-items:center;margin-bottom:7px">
-      <input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/>
-      <input value="${esc(l.url)}"   placeholder="URL"   style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/>
-      <button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button>
-    </div>`).join('');
-}
-
+// ── FOOTER
+function lFt() { const f = DB.footer || {}; SV('ft-copy', f.copy || ''); SV('ft-slogan', f.slogan || ''); SV('ft-desc', f.desc || ''); SV('ft-addr', f.addr || ''); SV('ft-email', f.email || ''); SV('ft-tel', f.tel || ''); SV('ft-piva', f.piva || ''); ftLinks = [...(f.links || [])]; rFtLinks(); updFtPrev(); }
+function saveFooter() { DB.footer = { copy: V('ft-copy'), slogan: V('ft-slogan'), desc: V('ft-desc'), addr: V('ft-addr'), email: V('ft-email'), tel: V('ft-tel'), piva: V('ft-piva'), links: ftLinks }; saveDB(); al('a-footer'); updFtPrev(); }
+function rFtLinks() { const c = E('ft-links'); if (!ftLinks.length) { c.innerHTML = '<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>'; return; } c.innerHTML = ftLinks.map((l, i) => `<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px"><input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/><input value="${esc(l.url)}" placeholder="URL" style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/><button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button></div>`).join(''); }
 function addFtLink() { ftLinks.push({ label: '', url: '' }); rFtLinks(); }
+function updFtPrev() { E('fp-brand').textContent = V('ft-slogan') || DB.identita?.nome || 'TuttoApricena'; E('fp-sub').textContent = V('ft-desc') || ''; E('fp-copy').textContent = V('ft-copy') || ''; E('fp-links').innerHTML = ftLinks.map(l => `<span>${l.label || 'Link'}</span>`).join(''); }
 
-function updFtPrev() {
-  E('fp-brand').textContent = V('ft-slogan') || DB.identita?.nome || 'TuttoApricena';
-  E('fp-sub').textContent   = V('ft-desc') || '';
-  E('fp-copy').textContent  = V('ft-copy') || '';
-  E('fp-links').innerHTML   = ftLinks.map(l => `<span>${esc(l.label) || 'Link'}</span>`).join('');
-}
+// ── NOTIZIE
+function rNews() { const list = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)); E('news-sub').textContent = `${list.length} totali · ${list.filter(x => x.status === 'pubblicata').length} pubblicate`; const tb = E('news-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`; return; } tb.innerHTML = list.map(n => `<tr><td>${n.img ? `<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>` : ''}<div class="ttn">${n.title}</div><div class="ttm">${n.author || ''}</div></td><td><span class="bdg bblu">${n.cat || ''}</span></td><td style="font-size:12px;color:var(--t3)">${n.date || ''}</td><td><span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status || ''}</span></td><td>${n.featured == '1' ? '<span style="color:var(--amb);font-size:15px">★</span>' : '<span style="color:var(--t4)">—</span>'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button></div></td></tr>`).join(''); }
+function openNews() { cNF(); E('mn-tit').textContent = 'Nuova notizia'; om('mo-news'); }
+function editNews(id) { const n = DB.notizie.find(x => x.id === id); if (!n) return; SV('n-id', n.id); SV('n-title', n.title || ''); SV('n-cat', n.cat || 'attualita'); SV('n-date', n.date || ''); SV('n-author', n.author || ''); SV('n-sum', n.summary || ''); SV('n-body', n.body || ''); SV('n-img-url', n.img || ''); SV('n-status', n.status || 'pubblicata'); SV('n-feat', n.featured || '0'); SV('n-tags', (n.tags || []).join(', ')); if (n.img) prevUrl(n.img, 'n-ip'); E('mn-tit').textContent = 'Modifica notizia'; om('mo-news'); }
+function cNF() { ['n-id', 'n-title', 'n-author', 'n-sum', 'n-body', 'n-img-url', 'n-tags'].forEach(i => SV(i, '')); SV('n-date', tod()); SV('n-cat', 'attualita'); SV('n-status', 'pubblicata'); SV('n-feat', '0'); const p = E('n-ip'); p.classList.remove('on'); p.src = ''; }
+function saveNews() { const t = V('n-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('n-id') || 'n' + Date.now(); const d = { id, title: t, cat: V('n-cat'), date: V('n-date'), author: V('n-author'), summary: V('n-sum'), body: V('n-body'), img: V('n-img-url'), status: V('n-status'), featured: V('n-feat'), tags: V('n-tags').split(',').map(x => x.trim()).filter(Boolean) }; const ix = DB.notizie.findIndex(x => x.id === id); if (ix >= 0) DB.notizie[ix] = d; else DB.notizie.unshift(d); saveDB(); cm('mo-news'); rNews(); al('a-news'); }
 
-// ══════════════════════════════════════════════════════
-// NOTIZIE
-// ══════════════════════════════════════════════════════
-function rNews() {
-  const list = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date));
-  E('news-sub').textContent = `${list.length} totali · ${list.filter(x => x.status === 'pubblicata').length} pubblicate`;
-  const tb = E('news-tb');
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`;
-    return;
-  }
-  tb.innerHTML = list.map(n => `
-    <tr>
-      <td>
-        ${n.img ? `<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>` : ''}
-        <div class="ttn">${esc(n.title)}</div>
-        <div class="ttm">${esc(n.author || '')}</div>
-      </td>
-      <td><span class="bdg bblu2">${n.cat || ''}</span></td>
-      <td style="font-size:12px;color:var(--t3)">${n.date || ''}</td>
-      <td><span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status || ''}</span></td>
-      <td>${n.featured == '1' ? '<span style="color:var(--amb);font-size:15px">★</span>' : '<span style="color:var(--t4)">—</span>'}</td>
-      <td><div class="tact">
-        <button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button>
-        <button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button>
-      </div></td>
-    </tr>`).join('');
-}
+// ── EVENTI
+function rEv() { const list = [...DB.eventi].sort((a, b) => new Date(a.start) - new Date(b.start)); E('ev-sub').textContent = `${list.length} eventi totali`; const tb = E('ev-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`; return; } tb.innerHTML = list.map(e => `<tr><td><div class="ttn">${e.title}</div><div class="ttm">${e.org || ''}</div></td><td style="font-size:12px;color:var(--t2)">${e.start ? e.start.substring(0, 10) : ''}</td><td style="font-size:12px;color:var(--t3)">${e.place || '—'}</td><td><span class="bdg bblu">${e.cat || ''}</span></td><td><span class="bdg ${e.status === 'programmato' ? 'bok2' : e.status === 'in-corso' ? 'bwrn' : e.status === 'annullato' ? 'bred' : 'bgry'}">${e.status || ''}</span></td><td><div class="tact"><button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button></div></td></tr>`).join(''); }
+function openEv() { cEF(); E('mev-tit').textContent = 'Nuovo evento'; om('mo-ev'); }
+function editEv(id) { const e = DB.eventi.find(x => x.id === id); if (!e) return; SV('e-id', e.id); SV('e-title', e.title || ''); SV('e-start', e.start || ''); SV('e-end', e.end || ''); SV('e-place', e.place || ''); SV('e-cat', e.cat || 'festa'); SV('e-desc', e.desc || ''); SV('e-img-url', e.img || ''); SV('e-org', e.org || ''); SV('e-status', e.status || 'programmato'); SV('e-link', e.link || ''); if (e.img) prevUrl(e.img, 'e-ip'); E('mev-tit').textContent = 'Modifica evento'; om('mo-ev'); }
+function cEF() { ['e-id', 'e-title', 'e-start', 'e-end', 'e-place', 'e-desc', 'e-img-url', 'e-org', 'e-link'].forEach(i => SV(i, '')); SV('e-cat', 'festa'); SV('e-status', 'programmato'); const p = E('e-ip'); p.classList.remove('on'); p.src = ''; }
+function saveEv() { const t = V('e-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('e-id') || 'e' + Date.now(); const d = { id, title: t, start: V('e-start'), end: V('e-end'), place: V('e-place'), cat: V('e-cat'), desc: V('e-desc'), img: V('e-img-url'), org: V('e-org'), status: V('e-status'), link: V('e-link') }; const ix = DB.eventi.findIndex(x => x.id === id); if (ix >= 0) DB.eventi[ix] = d; else DB.eventi.unshift(d); saveDB(); cm('mo-ev'); rEv(); al('a-ev'); }
 
-function openNews() {
-  cNF();
-  E('mn-tit').textContent = 'Nuova notizia';
-  om('mo-news');
-}
+// ── SPONSOR
+function rSpon() { const g = E('spg'), em = E('spem'); E('spon-cnt').textContent = DB.sponsor.length; if (!DB.sponsor.length) { g.innerHTML = ''; em.style.display = 'block'; return; } em.style.display = 'none'; g.innerHTML = DB.sponsor.map(s => `<div class="spc"><button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>${s.logo ? `<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>` : '<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}<div class="spnm">${s.nome}</div><div class="sptier">${s.tier}</div></div>`).join(''); }
+function lSponSet() { const ss = DB.sponsorSettings || {}; SV('sp-pos', ss.position || 'after-news'); SV('sp-title', ss.title || ''); SV('sp-cols', ss.cols || '4'); }
+function saveSponSet() { DB.sponsorSettings = { position: V('sp-pos'), title: V('sp-title'), cols: V('sp-cols') }; saveDB(); al('a-spon'); }
+function openSpon() { ['s-nome', 's-logo-url', 's-sito'].forEach(i => SV(i, '')); SV('s-tier', 'partner'); const p = E('s-ip'); p.classList.remove('on'); p.src = ''; om('mo-spon'); }
+function saveSpon() { const n = V('s-nome').trim(); if (!n) { alert('Nome obbligatorio'); return; } DB.sponsor.push({ id: 's' + Date.now(), nome: n, logo: V('s-logo-url'), sito: V('s-sito'), tier: V('s-tier') }); saveDB(); cm('mo-spon'); rSpon(); al('a-spon'); }
 
-function editNews(id) {
-  const n = DB.notizie.find(x => x.id === id);
-  if (!n) return;
-  SV('n-id',      n.id);
-  SV('n-title',   n.title   || '');
-  SV('n-cat',     n.cat     || 'attualita');
-  SV('n-date',    n.date    || '');
-  SV('n-author',  n.author  || '');
-  SV('n-sum',     n.summary || '');
-  SV('n-body',    n.body    || '');
-  SV('n-img-url', n.img     || '');
-  SV('n-status',  n.status  || 'pubblicata');
-  SV('n-feat',    n.featured|| '0');
-  SV('n-tags',    (n.tags || []).join(', '));
-  if (n.img) prevUrl(n.img, 'n-ip');
-  E('mn-tit').textContent = 'Modifica notizia';
-  om('mo-news');
-}
-
-function cNF() {
-  ['n-id','n-title','n-author','n-sum','n-body','n-img-url','n-tags'].forEach(i => SV(i, ''));
-  SV('n-date',   tod());
-  SV('n-cat',    'attualita');
-  SV('n-status', 'pubblicata');
-  SV('n-feat',   '0');
-  const p = E('n-ip'); p.classList.remove('on'); p.src = '';
-}
-
-function saveNews() {
-  const t = V('n-title').trim();
-  if (!t) { alert('Titolo obbligatorio'); return; }
-  const id = V('n-id') || 'n' + Date.now();
-  const d = {
-    id, title: t,
-    cat:      V('n-cat'),
-    date:     V('n-date'),
-    author:   V('n-author'),
-    summary:  V('n-sum'),
-    body:     V('n-body'),
-    img:      V('n-img-url'),
-    status:   V('n-status'),
-    featured: V('n-feat'),
-    tags:     V('n-tags').split(',').map(x => x.trim()).filter(Boolean)
-  };
-  const ix = DB.notizie.findIndex(x => x.id === id);
-  if (ix >= 0) DB.notizie[ix] = d; else DB.notizie.unshift(d);
-  saveDB();
-  cm('mo-news');
-  rNews();
-  rDash();
-  al('a-news');
-  toast('✓ Notizia salvata');
-}
-
-// ══════════════════════════════════════════════════════
-// EVENTI
-// ══════════════════════════════════════════════════════
-function rEv() {
-  const list = [...DB.eventi].sort((a, b) => new Date(a.start) - new Date(b.start));
-  E('ev-sub').textContent = `${list.length} eventi totali`;
-  const tb = E('ev-tb');
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`;
-    return;
-  }
-  tb.innerHTML = list.map(e => `
-    <tr>
-      <td><div class="ttn">${esc(e.title)}</div><div class="ttm">${esc(e.org || '')}</div></td>
-      <td style="font-size:12px;color:var(--t2)">${e.start ? e.start.substring(0,10) : ''}</td>
-      <td style="font-size:12px;color:var(--t3)">${esc(e.place || '—')}</td>
-      <td><span class="bdg bblu2">${e.cat || ''}</span></td>
-      <td><span class="bdg ${e.status === 'programmato' ? 'bok2' : e.status === 'in-corso' ? 'bwrn' : e.status === 'annullato' ? 'bred' : 'bgry'}">${e.status || ''}</span></td>
-      <td><div class="tact">
-        <button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button>
-        <button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button>
-      </div></td>
-    </tr>`).join('');
-}
-
-function openEv() {
-  cEF();
-  E('mev-tit').textContent = 'Nuovo evento';
-  om('mo-ev');
-}
-
-function editEv(id) {
-  const e = DB.eventi.find(x => x.id === id);
-  if (!e) return;
-  SV('e-id',      e.id);
-  SV('e-title',   e.title  || '');
-  SV('e-start',   e.start  || '');
-  SV('e-end',     e.end    || '');
-  SV('e-place',   e.place  || '');
-  SV('e-cat',     e.cat    || 'festa');
-  SV('e-desc',    e.desc   || '');
-  SV('e-img-url', e.img    || '');
-  SV('e-org',     e.org    || '');
-  SV('e-status',  e.status || 'programmato');
-  SV('e-link',    e.link   || '');
-  if (e.img) prevUrl(e.img, 'e-ip');
-  E('mev-tit').textContent = 'Modifica evento';
-  om('mo-ev');
-}
-
-function cEF() {
-  ['e-id','e-title','e-start','e-end','e-place','e-desc','e-img-url','e-org','e-link'].forEach(i => SV(i, ''));
-  SV('e-cat',    'festa');
-  SV('e-status', 'programmato');
-  const p = E('e-ip'); p.classList.remove('on'); p.src = '';
-}
-
-function saveEv() {
-  const t = V('e-title').trim();
-  if (!t) { alert('Titolo obbligatorio'); return; }
-  const id = V('e-id') || 'e' + Date.now();
-  const d = {
-    id, title: t,
-    start:  V('e-start'),
-    end:    V('e-end'),
-    place:  V('e-place'),
-    cat:    V('e-cat'),
-    desc:   V('e-desc'),
-    img:    V('e-img-url'),
-    org:    V('e-org'),
-    status: V('e-status'),
-    link:   V('e-link')
-  };
-  const ix = DB.eventi.findIndex(x => x.id === id);
-  if (ix >= 0) DB.eventi[ix] = d; else DB.eventi.unshift(d);
-  saveDB();
-  cm('mo-ev');
-  rEv();
-  rDash();
-  al('a-ev');
-  toast('✓ Evento salvato');
-}
-
-// ══════════════════════════════════════════════════════
-// SPONSOR
-// ══════════════════════════════════════════════════════
-function rSpon() {
-  const g = E('spg'), em = E('spem');
-  E('spon-cnt').textContent = DB.sponsor.length;
-  if (!DB.sponsor.length) { g.innerHTML = ''; em.style.display = 'block'; return; }
-  em.style.display = 'none';
-  g.innerHTML = DB.sponsor.map(s => `
-    <div class="spc">
-      <button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>
-      ${s.logo ? `<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>` : '<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}
-      <div class="spnm">${esc(s.nome)}</div>
-      <div class="sptier">${s.tier}</div>
-    </div>`).join('');
-}
-
-function lSponSet() {
-  const ss = DB.sponsorSettings || {};
-  SV('sp-pos',   ss.position || 'after-news');
-  SV('sp-title', ss.title    || '');
-  SV('sp-cols',  ss.cols     || '4');
-}
-
-function saveSponSet() {
-  DB.sponsorSettings = { position: V('sp-pos'), title: V('sp-title'), cols: V('sp-cols') };
-  saveDB();
-  al('a-spon');
-  toast('✓ Impostazioni sponsor salvate');
-}
-
-function openSpon() {
-  ['s-nome','s-logo-url','s-sito'].forEach(i => SV(i, ''));
-  SV('s-tier', 'partner');
-  const p = E('s-ip'); p.classList.remove('on'); p.src = '';
-  om('mo-spon');
-}
-
-function saveSpon() {
-  const n = V('s-nome').trim();
-  if (!n) { alert('Nome obbligatorio'); return; }
-  DB.sponsor.push({ id: 's' + Date.now(), nome: n, logo: V('s-logo-url'), sito: V('s-sito'), tier: V('s-tier') });
-  saveDB();
-  cm('mo-spon');
-  rSpon();
-  al('a-spon');
-  toast('✓ Sponsor aggiunto');
-}
-
-// ══════════════════════════════════════════════════════
-// LAYOUT
-// ══════════════════════════════════════════════════════
-function rLay() {
-  const sl = E('slist');
-  sl.innerHTML = DB.layout.sections.map((s, i) => `
-    <div class="srow" draggable="true" data-i="${i}"
-         ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)">
-      <span class="dh">⠿</span>
-      <span class="sico">${s.icon}</span>
-      <span class="snm">${s.label}</span>
-      <label class="sw">
-        <input type="checkbox" ${s.vis ? 'checked' : ''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/>
-        <span class="sws"></span>
-      </label>
-      <span style="font-size:11px;color:var(--t3);width:50px">${s.vis ? 'Visibile' : 'Nascosta'}</span>
-    </div>`).join('');
-  SV('lay-nl',   DB.layout.newsLayout  || 'grid');
-  SV('lay-pp',   DB.layout.newsPerPage || '9');
-  SV('lay-ord',  DB.layout.newsOrder   || 'newest');
-  SV('lay-tabs', DB.layout.newsTabs    || 'hide');
-}
-
+// ── LAYOUT
+function rLay() { const sl = E('slist'); sl.innerHTML = DB.layout.sections.map((s, i) => `<div class="srow" draggable="true" data-i="${i}" ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)"><span class="dh">⠿</span><span class="sico">${s.icon}</span><span class="snm">${s.label}</span><label class="sw"><input type="checkbox" ${s.vis ? 'checked' : ''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/><span class="sws"></span></label><span style="font-size:11px;color:var(--t3);width:50px">${s.vis ? 'Visibile' : 'Nascosta'}</span></div>`).join(''); SV('lay-nl', DB.layout.newsLayout || 'grid'); SV('lay-pp', DB.layout.newsPerPage || '9'); SV('lay-ord', DB.layout.newsOrder || 'newest'); SV('lay-tabs', DB.layout.newsTabs || 'hide'); }
 function dS(e) { dragIdx = +e.currentTarget.dataset.i; e.currentTarget.classList.add('dragging'); }
 function dO(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
 function dL(e) { e.currentTarget.classList.remove('over'); }
-function dD(e) {
-  e.preventDefault();
-  e.currentTarget.classList.remove('over');
-  const ti = +e.currentTarget.dataset.i;
-  if (dragIdx === null || dragIdx === ti) return;
-  const a = DB.layout.sections;
-  const it = a.splice(dragIdx, 1)[0];
-  a.splice(ti, 0, it);
-  dragIdx = null;
-  document.querySelectorAll('.srow').forEach(r => { r.classList.remove('dragging'); r.classList.remove('over'); });
-  rLay();
-}
+function dD(e) { e.preventDefault(); e.currentTarget.classList.remove('over'); const ti = +e.currentTarget.dataset.i; if (dragIdx === null || dragIdx === ti) return; const a = DB.layout.sections; const it = a.splice(dragIdx, 1)[0]; a.splice(ti, 0, it); dragIdx = null; document.querySelectorAll('.srow').forEach(r => { r.classList.remove('dragging'); r.classList.remove('over'); }); rLay(); }
+function saveLayout() { DB.layout.newsLayout = V('lay-nl'); DB.layout.newsPerPage = V('lay-pp'); DB.layout.newsOrder = V('lay-ord'); DB.layout.newsTabs = V('lay-tabs'); saveDB(); al('a-lay'); }
 
-function saveLayout() {
-  DB.layout.newsLayout  = V('lay-nl');
-  DB.layout.newsPerPage = V('lay-pp');
-  DB.layout.newsOrder   = V('lay-ord');
-  DB.layout.newsTabs    = V('lay-tabs');
-  saveDB();
-  al('a-lay');
-  toast('✓ Layout salvato');
-}
-
-// ══════════════════════════════════════════════════════
-// UTENTI
-// ══════════════════════════════════════════════════════
-function rUsers() {
-  E('usr-tb').innerHTML = DB.users.map(u => `
-    <tr>
-      <td><div class="ttn">${esc(u.username)}</div></td>
-      <td><span class="bdg ${u.role === 'admin' ? 'bred' : 'bwrn'}">${u.role}</span></td>
-      <td style="font-size:12px;color:var(--t3)">${u.created || '—'}</td>
-      <td><div class="tact">
-        <button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>
-        ${u.id === 'u1'
-          ? '<span style="font-size:11px;color:var(--t4)">Principale</span>'
-          : `<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}
-      </div></td>
-    </tr>`).join('');
-}
-
-function openUser() {
-  SV('u-id', ''); SV('u-uname', ''); SV('u-pass', ''); SV('u-role', 'editor');
-  E('u-phi').style.display = 'none';
-  E('mu-tit').textContent  = 'Nuovo utente';
-  om('mo-usr');
-}
-
-function editUser(id) {
-  const u = DB.users.find(x => x.id === id);
-  if (!u) return;
-  SV('u-id',    u.id);
-  SV('u-uname', u.username);
-  SV('u-pass',  '');
-  SV('u-role',  u.role);
-  E('u-phi').style.display = 'inline';
-  E('mu-tit').textContent  = 'Modifica utente';
-  om('mo-usr');
-}
-
+// ── UTENTI
+function rUsers() { E('usr-tb').innerHTML = DB.users.map(u => `<tr><td><div class="ttn">${u.username}</div></td><td><span class="bdg ${u.role === 'admin' ? 'bred' : 'bwrn'}">${u.role}</span></td><td style="font-size:12px;color:var(--t3)">${u.created || '—'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>${u.id === 'u1' ? '<span style="font-size:11px;color:var(--t4)">Principale</span>' : `<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}</div></td></tr>`).join(''); }
+function openUser() { SV('u-id', ''); SV('u-uname', ''); SV('u-pass', ''); SV('u-role', 'editor'); E('u-phi').style.display = 'none'; E('mu-tit').textContent = 'Nuovo utente'; om('mo-usr'); }
+function editUser(id) { const u = DB.users.find(x => x.id === id); if (!u) return; SV('u-id', u.id); SV('u-uname', u.username); SV('u-pass', ''); SV('u-role', u.role); E('u-phi').style.display = 'inline'; E('mu-tit').textContent = 'Modifica utente'; om('mo-usr'); }
 function saveUser() {
-  const uname = V('u-uname').trim();
-  const pass  = V('u-pass');
-  const id    = V('u-id');
+  const uname = V('u-uname').trim(), pass = V('u-pass'), id = V('u-id');
   if (!uname) { alert('Username obbligatorio'); return; }
   if (!id && pass.length < 6) { alert('Password: minimo 6 caratteri'); return; }
   if (!id) {
@@ -1385,403 +912,205 @@ function saveUser() {
     DB.users.push({ id: 'u' + Date.now(), username: uname, hash: H(pass), role: V('u-role'), created: tod() });
   } else {
     const u = DB.users.find(x => x.id === id); if (!u) return;
-    u.username = uname;
-    u.role     = V('u-role');
+    u.username = uname; u.role = V('u-role');
     if (pass.length >= 6) u.hash = H(pass);
   }
-  saveDB();
-  cm('mo-usr');
-  rUsers();
-  al('a-usr');
-  toast('✓ Utente salvato');
+  saveDB(); cm('mo-usr'); rUsers(); al('a-usr');
 }
 
-// ══════════════════════════════════════════════════════
-// DELETE
-// ══════════════════════════════════════════════════════
-function cDel(type, id, name) {
-  E('del-msg').textContent = `Stai per eliminare "${name}". Azione irreversibile.`;
-  E('del-ok').onclick = () => doDel(type, id);
-  om('mo-del');
-}
-
+// ── DELETE
+function cDel(type, id, name) { E('del-msg').textContent = `Stai per eliminare "${name}". Azione irreversibile.`; E('del-ok').onclick = () => doDel(type, id); om('mo-del'); }
 function doDel(type, id) {
-  if (type === 'notizia') DB.notizie  = DB.notizie.filter(x => x.id !== id);
-  if (type === 'evento')  DB.eventi   = DB.eventi.filter(x => x.id !== id);
-  if (type === 'sponsor') DB.sponsor  = DB.sponsor.filter(x => x.id !== id);
-  if (type === 'utente') {
-    if (id === 'u1') { toast('Non puoi eliminare l\'account admin principale', true); cm('mo-del'); return; }
-    DB.users = DB.users.filter(x => x.id !== id);
-  }
-  saveDB();
-  cm('mo-del');
+  if (type === 'notizia') DB.notizie = DB.notizie.filter(x => x.id !== id);
+  if (type === 'evento') DB.eventi = DB.eventi.filter(x => x.id !== id);
+  if (type === 'sponsor') DB.sponsor = DB.sponsor.filter(x => x.id !== id);
+  if (type === 'utente') { if (id === 'u1') { toast('Non puoi eliminare l\'account admin principale', true); cm('mo-del'); return; } DB.users = DB.users.filter(x => x.id !== id); }
+  saveDB(); cm('mo-del');
   if (type === 'notizia') rNews();
-  if (type === 'evento')  rEv();
+  if (type === 'evento') rEv();
   if (type === 'sponsor') rSpon();
-  if (type === 'utente')  rUsers();
+  if (type === 'utente') rUsers();
   rDash();
-  toast('✓ Eliminato');
 }
 
-// ══════════════════════════════════════════════════════
-// GITHUB
-// ══════════════════════════════════════════════════════
+// ── GITHUB
 function addLog(msg, ok = true) {
-  const el = E('pub-log');
-  if (!el) return;
+  const el = E('pub-log'); if (!el) return;
   const ts = new Date().toLocaleTimeString('it-IT');
   const line = `[${ts}] ${ok ? '✓' : '✕'} ${msg}`;
-  if (el.textContent.trim() === '— Nessuna attività ancora —') el.textContent = '';
+  if (el.textContent === '— Nessuna attività ancora —') el.textContent = '';
   el.textContent += line + '\n';
   el.parentElement.scrollTop = el.parentElement.scrollHeight;
 }
-
-function copyRepoPath() {
-  navigator.clipboard.writeText('tuttoapricena/assets/data.json').then(() => toast('✓ Percorso copiato!'));
-}
-
+function copyRepoPath() { navigator.clipboard.writeText('tuttoapricena/assets/data.json').then(() => toast('✓ Percorso copiato!')); }
 function lGh() {
   const g = DB.github || {};
-  SV('gh-owner',  g.owner  || '');
-  SV('gh-repo',   g.repo   || '');
+  SV('gh-owner', g.owner || 'NicolaMartucci');
+  SV('gh-repo', g.repo || 'nicolamartucci.github.io');
   SV('gh-branch', g.branch || 'main');
-  SV('gh-path',   g.path   || 'tuttoapricena/assets/data.json');
-  // Non mostrare mai il token in chiaro come valore preimpostato — solo placeholder
-  E('gh-token').value = getTok();
+  SV('gh-path', g.path || 'tuttoapricena/assets/data.json');
+  SV('gh-token', getTok());
   E('gh-snip').textContent = buildSnip();
 }
-
 function saveGh() {
-  const owner  = V('gh-owner').trim();
-  const repo   = V('gh-repo').trim();
-  const branch = V('gh-branch').trim() || 'main';
-  const path   = V('gh-path').trim()   || 'tuttoapricena/assets/data.json';
-  const tok    = V('gh-token').trim();
-
-  if (!owner || !repo) { toast('Owner e Repository sono obbligatori', true); return; }
-
-  DB.github = { owner, repo, branch, path };
+  DB.github = { owner: V('gh-owner'), repo: V('gh-repo'), branch: V('gh-branch'), path: V('gh-path') };
+  const tok = V('gh-token').trim();
   setTok(tok);
-  // salva DB senza modificare il flag dirty (questa è config, non contenuto)
-  const d = JSON.parse(JSON.stringify(DB));
-  localStorage.setItem('ta_db', JSON.stringify(d));
-
-  syncUI();
-  al('a-gh');
-  toast('✓ Configurazione GitHub salvata');
+  saveDB(); syncUI(); al('a-gh');
+  E('pubbtn').style.display = tok ? 'flex' : 'none';
   E('gh-snip').textContent = buildSnip();
-
-  addLog('Configurazione salvata — ' + owner + '/' + repo + ' branch:' + branch);
-  addLog('Token: ' + (tok ? tok.substring(0, 8) + '••••' : 'NON impostato'), !!tok);
+  addLog('Configurazione salvata — Owner: ' + V('gh-owner') + ' | Repo: ' + V('gh-repo') + ' | Branch: ' + V('gh-branch'));
+  addLog('Token: ' + (tok ? tok.substring(0, 8) + '••••••••••••' : 'NON IMPOSTATO'), !!tok);
 }
-
 function buildSnip() {
-  const owner  = V('gh-owner')  || (DB.github?.owner  || 'OWNER');
-  const repo   = V('gh-repo')   || (DB.github?.repo   || 'REPO');
-  const branch = V('gh-branch') || (DB.github?.branch || 'main');
-  const path   = V('gh-path')   || (DB.github?.path   || 'tuttoapricena/assets/data.json');
-  return `<script>
-(function(){
-  var url = 'https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}?t='+Date.now();
-  fetch(url)
-    .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(d){ if(d){ window.TA_DATA=d; document.dispatchEvent(new Event('ta-ready')); } })
-    .catch(function(){});
-})();
-<\/script>`;
+  const p = V('gh-path') || 'tuttoapricena/assets/data.json';
+  return `<script>\n(function(){\n  fetch('/${p}?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`;
 }
+function copySnip() { navigator.clipboard.writeText(E('gh-snip').textContent).then(() => toast('✓ Snippet copiato!')); }
 
-function copySnip() {
-  navigator.clipboard.writeText(E('gh-snip').textContent).then(() => toast('✓ Snippet copiato!'));
-}
-
-// ── Chiamata alle API GitHub
 async function ghReq(method, path, body) {
-  const g   = DB.github;
-  const tok = getTok();
-  if (!tok)           throw new Error('Token non configurato — vai su GitHub & Sync');
+  const g = DB.github, tok = getTok();
+  if (!tok) throw new Error('Token non configurato — vai su GitHub & Sync e imposta il token');
   if (!g.owner || !g.repo) throw new Error('Owner o Repository non configurati');
-
   const url = `https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`;
-  addLog(`${method} → ${g.owner}/${g.repo}/${path}`);
-
-  const headers = {
-    'Authorization': 'token ' + tok,
-    'Content-Type':  'application/json',
-    'Accept':        'application/vnd.github.v3+json'
-  };
-
+  addLog(`${method} ${url.replace('https://api.github.com', '')}`);
   const r = await fetch(url, {
     method,
-    headers,
+    headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
     body: body ? JSON.stringify(body) : undefined
   });
-
   if (!r.ok) {
-    let errMsg = 'HTTP ' + r.status;
-    try { const e = await r.json(); errMsg = e.message || errMsg; } catch (_) {}
-    if (r.status === 401) errMsg += ' → Token scaduto o permessi insufficienti';
-    if (r.status === 404) errMsg += ' → Repository o percorso non trovato';
-    if (r.status === 409) errMsg += ' → Conflitto SHA (prova a risincronizzare)';
-    addLog('Errore GitHub: ' + errMsg, false);
-    throw new Error(errMsg);
+    const e = await r.json();
+    const msg = e.message || 'HTTP ' + r.status;
+    addLog('Errore GitHub: ' + msg + (r.status === 401 ? ' → Token scaduto o permessi insufficienti' : r.status === 404 ? ' → Repository non trovato o path errato' : ''), false);
+    throw new Error(msg + (r.status === 401 ? ' (token non valido o scaduto)' : r.status === 404 ? ' (repository o percorso non trovato)' : ''));
   }
   return r.json();
 }
 
-// ── Pubblica data.json su GitHub
 async function publishNow() {
   if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
-
-  const pubbtn = E('pubbtn');
-  pubbtn.disabled = true;
-  pubbtn.textContent = '⏳ Pubblicazione...';
-  E('sdot').className  = 'sdot busy';
-  E('slabel').textContent = 'Pubblicazione in corso...';
-  if (E('pub-dot')) E('pub-dot').className = 'sdot busy';
-  if (E('pub-status-txt')) E('pub-status-txt').textContent = 'Pubblicazione in corso...';
-
+  const btn = E('pubbtn');
+  btn.disabled = true; 
+  E('sdot').className = 'sdot busy'; 
+  E('slabel').textContent = 'Pubblicazione...';
   addLog('=== Avvio pubblicazione ===');
-  addLog('Owner: ' + DB.github.owner + ' | Repo: ' + DB.github.repo + ' | Branch: ' + DB.github.branch);
-
+  addLog('Owner: ' + (DB.github.owner || '?') + ' | Repo: ' + (DB.github.repo || '?') + ' | Branch: ' + (DB.github.branch || 'main'));
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
-    addLog('Percorso: ' + path);
-
-    // 1. Recupera SHA attuale del file (se esiste)
+    addLog('Percorso file: ' + path);
     let sha = null;
     try {
       addLog('Controllo file esistente...');
       const cur = await ghReq('GET', path);
       sha = cur.sha;
-      addLog('File trovato — SHA: ' + sha.substring(0, 8) + '...');
+      addLog('File esistente trovato (SHA: ' + sha.substring(0, 8) + '...)');
     } catch (e) {
-      if (e.message.includes('non trovato') || e.message.includes('404')) {
-        addLog('File non esiste ancora — verrà creato', true);
-      } else {
-        throw e;
-      }
+      addLog('File non esiste ancora — verrà creato', true);
     }
-
-    // 2. Prepara il payload JSON da pubblicare
-    const payload = {
-      identita:        DB.identita,
-      hero:            DB.hero,
-      footer:          DB.footer,
-      notizie:         DB.notizie,
-      eventi:          DB.eventi,
-      sponsor:         DB.sponsor,
-      sponsorSettings: DB.sponsorSettings,
-      layout:          DB.layout,
-      _lastUpdate:     new Date().toISOString()
-    };
-    const json    = JSON.stringify(payload, null, 2);
-    const content = btoa(unescape(encodeURIComponent(json)));
-
-    addLog('Payload pronto: ' + DB.notizie.length + ' notizie, ' + DB.eventi.length + ' eventi, ' + DB.sponsor.length + ' sponsor');
-
-    // 3. PUT su GitHub
-    const reqBody = {
-      message: 'CMS update — ' + new Date().toLocaleString('it-IT'),
-      content,
-      branch: DB.github.branch || 'main'
-    };
-    if (sha) reqBody.sha = sha; // necessario per aggiornare un file esistente
-
-    addLog('Invio PUT a GitHub...');
-    const res = await ghReq('PUT', path, reqBody);
-
-    addLog('✅ Pubblicato! Commit: ' + (res.commit?.sha?.substring(0, 8) || 'ok'));
-    dirty = false;
-    E('sdot').className  = 'sdot ok';
+    const exp = { identita: DB.identita, hero: DB.hero, footer: DB.footer, notizie: DB.notizie, eventi: DB.eventi, sponsor: DB.sponsor, sponsorSettings: DB.sponsorSettings, layout: DB.layout };
+    const json = JSON.stringify(exp, null, 2);
+    addLog('Dati preparati: ' + DB.notizie.length + ' notizie, ' + DB.eventi.length + ' eventi, ' + DB.sponsor.length + ' sponsor');
+    
+    // ✅ USO DELLA NUOVA FUNZIONE UTF-8
+    const content = utf8ToBase64(json);
+    
+    const body = { message: 'CMS update — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
+    if (sha) body.sha = sha;
+    addLog('Invio a GitHub API...');
+    const res = await ghReq('PUT', path, body);
+    addLog('✅ Pubblicato con successo! Commit: ' + (res.commit?.sha?.substring(0, 8) || 'ok'));
+    dirty = false; 
+    E('sdot').className = 'sdot ok'; 
     E('slabel').textContent = 'Sito aggiornato ✓';
-    if (E('pub-dot')) E('pub-dot').className = 'sdot ok';
-    if (E('pub-status-txt')) E('pub-status-txt').textContent = 'Sito aggiornato ✓';
-    if (E('dirty-warn')) E('dirty-warn').classList.remove('on');
     toast('✓ Pubblicato! Il sito si aggiorna in 10–30 secondi.');
-
   } catch (e) {
-    addLog('ERRORE: ' + e.message, false);
-    addLog('→ Verifica: token valido? Permessi Contents R+W? Owner/repo/path corretti?', false);
-    E('sdot').className  = 'sdot err';
-    E('slabel').textContent = 'Errore pubblicazione';
-    if (E('pub-dot')) E('pub-dot').className = 'sdot err';
-    if (E('pub-status-txt')) E('pub-status-txt').textContent = 'Errore — riprova';
+    addLog('ERRORE PUBBLICAZIONE: ' + e.message, false);
+    addLog('→ Controlla: token valido? Permessi Contents R+W? Repo/path corretti?', false);
+    E('sdot').className = 'sdot err'; 
+    E('slabel').textContent = 'Errore';
     toast('✕ ' + e.message, true);
-  } finally {
-    pubbtn.disabled = false;
-    pubbtn.innerHTML = '<svg viewBox="0 0 12 12" fill="none"><path d="M6 1v6.5M3.5 5L6 7.5 8.5 5M1 10h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Pubblica sul sito';
   }
+  finally { btn.disabled = false; }
 }
 
-// ── Sincronizza DA GitHub verso il CMS
 async function syncFrom() {
   if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
-
-  const syncbtn = E('syncbtn');
-  if (syncbtn) { syncbtn.disabled = true; syncbtn.textContent = '⏳ Sincronizzazione...'; }
-  E('sdot').className  = 'sdot busy';
+  E('sdot').className = 'sdot busy'; 
   E('slabel').textContent = 'Sincronizzazione...';
-
   addLog('=== Avvio sincronizzazione dal sito ===');
-
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
     addLog('Lettura: ' + path);
-
     const cur = await ghReq('GET', path);
-    // Il contenuto è in Base64 con possibili newline
-    const b64     = cur.content.replace(/\n/g, '').replace(/\r/g, '');
-    const decoded = decodeURIComponent(escape(atob(b64)));
-    const remote  = JSON.parse(decoded);
-
-    // Mantieni utenti e config GitHub locali, sostituisci tutto il resto
-    const localUsers  = DB.users;
-    const localGithub = DB.github;
-    DB = {
-      ...defDB(),
-      ...remote,
-      users:  localUsers,
-      github: localGithub
-    };
-    // salva localmente senza marcare dirty (abbiamo appena sincronizzato)
-    const d = JSON.parse(JSON.stringify(DB));
-    localStorage.setItem('ta_db', JSON.stringify(d));
-    dirty = false;
-
-    E('sdot').className  = 'sdot ok';
+    
+    // ✅ USO DELLA NUOVA FUNZIONE UTF-8
+    const dec = JSON.parse(base64ToUtf8(cur.content.replace(/\n/g, '')));
+    
+    const lu = DB.users, lg = DB.github;
+    DB = { ...defDB(), ...dec, users: lu, github: lg };
+    saveDB(); 
+    dirty = false; 
+    E('sdot').className = 'sdot ok'; 
     E('slabel').textContent = 'Sincronizzato ✓';
-    if (E('pub-dot')) E('pub-dot').className = 'sdot ok';
-    if (E('pub-status-txt')) E('pub-status-txt').textContent = 'Sincronizzato ✓';
-    if (E('dirty-warn')) E('dirty-warn').classList.remove('on');
-
-    addLog('✅ Sincronizzazione completata: ' + (remote.notizie?.length || 0) + ' notizie, ' + (remote.eventi?.length || 0) + ' eventi');
+    addLog('✅ Sincronizzazione completata: ' + (dec.notizie?.length || 0) + ' notizie, ' + (dec.eventi?.length || 0) + ' eventi');
+    rDash(); 
     toast('✓ Dati sincronizzati dal sito!');
-
-    // Aggiorna la view corrente
-    rDash();
-
   } catch (e) {
     addLog('ERRORE SYNC: ' + e.message, false);
-    E('sdot').className  = 'sdot err';
+    E('sdot').className = 'sdot err'; 
     E('slabel').textContent = 'Errore sync';
-    if (E('pub-dot')) E('pub-dot').className = 'sdot err';
-    if (E('pub-status-txt')) E('pub-status-txt').textContent = 'Errore sync';
     toast('✕ ' + e.message, true);
-  } finally {
-    if (syncbtn) {
-      syncbtn.disabled = false;
-      syncbtn.innerHTML = '<svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M1 6A5 5 0 1 0 6 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 2v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Sincronizza';
-    }
   }
 }
 
-// ── Test connessione GitHub
 async function testGh() {
-  const owner = V('gh-owner').trim() || DB.github?.owner;
-  const repo  = V('gh-repo').trim()  || DB.github?.repo;
-  const tok   = V('gh-token').trim() || getTok();
-
-  if (!tok)          { showAlerr('Token mancante — inserisci il token prima di testare'); return; }
-  if (!owner || !repo) { showAlerr('Owner e Repository obbligatori'); return; }
-
+  const owner = V('gh-owner'), repo = V('gh-repo'), tok = V('gh-token').trim() || getTok();
+  if (!tok) { showAlerr('Token mancante — inserisci il token prima di testare'); return; }
   addLog('=== Test connessione GitHub ===');
   addLog('Repo: ' + owner + '/' + repo);
-
   try {
-    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-      headers: { 'Authorization': 'token ' + tok, 'Accept': 'application/vnd.github.v3+json' }
-    });
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': 'token ' + tok } });
     if (r.ok) {
       const d = await r.json();
       addLog('✅ Connessione OK! Repo: ' + d.full_name + ' | Branch default: ' + d.default_branch + ' | Privato: ' + d.private);
-      al('a-gh');
-      toast('✓ Connessione GitHub OK!');
+      al('a-gh'); toast('✓ Connessione GitHub OK!');
     } else {
-      const e  = await r.json();
-      const msg = (e.message || 'Errore ' + r.status)
-        + (r.status === 401 ? ' → token non valido o scaduto'   : '')
-        + (r.status === 404 ? ' → repository non trovato'        : '');
-      addLog('✕ ' + msg, false);
-      showAlerr(msg);
+      const e = await r.json();
+      const msg = e.message || 'Errore ' + r.status;
+      addLog('✕ Errore: ' + msg + (r.status === 401 ? ' → Token non valido o scaduto' : r.status === 404 ? ' → Repository non trovato (controlla owner e nome repo)' : ''), false);
+      showAlerr(msg + (r.status === 401 ? ' — token non valido' : r.status === 404 ? ' — repository non trovato' : ''));
     }
   } catch (e) {
     addLog('✕ Errore di rete: ' + e.message, false);
-    showAlerr('Errore di rete: ' + e.message);
+    showAlerr(e.message);
   }
 }
+function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 6000); }
 
-function showAlerr(msg) {
-  const el = E('a-gherr'), sp = E('a-gherr-msg');
-  if (sp) sp.textContent = msg;
-  el.classList.add('on');
-  setTimeout(() => el.classList.remove('on'), 6000);
-}
+// ── IMMAGINI
+function handleImg(input, prevId, urlId) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { SV(urlId, e.target.result); prevUrl(e.target.result, prevId); }; r.readAsDataURL(f); }
+function prevUrl(url, id) { const e = E(id); if (!e) return; if (url) { e.src = url; e.classList.add('on'); } else { e.classList.remove('on'); e.src = ''; } if (id === 'logo-img') { if (url) { e.style.display = 'block'; E('logo-empty').style.display = 'none'; } else { e.style.display = 'none'; E('logo-empty').style.display = 'block'; } } }
 
-// ══════════════════════════════════════════════════════
-// IMMAGINI
-// ══════════════════════════════════════════════════════
-function handleImg(input, prevId, urlId) {
-  const f = input.files[0];
-  if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => { SV(urlId, ev.target.result); prevUrl(ev.target.result, prevId); };
-  r.readAsDataURL(f);
-}
+// ── UTILS
+const E = id => document.getElementById(id);
+const V = id => { const e = E(id); return e ? e.value : ''; };
+const SV = (id, v) => { const e = E(id); if (e) e.value = v; };
+function esc(s) { return (s || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function om(id) { E(id).classList.add('on'); }
+function cm(id) { E(id).classList.remove('on'); }
+function al(id) { const e = E(id); if (!e) return; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 3000); }
+function toast(msg, err = false) { const t = E('toast'); t.textContent = msg; t.style.background = err ? '#dc2626' : '#16a34a'; t.style.color = '#fff'; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 3500); }
 
-function prevUrl(url, id) {
-  const e = E(id);
-  if (!e) return;
-  if (url) { e.src = url; e.classList.add('on'); }
-  else     { e.classList.remove('on'); e.src = ''; }
-  // Gestione speciale logo
-  if (id === 'logo-img') {
-    const logoImg   = E('logo-img');
-    const logoEmpty = E('logo-empty');
-    if (logoImg && logoEmpty) {
-      logoImg.style.display   = url ? 'block' : 'none';
-      logoEmpty.style.display = url ? 'none'  : 'block';
-    }
-  }
-}
+document.querySelectorAll('.ovl').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
 
-// ══════════════════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════════════════
-function esc(s) {
-  return (s || '').replace(/&/g,'&amp;').replace(/'/g,"&#39;").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function om(id)  { E(id).classList.add('on'); }
-function cm(id)  { E(id).classList.remove('on'); }
-function al(id)  { const e = E(id); if (!e) return; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 3000); }
-function toast(msg, err = false) {
-  const t = E('toast');
-  t.textContent  = msg;
-  t.style.background = err ? '#dc2626' : '#16a34a';
-  t.style.color      = '#fff';
-  t.classList.add('on');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('on'), 3500);
-}
-
-// Chiudi modal cliccando lo sfondo
-document.querySelectorAll('.ovl').forEach(o => o.addEventListener('click', e => {
-  if (e.target === o) o.classList.remove('on');
-}));
-
-// ══════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  // Ripristina credenziali salvate (remember me)
   if (localStorage.getItem('ta_rem')) {
-    const u = localStorage.getItem('ta_ru');
-    const p = localStorage.getItem('ta_rp');
+    const u = localStorage.getItem('ta_ru'), p = localStorage.getItem('ta_rp');
     if (u) SV('lu', u);
     if (p) SV('lp', p);
     E('lrem').checked = true;
   }
-  // Avviso prima configurazione
   if (!getTok()) E('lnotice').classList.add('x');
 });
 </script>
