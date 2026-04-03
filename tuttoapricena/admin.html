@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuttoApricena — CMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --w:#fff;--g1:#fafafa;--g2:#f4f4f4;--g3:#e8e8e8;--g4:#c8c8c8;
+  --t1:#0f0f0f;--t2:#3a3a3a;--t3:#6b6b6b;--t4:#a3a3a3;
+  --red:#dc2626;--red-l:#fef2f2;--red-b:#fecaca;
+  --grn:#16a34a;--grn-l:#f0fdf4;--grn-b:#bbf7d0;
+  --amb:#d97706;--amb-l:#fffbeb;--amb-b:#fde68a;
+  --blu:#1d4ed8;--blu-l:#eff6ff;--blu-b:#bfdbfe;
+  --bd:rgba(0,0,0,.06);--bd2:rgba(0,0,0,.11);--bd3:rgba(0,0,0,.17);
+  --s1:0 1px 2px rgba(0,0,0,.04);
+  --s2:0 1px 4px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.06);
+  --s3:0 4px 16px rgba(0,0,0,.08),0 20px 48px rgba(0,0,0,.1);
+  --r:6px;--r2:10px;--r3:16px;
+  --ff:'Geist',system-ui,sans-serif;--fm:'Geist Mono',monospace;
+  --nav:220px;
+}
+html,body{height:100%;font-family:var(--ff);color:var(--t1);background:var(--g1);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+input,select,textarea,button{font-family:var(--ff);font-size:14px;color:var(--t1)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--g3);border-radius:4px}
+
+/* LOGIN */
+#LS{position:fixed;inset:0;display:flex;background:var(--g1);z-index:9999;align-items:center;justify-content:center}
+.lcard{background:var(--w);border:1px solid var(--bd2);border-radius:var(--r3);padding:44px 40px;width:400px;box-shadow:var(--s3)}
+.lmark{font-size:26px;font-weight:700;letter-spacing:-.4px;line-height:1;margin-bottom:4px}
+.lmark span{color:var(--red)}
+.lsub{font-size:11px;color:var(--t4);letter-spacing:.07em;text-transform:uppercase;font-weight:500;margin-bottom:28px}
+.lnotice{display:none;background:var(--amb-l);border:1px solid var(--amb-b);border-radius:var(--r);padding:11px 13px;font-size:12.5px;color:var(--amb);margin-bottom:18px;line-height:1.5}
+.lnotice.x{display:block}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:5px;letter-spacing:.06em;text-transform:uppercase}
+.lf input{width:100%;border:1.5px solid var(--bd2);border-radius:var(--r);padding:10px 12px;background:var(--w);outline:none;transition:border-color .15s}
+.lf input:focus{border-color:var(--red)}
+.rem{display:flex;align-items:center;gap:8px;margin-bottom:20px;cursor:pointer}
+.rem input[type=checkbox]{width:14px;height:14px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
+.rem label{font-size:13px;color:var(--t2);cursor:pointer;user-select:none}
+.lbtn{width:100%;background:var(--red);border:none;border-radius:var(--r);padding:11px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+.lbtn:hover{background:#b91c1c}
+.lerr{color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;display:none}
+.lerr.x{display:block}
+.lreset{font-size:11px;color:var(--t4);text-align:center;margin-top:10px;cursor:pointer;text-decoration:underline}
+.lreset:hover{color:var(--red)}
+
+/* SHELL */
+#APP{display:none;height:100vh;flex-direction:row;overflow:hidden}
+
+/* NAV */
+.nav{width:var(--nav);background:var(--w);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.nbrand{padding:16px 18px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.nbmark{font-size:16px;font-weight:700;letter-spacing:-.2px}
+.nbmark span{color:var(--red)}
+.ncms{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);background:var(--g2);padding:2px 7px;border-radius:4px}
+.nuser{margin:9px 10px 4px;padding:9px 11px;background:var(--g1);border-radius:var(--r2);display:flex;align-items:center;gap:8px}
+.nav-av{width:27px;height:27px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-nm{font-size:12.5px;font-weight:600;line-height:1.2}
+.nav-rl{font-size:11px;color:var(--t3)}
+.nsec{font-size:10px;font-weight:600;color:var(--t4);letter-spacing:.08em;text-transform:uppercase;padding:12px 18px 4px}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 8px;border-radius:var(--r);color:var(--t2);cursor:pointer;font-size:13px;font-weight:400;transition:all .1s}
+.ni:hover{background:var(--g2);color:var(--t1)}
+.ni.on{background:var(--red-l);color:var(--red);font-weight:500}
+.ni svg{width:14px;height:14px;flex-shrink:0;opacity:.65}
+.ni.on svg{opacity:1}
+.nsync{margin:6px 10px;padding:8px 11px;background:var(--g1);border:1px solid var(--bd);border-radius:var(--r);display:flex;align-items:center;gap:7px;cursor:pointer;transition:background .1s}
+.nsync:hover{background:var(--g2)}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sdot.ok{background:var(--grn)}.sdot.busy{background:var(--amb);animation:pulse .7s infinite}.sdot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.slabel{font-size:11.5px;color:var(--t2);flex:1;line-height:1.3}
+.nfoot{margin-top:auto;padding:10px;border-top:1px solid var(--bd)}
+.logout{width:100%;background:transparent;border:1px solid var(--bd2);border-radius:var(--r);padding:7px;color:var(--t3);cursor:pointer;font-size:12.5px;transition:all .1s}
+.logout:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:52px;background:var(--w);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;gap:12px}
+.tbc{font-size:14.5px;font-weight:500;color:var(--t1)}
+.tbr{display:flex;align-items:center;gap:7px}
+.content{flex:1;overflow-y:auto;padding:24px 26px}
+.page{display:none;animation:fi .14s ease}
+.page.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+/* PAGE HEADER */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:14px}
+.phl h1{font-size:19px;font-weight:600;color:var(--t1);letter-spacing:-.15px}
+.phl p{font-size:13px;color:var(--t3);margin-top:2px}
+.phr{display:flex;gap:7px;flex-shrink:0;align-items:center}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .1s;white-space:nowrap;line-height:1}
+.btn svg{width:12px;height:12px;flex-shrink:0}
+.bp{background:var(--red);color:#fff;box-shadow:var(--s1)}.bp:hover{background:#b91c1c}
+.bg{background:var(--w);color:var(--t2);border:1px solid var(--bd2)}.bg:hover{background:var(--g2);border-color:var(--bd3)}
+.bok{background:var(--grn-l);color:var(--grn);border:1px solid var(--grn-b)}.bok:hover{background:#dcfce7}
+.bdel{background:var(--red-l);color:var(--red);border:1px solid var(--red-b)}.bdel:hover{background:#fee2e2}
+.bsm{padding:5px 9px;font-size:12px}
+.bico{padding:5px;border-radius:var(--r)}
+
+/* CARDS */
+.card{background:var(--w);border:1px solid var(--bd);border-radius:var(--r2);padding:20px}
+.card+.card,.card+.tw,.tw+.card{margin-top:13px}
+.chd{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:14px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}
+.stat{background:var(--w);border:1px solid var(--bd);border-radius:var(--r2);padding:16px 18px;position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.stat.red::after{background:var(--red)}.stat.grn::after{background:var(--grn)}.stat.amb::after{background:var(--amb)}.stat.blu::after{background:var(--blu)}
+.statn{font-size:28px;font-weight:300;line-height:1;margin-bottom:4px}
+.statl{font-size:12px;color:var(--t3)}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+
+/* TABLE */
+.tw{background:var(--w);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;padding:9px 15px;border-bottom:1px solid var(--bd);background:var(--g1);text-align:left;white-space:nowrap}
+tbody td{padding:11px 15px;border-bottom:1px solid var(--bd);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--g1)}
+.tth{width:32px;height:32px;border-radius:5px;object-fit:cover;border:1px solid var(--bd);vertical-align:middle;margin-right:9px}
+.ttn{font-weight:500;font-size:13px}
+.ttm{font-size:11.5px;color:var(--t3);margin-top:1px}
+.tact{display:flex;gap:5px;align-items:center}
+
+/* BADGES */
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.bok2{background:var(--grn-l);color:var(--grn)}.bred{background:var(--red-l);color:var(--red)}
+.bwrn{background:var(--amb-l);color:var(--amb)}.bblu{background:var(--blu-l);color:var(--blu)}
+.bgry{background:var(--g2);color:var(--t3)}
+
+/* ALERTS */
+.al{display:none;align-items:center;gap:7px;padding:10px 13px;border-radius:var(--r);font-size:13px;margin-bottom:14px}
+.al.on{display:flex}
+.alok{background:var(--grn-l);color:var(--grn);border:1px solid var(--grn-b)}
+.alerr{background:var(--red-l);color:var(--red);border:1px solid var(--red-b)}
+.alwrn{background:var(--amb-l);color:var(--amb);border:1px solid var(--amb-b)}
+.alinfo{background:var(--blu-l);color:var(--blu);border:1px solid var(--blu-b)}
+
+/* FORMS */
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg textarea,.fg select{border:1.5px solid var(--bd2);border-radius:var(--r);padding:8px 11px;background:var(--w);color:var(--t1);outline:none;transition:border-color .15s}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red)}
+.fg textarea{resize:vertical;min-height:82px;line-height:1.6}
+.fhint{font-size:11px;color:var(--t4);margin-top:2px}
+
+/* UPLOAD */
+.upz{border:2px dashed var(--bd2);border-radius:var(--r);padding:18px;text-align:center;cursor:pointer;transition:all .15s}
+.upz:hover{border-color:var(--red);background:var(--red-l)}
+.upzico{font-size:20px;margin-bottom:4px}
+.upztxt{font-size:12px;color:var(--t3)}
+.iprev{width:100%;max-height:150px;object-fit:cover;border-radius:var(--r);margin-top:7px;border:1px solid var(--bd);display:none}
+.iprev.on{display:block}
+
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--g2);padding:3px;border-radius:var(--r2);width:fit-content;margin-bottom:16px}
+.tab{padding:6px 13px;border-radius:8px;border:none;background:transparent;color:var(--t3);cursor:pointer;font-size:13px;font-weight:400;transition:all .1s}
+.tab.on{background:var(--w);color:var(--t1);font-weight:500;box-shadow:var(--s1)}
+
+/* SORT */
+.slist{display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:10px;background:var(--w);border:1px solid var(--bd);border-radius:var(--r);padding:10px 13px}
+.srow.over{border-color:var(--red);background:var(--red-l)}
+.srow.dragging{opacity:.4}
+.dh{cursor:grab;color:var(--t4);font-size:14px;flex-shrink:0}.dh:active{cursor:grabbing}
+.sico{font-size:16px;flex-shrink:0}
+.snm{flex:1;font-size:13px;font-weight:500}
+
+/* TOGGLE */
+.sw{position:relative;display:inline-block;width:34px;height:19px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.sws{position:absolute;cursor:pointer;inset:0;background:var(--g3);border-radius:10px;transition:.15s}
+.sws::before{content:'';position:absolute;width:13px;height:13px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.sw input:checked+.sws{background:var(--grn)}
+.sw input:checked+.sws::before{transform:translateX(15px)}
+
+/* SPONSOR */
+.spg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}
+.spc{background:var(--w);border:1px solid var(--bd);border-radius:var(--r);padding:13px 9px;text-align:center;position:relative}
+.splogo{max-width:80px;max-height:40px;object-fit:contain;display:block;margin:0 auto 6px}
+.spnm{font-size:12px;font-weight:500}
+.sptier{font-size:10px;color:var(--t3);margin-top:2px}
+.spdel{position:absolute;top:5px;right:5px;background:var(--g2);border:1px solid var(--bd);border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t3);font-size:9px;transition:all .1s}
+.spdel:hover{background:var(--red-l);color:var(--red);border-color:var(--red-b)}
+
+/* MODAL */
+.ovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.ovl.on{display:flex}
+.modal{background:var(--w);border:1px solid var(--bd2);border-radius:var(--r3);padding:24px;width:540px;max-width:95vw;max-height:88vh;overflow-y:auto;box-shadow:var(--s3)}
+.msm{width:390px}
+.mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mtit{font-size:15px;font-weight:600}
+.mx{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:4px;border-radius:var(--r);transition:background .1s}
+.mx:hover{background:var(--g2);color:var(--t1)}
+.mft{display:flex;justify-content:flex-end;gap:7px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bd)}
+
+/* MISC */
+.colrow{display:flex;align-items:center;gap:7px}
+.colrow input[type=text]{flex:1}
+.colsw{width:34px;height:34px;border-radius:var(--r);border:1.5px solid var(--bd2);cursor:pointer;padding:2px;background:transparent}
+.lbox{background:var(--g1);border:1px solid var(--bd);border-radius:var(--r);padding:18px;text-align:center;min-height:68px;display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.lbox img{max-height:60px;max-width:190px;object-fit:contain}
+.lempty{font-size:12px;color:var(--t4)}
+.ftprev{background:var(--t1);color:#fff;border-radius:var(--r);padding:20px;margin-top:9px}
+.ftprev-brand{font-size:17px;font-weight:700;margin-bottom:4px}
+.ftprev-sub{font-size:12px;opacity:.5;margin-bottom:9px}
+.ftprev-links{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;opacity:.6}
+.ftprev-copy{font-size:11px;opacity:.3;margin-top:10px;border-top:1px solid rgba(255,255,255,.1);padding-top:9px}
+.ghinfo{background:var(--g1);border:1px solid var(--bd);border-radius:var(--r);padding:13px 15px;font-size:13px;color:var(--t2);line-height:1.7}
+.ghinfo code{background:var(--g2);padding:1px 5px;border-radius:4px;font-family:var(--fm);font-size:12px;color:var(--t1)}
+.snippet{background:var(--t1);border-radius:var(--r);padding:13px 15px;overflow-x:auto}
+.snippet code{font-family:var(--fm);font-size:12px;color:#e4e4e7;line-height:1.8;white-space:pre}
+.empty{text-align:center;padding:40px 20px;color:var(--t3)}
+.emico{font-size:30px;margin-bottom:9px;opacity:.3}
+.emtxt{font-size:13px}
+#toast{position:fixed;bottom:20px;right:20px;padding:11px 16px;border-radius:var(--r2);font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--s3);opacity:0;transition:opacity .22s;pointer-events:none;max-width:300px}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="LS">
+  <div class="lcard">
+    <div class="lmark">Tutto<span>Apricena</span></div>
+    <div class="lsub">Content Management System</div>
+    <div class="lnotice" id="lnotice">Prima configurazione: dopo il login configura il token GitHub per pubblicare live.</div>
+    <div class="lf"><label>Username</label><input id="lu" type="text" autocomplete="username" placeholder="admin"/></div>
+    <div class="lf"><label>Password</label><input id="lp" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="rem"><input type="checkbox" id="lrem" /><label for="lrem">Ricorda le credenziali di accesso</label></div>
+    <button class="lbtn" onclick="doLogin()">Accedi</button>
+    <div class="lerr" id="lerr">Username o password non corretti</div>
+    <div class="lreset" onclick="resetDB()">Problemi di accesso? Reimposta i dati</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="APP" style="display:none">
+  <nav class="nav">
+    <div class="nbrand">
+      <div><div class="nbmark">Tutto<span>Apricena</span></div></div>
+      <div class="ncms">CMS</div>
+    </div>
+    <div class="nuser">
+      <div class="nav-av" id="nav-av">A</div>
+      <div><div class="nav-nm" id="nav-nm">admin</div><div class="nav-rl" id="nav-rl">Administrator</div></div>
+    </div>
+    <div class="nsec">Panoramica</div>
+    <div class="ni on" id="ni-dash" onclick="go('dash')"><svg fill="none" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".9"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor" opacity=".25"/></svg>Dashboard</div>
+    <div class="nsec">Sito</div>
+    <div class="ni" id="ni-identita" onclick="go('identita')"><svg fill="none" viewBox="0 0 14 14"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Identità & Logo</div>
+    <div class="ni" id="ni-hero" onclick="go('hero')"><svg fill="none" viewBox="0 0 14 14"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 9l3-2.5 2.5 2 2.5-3L13 9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Hero & Banner</div>
+    <div class="ni" id="ni-footer" onclick="go('footer')"><svg fill="none" viewBox="0 0 14 14"><path d="M1 10.5h12M1 7.5h12M1 4.5h7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Footer</div>
+    <div class="nsec">Contenuti</div>
+    <div class="ni" id="ni-notizie" onclick="go('notizie')"><svg fill="none" viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 4.5h7M3.5 7h7M3.5 9.5h4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>Notizie</div>
+    <div class="ni" id="ni-eventi" onclick="go('eventi')"><svg fill="none" viewBox="0 0 14 14"><rect x="1" y="2.5" width="12" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 1v3M9.5 1v3M1 6.5h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Eventi</div>
+    <div class="ni admin-only" id="ni-sponsor" onclick="go('sponsor')"><svg fill="none" viewBox="0 0 14 14"><path d="M7 1.5l1.4 3 3.6.5-2.6 2.5.6 3.5L7 9.5l-3 1.5.6-3.5L2 5l3.6-.5L7 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>Sponsor</div>
+    <div class="nsec">Layout</div>
+    <div class="ni admin-only" id="ni-layout" onclick="go('layout')"><svg fill="none" viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="3.5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="6.5" width="5" height="6.5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="6.5" width="5" height="6.5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>Sezioni & Ordine</div>
+    <div class="nsec">Sistema</div>
+    <div class="ni admin-only" id="ni-utenti" onclick="go('utenti')"><svg fill="none" viewBox="0 0 14 14"><circle cx="5" cy="4" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.5 1.8-4.5 4-4.5S9 10.5 9 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 7.5v4.5M9 9.5h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Utenti</div>
+    <div class="ni" id="ni-github" onclick="go('github')"><svg fill="none" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 10c.5-1.2.9-2 2.5-2s2 .8 2.5 2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="7" cy="5" r="1.3" fill="currentColor"/></svg>GitHub & Sync</div>
+    <div class="nsync" onclick="go('github')" id="nsync">
+      <div class="sdot err" id="sdot"></div>
+      <div class="slabel" id="slabel">GitHub non configurato</div>
+    </div>
+    <div class="nfoot"><button class="logout" onclick="doLogout()">Esci dall'account</button></div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="tbc" id="tbc">Dashboard</span>
+      <div class="tbr">
+        <button class="btn bok" id="pubbtn" onclick="publishNow()" style="display:none">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v6.5M3.5 5L6 7.5 8.5 5M1 10h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Pubblica sul sito
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+<!-- DASHBOARD -->
+<div class="page on" id="p-dash">
+  <div class="ph"><div class="phl"><h1>Dashboard</h1><p>Panoramica di TuttoApricena</p></div>
+    <div class="phr"><button class="btn bg" onclick="syncFrom()"><svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M1 6A5 5 0 1 0 6 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 2v4h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sincronizza dal sito</button></div>
+  </div>
+  <div class="al alwrn on" id="ghwarn" style="margin-bottom:14px">⚠ GitHub non configurato — configura il token per pubblicare le modifiche. <a href="#" onclick="go('github')" style="font-weight:600;margin-left:5px">Configura →</a></div>
+  <div class="stats" id="dstats"></div>
+  <div class="g2"><div class="card"><div class="chd">Ultime notizie</div><div id="dnews"></div></div><div class="card"><div class="chd">Prossimi eventi</div><div id="devs"></div></div></div>
+</div>
+
+<!-- IDENTITÀ -->
+<div class="page" id="p-identita">
+  <div class="ph"><div class="phl"><h1>Identità & Logo</h1><p>Brand, colori e social</p></div><div class="phr"><button class="btn bp" onclick="saveId()">Salva</button></div></div>
+  <div class="al alok" id="a-id">✓ Salvato con successo</div>
+  <div class="card">
+    <div class="chd">Logo</div>
+    <div class="lbox"><img id="logo-img" src="" style="display:none"/><span class="lempty" id="logo-empty">Nessun logo</span></div>
+    <div class="upz" onclick="document.getElementById('logo-f').click()"><div class="upzico">🖼</div><div class="upztxt">Clicca per caricare logo (PNG, SVG, WebP)</div><input type="file" id="logo-f" accept="image/*" style="display:none" onchange="handleImg(this,'logo-img','logo-url')"/></div>
+    <div class="fg" style="margin-top:8px"><label>Oppure URL</label><input id="logo-url" type="url" placeholder="https://..." oninput="prevUrl(this.value,'logo-img')"/></div>
+  </div>
+  <div class="card">
+    <div class="chd">Informazioni sito</div>
+    <div class="g2">
+      <div class="fg"><label>Nome sito</label><input id="id-nome"/></div>
+      <div class="fg"><label>Tagline</label><input id="id-tag"/></div>
+    </div>
+    <div class="fg" style="margin-top:11px"><label>Descrizione SEO</label><textarea id="id-desc" rows="2"></textarea></div>
+    <div class="g2" style="margin-top:11px">
+      <div class="fg"><label>Email contatto</label><input id="id-email" type="email"/></div>
+      <div class="fg"><label>Colore principale</label><div class="colrow"><input id="id-col" type="text" placeholder="#d63031"/><input type="color" class="colsw" id="id-col-sw" oninput="document.getElementById('id-col').value=this.value"/></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chd">Social</div>
+    <div class="g2">
+      <div class="fg"><label>Facebook</label><input id="id-fb"/></div>
+      <div class="fg"><label>Instagram</label><input id="id-ig"/></div>
+      <div class="fg"><label>Twitter / X</label><input id="id-tw"/></div>
+      <div class="fg"><label>YouTube</label><input id="id-yt"/></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="page" id="p-hero">
+  <div class="ph"><div class="phl"><h1>Hero & Banner</h1><p>Immagini e testi delle sezioni</p></div><div class="phr"><button class="btn bp" onclick="saveHero()">Salva</button></div></div>
+  <div class="al alok" id="a-hero">✓ Salvato</div>
+  <div class="tabs"><button class="tab on" onclick="htab('h-home',this)">Homepage</button><button class="tab" onclick="htab('h-news',this)">Notizie</button><button class="tab" onclick="htab('h-ev',this)">Eventi</button></div>
+  <div id="h-home">
+    <div class="card"><div class="chd">Hero principale</div>
+      <div class="upz" onclick="document.getElementById('hh-f').click()"><div class="upzico">🖼</div><div class="upztxt">1920×600px consigliato</div><input type="file" id="hh-f" accept="image/*" style="display:none" onchange="handleImg(this,'hh-p','hh-url')"/></div>
+      <img class="iprev" id="hh-p"/>
+      <div class="fg" style="margin-top:8px"><label>URL immagine</label><input id="hh-url" type="url" oninput="prevUrl(this.value,'hh-p')"/></div>
+      <div class="g2" style="margin-top:11px">
+        <div class="fg"><label>Titolo</label><input id="hh-title"/></div>
+        <div class="fg"><label>Sottotitolo</label><input id="hh-sub"/></div>
+        <div class="fg"><label>Testo bottone CTA</label><input id="hh-cta"/></div>
+        <div class="fg"><label>Link bottone</label><input id="hh-ctalink"/></div>
+      </div>
+    </div>
+  </div>
+  <div id="h-news" style="display:none">
+    <div class="card"><div class="chd">Banner Notizie</div>
+      <div class="upz" onclick="document.getElementById('hn-f').click()"><div class="upzico">🖼</div><div class="upztxt">Banner sezione notizie</div><input type="file" id="hn-f" accept="image/*" style="display:none" onchange="handleImg(this,'hn-p','hn-url')"/></div>
+      <img class="iprev" id="hn-p"/>
+      <div class="fg" style="margin-top:8px"><label>URL</label><input id="hn-url" type="url" oninput="prevUrl(this.value,'hn-p')"/></div>
+      <div class="fg" style="margin-top:10px"><label>Titolo sezione</label><input id="hn-title" placeholder="Ultime notizie"/></div>
+    </div>
+  </div>
+  <div id="h-ev" style="display:none">
+    <div class="card"><div class="chd">Banner Eventi</div>
+      <div class="upz" onclick="document.getElementById('he-f').click()"><div class="upzico">🖼</div><div class="upztxt">Banner sezione eventi</div><input type="file" id="he-f" accept="image/*" style="display:none" onchange="handleImg(this,'he-p','he-url')"/></div>
+      <img class="iprev" id="he-p"/>
+      <div class="fg" style="margin-top:8px"><label>URL</label><input id="he-url" type="url" oninput="prevUrl(this.value,'he-p')"/></div>
+      <div class="fg" style="margin-top:10px"><label>Titolo sezione</label><input id="he-title" placeholder="Eventi in programma"/></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page" id="p-footer">
+  <div class="ph"><div class="phl"><h1>Footer</h1><p>Testi e link del piè di pagina</p></div><div class="phr"><button class="btn bp" onclick="saveFooter()">Salva</button></div></div>
+  <div class="al alok" id="a-footer">✓ Salvato</div>
+  <div class="card">
+    <div class="chd">Contenuto</div>
+    <div class="g2">
+      <div class="fg"><label>Copyright</label><input id="ft-copy" placeholder="© 2025 TuttoApricena"/></div>
+      <div class="fg"><label>Slogan footer</label><input id="ft-slogan"/></div>
+      <div class="fg" style="grid-column:span 2"><label>Descrizione</label><textarea id="ft-desc" rows="2"></textarea></div>
+      <div class="fg"><label>Indirizzo</label><input id="ft-addr"/></div>
+      <div class="fg"><label>Email</label><input id="ft-email" type="email"/></div>
+      <div class="fg"><label>Telefono</label><input id="ft-tel"/></div>
+      <div class="fg"><label>P.IVA / C.F.</label><input id="ft-piva"/></div>
+    </div>
+  </div>
+  <div class="card"><div class="chd">Link rapidi</div><div id="ft-links"></div><button class="btn bg bsm" style="margin-top:9px" onclick="addFtLink()">+ Aggiungi link</button></div>
+  <div class="card"><div class="chd">Anteprima</div>
+    <div class="ftprev">
+      <div class="ftprev-brand" id="fp-brand">TuttoApricena</div>
+      <div class="ftprev-sub" id="fp-sub"></div>
+      <div class="ftprev-links" id="fp-links"></div>
+      <div class="ftprev-copy" id="fp-copy"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIZIE -->
+<div class="page" id="p-notizie">
+  <div class="ph"><div class="phl"><h1>Notizie</h1><p id="news-sub"></p></div><div class="phr"><button class="btn bp" onclick="openNews()">+ Nuova notizia</button></div></div>
+  <div class="al alok" id="a-news">✓ Completato</div>
+  <div class="tw"><table><thead><tr><th>Notizia</th><th>Categoria</th><th>Data</th><th>Stato</th><th>Evidenza</th><th style="width:85px">Azioni</th></tr></thead><tbody id="news-tb"></tbody></table></div>
+</div>
+
+<!-- EVENTI -->
+<div class="page" id="p-eventi">
+  <div class="ph"><div class="phl"><h1>Eventi</h1><p id="ev-sub"></p></div><div class="phr"><button class="btn bp" onclick="openEv()">+ Nuovo evento</button></div></div>
+  <div class="al alok" id="a-ev">✓ Completato</div>
+  <div class="tw"><table><thead><tr><th>Evento</th><th>Data</th><th>Luogo</th><th>Categoria</th><th>Stato</th><th style="width:85px">Azioni</th></tr></thead><tbody id="ev-tb"></tbody></table></div>
+</div>
+
+<!-- SPONSOR -->
+<div class="page" id="p-sponsor">
+  <div class="ph"><div class="phl"><h1>Sponsor</h1></div><div class="phr"><button class="btn bp" onclick="openSpon()">+ Aggiungi</button></div></div>
+  <div class="al alok" id="a-spon">✓ Aggiornato</div>
+  <div class="card"><div class="chd">Posizione homepage</div>
+    <div class="g3">
+      <div class="fg"><label>Dove mostrare</label><select id="sp-pos"><option value="after-hero">Dopo l'hero</option><option value="before-news">Prima delle notizie</option><option value="after-news">Dopo le notizie</option><option value="after-events">Dopo gli eventi</option><option value="footer-only">Solo footer</option><option value="hidden">Non mostrare</option></select></div>
+      <div class="fg"><label>Titolo sezione</label><input id="sp-title" placeholder="I nostri sponsor"/></div>
+      <div class="fg"><label>Colonne</label><select id="sp-cols"><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+    </div>
+    <button class="btn bg bsm" style="margin-top:11px" onclick="saveSponSet()">Salva impostazioni</button>
+  </div>
+  <div class="card"><div class="chd">Sponsor attivi <span class="bdg bgry" id="spon-cnt">0</span></div>
+    <div class="spg" id="spg"></div>
+    <div class="empty" id="spem" style="display:none"><div class="emico">🤝</div><div class="emtxt">Nessuno sponsor aggiunto</div></div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="page" id="p-layout">
+  <div class="ph"><div class="phl"><h1>Sezioni & Ordine</h1><p>Trascina per riordinare la homepage</p></div><div class="phr"><button class="btn bp" onclick="saveLayout()">Salva ordine</button></div></div>
+  <div class="al alok" id="a-lay">✓ Ordine salvato</div>
+  <div class="card"><div class="slist" id="slist"></div></div>
+  <div class="card" style="margin-top:13px"><div class="chd">Impostazioni notizie</div>
+    <div class="g2">
+      <div class="fg"><label>Layout</label><select id="lay-nl"><option value="grid">Griglia 3 colonne</option><option value="list">Lista</option><option value="featured">In evidenza + griglia</option><option value="carousel">Carosello</option><option value="tabs">Tab categorie</option></select></div>
+      <div class="fg"><label>Per pagina</label><select id="lay-pp"><option value="6">6</option><option value="9">9</option><option value="12">12</option><option value="all">Tutte</option></select></div>
+      <div class="fg"><label>Ordine</label><select id="lay-ord"><option value="newest">Più recenti</option><option value="oldest">Più vecchie</option><option value="featured">Evidenziate prima</option></select></div>
+      <div class="fg"><label>Tab categorie</label><select id="lay-tabs"><option value="hide">Nascondi</option><option value="show">Mostra</option></select></div>
+    </div>
+  </div>
+</div>
+
+<!-- UTENTI -->
+<div class="page" id="p-utenti">
+  <div class="ph"><div class="phl"><h1>Utenti</h1></div><div class="phr"><button class="btn bp" onclick="openUser()">+ Nuovo utente</button></div></div>
+  <div class="al alok" id="a-usr">✓ Salvato</div>
+  <div class="tw"><table><thead><tr><th>Username</th><th>Ruolo</th><th>Creato</th><th style="width:95px">Azioni</th></tr></thead><tbody id="usr-tb"></tbody></table></div>
+  <div class="g2" style="margin-top:13px">
+    <div class="card" style="border-left:3px solid var(--red)"><div class="chd" style="color:var(--red)">Admin</div><div style="font-size:12.5px;color:var(--t2);line-height:1.7">Accesso completo: identità, logo, hero, footer, notizie, eventi, sponsor, layout, gestione utenti, GitHub sync.</div></div>
+    <div class="card" style="border-left:3px solid var(--amb)"><div class="chd" style="color:var(--amb)">Editor</div><div style="font-size:12.5px;color:var(--t2);line-height:1.7">Può solo creare, modificare ed eliminare <strong>notizie</strong> ed <strong>eventi</strong>. Nessun accesso alle impostazioni del sito.</div></div>
+  </div>
+</div>
+
+<!-- GITHUB -->
+<div class="page" id="p-github">
+  <div class="ph"><div class="phl"><h1>GitHub & Sync</h1><p>Pubblicazione live sul sito</p></div></div>
+  <div class="al alok" id="a-gh">✓ Configurazione salvata</div>
+  <div class="al alerr" id="a-gherr">✕ <span id="a-gherr-msg"></span></div>
+  <div class="card">
+    <div class="chd">Configurazione</div>
+    <div class="al alwrn on" style="margin-bottom:14px">🔒 Il token viene salvato <strong>solo nel browser</strong> e non è mai incluso nei file caricati su GitHub — nessuna violazione di sicurezza.</div>
+    <div class="g2">
+      <div class="fg"><label>Owner GitHub</label><input id="gh-owner" value="NicolaMartucci"/></div>
+      <div class="fg"><label>Repository</label><input id="gh-repo" value="nicolamartucci.github.io"/></div>
+      <div class="fg"><label>Branch</label><input id="gh-branch" value="main"/></div>
+      <div class="fg"><label>Percorso file dati</label><input id="gh-path" value="tuttoapricena/assets/data.json"/></div>
+      <div class="fg" style="grid-column:span 2">
+        <label>Personal Access Token</label>
+        <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password"/>
+        <div class="fhint">github.com → Settings → Developer settings → Personal access tokens → Fine-grained. Permesso: <strong>Contents: Read and Write</strong></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:7px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn bp" onclick="saveGh()">Salva configurazione</button>
+      <button class="btn bg" onclick="testGh()">Testa connessione</button>
+      <button class="btn bg" onclick="syncFrom()">⬇ Sincronizza dal sito</button>
+    </div>
+  </div>
+  <div class="card"><div class="chd">Come funziona</div>
+    <div class="ghinfo"><ol style="padding-left:17px;line-height:2.2">
+      <li>Genera un token GitHub Fine-grained con permesso <code>Contents: Read and Write</code></li>
+      <li>Incollalo sopra e clicca <strong>Salva configurazione</strong></li>
+      <li>Il CMS scrive <code>tuttoapricena/assets/data.json</code> nel repo tramite API</li>
+      <li>GitHub Pages aggiorna il sito in 10–30 secondi</li>
+      <li>Aggiungi lo snippet sotto nel tuo <code>index.html</code> per leggere i dati</li>
+    </ol></div>
+  </div>
+  <div class="card"><div class="chd">Snippet per index.html</div>
+    <div class="snippet"><code id="gh-snip"></code></div>
+    <button class="btn bg bsm" style="margin-top:9px" onclick="copySnip()">Copia snippet</button>
+  </div>
+</div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /APP -->
+
+<!-- MODAL NOTIZIA -->
+<div class="ovl" id="mo-news">
+  <div class="modal"><div class="mhd"><div class="mtit" id="mn-tit">Nuova notizia</div><button class="mx" onclick="cm('mo-news')">✕</button></div>
+    <input type="hidden" id="n-id"/>
+    <div class="fg" style="margin-bottom:11px"><label>Titolo *</label><input id="n-title"/></div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="fg"><label>Categoria</label><select id="n-cat"><option value="attualita">Attualità</option><option value="sport">Sport</option><option value="cultura">Cultura</option><option value="politica">Politica</option><option value="economia">Economia</option><option value="cronaca">Cronaca</option><option value="altro">Altro</option></select></div>
+      <div class="fg"><label>Data</label><input id="n-date" type="date"/></div>
+    </div>
+    <div class="fg" style="margin-bottom:11px"><label>Autore</label><input id="n-author" placeholder="Redazione"/></div>
+    <div class="fg" style="margin-bottom:11px"><label>Sommario</label><textarea id="n-sum" rows="2"></textarea></div>
+    <div class="fg" style="margin-bottom:11px"><label>Testo completo</label><textarea id="n-body" rows="5"></textarea></div>
+    <div class="fg" style="margin-bottom:11px"><label>Immagine</label>
+      <div class="upz" onclick="document.getElementById('n-img-f').click()"><div class="upzico" style="font-size:17px">🖼</div><div class="upztxt">Carica immagine</div><input type="file" id="n-img-f" accept="image/*" style="display:none" onchange="handleImg(this,'n-ip','n-img-url')"/></div>
+      <input id="n-img-url" type="url" placeholder="Oppure URL" style="margin-top:6px;padding:8px 11px;border:1.5px solid var(--bd2);border-radius:var(--r);width:100%;outline:none" oninput="prevUrl(this.value,'n-ip')"/>
+      <img class="iprev" id="n-ip"/>
+    </div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="fg"><label>Stato</label><select id="n-status"><option value="pubblicata">Pubblicata</option><option value="bozza">Bozza</option><option value="archiviata">Archiviata</option></select></div>
+      <div class="fg"><label>In evidenza</label><select id="n-feat"><option value="0">No</option><option value="1">Sì</option></select></div>
+    </div>
+    <div class="fg"><label>Tag (virgola)</label><input id="n-tags"/></div>
+    <div class="mft"><button class="btn bg" onclick="cm('mo-news')">Annulla</button><button class="btn bp" onclick="saveNews()">Salva notizia</button></div>
+  </div>
+</div>
+
+<!-- MODAL EVENTO -->
+<div class="ovl" id="mo-ev">
+  <div class="modal"><div class="mhd"><div class="mtit" id="mev-tit">Nuovo evento</div><button class="mx" onclick="cm('mo-ev')">✕</button></div>
+    <input type="hidden" id="e-id"/>
+    <div class="fg" style="margin-bottom:11px"><label>Titolo *</label><input id="e-title"/></div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="fg"><label>Inizio *</label><input id="e-start" type="datetime-local"/></div>
+      <div class="fg"><label>Fine</label><input id="e-end" type="datetime-local"/></div>
+      <div class="fg"><label>Luogo</label><input id="e-place"/></div>
+      <div class="fg"><label>Categoria</label><select id="e-cat"><option value="festa">Festa / Sagra</option><option value="sport">Sportivo</option><option value="cultura">Culturale</option><option value="religioso">Religioso</option><option value="mercato">Fiera</option><option value="musica">Concerto</option><option value="altro">Altro</option></select></div>
+    </div>
+    <div class="fg" style="margin-bottom:11px"><label>Descrizione</label><textarea id="e-desc" rows="3"></textarea></div>
+    <div class="fg" style="margin-bottom:11px"><label>Immagine</label>
+      <div class="upz" onclick="document.getElementById('e-img-f').click()"><div class="upzico" style="font-size:17px">🖼</div><div class="upztxt">Carica immagine</div><input type="file" id="e-img-f" accept="image/*" style="display:none" onchange="handleImg(this,'e-ip','e-img-url')"/></div>
+      <input id="e-img-url" type="url" placeholder="Oppure URL" style="margin-top:6px;padding:8px 11px;border:1.5px solid var(--bd2);border-radius:var(--r);width:100%;outline:none" oninput="prevUrl(this.value,'e-ip')"/>
+      <img class="iprev" id="e-ip"/>
+    </div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="fg"><label>Organizzatore</label><input id="e-org"/></div>
+      <div class="fg"><label>Stato</label><select id="e-status"><option value="programmato">Programmato</option><option value="in-corso">In corso</option><option value="concluso">Concluso</option><option value="annullato">Annullato</option></select></div>
+    </div>
+    <div class="fg"><label>Link esterno</label><input id="e-link" type="url"/></div>
+    <div class="mft"><button class="btn bg" onclick="cm('mo-ev')">Annulla</button><button class="btn bp" onclick="saveEv()">Salva evento</button></div>
+  </div>
+</div>
+
+<!-- MODAL SPONSOR -->
+<div class="ovl" id="mo-spon">
+  <div class="modal msm"><div class="mhd"><div class="mtit">Aggiungi sponsor</div><button class="mx" onclick="cm('mo-spon')">✕</button></div>
+    <div class="fg" style="margin-bottom:11px"><label>Nome *</label><input id="s-nome"/></div>
+    <div class="fg" style="margin-bottom:11px"><label>Logo</label>
+      <div class="upz" onclick="document.getElementById('s-img-f').click()"><div class="upzico" style="font-size:17px">🏢</div><div class="upztxt">Carica logo</div><input type="file" id="s-img-f" accept="image/*" style="display:none" onchange="handleImg(this,'s-ip','s-logo-url')"/></div>
+      <input id="s-logo-url" type="url" placeholder="Oppure URL" style="margin-top:6px;padding:8px 11px;border:1.5px solid var(--bd2);border-radius:var(--r);width:100%;outline:none" oninput="prevUrl(this.value,'s-ip')"/>
+      <img class="iprev" id="s-ip"/>
+    </div>
+    <div class="fg" style="margin-bottom:11px"><label>Sito web</label><input id="s-sito" type="url"/></div>
+    <div class="fg"><label>Tier</label><select id="s-tier"><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option><option value="partner">Partner</option></select></div>
+    <div class="mft"><button class="btn bg" onclick="cm('mo-spon')">Annulla</button><button class="btn bp" onclick="saveSpon()">Salva</button></div>
+  </div>
+</div>
+
+<!-- MODAL UTENTE -->
+<div class="ovl" id="mo-usr">
+  <div class="modal msm"><div class="mhd"><div class="mtit" id="mu-tit">Nuovo utente</div><button class="mx" onclick="cm('mo-usr')">✕</button></div>
+    <input type="hidden" id="u-id"/>
+    <div class="fg" style="margin-bottom:11px"><label>Username *</label><input id="u-uname" autocomplete="off"/></div>
+    <div class="fg" style="margin-bottom:4px"><label>Password <span id="u-phi" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--t4)">(lascia vuoto = non cambia)</span></label><input id="u-pass" type="password" autocomplete="new-password"/></div>
+    <div class="fhint" style="margin-bottom:11px">Minimo 6 caratteri per i nuovi utenti</div>
+    <div class="fg"><label>Ruolo</label><select id="u-role"><option value="editor">Editor</option><option value="admin">Admin</option></select></div>
+    <div class="mft"><button class="btn bg" onclick="cm('mo-usr')">Annulla</button><button class="btn bp" onclick="saveUser()">Salva</button></div>
+  </div>
+</div>
+
+<!-- MODAL ELIMINA -->
+<div class="ovl" id="mo-del">
+  <div class="modal msm" style="text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:11px">🗑</div>
+    <div class="mtit" style="margin-bottom:7px">Conferma eliminazione</div>
+    <p style="font-size:13px;color:var(--t3);margin-bottom:22px;line-height:1.6" id="del-msg"></p>
+    <div style="display:flex;gap:7px;justify-content:center">
+      <button class="btn bg" onclick="cm('mo-del')">Annulla</button>
+      <button class="btn bdel" id="del-ok">Elimina definitivamente</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// FNV-1a 32-bit hash — usato per le password
+// IMPORTANTE: questa funzione DEVE essere definita PRIMA
+// di qualsiasi chiamata a defDB() o caricamento del DB
+// ══════════════════════════════════════════════════════
+function H(s) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h.toString(16);
+}
+
+// Costanti predefinite dell'admin — calcolate subito
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin123';
+const ADMIN_HASH = H(ADMIN_PASS); // calcolato una volta sola
+
+function tod() { return new Date().toISOString().substring(0, 10); }
+
+function defDB() {
+  return {
+    users: [{ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() }],
+    identita: { nome: 'TuttoApricena', tag: 'Il portale di Apricena', desc: '', email: '', col: '#d63031', logo: '', social: { fb: '', ig: '', tw: '', yt: '' } },
+    hero: { home: { url: '', title: 'Benvenuti ad Apricena', sub: '', cta: 'Scopri le notizie', ctalink: '#notizie' }, news: { url: '', title: 'Ultime notizie' }, events: { url: '', title: 'Eventi in programma' } },
+    footer: { copy: '© 2025 TuttoApricena. Tutti i diritti riservati.', slogan: 'TuttoApricena', desc: '', addr: 'Apricena (FG), Italia', email: '', tel: '', piva: '', links: [] },
+    notizie: [], eventi: [], sponsor: [],
+    sponsorSettings: { position: 'after-news', title: 'I nostri sponsor', cols: '4' },
+    layout: {
+      sections: [
+        { id: 'hero', label: 'Hero principale', icon: '🖼', vis: true },
+        { id: 'notizie', label: 'Notizie', icon: '📰', vis: true },
+        { id: 'eventi', label: 'Eventi', icon: '📅', vis: true },
+        { id: 'sponsor', label: 'Sponsor', icon: '🤝', vis: true },
+        { id: 'contatti', label: 'Contatti', icon: '📞', vis: true },
+        { id: 'footer', label: 'Footer', icon: '📄', vis: true }
+      ],
+      newsLayout: 'grid', newsPerPage: '9', newsOrder: 'newest', newsTabs: 'hide'
+    },
+    github: { owner: 'NicolaMartucci', repo: 'nicolamartucci.github.io', branch: 'main', path: 'tuttoapricena/assets/data.json' }
+  };
+}
+
+// ── Caricamento DB con validazione e riparazione automatica
+function loadDB() {
+  try {
+    const raw = localStorage.getItem('ta_db');
+    if (!raw) return defDB();
+    const parsed = JSON.parse(raw);
+    // Assicurati che ci sia sempre l'utente admin con hash corretto
+    if (!parsed.users) parsed.users = [];
+    const adminIdx = parsed.users.findIndex(u => u.id === 'u1');
+    if (adminIdx < 0) {
+      // Admin rimosso: lo riaggiungiamo
+      parsed.users.unshift({ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() });
+    } else {
+      // Admin presente: aggiorna solo l'hash se non corrisponde
+      // (questo risolve il caso in cui il DB è stato salvato con un hash diverso)
+      if (!parsed.users[adminIdx].hash) {
+        parsed.users[adminIdx].hash = ADMIN_HASH;
+      }
+    }
+    return parsed;
+  } catch (e) {
+    console.warn('DB corrotto, ripristino dal default', e);
+    return defDB();
+  }
+}
+
+let DB = loadDB();
+let CU = null, ftLinks = [], dragIdx = null, dirty = false;
+
+const getTok = () => localStorage.getItem('ta_tok') || '';
+const setTok = t => t ? localStorage.setItem('ta_tok', t) : localStorage.removeItem('ta_tok');
+
+function saveDB() {
+  const d = JSON.parse(JSON.stringify(DB));
+  delete d.github?.token; // sicurezza: il token non va nel DB
+  localStorage.setItem('ta_db', JSON.stringify(d));
+  dirty = true;
+  syncUI();
+}
+
+// ── RESET DB (link di recupero nella pagina login)
+function resetDB() {
+  if (!confirm('Questa operazione cancellerà tutti i dati salvati nel browser e ripristinerà le credenziali predefinite (admin / admin123). Continuare?')) return;
+  localStorage.removeItem('ta_db');
+  localStorage.removeItem('ta_ru');
+  localStorage.removeItem('ta_rp');
+  localStorage.removeItem('ta_rem');
+  DB = defDB();
+  E('lerr').classList.remove('x');
+  E('lu').value = ADMIN_USER;
+  E('lp').value = '';
+  toast('✓ Dati ripristinati. Usa admin / admin123');
+}
+
+// ── LOGIN
+function doLogin() {
+  const u = V('lu').trim(), p = V('lp');
+  const rem = document.getElementById('lrem').checked;
+  const hashed = H(p);
+  // Debug in console (rimovibile in produzione)
+  console.log('Login attempt:', u, '| hash:', hashed);
+  console.log('Users in DB:', DB.users.map(x => ({ u: x.username, h: x.hash })));
+  const found = DB.users.find(x => x.username === u && x.hash === hashed);
+  if (!found) {
+    E('lerr').classList.add('x');
+    return;
+  }
+  E('lerr').classList.remove('x');
+  if (rem) {
+    localStorage.setItem('ta_ru', u);
+    localStorage.setItem('ta_rp', p);
+    localStorage.setItem('ta_rem', '1');
+  } else {
+    localStorage.removeItem('ta_ru');
+    localStorage.removeItem('ta_rp');
+    localStorage.removeItem('ta_rem');
+  }
+  CU = found;
+  E('LS').style.display = 'none';
+  E('APP').style.display = 'flex';
+  E('nav-av').textContent = u[0].toUpperCase();
+  E('nav-nm').textContent = u;
+  E('nav-rl').textContent = found.role === 'admin' ? 'Administrator' : 'Editor';
+  if (found.role !== 'admin') document.querySelectorAll('.admin-only').forEach(x => x.style.display = 'none');
+  go('dash');
+  syncUI();
+}
+
+function doLogout() {
+  CU = null;
+  E('APP').style.display = 'none';
+  E('LS').style.display = 'flex';
+  E('lp').value = '';
+}
+
+// ── NAVIGATION
+const crumbs = { dash: 'Dashboard', identita: 'Identità & Logo', hero: 'Hero & Banner', footer: 'Footer', notizie: 'Notizie', eventi: 'Eventi', sponsor: 'Sponsor', layout: 'Sezioni & Ordine', utenti: 'Utenti', github: 'GitHub & Sync' };
+function go(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  const pg = E('p-' + id); if (pg) pg.classList.add('on');
+  const ni = E('ni-' + id); if (ni) ni.classList.add('on');
+  E('tbc').textContent = crumbs[id] || id;
+  E('pubbtn').style.display = getTok() ? 'flex' : 'none';
+  if (id === 'dash') rDash();
+  if (id === 'identita') lId();
+  if (id === 'hero') lHero();
+  if (id === 'footer') lFt();
+  if (id === 'notizie') rNews();
+  if (id === 'eventi') rEv();
+  if (id === 'sponsor') { rSpon(); lSponSet(); }
+  if (id === 'layout') rLay();
+  if (id === 'utenti') rUsers();
+  if (id === 'github') lGh();
+}
+
+// ── SYNC UI
+function syncUI() {
+  const tok = getTok(), sd = E('sdot'), sl = E('slabel'), gw = E('ghwarn');
+  if (!tok) { sd.className = 'sdot err'; sl.textContent = 'GitHub non configurato'; if (gw) gw.classList.add('on'); }
+  else if (dirty) { sd.className = 'sdot busy'; sl.textContent = 'Modifiche in attesa...'; if (gw) gw.classList.remove('on'); }
+  else { sd.className = 'sdot ok'; sl.textContent = 'Sito aggiornato'; if (gw) gw.classList.remove('on'); }
+  E('pubbtn').style.display = tok ? 'flex' : 'none';
+}
+
+// ── DASHBOARD
+function rDash() {
+  const nP = DB.notizie.filter(x => x.status === 'pubblicata').length;
+  E('dstats').innerHTML = `
+    <div class="stat red"><div class="statn">${DB.notizie.length}</div><div class="statl">Notizie totali</div></div>
+    <div class="stat grn"><div class="statn">${nP}</div><div class="statl">Pubblicate</div></div>
+    <div class="stat amb"><div class="statn">${DB.eventi.length}</div><div class="statl">Eventi</div></div>
+    <div class="stat blu"><div class="statn">${DB.sponsor.length}</div><div class="statl">Sponsor</div></div>`;
+  const news = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+  E('dnews').innerHTML = news.length ? news.map(n => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:pointer" onclick="editNews('${n.id}')">
+      ${n.img ? `<img src="${n.img}" style="width:29px;height:29px;border-radius:5px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>` : '<div style="width:29px;height:29px;background:var(--g2);border-radius:5px;flex-shrink:0"></div>'}
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.title}</div><div style="font-size:11px;color:var(--t3)">${n.date || ''}</div></div>
+      <span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status}</span>
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📰</div><div class="emtxt">Nessuna notizia</div></div>';
+  const evs = [...DB.eventi].filter(e => e.status !== 'concluso' && e.status !== 'annullato').slice(0, 5);
+  E('devs').innerHTML = evs.length ? evs.map(e => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)">
+      <div style="width:29px;height:29px;background:var(--amb-l);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📅</div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div><div style="font-size:11px;color:var(--t3)">${e.start ? e.start.substring(0, 10) : ''}</div></div>
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
+}
+
+// ── IDENTITÀ
+function lId() { const d = DB.identita; SV('id-nome', d.nome || ''); SV('id-tag', d.tag || ''); SV('id-desc', d.desc || ''); SV('id-email', d.email || ''); SV('id-col', d.col || ''); E('id-col-sw').value = d.col || '#d63031'; SV('id-fb', d.social?.fb || ''); SV('id-ig', d.social?.ig || ''); SV('id-tw', d.social?.tw || ''); SV('id-yt', d.social?.yt || ''); SV('logo-url', d.logo || ''); if (d.logo) prevUrl(d.logo, 'logo-img'); }
+function saveId() { DB.identita = { nome: V('id-nome'), tag: V('id-tag'), desc: V('id-desc'), email: V('id-email'), col: V('id-col'), logo: V('logo-url'), social: { fb: V('id-fb'), ig: V('id-ig'), tw: V('id-tw'), yt: V('id-yt') } }; saveDB(); al('a-id'); }
+
+// ── HERO
+function lHero() { const h = DB.hero; SV('hh-url', h.home?.url || ''); SV('hh-title', h.home?.title || ''); SV('hh-sub', h.home?.sub || ''); SV('hh-cta', h.home?.cta || ''); SV('hh-ctalink', h.home?.ctalink || ''); if (h.home?.url) prevUrl(h.home.url, 'hh-p'); SV('hn-url', h.news?.url || ''); SV('hn-title', h.news?.title || ''); if (h.news?.url) prevUrl(h.news.url, 'hn-p'); SV('he-url', h.events?.url || ''); SV('he-title', h.events?.title || ''); if (h.events?.url) prevUrl(h.events.url, 'he-p'); }
+function saveHero() { DB.hero = { home: { url: V('hh-url'), title: V('hh-title'), sub: V('hh-sub'), cta: V('hh-cta'), ctalink: V('hh-ctalink') }, news: { url: V('hn-url'), title: V('hn-title') }, events: { url: V('he-url'), title: V('he-title') } }; saveDB(); al('a-hero'); }
+function htab(id, btn) { ['h-home', 'h-news', 'h-ev'].forEach(t => E(t).style.display = 'none'); E(id).style.display = 'block'; document.querySelectorAll('#p-hero .tab').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
+
+// ── FOOTER
+function lFt() { const f = DB.footer || {}; SV('ft-copy', f.copy || ''); SV('ft-slogan', f.slogan || ''); SV('ft-desc', f.desc || ''); SV('ft-addr', f.addr || ''); SV('ft-email', f.email || ''); SV('ft-tel', f.tel || ''); SV('ft-piva', f.piva || ''); ftLinks = [...(f.links || [])]; rFtLinks(); updFtPrev(); }
+function saveFooter() { DB.footer = { copy: V('ft-copy'), slogan: V('ft-slogan'), desc: V('ft-desc'), addr: V('ft-addr'), email: V('ft-email'), tel: V('ft-tel'), piva: V('ft-piva'), links: ftLinks }; saveDB(); al('a-footer'); updFtPrev(); }
+function rFtLinks() { const c = E('ft-links'); if (!ftLinks.length) { c.innerHTML = '<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>'; return; } c.innerHTML = ftLinks.map((l, i) => `<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px"><input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/><input value="${esc(l.url)}" placeholder="URL" style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/><button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button></div>`).join(''); }
+function addFtLink() { ftLinks.push({ label: '', url: '' }); rFtLinks(); }
+function updFtPrev() { E('fp-brand').textContent = V('ft-slogan') || DB.identita?.nome || 'TuttoApricena'; E('fp-sub').textContent = V('ft-desc') || ''; E('fp-copy').textContent = V('ft-copy') || ''; E('fp-links').innerHTML = ftLinks.map(l => `<span>${l.label || 'Link'}</span>`).join(''); }
+
+// ── NOTIZIE
+function rNews() { const list = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)); E('news-sub').textContent = `${list.length} totali · ${list.filter(x => x.status === 'pubblicata').length} pubblicate`; const tb = E('news-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`; return; } tb.innerHTML = list.map(n => `<tr><td>${n.img ? `<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>` : ''}<div class="ttn">${n.title}</div><div class="ttm">${n.author || ''}</div></td><td><span class="bdg bblu">${n.cat || ''}</span></td><td style="font-size:12px;color:var(--t3)">${n.date || ''}</td><td><span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status || ''}</span></td><td>${n.featured == '1' ? '<span style="color:var(--amb);font-size:15px">★</span>' : '<span style="color:var(--t4)">—</span>'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button></div></td></tr>`).join(''); }
+function openNews() { cNF(); E('mn-tit').textContent = 'Nuova notizia'; om('mo-news'); }
+function editNews(id) { const n = DB.notizie.find(x => x.id === id); if (!n) return; SV('n-id', n.id); SV('n-title', n.title || ''); SV('n-cat', n.cat || 'attualita'); SV('n-date', n.date || ''); SV('n-author', n.author || ''); SV('n-sum', n.summary || ''); SV('n-body', n.body || ''); SV('n-img-url', n.img || ''); SV('n-status', n.status || 'pubblicata'); SV('n-feat', n.featured || '0'); SV('n-tags', (n.tags || []).join(', ')); if (n.img) prevUrl(n.img, 'n-ip'); E('mn-tit').textContent = 'Modifica notizia'; om('mo-news'); }
+function cNF() { ['n-id', 'n-title', 'n-author', 'n-sum', 'n-body', 'n-img-url', 'n-tags'].forEach(i => SV(i, '')); SV('n-date', tod()); SV('n-cat', 'attualita'); SV('n-status', 'pubblicata'); SV('n-feat', '0'); const p = E('n-ip'); p.classList.remove('on'); p.src = ''; }
+function saveNews() { const t = V('n-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('n-id') || 'n' + Date.now(); const d = { id, title: t, cat: V('n-cat'), date: V('n-date'), author: V('n-author'), summary: V('n-sum'), body: V('n-body'), img: V('n-img-url'), status: V('n-status'), featured: V('n-feat'), tags: V('n-tags').split(',').map(x => x.trim()).filter(Boolean) }; const ix = DB.notizie.findIndex(x => x.id === id); if (ix >= 0) DB.notizie[ix] = d; else DB.notizie.unshift(d); saveDB(); cm('mo-news'); rNews(); al('a-news'); }
+
+// ── EVENTI
+function rEv() { const list = [...DB.eventi].sort((a, b) => new Date(a.start) - new Date(b.start)); E('ev-sub').textContent = `${list.length} eventi totali`; const tb = E('ev-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`; return; } tb.innerHTML = list.map(e => `<tr><td><div class="ttn">${e.title}</div><div class="ttm">${e.org || ''}</div></td><td style="font-size:12px;color:var(--t2)">${e.start ? e.start.substring(0, 10) : ''}</td><td style="font-size:12px;color:var(--t3)">${e.place || '—'}</td><td><span class="bdg bblu">${e.cat || ''}</span></td><td><span class="bdg ${e.status === 'programmato' ? 'bok2' : e.status === 'in-corso' ? 'bwrn' : e.status === 'annullato' ? 'bred' : 'bgry'}">${e.status || ''}</span></td><td><div class="tact"><button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button></div></td></tr>`).join(''); }
+function openEv() { cEF(); E('mev-tit').textContent = 'Nuovo evento'; om('mo-ev'); }
+function editEv(id) { const e = DB.eventi.find(x => x.id === id); if (!e) return; SV('e-id', e.id); SV('e-title', e.title || ''); SV('e-start', e.start || ''); SV('e-end', e.end || ''); SV('e-place', e.place || ''); SV('e-cat', e.cat || 'festa'); SV('e-desc', e.desc || ''); SV('e-img-url', e.img || ''); SV('e-org', e.org || ''); SV('e-status', e.status || 'programmato'); SV('e-link', e.link || ''); if (e.img) prevUrl(e.img, 'e-ip'); E('mev-tit').textContent = 'Modifica evento'; om('mo-ev'); }
+function cEF() { ['e-id', 'e-title', 'e-start', 'e-end', 'e-place', 'e-desc', 'e-img-url', 'e-org', 'e-link'].forEach(i => SV(i, '')); SV('e-cat', 'festa'); SV('e-status', 'programmato'); const p = E('e-ip'); p.classList.remove('on'); p.src = ''; }
+function saveEv() { const t = V('e-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('e-id') || 'e' + Date.now(); const d = { id, title: t, start: V('e-start'), end: V('e-end'), place: V('e-place'), cat: V('e-cat'), desc: V('e-desc'), img: V('e-img-url'), org: V('e-org'), status: V('e-status'), link: V('e-link') }; const ix = DB.eventi.findIndex(x => x.id === id); if (ix >= 0) DB.eventi[ix] = d; else DB.eventi.unshift(d); saveDB(); cm('mo-ev'); rEv(); al('a-ev'); }
+
+// ── SPONSOR
+function rSpon() { const g = E('spg'), em = E('spem'); E('spon-cnt').textContent = DB.sponsor.length; if (!DB.sponsor.length) { g.innerHTML = ''; em.style.display = 'block'; return; } em.style.display = 'none'; g.innerHTML = DB.sponsor.map(s => `<div class="spc"><button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>${s.logo ? `<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>` : '<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}<div class="spnm">${s.nome}</div><div class="sptier">${s.tier}</div></div>`).join(''); }
+function lSponSet() { const ss = DB.sponsorSettings || {}; SV('sp-pos', ss.position || 'after-news'); SV('sp-title', ss.title || ''); SV('sp-cols', ss.cols || '4'); }
+function saveSponSet() { DB.sponsorSettings = { position: V('sp-pos'), title: V('sp-title'), cols: V('sp-cols') }; saveDB(); al('a-spon'); }
+function openSpon() { ['s-nome', 's-logo-url', 's-sito'].forEach(i => SV(i, '')); SV('s-tier', 'partner'); const p = E('s-ip'); p.classList.remove('on'); p.src = ''; om('mo-spon'); }
+function saveSpon() { const n = V('s-nome').trim(); if (!n) { alert('Nome obbligatorio'); return; } DB.sponsor.push({ id: 's' + Date.now(), nome: n, logo: V('s-logo-url'), sito: V('s-sito'), tier: V('s-tier') }); saveDB(); cm('mo-spon'); rSpon(); al('a-spon'); }
+
+// ── LAYOUT
+function rLay() { const sl = E('slist'); sl.innerHTML = DB.layout.sections.map((s, i) => `<div class="srow" draggable="true" data-i="${i}" ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)"><span class="dh">⠿</span><span class="sico">${s.icon}</span><span class="snm">${s.label}</span><label class="sw"><input type="checkbox" ${s.vis ? 'checked' : ''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/><span class="sws"></span></label><span style="font-size:11px;color:var(--t3);width:50px">${s.vis ? 'Visibile' : 'Nascosta'}</span></div>`).join(''); SV('lay-nl', DB.layout.newsLayout || 'grid'); SV('lay-pp', DB.layout.newsPerPage || '9'); SV('lay-ord', DB.layout.newsOrder || 'newest'); SV('lay-tabs', DB.layout.newsTabs || 'hide'); }
+function dS(e) { dragIdx = +e.currentTarget.dataset.i; e.currentTarget.classList.add('dragging'); }
+function dO(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
+function dL(e) { e.currentTarget.classList.remove('over'); }
+function dD(e) { e.preventDefault(); e.currentTarget.classList.remove('over'); const ti = +e.currentTarget.dataset.i; if (dragIdx === null || dragIdx === ti) return; const a = DB.layout.sections; const it = a.splice(dragIdx, 1)[0]; a.splice(ti, 0, it); dragIdx = null; document.querySelectorAll('.srow').forEach(r => { r.classList.remove('dragging'); r.classList.remove('over'); }); rLay(); }
+function saveLayout() { DB.layout.newsLayout = V('lay-nl'); DB.layout.newsPerPage = V('lay-pp'); DB.layout.newsOrder = V('lay-ord'); DB.layout.newsTabs = V('lay-tabs'); saveDB(); al('a-lay'); }
+
+// ── UTENTI
+function rUsers() { E('usr-tb').innerHTML = DB.users.map(u => `<tr><td><div class="ttn">${u.username}</div></td><td><span class="bdg ${u.role === 'admin' ? 'bred' : 'bwrn'}">${u.role}</span></td><td style="font-size:12px;color:var(--t3)">${u.created || '—'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>${u.id === 'u1' ? '<span style="font-size:11px;color:var(--t4)">Principale</span>' : `<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}</div></td></tr>`).join(''); }
+function openUser() { SV('u-id', ''); SV('u-uname', ''); SV('u-pass', ''); SV('u-role', 'editor'); E('u-phi').style.display = 'none'; E('mu-tit').textContent = 'Nuovo utente'; om('mo-usr'); }
+function editUser(id) { const u = DB.users.find(x => x.id === id); if (!u) return; SV('u-id', u.id); SV('u-uname', u.username); SV('u-pass', ''); SV('u-role', u.role); E('u-phi').style.display = 'inline'; E('mu-tit').textContent = 'Modifica utente'; om('mo-usr'); }
+function saveUser() {
+  const uname = V('u-uname').trim(), pass = V('u-pass'), id = V('u-id');
+  if (!uname) { alert('Username obbligatorio'); return; }
+  if (!id && pass.length < 6) { alert('Password: minimo 6 caratteri'); return; }
+  if (!id) {
+    if (DB.users.find(u => u.username === uname)) { alert('Username già usato'); return; }
+    DB.users.push({ id: 'u' + Date.now(), username: uname, hash: H(pass), role: V('u-role'), created: tod() });
+  } else {
+    const u = DB.users.find(x => x.id === id); if (!u) return;
+    u.username = uname; u.role = V('u-role');
+    if (pass.length >= 6) u.hash = H(pass);
+  }
+  saveDB(); cm('mo-usr'); rUsers(); al('a-usr');
+}
+
+// ── DELETE
+function cDel(type, id, name) { E('del-msg').textContent = `Stai per eliminare "${name}". Azione irreversibile.`; E('del-ok').onclick = () => doDel(type, id); om('mo-del'); }
+function doDel(type, id) {
+  if (type === 'notizia') DB.notizie = DB.notizie.filter(x => x.id !== id);
+  if (type === 'evento') DB.eventi = DB.eventi.filter(x => x.id !== id);
+  if (type === 'sponsor') DB.sponsor = DB.sponsor.filter(x => x.id !== id);
+  if (type === 'utente') { if (id === 'u1') { toast('Non puoi eliminare l\'account admin principale', true); cm('mo-del'); return; } DB.users = DB.users.filter(x => x.id !== id); }
+  saveDB(); cm('mo-del');
+  if (type === 'notizia') rNews();
+  if (type === 'evento') rEv();
+  if (type === 'sponsor') rSpon();
+  if (type === 'utente') rUsers();
+  rDash();
+}
+
+// ── GITHUB
+function lGh() { const g = DB.github || {}; SV('gh-owner', g.owner || 'NicolaMartucci'); SV('gh-repo', g.repo || 'nicolamartucci.github.io'); SV('gh-branch', g.branch || 'main'); SV('gh-path', g.path || 'tuttoapricena/assets/data.json'); SV('gh-token', getTok()); E('gh-snip').textContent = buildSnip(); }
+function saveGh() { DB.github = { owner: V('gh-owner'), repo: V('gh-repo'), branch: V('gh-branch'), path: V('gh-path') }; const tok = V('gh-token').trim(); setTok(tok); saveDB(); syncUI(); al('a-gh'); E('pubbtn').style.display = tok ? 'flex' : 'none'; E('gh-snip').textContent = buildSnip(); }
+function buildSnip() { return `<script>\n(function(){\n  fetch('/tuttoapricena/assets/data.json?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`; }
+function copySnip() { navigator.clipboard.writeText(E('gh-snip').textContent).then(() => toast('✓ Snippet copiato!')); }
+
+async function ghReq(method, path, body) {
+  const g = DB.github, tok = getTok(); if (!tok) throw new Error('Token non configurato');
+  const r = await fetch(`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`, { method, headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: body ? JSON.stringify(body) : undefined });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || 'HTTP ' + r.status); }
+  return r.json();
+}
+
+async function publishNow() {
+  if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
+  E('pubbtn').disabled = true; E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Pubblicazione...';
+  try {
+    const path = DB.github.path || 'tuttoapricena/assets/data.json';
+    let sha = null; try { const cur = await ghReq('GET', path); sha = cur.sha; } catch (e) { }
+    const exp = { identita: DB.identita, hero: DB.hero, footer: DB.footer, notizie: DB.notizie, eventi: DB.eventi, sponsor: DB.sponsor, sponsorSettings: DB.sponsorSettings, layout: DB.layout };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(exp, null, 2))));
+    const body = { message: 'CMS — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
+    if (sha) body.sha = sha;
+    await ghReq('PUT', path, body);
+    dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sito aggiornato ✓';
+    toast('✓ Pubblicato! Il sito si aggiorna in 10–30 secondi.');
+  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore'; toast('✕ ' + e.message, true); }
+  finally { E('pubbtn').disabled = false; }
+}
+
+async function syncFrom() {
+  if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
+  E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Sincronizzazione...';
+  try {
+    const path = DB.github.path || 'tuttoapricena/assets/data.json';
+    const cur = await ghReq('GET', path);
+    const dec = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, '')))));
+    const lu = DB.users, lg = DB.github;
+    DB = { ...defDB(), ...dec, users: lu, github: lg };
+    saveDB(); dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sincronizzato ✓';
+    rDash(); toast('✓ Dati sincronizzati dal sito!');
+  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore sync'; toast('✕ ' + e.message, true); }
+}
+
+async function testGh() {
+  const owner = V('gh-owner'), repo = V('gh-repo'), tok = V('gh-token').trim() || getTok();
+  if (!tok) { showAlerr('Token mancante'); return; }
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': 'token ' + tok } });
+    if (r.ok) { al('a-gh'); toast('✓ Connessione GitHub OK!'); }
+    else { const e = await r.json(); showAlerr(e.message || 'Errore ' + r.status); }
+  } catch (e) { showAlerr(e.message); }
+}
+function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 4000); }
+
+// ── IMMAGINI
+function handleImg(input, prevId, urlId) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { SV(urlId, e.target.result); prevUrl(e.target.result, prevId); }; r.readAsDataURL(f); }
+function prevUrl(url, id) { const e = E(id); if (!e) return; if (url) { e.src = url; e.classList.add('on'); } else { e.classList.remove('on'); e.src = ''; } if (id === 'logo-img') { if (url) { e.style.display = 'block'; E('logo-empty').style.display = 'none'; } else { e.style.display = 'none'; E('logo-empty').style.display = 'block'; } } }
+
+// ── UTILS
+const E = id => document.getElementById(id);
+const V = id => { const e = E(id); return e ? e.value : ''; };
+const SV = (id, v) => { const e = E(id); if (e) e.value = v; };
+function esc(s) { return (s || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function om(id) { E(id).classList.add('on'); }
+function cm(id) { E(id).classList.remove('on'); }
+function al(id) { const e = E(id); if (!e) return; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 3000); }
+function toast(msg, err = false) { const t = E('toast'); t.textContent = msg; t.style.background = err ? '#dc2626' : '#16a34a'; t.style.color = '#fff'; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 3500); }
+
+document.querySelectorAll('.ovl').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Ripristina credenziali salvate
+  if (localStorage.getItem('ta_rem')) {
+    const u = localStorage.getItem('ta_ru'), p = localStorage.getItem('ta_rp');
+    if (u) SV('lu', u);
+    if (p) SV('lp', p);
+    E('lrem').checked = true;
+  }
+  // Mostra avviso prima configurazione se non c'è token
+  if (!getTok()) E('lnotice').classList.add('x');
+  // Log hash per debug (rimuovibile in produzione)
+  console.log('=== CMS Login Info ===');
+  console.log('admin hash atteso:', ADMIN_HASH);
+  console.log('DB users:', JSON.stringify(DB.users.map(u => ({ id: u.id, username: u.username, hash: u.hash }))));
+});
+</script>
+</body>
+</html>
