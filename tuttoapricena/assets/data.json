@@ -1,29 +1,18 @@
 {
-  "site": {
-    "title": "TuttoApricena",
-    "subtitle": "Il portale di Apricena",
-    "description": "Notizie, eventi e servizi della città di Apricena",
-    "logo": "",
-    "headerImage": "",
-    "headerImages": [],
-    "primaryColor": "#1a6b3a",
-    "facebook": "",
-    "instagram": "",
-    "email": ""
-  },
-  "notizie": [],
-  "eventi": [],
-  "servizi": [],
-  "locali": [],
-  "sponsor": [],
-  "users": [
+  "notizie": [
     {
-      "id": "1",
-      "username": "admin",
-      "password": "admin2024",
-      "role": "admin",
-      "name": "Amministratore",
-      "email": ""
+      "id": "n001",
+      "createdAt": "2026-04-03T13:26:02.138Z",
+      "titolo": "aaaaaaa",
+      "categoria": "Generale",
+      "stato": "pubblicata",
+      "autore": "Redazione",
+      "data": "2026-04-03T11:25:00.000Z",
+      "immagine": "",
+      "contenuto": "aaaaaaaa",
+      "tag": [],
+      "evidenza": false,
+      "updatedAt": "2026-04-03T13:26:02.138Z"
     }
   ]
 }
