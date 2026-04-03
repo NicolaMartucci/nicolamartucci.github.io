@@ -6,7 +6,29 @@
     "primaryColor": "#2d7a4f",
     "facebook": "",
     "instagram": "",
+    "twitter": "",
+    "youtube": "",
     "email": ""
+  },
+  "hero": {
+    "backgroundImage": "",
+    "title": "Benvenuti ad Apricena",
+    "subtitle": "Tutto quello che succede nella tua città",
+    "ctaText": "Scopri le notizie",
+    "ctaLink": "#notizie"
+  },
+  "layout": {
+    "notiziePagina": 9,
+    "notizieLayout": "grid",
+    "notizieOrdine": "recenti",
+    "notizieTabCategorie": true,
+    "sezioni": {
+      "notizie": true,
+      "eventi": true,
+      "servizi": true,
+      "locali": true,
+      "sponsor": true
+    }
   },
   "notizie": [
     {
