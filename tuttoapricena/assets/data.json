@@ -40,7 +40,21 @@
     "piva": "",
     "links": []
   },
-  "notizie": [],
+  "notizie": [
+    {
+      "id": "n1775216304997",
+      "title": "aaaaa",
+      "cat": "sport",
+      "date": "2026-04-03",
+      "author": "",
+      "summary": "",
+      "body": "",
+      "img": "",
+      "status": "pubblicata",
+      "featured": "0",
+      "tags": []
+    }
+  ],
   "eventi": [],
   "sponsor": [],
   "sponsorSettings": {
