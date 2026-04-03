@@ -33,23 +33,39 @@
   "notizie": [
     {
       "id": "n001",
-      "createdAt": "2026-04-03T14:33:06.175Z",
-      "titolo": "test",
+      "createdAt": "2026-04-03T13:33:31.289Z",
+      "titolo": "prova",
       "categoria": "sport",
       "stato": "pubblicata",
-      "autore": "io",
-      "data": "2026-04-03T12:32:00.000Z",
+      "autore": "Redazione",
+      "data": "2026-04-03T11:33:00.000Z",
       "immagine": "",
-      "contenuto": "ciaooooooooooooooooooooo",
+      "contenuto": "aaaaaaaa",
       "tag": [],
       "evidenza": false,
-      "updatedAt": "2026-04-03T14:33:06.176Z"
+      "updatedAt": "2026-04-03T13:33:31.289Z"
     }
   ],
   "eventi": [],
   "servizi": [],
-  "sponsor": [],
+  "sponsor": [
+    {
+      "id": "sp001",
+      "createdAt": "2026-04-03T14:39:43.686Z",
+      "nome": "Nicola martucci",
+      "logo": "",
+      "sito": "",
+      "attivo": true,
+      "descrizione": "",
+      "updatedAt": "2026-04-03T14:39:43.686Z"
+    }
+  ],
   "locali": [],
   "identita": {},
-  "footer": {}
+  "footer": {},
+  "sponsorSettings": {
+    "title": "I nostri sponsor",
+    "cols": "4",
+    "position": "after-news"
+  }
 }
