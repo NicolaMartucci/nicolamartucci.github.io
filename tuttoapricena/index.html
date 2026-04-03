@@ -14,9 +14,13 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-fetch('/tuttoapricena/data.json?v='+Date.now())
-  .then(r=>r.json()).then(d=>{window.TA_DATA=d;});
+<script>
+(function(){
+  fetch('/tuttoapricena/assets/data.json?t='+Date.now())
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})
+    .catch(()=>{});
+})();
 </script>
   </body>
 </html>
