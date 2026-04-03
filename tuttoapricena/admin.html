@@ -101,6 +101,7 @@ input,select,textarea,button{font-family:var(--ff);font-size:14px;color:var(--t1
 .bg{background:var(--w);color:var(--t2);border:1px solid var(--bd2)}.bg:hover{background:var(--g2);border-color:var(--bd3)}
 .bok{background:var(--grn-l);color:var(--grn);border:1px solid var(--grn-b)}.bok:hover{background:#dcfce7}
 .bdel{background:var(--red-l);color:var(--red);border:1px solid var(--red-b)}.bdel:hover{background:#fee2e2}
+.bblu{background:var(--blu-l);color:var(--blu);border:1px solid var(--blu-b)}.bblu:hover{background:#dbeafe}
 .bsm{padding:5px 9px;font-size:12px}
 .bico{padding:5px;border-radius:var(--r)}
 
@@ -460,38 +461,87 @@ tbody tr:hover td{background:var(--g1)}
   <div class="ph"><div class="phl"><h1>GitHub & Sync</h1><p>Pubblicazione live sul sito</p></div></div>
   <div class="al alok" id="a-gh">✓ Configurazione salvata</div>
   <div class="al alerr" id="a-gherr">✕ <span id="a-gherr-msg"></span></div>
+
+  <!-- GUIDA STRUTTURA REPO -->
+  <div class="card" style="border-left:3px solid var(--blu)">
+    <div class="chd" style="color:var(--blu)">📁 Dove mettere admin.html nel repository</div>
+    <div class="ghinfo" style="margin-bottom:12px">
+      La struttura consigliata del tuo repository <strong>nicolamartucci.github.io</strong> è:
+    </div>
+    <div class="snippet" style="margin-bottom:12px"><code id="repo-tree">nicolamartucci.github.io/
+├── tuttoapricena/
+│   ├── index.html          ← sito pubblico
+│   ├── admin.html          ← questo CMS (pannello admin)
+│   └── assets/
+│       └── data.json       ← dati pubblicati dal CMS
+└── (altri file del repo)</code></div>
+    <div class="ghinfo">
+      ✅ <strong>admin.html</strong> va nella cartella <code>tuttoapricena/</code> — si accede da <code>https://nicolamartucci.github.io/tuttoapricena/admin.html</code><br/>
+      ✅ <strong>data.json</strong> viene creato automaticamente dal CMS al primo "Pubblica"<br/>
+      ✅ <strong>La cartella assets/</strong> deve esistere nel repo (anche vuota, aggiungi un file <code>.gitkeep</code> dentro)
+    </div>
+    <div style="margin-top:11px;display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn bblu bsm" onclick="copyRepoPath()">📋 Copia percorso data.json</button>
+      <a href="https://github.com/NicolaMartucci/nicolamartucci.github.io" target="_blank" class="btn bg bsm">🔗 Apri repository</a>
+    </div>
+  </div>
+
+  <!-- CONFIGURAZIONE -->
   <div class="card">
-    <div class="chd">Configurazione</div>
-    <div class="al alwrn on" style="margin-bottom:14px">🔒 Il token viene salvato <strong>solo nel browser</strong> e non è mai incluso nei file caricati su GitHub — nessuna violazione di sicurezza.</div>
+    <div class="chd">⚙️ Configurazione pubblicazione</div>
+    <div class="al alwrn on" style="margin-bottom:14px">🔒 Il token viene salvato <strong>solo nel browser</strong> e non è mai incluso nei file caricati su GitHub.</div>
     <div class="g2">
-      <div class="fg"><label>Owner GitHub</label><input id="gh-owner" value="NicolaMartucci"/></div>
-      <div class="fg"><label>Repository</label><input id="gh-repo" value="nicolamartucci.github.io"/></div>
-      <div class="fg"><label>Branch</label><input id="gh-branch" value="main"/></div>
-      <div class="fg"><label>Percorso file dati</label><input id="gh-path" value="tuttoapricena/assets/data.json"/></div>
+      <div class="fg"><label>Owner GitHub</label><input id="gh-owner" value="NicolaMartucci"/><div class="fhint">Il tuo username GitHub</div></div>
+      <div class="fg"><label>Repository</label><input id="gh-repo" value="nicolamartucci.github.io"/><div class="fhint">Nome esatto del repository</div></div>
+      <div class="fg"><label>Branch</label><input id="gh-branch" value="main"/><div class="fhint">Di solito "main" o "master"</div></div>
+      <div class="fg"><label>Percorso file dati</label><input id="gh-path" value="tuttoapricena/assets/data.json"/><div class="fhint">Percorso relativo alla root del repo</div></div>
       <div class="fg" style="grid-column:span 2">
         <label>Personal Access Token</label>
         <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password"/>
-        <div class="fhint">github.com → Settings → Developer settings → Personal access tokens → Fine-grained. Permesso: <strong>Contents: Read and Write</strong></div>
+        <div class="fhint">
+          <strong>Come generarlo:</strong> github.com → avatar in alto a destra → Settings → Developer settings (in fondo) → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token<br/>
+          Permesso necessario: Repository permissions → <strong>Contents: Read and Write</strong>
+        </div>
       </div>
     </div>
     <div style="display:flex;gap:7px;margin-top:14px;flex-wrap:wrap">
-      <button class="btn bp" onclick="saveGh()">Salva configurazione</button>
-      <button class="btn bg" onclick="testGh()">Testa connessione</button>
+      <button class="btn bp" onclick="saveGh()">💾 Salva configurazione</button>
+      <button class="btn bg" onclick="testGh()">🔌 Testa connessione</button>
       <button class="btn bg" onclick="syncFrom()">⬇ Sincronizza dal sito</button>
     </div>
   </div>
-  <div class="card"><div class="chd">Come funziona</div>
-    <div class="ghinfo"><ol style="padding-left:17px;line-height:2.2">
-      <li>Genera un token GitHub Fine-grained con permesso <code>Contents: Read and Write</code></li>
-      <li>Incollalo sopra e clicca <strong>Salva configurazione</strong></li>
-      <li>Il CMS scrive <code>tuttoapricena/assets/data.json</code> nel repo tramite API</li>
-      <li>GitHub Pages aggiorna il sito in 10–30 secondi</li>
-      <li>Aggiungi lo snippet sotto nel tuo <code>index.html</code> per leggere i dati</li>
-    </ol></div>
+
+  <!-- LOG PUBBLICAZIONE -->
+  <div class="card">
+    <div class="chd">📋 Log pubblicazione</div>
+    <div class="snippet" style="min-height:60px;max-height:180px;overflow-y:auto"><code id="pub-log" style="white-space:pre-wrap;font-size:11.5px">— Nessuna attività ancora —</code></div>
+    <button class="btn bg bsm" style="margin-top:9px" onclick="E('pub-log').textContent='— Log cancellato —'">Cancella log</button>
   </div>
-  <div class="card"><div class="chd">Snippet per index.html</div>
+
+  <!-- PASSO PASSO -->
+  <div class="card">
+    <div class="chd">📖 Guida passo-passo</div>
+    <div class="ghinfo">
+      <div style="display:grid;grid-template-columns:28px 1fr;gap:6px 10px;align-items:start">
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">1</div>
+        <div><strong>Crea la struttura cartelle nel repo</strong><br/>Su github.com → il tuo repo → Add file → Create new file → scrivi <code>tuttoapricena/assets/.gitkeep</code> → Commit</div>
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">2</div>
+        <div><strong>Carica admin.html nel repo</strong><br/>Su github.com → <code>tuttoapricena/</code> → Add file → Upload files → carica <code>admin.html</code> → Commit</div>
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">3</div>
+        <div><strong>Genera il token GitHub</strong><br/>Settings → Developer settings → Fine-grained tokens → Genera con permesso <code>Contents: Read and Write</code> sul repo specifico</div>
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">4</div>
+        <div><strong>Configura e testa qui</strong><br/>Incolla il token sopra → Salva configurazione → Testa connessione (deve dire ✓ OK)</div>
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">5</div>
+        <div><strong>Pubblica!</strong><br/>Vai su Dashboard o qualsiasi pagina → clicca <strong>"Pubblica sul sito"</strong> in alto a destra → il sito si aggiorna in 10–30 sec</div>
+        <div style="background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px">6</div>
+        <div><strong>Aggiungi lo snippet al sito</strong><br/>Nel tuo <code>index.html</code> del sito pubblico, aggiungi lo snippet qui sotto prima di <code>&lt;/body&gt;</code> per leggere i dati</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card"><div class="chd">Snippet per index.html del sito pubblico</div>
     <div class="snippet"><code id="gh-snip"></code></div>
-    <button class="btn bg bsm" style="margin-top:9px" onclick="copySnip()">Copia snippet</button>
+    <button class="btn bg bsm" style="margin-top:9px" onclick="copySnip()">📋 Copia snippet</button>
   </div>
 </div>
 
@@ -866,59 +916,141 @@ function doDel(type, id) {
 }
 
 // ── GITHUB
-function lGh() { const g = DB.github || {}; SV('gh-owner', g.owner || 'NicolaMartucci'); SV('gh-repo', g.repo || 'nicolamartucci.github.io'); SV('gh-branch', g.branch || 'main'); SV('gh-path', g.path || 'tuttoapricena/assets/data.json'); SV('gh-token', getTok()); E('gh-snip').textContent = buildSnip(); }
-function saveGh() { DB.github = { owner: V('gh-owner'), repo: V('gh-repo'), branch: V('gh-branch'), path: V('gh-path') }; const tok = V('gh-token').trim(); setTok(tok); saveDB(); syncUI(); al('a-gh'); E('pubbtn').style.display = tok ? 'flex' : 'none'; E('gh-snip').textContent = buildSnip(); }
-function buildSnip() { return `<script>\n(function(){\n  fetch('/tuttoapricena/assets/data.json?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`; }
+function addLog(msg, ok = true) {
+  const el = E('pub-log'); if (!el) return;
+  const ts = new Date().toLocaleTimeString('it-IT');
+  const line = `[${ts}] ${ok ? '✓' : '✕'} ${msg}`;
+  if (el.textContent === '— Nessuna attività ancora —') el.textContent = '';
+  el.textContent += line + '\n';
+  el.parentElement.scrollTop = el.parentElement.scrollHeight;
+}
+function copyRepoPath() { navigator.clipboard.writeText('tuttoapricena/assets/data.json').then(() => toast('✓ Percorso copiato!')); }
+function lGh() {
+  const g = DB.github || {};
+  SV('gh-owner', g.owner || 'NicolaMartucci');
+  SV('gh-repo', g.repo || 'nicolamartucci.github.io');
+  SV('gh-branch', g.branch || 'main');
+  SV('gh-path', g.path || 'tuttoapricena/assets/data.json');
+  SV('gh-token', getTok());
+  E('gh-snip').textContent = buildSnip();
+}
+function saveGh() {
+  DB.github = { owner: V('gh-owner'), repo: V('gh-repo'), branch: V('gh-branch'), path: V('gh-path') };
+  const tok = V('gh-token').trim();
+  setTok(tok);
+  saveDB(); syncUI(); al('a-gh');
+  E('pubbtn').style.display = tok ? 'flex' : 'none';
+  E('gh-snip').textContent = buildSnip();
+  addLog('Configurazione salvata — Owner: ' + V('gh-owner') + ' | Repo: ' + V('gh-repo') + ' | Branch: ' + V('gh-branch'));
+  addLog('Token: ' + (tok ? tok.substring(0, 8) + '••••••••••••' : 'NON IMPOSTATO'), !!tok);
+}
+function buildSnip() {
+  const p = V('gh-path') || 'tuttoapricena/assets/data.json';
+  return `<script>\n(function(){\n  fetch('/${p}?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`;
+}
 function copySnip() { navigator.clipboard.writeText(E('gh-snip').textContent).then(() => toast('✓ Snippet copiato!')); }
 
 async function ghReq(method, path, body) {
-  const g = DB.github, tok = getTok(); if (!tok) throw new Error('Token non configurato');
-  const r = await fetch(`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`, { method, headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: body ? JSON.stringify(body) : undefined });
-  if (!r.ok) { const e = await r.json(); throw new Error(e.message || 'HTTP ' + r.status); }
+  const g = DB.github, tok = getTok();
+  if (!tok) throw new Error('Token non configurato — vai su GitHub & Sync e imposta il token');
+  if (!g.owner || !g.repo) throw new Error('Owner o Repository non configurati');
+  const url = `https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`;
+  addLog(`${method} ${url.replace('https://api.github.com', '')}`);
+  const r = await fetch(url, {
+    method,
+    headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!r.ok) {
+    const e = await r.json();
+    const msg = e.message || 'HTTP ' + r.status;
+    addLog('Errore GitHub: ' + msg + (r.status === 401 ? ' → Token scaduto o permessi insufficienti' : r.status === 404 ? ' → Repository non trovato o path errato' : ''), false);
+    throw new Error(msg + (r.status === 401 ? ' (token non valido o scaduto)' : r.status === 404 ? ' (repository o percorso non trovato)' : ''));
+  }
   return r.json();
 }
 
 async function publishNow() {
   if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
   E('pubbtn').disabled = true; E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Pubblicazione...';
+  addLog('=== Avvio pubblicazione ===');
+  addLog('Owner: ' + (DB.github.owner || '?') + ' | Repo: ' + (DB.github.repo || '?') + ' | Branch: ' + (DB.github.branch || 'main'));
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
-    let sha = null; try { const cur = await ghReq('GET', path); sha = cur.sha; } catch (e) { }
+    addLog('Percorso file: ' + path);
+    let sha = null;
+    try {
+      addLog('Controllo file esistente...');
+      const cur = await ghReq('GET', path);
+      sha = cur.sha;
+      addLog('File esistente trovato (SHA: ' + sha.substring(0, 8) + '...)');
+    } catch (e) {
+      addLog('File non esiste ancora — verrà creato', true);
+    }
     const exp = { identita: DB.identita, hero: DB.hero, footer: DB.footer, notizie: DB.notizie, eventi: DB.eventi, sponsor: DB.sponsor, sponsorSettings: DB.sponsorSettings, layout: DB.layout };
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(exp, null, 2))));
-    const body = { message: 'CMS — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
+    const json = JSON.stringify(exp, null, 2);
+    addLog('Dati preparati: ' + DB.notizie.length + ' notizie, ' + DB.eventi.length + ' eventi, ' + DB.sponsor.length + ' sponsor');
+    const content = btoa(unescape(encodeURIComponent(json)));
+    const body = { message: 'CMS update — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
     if (sha) body.sha = sha;
-    await ghReq('PUT', path, body);
+    addLog('Invio a GitHub API...');
+    const res = await ghReq('PUT', path, body);
+    addLog('✅ Pubblicato con successo! Commit: ' + (res.commit?.sha?.substring(0, 8) || 'ok'));
     dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sito aggiornato ✓';
     toast('✓ Pubblicato! Il sito si aggiorna in 10–30 secondi.');
-  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore'; toast('✕ ' + e.message, true); }
+  } catch (e) {
+    addLog('ERRORE PUBBLICAZIONE: ' + e.message, false);
+    addLog('→ Controlla: token valido? Permessi Contents R+W? Repo/path corretti?', false);
+    E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore';
+    toast('✕ ' + e.message, true);
+  }
   finally { E('pubbtn').disabled = false; }
 }
 
 async function syncFrom() {
   if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
   E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Sincronizzazione...';
+  addLog('=== Avvio sincronizzazione dal sito ===');
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
+    addLog('Lettura: ' + path);
     const cur = await ghReq('GET', path);
     const dec = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, '')))));
     const lu = DB.users, lg = DB.github;
     DB = { ...defDB(), ...dec, users: lu, github: lg };
     saveDB(); dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sincronizzato ✓';
+    addLog('✅ Sincronizzazione completata: ' + (dec.notizie?.length || 0) + ' notizie, ' + (dec.eventi?.length || 0) + ' eventi');
     rDash(); toast('✓ Dati sincronizzati dal sito!');
-  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore sync'; toast('✕ ' + e.message, true); }
+  } catch (e) {
+    addLog('ERRORE SYNC: ' + e.message, false);
+    E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore sync';
+    toast('✕ ' + e.message, true);
+  }
 }
 
 async function testGh() {
   const owner = V('gh-owner'), repo = V('gh-repo'), tok = V('gh-token').trim() || getTok();
-  if (!tok) { showAlerr('Token mancante'); return; }
+  if (!tok) { showAlerr('Token mancante — inserisci il token prima di testare'); return; }
+  addLog('=== Test connessione GitHub ===');
+  addLog('Repo: ' + owner + '/' + repo);
   try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': 'token ' + tok } });
-    if (r.ok) { al('a-gh'); toast('✓ Connessione GitHub OK!'); }
-    else { const e = await r.json(); showAlerr(e.message || 'Errore ' + r.status); }
-  } catch (e) { showAlerr(e.message); }
+    if (r.ok) {
+      const d = await r.json();
+      addLog('✅ Connessione OK! Repo: ' + d.full_name + ' | Branch default: ' + d.default_branch + ' | Privato: ' + d.private);
+      al('a-gh'); toast('✓ Connessione GitHub OK!');
+    } else {
+      const e = await r.json();
+      const msg = e.message || 'Errore ' + r.status;
+      addLog('✕ Errore: ' + msg + (r.status === 401 ? ' → Token non valido o scaduto' : r.status === 404 ? ' → Repository non trovato (controlla owner e nome repo)' : ''), false);
+      showAlerr(msg + (r.status === 401 ? ' — token non valido' : r.status === 404 ? ' — repository non trovato' : ''));
+    }
+  } catch (e) {
+    addLog('✕ Errore di rete: ' + e.message, false);
+    showAlerr(e.message);
+  }
 }
-function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 4000); }
+function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 6000); }
 
 // ── IMMAGINI
 function handleImg(input, prevId, urlId) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { SV(urlId, e.target.result); prevUrl(e.target.result, prevId); }; r.readAsDataURL(f); }
