@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  const DATA_URL = './assets/data.json';
+  const DATA_URL = '/tuttoapricena/assets/data.json'
 
   async function loadData() {
     try {
