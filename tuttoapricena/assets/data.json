@@ -31,9 +31,9 @@
     }
   },
   "footer": {
-    "copy": "© 2026 TuttoApricena. Tutti i diritti riservati.",
+    "copy": "Â© 2026 TuttoApricena. Tutti i diritti riservati.",
     "slogan": "TuttoApricena",
-    "desc": "Il portale di informazione della città di Apricena.",
+    "desc": "Il portale di informazione della cittÃ  di Apricena.",
     "addr": "Apricena (FG), Italia",
     "email": "",
     "tel": "",
@@ -56,6 +56,8 @@
     }
   ],
   "eventi": [],
+  "servizi": [],
+  "locali": [],
   "sponsor": [],
   "sponsorSettings": {
     "position": "after-news",
@@ -67,37 +69,37 @@
       {
         "id": "hero",
         "label": "Hero principale",
-        "icon": "🖼",
+        "icon": "ð¼",
         "vis": true
       },
       {
         "id": "notizie",
         "label": "Notizie",
-        "icon": "📰",
+        "icon": "ð°",
         "vis": true
       },
       {
         "id": "eventi",
         "label": "Eventi",
-        "icon": "📅",
+        "icon": "ð",
         "vis": true
       },
       {
         "id": "sponsor",
         "label": "Sponsor",
-        "icon": "🤝",
+        "icon": "ð¤",
         "vis": true
       },
       {
         "id": "contatti",
         "label": "Contatti",
-        "icon": "📞",
+        "icon": "ð",
         "vis": true
       },
       {
         "id": "footer",
         "label": "Footer",
-        "icon": "📄",
+        "icon": "ð",
         "vis": true
       }
     ],
