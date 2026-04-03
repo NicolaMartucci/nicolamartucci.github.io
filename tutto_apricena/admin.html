@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuttoApricena — CMS Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #1e40af;
+    --primary-light: #3b82f6;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --sidebar-w: 260px;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; margin: 0; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+  /* LOGIN */
+  #loginScreen {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #2563eb 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    background: white; border-radius: 20px; padding: 48px 40px;
+    width: 420px; max-width: 95vw;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+  }
+
+  /* LAYOUT */
+  #appScreen { display: none; min-height: 100vh; }
+  #sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: linear-gradient(180deg, #1e3a5f 0%, #1e40af 100%);
+    z-index: 100; overflow-y: auto;
+    transition: transform .3s;
+  }
+  #sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); }
+  #mainContent {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+    transition: margin-left .3s;
+  }
+  #mainContent.full { margin-left: 0; }
+
+  /* TOPBAR */
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 24px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+
+  /* SIDEBAR NAV */
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px; color: rgba(255,255,255,.75);
+    cursor: pointer; border-radius: 10px;
+    margin: 2px 10px; transition: all .2s;
+    font-size: 14px; font-weight: 500;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.15); color: white; }
+  .nav-item.active { background: rgba(255,255,255,.2); color: white; }
+  .nav-item i { width: 20px; text-align: center; font-size: 16px; }
+
+  /* CARDS */
+  .stat-card {
+    background: white; border-radius: 16px; padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border: 1px solid #f0f4f8;
+  }
+  .content-card {
+    background: white; border-radius: 16px; padding: 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border: 1px solid #f0f4f8; margin-bottom: 24px;
+  }
+
+  /* TABS */
+  .tab-btn {
+    padding: 8px 20px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    border: 2px solid transparent; transition: all .2s;
+    color: #64748b; background: transparent;
+  }
+  .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+  .tab-btn:not(.active):hover { border-color: #cbd5e1; color: #334155; }
+
+  /* FORMS */
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .form-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid #e2e8f0; border-radius: 10px;
+    font-size: 14px; color: #1e293b;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none; background: #fafafa;
+  }
+  .form-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,.1); background: white; }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; }
+  textarea.form-input { resize: vertical; min-height: 100px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all .2s; text-decoration: none;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,64,175,.3); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #16a34a; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-secondary { background: #f1f5f9; color: #475569; border: 1.5px solid #e2e8f0; }
+  .btn-secondary:hover { background: #e2e8f0; }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-accent:hover { background: #d97706; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+  .btn-icon { padding: 8px; border-radius: 8px; width: 36px; height: 36px; justify-content: center; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid #e2e8f0; }
+  .data-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #334155; vertical-align: middle; }
+  .data-table tr:hover td { background: #f8fafc; }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    z-index: 1000; display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-box {
+    background: white; border-radius: 20px; padding: 32px;
+    width: 700px; max-width: 100%; max-height: 90vh;
+    overflow-y: auto; position: relative;
+  }
+
+  /* TOAST */
+  #toastContainer { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+  .toast {
+    padding: 14px 20px; border-radius: 12px; color: white;
+    font-size: 14px; font-weight: 500; min-width: 280px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    display: flex; align-items: center; gap: 10px;
+    animation: slideIn .3s ease;
+  }
+  .toast-success { background: #16a34a; }
+  .toast-error { background: #dc2626; }
+  .toast-info { background: #2563eb; }
+  .toast-warning { background: #d97706; }
+  @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateX(20px); } }
+
+  /* SECTIONS */
+  .section-page { display: none; padding: 32px; }
+  .section-page.active { display: block; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media(max-width: 900px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    #sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); }
+    #sidebar.mobile-open { transform: translateX(0); }
+    #mainContent { margin-left: 0; }
+  }
+
+  /* SPINNER */
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: white; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* DRAG DROP */
+  .drag-handle { cursor: grab; color: #94a3b8; }
+  .drag-handle:active { cursor: grabbing; }
+
+  /* TOGGLE */
+  .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; cursor: pointer; inset: 0;
+    background: #cbd5e1; border-radius: 24px; transition: .3s;
+  }
+  .toggle-slider:before {
+    content: ''; position: absolute;
+    height: 18px; width: 18px; left: 3px; bottom: 3px;
+    background: white; border-radius: 50%; transition: .3s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--primary); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+  .section-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: #f8fafc; border-radius: 10px;
+    margin-bottom: 8px; border: 1px solid #e2e8f0;
+  }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+  .empty-state i { font-size: 48px; margin-bottom: 16px; }
+
+  /* PUBLISH BAR */
+  #publishBar {
+    position: fixed; bottom: 0; left: var(--sidebar-w); right: 0;
+    background: #1e293b; color: white; padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 90; transform: translateY(100%); transition: transform .3s;
+  }
+  #publishBar.visible { transform: translateY(0); }
+  @media(max-width:900px){ #publishBar { left: 0; } }
+</style>
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="width:64px;height:64px;background:linear-gradient(135deg,#1e40af,#3b82f6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <i class="fas fa-newspaper" style="font-size:28px;color:white;"></i>
+      </div>
+      <h1 style="font-size:24px;font-weight:800;color:#1e293b;margin:0 0 4px;">TuttoApricena</h1>
+      <p style="color:#64748b;font-size:14px;margin:0;">CMS Admin — Accedi al pannello</p>
+    </div>
+    <div id="loginError" style="display:none;background:#fee2e2;color:#991b1b;padding:12px;border-radius:8px;font-size:13px;margin-bottom:16px;"></div>
+    <div style="margin-bottom:16px;">
+      <label class="form-label">Username</label>
+      <input type="text" id="loginUser" class="form-input" placeholder="admin" autocomplete="username">
+    </div>
+    <div style="margin-bottom:24px;">
+      <label class="form-label">Password</label>
+      <input type="password" id="loginPass" class="form-input" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="doLogin()">
+      <i class="fas fa-sign-in-alt"></i> Accedi
+    </button>
+    <p style="text-align:center;margin-top:20px;font-size:12px;color:#94a3b8;">TuttoApricena CMS v2.0</p>
+  </div>
+</div>
+
+<!-- ========== APP ========== -->
+<div id="appScreen">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div style="padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.1);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-newspaper" style="color:white;font-size:16px;"></i>
+        </div>
+        <div>
+          <div style="color:white;font-weight:700;font-size:14px;">TuttoApricena</div>
+          <div style="color:rgba(255,255,255,.5);font-size:11px;" id="sidebarRole">CMS Admin</div>
+        </div>
+      </div>
+    </div>
+    <nav style="padding:12px 0;" id="sidebarNav">
+      <div class="nav-item active" onclick="showSection('dashboard')"><i class="fas fa-home"></i><span>Dashboard</span></div>
+      <div class="nav-item" onclick="showSection('notizie')"><i class="fas fa-newspaper"></i><span>Notizie</span></div>
+      <div class="nav-item" onclick="showSection('eventi')"><i class="fas fa-calendar-alt"></i><span>Eventi</span></div>
+      <div class="nav-item" onclick="showSection('servizi')"><i class="fas fa-wrench"></i><span>Servizi</span></div>
+      <div class="nav-item" onclick="showSection('locali')"><i class="fas fa-store"></i><span>Locali</span></div>
+      <div class="nav-item" onclick="showSection('sponsor')"><i class="fas fa-handshake"></i><span>Sponsor</span></div>
+      <div style="height:1px;background:rgba(255,255,255,.1);margin:12px 16px;"></div>
+      <div class="nav-item" onclick="showSection('identita')"><i class="fas fa-palette"></i><span>Identità sito</span></div>
+      <div class="nav-item" onclick="showSection('hero')"><i class="fas fa-image"></i><span>Hero / Header</span></div>
+      <div class="nav-item" onclick="showSection('layout')"><i class="fas fa-th-large"></i><span>Layout</span></div>
+      <div class="nav-item" onclick="showSection('footer')"><i class="fas fa-shoe-prints"></i><span>Footer</span></div>
+      <div style="height:1px;background:rgba(255,255,255,.1);margin:12px 16px;"></div>
+      <div class="nav-item" id="navGithub" onclick="showSection('github')"><i class="fab fa-github"></i><span>GitHub</span></div>
+      <div class="nav-item" id="navUtenti" onclick="showSection('utenti')"><i class="fas fa-users"></i><span>Utenti</span></div>
+    </nav>
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:16px;border-top:1px solid rgba(255,255,255,.1);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-user" style="color:white;font-size:13px;"></i>
+        </div>
+        <div>
+          <div style="color:white;font-size:13px;font-weight:600;" id="sidebarUser">Admin</div>
+          <div style="color:rgba(255,255,255,.5);font-size:11px;" id="sidebarUserRole">superadmin</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;" onclick="doLogout()">
+        <i class="fas fa-sign-out-alt"></i> Esci
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="mainContent">
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <button class="btn btn-secondary btn-icon" onclick="toggleSidebar()" title="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div>
+          <h2 id="topbarTitle" style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Dashboard</h2>
+          <p id="topbarSub" style="margin:0;font-size:12px;color:#64748b;">Pannello di controllo</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="btn btn-secondary btn-sm" onclick="syncFromGitHub()" id="syncBtn" title="Sincronizza da GitHub">
+          <i class="fas fa-sync-alt"></i> Sincronizza
+        </button>
+        <button class="btn btn-success btn-sm" onclick="publishToGitHub()" id="publishBtn">
+          <i class="fas fa-rocket"></i> Pubblica Live
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTIONS -->
+    <div style="padding-bottom:80px;">
+
+      <!-- DASHBOARD -->
+      <div class="section-page active" id="sec-dashboard">
+        <div class="grid-4" style="margin-bottom:24px;">
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#dbeafe;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-newspaper" style="color:#1e40af;font-size:18px;"></i>
+              </div>
+            </div>
+            <div id="dash-notizie" style="font-size:32px;font-weight:800;color:#1e293b;">0</div>
+            <div style="font-size:13px;color:#64748b;">Notizie totali</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#dcfce7;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-calendar-alt" style="color:#16a34a;font-size:18px;"></i>
+              </div>
+            </div>
+            <div id="dash-eventi" style="font-size:32px;font-weight:800;color:#1e293b;">0</div>
+            <div style="font-size:13px;color:#64748b;">Eventi programmati</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fef3c7;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-wrench" style="color:#d97706;font-size:18px;"></i>
+              </div>
+            </div>
+            <div id="dash-servizi" style="font-size:32px;font-weight:800;color:#1e293b;">0</div>
+            <div style="font-size:13px;color:#64748b;">Servizi elencati</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="width:44px;height:44px;background:#fce7f3;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-store" style="color:#9d174d;font-size:18px;"></i>
+              </div>
+            </div>
+            <div id="dash-locali" style="font-size:32px;font-weight:800;color:#1e293b;">0</div>
+            <div style="font-size:13px;color:#64748b;">Locali registrati</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="content-card" style="margin-bottom:0;">
+            <h3 style="margin:0 0 16px;font-size:16px;font-weight:700;color:#1e293b;"><i class="fab fa-github" style="margin-right:8px;color:#64748b;"></i>Stato GitHub</h3>
+            <div id="githubStatus"><p style="color:#64748b;font-size:14px;"><i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Verifica configurazione...</p></div>
+          </div>
+          <div class="content-card" style="margin-bottom:0;">
+            <h3 style="margin:0 0 16px;font-size:16px;font-weight:700;color:#1e293b;"><i class="fas fa-clock" style="margin-right:8px;color:#64748b;"></i>Ultime modifiche</h3>
+            <div id="recentChanges"><p style="color:#64748b;font-size:14px;">Nessuna modifica recente</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIZIE -->
+      <div class="section-page" id="sec-notizie">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Notizie <span id="badge-notizie" class="badge badge-blue" style="margin-left:8px;">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openModal('notizia')"><i class="fas fa-plus"></i> Nuova Notizia</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Titolo</th><th>Categoria</th><th>Stato</th><th>Data</th><th>In evidenza</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodyNotizie"><tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;">Clicca Sincronizza per caricare i dati</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENTI -->
+      <div class="section-page" id="sec-eventi">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Eventi <span id="badge-eventi" class="badge badge-green" style="margin-left:8px;">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openModal('evento')"><i class="fas fa-plus"></i> Nuovo Evento</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Titolo</th><th>Data</th><th>Luogo</th><th>Categoria</th><th>Stato</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodyEventi"><tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;">Clicca Sincronizza per caricare i dati</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVIZI -->
+      <div class="section-page" id="sec-servizi">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Servizi <span id="badge-servizi" class="badge badge-yellow" style="margin-left:8px;">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openModal('servizio')"><i class="fas fa-plus"></i> Nuovo Servizio</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Nome</th><th>Categoria</th><th>Orari</th><th>Telefono</th><th>Stato</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodyServizi"><tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;">Clicca Sincronizza per caricare i dati</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCALI -->
+      <div class="section-page" id="sec-locali">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Locali <span id="badge-locali" class="badge badge-blue" style="margin-left:8px;">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openModal('locale')"><i class="fas fa-plus"></i> Nuovo Locale</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Nome</th><th>Tipologia</th><th>Orari</th><th>Telefono</th><th>Stato</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodyLocali"><tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;">Clicca Sincronizza per caricare i dati</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPONSOR -->
+      <div class="section-page" id="sec-sponsor">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Sponsor <span id="badge-sponsor" class="badge badge-gray" style="margin-left:8px;">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openModal('sponsor')"><i class="fas fa-plus"></i> Nuovo Sponsor</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Nome</th><th>Logo</th><th>Sito</th><th>Attivo</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodySponsor"><tr><td colspan="5" style="text-align:center;padding:40px;color:#94a3b8;">Clicca Sincronizza per caricare i dati</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="content-card">
+          <h3 style="margin:0 0 20px;font-size:16px;font-weight:700;color:#1e293b;">Impostazioni Sponsor</h3>
+          <div class="grid-2">
+            <div>
+              <label class="form-label">Titolo sezione</label>
+              <input type="text" id="spon-title" class="form-input" placeholder="I nostri sponsor">
+            </div>
+            <div>
+              <label class="form-label">Colonne</label>
+              <select id="spon-cols" class="form-input form-select">
+                <option value="2">2 colonne</option>
+                <option value="3">3 colonne</option>
+                <option value="4">4 colonne</option>
+                <option value="5">5 colonne</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Posizione nel sito</label>
+              <select id="spon-position" class="form-input form-select">
+                <option value="after-news">Dopo le notizie</option>
+                <option value="after-events">Dopo gli eventi</option>
+                <option value="before-footer">Prima del footer</option>
+                <option value="top">In cima</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px;" onclick="saveSponsorSettings()"><i class="fas fa-save"></i> Salva impostazioni</button>
+        </div>
+      </div>
+
+      <!-- IDENTITÀ -->
+      <div class="section-page" id="sec-identita">
+        <div class="content-card">
+          <h3 style="margin:0 0 24px;font-size:18px;font-weight:700;color:#1e293b;">Identità del sito</h3>
+          <div class="grid-2" style="margin-bottom:20px;">
+            <div>
+              <label class="form-label">Nome del sito</label>
+              <input type="text" id="id-nome" class="form-input" placeholder="TuttoApricena">
+            </div>
+            <div>
+              <label class="form-label">Tagline / Slogan</label>
+              <input type="text" id="id-tag" class="form-input" placeholder="Il portale di Apricena">
+            </div>
+            <div>
+              <label class="form-label">Email di contatto</label>
+              <input type="email" id="id-email" class="form-input" placeholder="info@tuttoapricena.it">
+            </div>
+            <div>
+              <label class="form-label">Colore principale</label>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input type="color" id="id-col" style="width:50px;height:42px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;padding:4px;">
+                <input type="text" id="id-col-hex" class="form-input" placeholder="#1e40af" style="flex:1;" oninput="syncColorHex(this.value)">
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom:20px;">
+            <label class="form-label">Descrizione</label>
+            <textarea id="id-desc" class="form-input" rows="3" placeholder="Descrizione del portale..."></textarea>
+          </div>
+          <div class="grid-2" style="margin-bottom:20px;">
+            <div>
+              <label class="form-label">URL Logo</label>
+              <input type="url" id="id-logo" class="form-input" placeholder="https://...">
+            </div>
+            <div>
+              <label class="form-label">Anteprima logo</label>
+              <div style="height:60px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                <img id="logoPreview" src="" alt="" style="max-height:50px;max-width:200px;display:none;" onerror="this.style.display='none'">
+                <span id="logoPlaceholder" style="color:#94a3b8;font-size:13px;"><i class="fas fa-image" style="margin-right:6px;"></i>Nessun logo</span>
+              </div>
+            </div>
+          </div>
+          <h4 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1e293b;"><i class="fas fa-share-alt" style="margin-right:8px;color:#64748b;"></i>Social media</h4>
+          <div class="grid-2" style="margin-bottom:20px;">
+            <div>
+              <label class="form-label"><i class="fab fa-facebook" style="color:#1877f2;margin-right:6px;"></i>Facebook</label>
+              <input type="url" id="id-fb" class="form-input" placeholder="https://facebook.com/...">
+            </div>
+            <div>
+              <label class="form-label"><i class="fab fa-instagram" style="color:#e1306c;margin-right:6px;"></i>Instagram</label>
+              <input type="url" id="id-ig" class="form-input" placeholder="https://instagram.com/...">
+            </div>
+            <div>
+              <label class="form-label"><i class="fab fa-twitter" style="color:#1da1f2;margin-right:6px;"></i>Twitter/X</label>
+              <input type="url" id="id-tw" class="form-input" placeholder="https://twitter.com/...">
+            </div>
+            <div>
+              <label class="form-label"><i class="fab fa-youtube" style="color:#ff0000;margin-right:6px;"></i>YouTube</label>
+              <input type="url" id="id-yt" class="form-input" placeholder="https://youtube.com/...">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveIdentita()"><i class="fas fa-save"></i> Salva identità</button>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="section-page" id="sec-hero">
+        <div class="content-card">
+          <h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1e293b;">Hero / Header</h3>
+          <p style="color:#64748b;font-size:14px;margin:0 0 24px;">Configura le immagini e i testi delle sezioni hero del sito</p>
+          <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+            <button class="tab-btn active" onclick="showHeroTab('home',this)">Home</button>
+            <button class="tab-btn" onclick="showHeroTab('news',this)">Notizie</button>
+            <button class="tab-btn" onclick="showHeroTab('events',this)">Eventi</button>
+          </div>
+          <!-- HERO HOME -->
+          <div id="heroTab-home">
+            <div style="margin-bottom:16px;">
+              <label class="form-label">Immagine di sfondo (URL)</label>
+              <input type="url" id="hero-home-url" class="form-input" placeholder="https://...">
+              <div id="heroHomePreview" style="margin-top:10px;height:120px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;">
+                <span style="color:#94a3b8;font-size:13px;"><i class="fas fa-image" style="margin-right:6px;"></i>Anteprima immagine</span>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-bottom:16px;">
+              <div>
+                <label class="form-label">Titolo principale</label>
+                <input type="text" id="hero-home-title" class="form-input" placeholder="Benvenuti ad Apricena">
+              </div>
+              <div>
+                <label class="form-label">Sottotitolo</label>
+                <input type="text" id="hero-home-sub" class="form-input" placeholder="Sottotitolo...">
+              </div>
+              <div>
+                <label class="form-label">Testo bottone CTA</label>
+                <input type="text" id="hero-home-cta" class="form-input" placeholder="Leggi le notizie">
+              </div>
+              <div>
+                <label class="form-label">Link CTA</label>
+                <input type="text" id="hero-home-ctalink" class="form-input" placeholder="#notizie">
+              </div>
+            </div>
+          </div>
+          <!-- HERO NEWS -->
+          <div id="heroTab-news" style="display:none;">
+            <div style="margin-bottom:16px;">
+              <label class="form-label">Immagine di sfondo (URL)</label>
+              <input type="url" id="hero-news-url" class="form-input" placeholder="https://...">
+            </div>
+            <div>
+              <label class="form-label">Titolo sezione notizie</label>
+              <input type="text" id="hero-news-title" class="form-input" placeholder="Ultime notizie">
+            </div>
+          </div>
+          <!-- HERO EVENTS -->
+          <div id="heroTab-events" style="display:none;">
+            <div style="margin-bottom:16px;">
+              <label class="form-label">Immagine di sfondo (URL)</label>
+              <input type="url" id="hero-events-url" class="form-input" placeholder="https://...">
+            </div>
+            <div>
+              <label class="form-label">Titolo sezione eventi</label>
+              <input type="text" id="hero-events-title" class="form-input" placeholder="Eventi in programma">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px;" onclick="saveHero()"><i class="fas fa-save"></i> Salva Hero</button>
+        </div>
+      </div>
+
+      <!-- LAYOUT -->
+      <div class="section-page" id="sec-layout">
+        <div class="content-card">
+          <h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1e293b;">Layout del sito</h3>
+          <p style="color:#64748b;font-size:14px;margin:0 0 24px;">Gestisci la visibilità delle sezioni e le impostazioni</p>
+          <h4 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1e293b;">Ordine e visibilità sezioni</h4>
+          <div id="sectionsList" style="margin-bottom:24px;"></div>
+          <h4 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#1e293b;">Impostazioni notizie</h4>
+          <div class="grid-2" style="margin-bottom:20px;">
+            <div>
+              <label class="form-label">Layout notizie</label>
+              <select id="lay-newsLayout" class="form-input form-select">
+                <option value="grid">Griglia</option>
+                <option value="list">Lista</option>
+                <option value="masonry">Masonry</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Notizie per pagina</label>
+              <select id="lay-newsPerPage" class="form-input form-select">
+                <option value="3">3</option>
+                <option value="6">6</option>
+                <option value="9">9</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Ordine notizie</label>
+              <select id="lay-newsOrder" class="form-input form-select">
+                <option value="newest">Più recenti prima</option>
+                <option value="oldest">Più vecchie prima</option>
+                <option value="alpha">Alfabetico</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Tab categorie</label>
+              <select id="lay-newsTabs" class="form-input form-select">
+                <option value="show">Mostra</option>
+                <option value="hide">Nascondi</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="saveLayout()"><i class="fas fa-save"></i> Salva Layout</button>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="section-page" id="sec-footer">
+        <div class="content-card">
+          <h3 style="margin:0 0 24px;font-size:18px;font-weight:700;color:#1e293b;">Footer</h3>
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div>
+              <label class="form-label">Copyright</label>
+              <input type="text" id="foot-copy" class="form-input" placeholder="© 2026 TuttoApricena...">
+            </div>
+            <div>
+              <label class="form-label">Slogan footer</label>
+              <input type="text" id="foot-slogan" class="form-input" placeholder="TuttoApricena">
+            </div>
+            <div>
+              <label class="form-label">Indirizzo</label>
+              <input type="text" id="foot-addr" class="form-input" placeholder="Apricena (FG), Italia">
+            </div>
+            <div>
+              <label class="form-label">Email footer</label>
+              <input type="email" id="foot-email" class="form-input" placeholder="info@...">
+            </div>
+            <div>
+              <label class="form-label">Telefono</label>
+              <input type="text" id="foot-tel" class="form-input" placeholder="+39 ...">
+            </div>
+            <div>
+              <label class="form-label">P.IVA / CF</label>
+              <input type="text" id="foot-piva" class="form-input" placeholder="IT...">
+            </div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label class="form-label">Descrizione footer</label>
+            <textarea id="foot-desc" class="form-input" rows="2" placeholder="Descrizione..."></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveFooter()"><i class="fas fa-save"></i> Salva Footer</button>
+        </div>
+      </div>
+
+      <!-- GITHUB -->
+      <div class="section-page" id="sec-github">
+        <div class="content-card">
+          <h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1e293b;"><i class="fab fa-github" style="margin-right:8px;"></i>Configurazione GitHub</h3>
+          <p style="color:#64748b;font-size:14px;margin:0 0 24px;">Credenziali per pubblicare i contenuti su GitHub Pages</p>
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div style="grid-column:1/-1;">
+              <label class="form-label">GitHub Token (Personal Access Token)</label>
+              <div style="position:relative;">
+                <input type="password" id="gh-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx" style="padding-right:48px;">
+                <button onclick="toggleTokenVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;" title="Mostra/Nascondi">
+                  <i class="fas fa-eye" id="tokenEyeIcon"></i>
+                </button>
+              </div>
+              <p style="font-size:12px;color:#94a3b8;margin:6px 0 0;">Permessi necessari: <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">repo</code> (Contents write)</p>
+            </div>
+            <div>
+              <label class="form-label">Repository</label>
+              <input type="text" id="gh-repo" class="form-input" placeholder="NicolaMartucci/nicolamartucci.github.io">
+            </div>
+            <div>
+              <label class="form-label">Branch</label>
+              <input type="text" id="gh-branch" class="form-input" placeholder="main">
+            </div>
+            <div>
+              <label class="form-label">Percorso file data.json</label>
+              <input type="text" id="gh-path" class="form-input" placeholder="tuttoapricena/assets/data.json">
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="saveGithubConfig()"><i class="fas fa-save"></i> Salva configurazione</button>
+            <button class="btn btn-secondary" onclick="testGithubConnection()"><i class="fas fa-plug"></i> Testa connessione</button>
+          </div>
+          <div id="ghTestResult" style="margin-top:16px;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- UTENTI -->
+      <div class="section-page" id="sec-utenti">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;">Utenti &amp; Ruoli</h3>
+            <button class="btn btn-primary btn-sm" onclick="openAddUserModal()"><i class="fas fa-user-plus"></i> Aggiungi utente</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Username</th><th>Ruolo</th><th>Creato</th><th>Azioni</th></tr></thead>
+              <tbody id="tbodyUtenti"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="content-card" style="margin-bottom:0;border-top:3px solid #ef4444;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:36px;height:36px;background:#fee2e2;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-crown" style="color:#dc2626;"></i>
+              </div>
+              <strong style="font-size:14px;color:#1e293b;">Super Admin</strong>
+            </div>
+            <ul style="margin:0;padding-left:16px;font-size:13px;color:#475569;line-height:1.8;">
+              <li>Accesso completo</li>
+              <li>Gestione utenti</li>
+              <li>Config GitHub</li>
+              <li>Pubblica contenuti</li>
+            </ul>
+          </div>
+          <div class="content-card" style="margin-bottom:0;border-top:3px solid #f59e0b;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:36px;height:36px;background:#fef3c7;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-user-shield" style="color:#d97706;"></i>
+              </div>
+              <strong style="font-size:14px;color:#1e293b;">Admin</strong>
+            </div>
+            <ul style="margin:0;padding-left:16px;font-size:13px;color:#475569;line-height:1.8;">
+              <li>Gestisce contenuti</li>
+              <li>Pubblica contenuti</li>
+              <li>Impostazioni sito</li>
+            </ul>
+          </div>
+          <div class="content-card" style="margin-bottom:0;border-top:3px solid #3b82f6;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:36px;height:36px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-pen" style="color:#2563eb;"></i>
+              </div>
+              <strong style="font-size:14px;color:#1e293b;">Editor</strong>
+            </div>
+            <ul style="margin:0;padding-left:16px;font-size:13px;color:#475569;line-height:1.8;">
+              <li>Crea/modifica contenuti</li>
+              <li>Non può pubblicare</li>
+              <li>Non vede GitHub</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sections -->
+  </div><!-- /mainContent -->
+</div><!-- /appScreen -->
+
+<!-- PUBLISH BAR -->
+<div id="publishBar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <i class="fas fa-circle" style="color:#f59e0b;font-size:10px;"></i>
+    <span style="font-size:14px;">Hai modifiche non pubblicate</span>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" onclick="discardChanges()"><i class="fas fa-times"></i> Annulla</button>
+    <button class="btn btn-success btn-sm" onclick="publishToGitHub()"><i class="fas fa-rocket"></i> Pubblica Live</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none;" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modalBox">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h3 id="modalTitle" style="margin:0;font-size:18px;font-weight:700;color:#1e293b;"></h3>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;font-size:20px;color:#94a3b8;line-height:1;">&times;</button>
+    </div>
+    <div id="modalBody"></div>
+    <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+      <button class="btn btn-secondary" onclick="closeModal()"><i class="fas fa-times"></i> Annulla</button>
+      <button class="btn btn-primary" id="modalSaveBtn" onclick="saveModalItem()"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-overlay" id="userModalOverlay" style="display:none;">
+  <div class="modal-box" style="width:440px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e293b;"><i class="fas fa-user-plus" style="margin-right:8px;color:#64748b;"></i>Aggiungi utente</h3>
+      <button onclick="closeUserModal()" style="background:none;border:none;cursor:pointer;font-size:20px;color:#94a3b8;">&times;</button>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label class="form-label">Username</label>
+      <input type="text" id="newUserName" class="form-input" placeholder="es: mario.rossi">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label class="form-label">Password</label>
+      <input type="password" id="newUserPass" class="form-input" placeholder="••••••••">
+    </div>
+    <div style="margin-bottom:24px;">
+      <label class="form-label">Ruolo</label>
+      <select id="newUserRole" class="form-input form-select">
+        <option value="editor">Editor</option>
+        <option value="admin">Admin</option>
+        <option value="superadmin">Super Admin</option>
+      </select>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:12px;">
+      <button class="btn btn-secondary" onclick="closeUserModal()"><i class="fas fa-times"></i> Annulla</button>
+      <button class="btn btn-primary" onclick="addUser()"><i class="fas fa-user-plus"></i> Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATO GLOBALE
+// ============================================================
+let DATA = {};
+let USERS = [];
+let currentUser = null;
+let currentSection = 'dashboard';
+let modalType = null;
+let modalEditId = null;
+let hasChanges = false;
+
+const DEFAULT_GH = {
+  token: '',
+  repo: 'NicolaMartucci/nicolamartucci.github.io',
+  branch: 'main',
+  path: 'tuttoapricena/assets/data.json'
+};
+
+// ============================================================
+// UTILITY: Encode/Decode Base64 UTF-8 SAFE (no NetworkError btoa)
+// ============================================================
+function toBase64UTF8(str) {
+  // Gestisce correttamente caratteri UTF-8 (emoji, accenti, ecc.)
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function fromBase64UTF8(b64) {
+  try {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
+  } catch(e) {
+    return atob(b64);
+  }
+}
+
+// ============================================================
+// STORAGE
+// ============================================================
+function loadLocal() {
+  try {
+    const d = localStorage.getItem('cms_data');
+    if (d) DATA = JSON.parse(d);
+  } catch(e) {}
+  try {
+    const u = localStorage.getItem('cms_users');
+    if (u) USERS = JSON.parse(u);
+  } catch(e) {}
+  if (!USERS.length) {
+    USERS = [{ username: 'admin', password: 'admin123', role: 'superadmin', createdAt: new Date().toISOString() }];
+    saveUsers();
+  }
+}
+
+function saveLocal() {
+  localStorage.setItem('cms_data', JSON.stringify(DATA));
+}
+
+function saveUsers() {
+  localStorage.setItem('cms_users', JSON.stringify(USERS));
+}
+
+function getGHConfig() {
+  try {
+    const c = localStorage.getItem('cms_gh');
+    return c ? JSON.parse(c) : { ...DEFAULT_GH };
+  } catch(e) { return { ...DEFAULT_GH }; }
+}
+
+function saveGHConfig(cfg) {
+  localStorage.setItem('cms_gh', JSON.stringify(cfg));
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const found = USERS.find(x => x.username === u && x.password === p);
+  if (!found) {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginError').textContent = 'Username o password errati';
+    return;
+  }
+  currentUser = found;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'block';
+  document.getElementById('sidebarUser').textContent = found.username;
+  document.getElementById('sidebarUserRole').textContent = found.role;
+  document.getElementById('sidebarRole').textContent = found.role === 'superadmin' ? '⭐ Super Admin' : found.role === 'admin' ? '🛡 Admin' : '✏️ Editor';
+  // Nascondi GitHub e Utenti per editor
+  if (found.role === 'editor') {
+    document.getElementById('navGithub').style.display = 'none';
+    document.getElementById('navUtenti').style.display = 'none';
+    document.getElementById('publishBtn').style.display = 'none';
+  }
+  initApp();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+});
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.display = 'none';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function initApp() {
+  loadGHConfigToUI();
+  renderAll();
+  checkGitHubStatus();
+  updateDashboard();
+  loadSponsorSettings();
+  renderUserTable();
+  // Auto-sync al primo avvio
+  syncFromGitHub(true);
+}
+
+function renderAll() {
+  renderNotizie();
+  renderEventi();
+  renderServizi();
+  renderLocali();
+  renderSponsor();
+  loadIdentitaUI();
+  loadHeroUI();
+  loadLayoutUI();
+  loadFooterUI();
+  updateDashboard();
+}
+
+// ============================================================
+// SYNC DA GITHUB — LEGGE data.json COMPLETO
+// ============================================================
+async function syncFromGitHub(silent = false) {
+  const btn = document.getElementById('syncBtn');
+  btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sincronizzazione...';
+  btn.disabled = true;
+
+  const cfg = getGHConfig();
+  if (!cfg.token || !cfg.repo || !cfg.path) {
+    if (!silent) toast('Configura prima le credenziali GitHub', 'warning');
+    btn.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizza';
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+// Usa raw.githubusercontent.com per evitare problemi CORS su Firefox
+    const rawUrl = `https://raw.githubusercontent.com/${cfg.repo}/${cfg.branch}/${cfg.path}?t=${Date.now()}`;
+    const resp = await fetch(rawUrl, { cache: 'no-store' });
+
+if (!resp.ok) {
+      throw new Error(`File non trovato (HTTP ${resp.status}). Controlla il percorso: ${cfg.path}`);
+    }
+
+    const remoteData = await resp.json();
+    // Merge COMPLETO: sovrascrive tutto con i dati remoti
+    DATA = remoteData;
+
+    // Assicura che tutti gli array esistano
+    if (!Array.isArray(DATA.notizie)) DATA.notizie = [];
+    if (!Array.isArray(DATA.eventi)) DATA.eventi = [];
+    if (!Array.isArray(DATA.servizi)) DATA.servizi = [];
+    if (!Array.isArray(DATA.locali)) DATA.locali = [];
+    if (!Array.isArray(DATA.sponsor)) DATA.sponsor = [];
+    if (!DATA.identita) DATA.identita = {};
+    if (!DATA.hero) DATA.hero = {};
+    if (!DATA.footer) DATA.footer = {};
+    if (!DATA.layout) DATA.layout = {};
+
+    saveLocal();
+    renderAll();
+    hasChanges = false;
+    updatePublishBar();
+
+    if (!silent) toast(`Sincronizzazione completata! ${DATA.notizie.length} notizie, ${DATA.eventi.length} eventi, ${DATA.servizi.length} servizi, ${DATA.locali.length} locali`, 'success');
+
+    // Aggiorna stato GitHub
+    updateGitHubStatusOk(cfg.repo, cfg.branch);
+
+  } catch(err) {
+    console.error('Sync error:', err);
+    if (!silent) toast('Errore sincronizzazione: ' + err.message, 'error');
+    // Carica da localStorage come fallback
+    loadLocal();
+    renderAll();
+  }
+
+  btn.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizza';
+  btn.disabled = false;
+}
+
+// ============================================================
+// PUBLISH SU GITHUB — FIX NetworkError (btoa UTF-8)
+// ============================================================
+async function publishToGitHub() {
+  const cfg = getGHConfig();
+  if (!cfg.token || !cfg.repo || !cfg.path) {
+    toast('Configura prima le credenziali GitHub nella sezione GitHub', 'warning');
+    showSection('github');
+    return;
+  }
+
+  const btn = document.getElementById('publishBtn');
+  const origHtml = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span> Pubblicazione...';
+  btn.disabled = true;
+
+  try {
+    const jsonContent = JSON.stringify(DATA, null, 2);
+
+    // STEP 1: Ottieni SHA attuale del file (necessario per l'update)
+    const apiUrl = `https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}`;
+    const getResp = await fetch(apiUrl + `?ref=${cfg.branch}&t=${Date.now()}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    let fileSha = null;
+    if (getResp.ok) {
+      const fileInfo = await getResp.json();
+      fileSha = fileInfo.sha;
+    }
+    // Se il file non esiste (404) procediamo senza SHA per crearlo
+
+    // STEP 2: Prepara il contenuto in base64 UTF-8 SAFE
+    const contentBase64 = toBase64UTF8(jsonContent);
+
+    // STEP 3: Fai il PUT per aggiornare il file
+    const body = {
+      message: `CMS: aggiornamento dati — ${new Date().toLocaleString('it-IT')}`,
+      content: contentBase64,
+      branch: cfg.branch
+    };
+    if (fileSha) body.sha = fileSha;
+
+    const putResp = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!putResp.ok) {
+      const errData = await putResp.json().catch(() => ({}));
+      throw new Error(errData.message || `HTTP ${putResp.status}: ${putResp.statusText}`);
+    }
+
+    const result = await putResp.json();
+    hasChanges = false;
+    updatePublishBar();
+    saveLocal();
+
+    toast('✅ Pubblicato su GitHub con successo! Il sito si aggiornerà entro 2-3 minuti.', 'success');
+
+    // Aggiorna recenti
+    const changes = JSON.parse(localStorage.getItem('cms_recentChanges') || '[]');
+    changes.unshift({ text: 'Pubblicazione su GitHub', time: new Date().toISOString() });
+    localStorage.setItem('cms_recentChanges', JSON.stringify(changes.slice(0, 5)));
+    renderRecentChanges();
+
+  } catch(err) {
+    console.error('Publish error:', err);
+    let msg = err.message || 'Errore sconosciuto';
+    if (msg.includes('NetworkError') || msg.includes('Failed to fetch')) {
+      msg = 'Errore di rete: controlla la tua connessione e il token GitHub';
+    } else if (msg.includes('401') || msg.includes('Bad credentials')) {
+      msg = 'Token GitHub non valido o scaduto';
+    } else if (msg.includes('403')) {
+      msg = 'Permessi insufficienti: il token necessita del permesso "repo"';
+    } else if (msg.includes('404')) {
+      msg = 'Repository o file non trovato: controlla il percorso';
+    } else if (msg.includes('422')) {
+      msg = 'SHA del file non aggiornato: riprova dopo una sincronizzazione';
+    }
+    toast('❌ ' + msg, 'error');
+  }
+
+  btn.innerHTML = origHtml;
+  btn.disabled = false;
+}
+
+// ============================================================
+// GITHUB CONFIG UI
+// ============================================================
+function loadGHConfigToUI() {
+  const cfg = getGHConfig();
+  document.getElementById('gh-token').value = cfg.token || '';
+  document.getElementById('gh-repo').value = cfg.repo || DEFAULT_GH.repo;
+  document.getElementById('gh-branch').value = cfg.branch || DEFAULT_GH.branch;
+  document.getElementById('gh-path').value = cfg.path || DEFAULT_GH.path;
+}
+
+function saveGithubConfig() {
+  const cfg = {
+    token: document.getElementById('gh-token').value.trim(),
+    repo: document.getElementById('gh-repo').value.trim(),
+    branch: document.getElementById('gh-branch').value.trim() || 'main',
+    path: document.getElementById('gh-path').value.trim() || 'tuttoapricena/assets/data.json'
+  };
+  saveGHConfig(cfg);
+  toast('Configurazione GitHub salvata', 'success');
+}
+
+async function testGithubConnection() {
+  saveGithubConfig();
+  const cfg = getGHConfig();
+  const res = document.getElementById('ghTestResult');
+  res.style.display = 'block';
+  res.innerHTML = '<p style="color:#64748b;font-size:14px;"><i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Test in corso...</p>';
+
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      res.innerHTML = `<div style="background:#dcfce7;color:#166534;padding:12px 16px;border-radius:10px;font-size:14px;">
+        <i class="fas fa-check-circle" style="margin-right:8px;"></i>
+        <strong>Connessione OK!</strong> File trovato: ${data.path} (${(data.size/1024).toFixed(1)} KB)
+      </div>`;
+      updateGitHubStatusOk(cfg.repo, cfg.branch);
+    } else {
+      const err = await resp.json().catch(()=>({}));
+      throw new Error(err.message || `HTTP ${resp.status}`);
+    }
+  } catch(err) {
+    res.innerHTML = `<div style="background:#fee2e2;color:#991b1b;padding:12px 16px;border-radius:10px;font-size:14px;">
+      <i class="fas fa-times-circle" style="margin-right:8px;"></i>
+      <strong>Errore:</strong> ${err.message}
+    </div>`;
+  }
+}
+
+function toggleTokenVis() {
+  const inp = document.getElementById('gh-token');
+  const icon = document.getElementById('tokenEyeIcon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.className = 'fas fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    icon.className = 'fas fa-eye';
+  }
+}
+
+async function checkGitHubStatus() {
+  const cfg = getGHConfig();
+  const el = document.getElementById('githubStatus');
+  if (!cfg.token || !cfg.repo) {
+    el.innerHTML = '<p style="color:#d97706;font-size:14px;"><i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>Non configurato — vai in <a href="#" onclick="showSection(\'github\')" style="color:#2563eb;">GitHub Settings</a></p>';
+    return;
+  }
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}`, {
+      headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (resp.ok) {
+      updateGitHubStatusOk(cfg.repo, cfg.branch);
+    } else throw new Error();
+  } catch(e) {
+    el.innerHTML = '<p style="color:#ef4444;font-size:14px;"><i class="fas fa-times-circle" style="margin-right:8px;"></i>Connessione fallita</p>';
+  }
+}
+
+function updateGitHubStatusOk(repo, branch) {
+  const el = document.getElementById('githubStatus');
+  el.innerHTML = `<p style="color:#16a34a;font-size:14px;"><i class="fas fa-check-circle" style="margin-right:8px;"></i>Connesso a <strong>${repo}</strong> (branch: ${branch})</p>
+  <p style="font-size:12px;color:#64748b;margin:4px 0 0;">Ultimo sync: ${new Date().toLocaleString('it-IT')}</p>`;
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function updateDashboard() {
+  const n = DATA.notizie || [];
+  const e = DATA.eventi || [];
+  const s = DATA.servizi || [];
+  const l = DATA.locali || [];
+  document.getElementById('dash-notizie').textContent = n.length;
+  document.getElementById('dash-eventi').textContent = e.length;
+  document.getElementById('dash-servizi').textContent = s.length;
+  document.getElementById('dash-locali').textContent = l.length;
+  document.getElementById('badge-notizie').textContent = n.length;
+  document.getElementById('badge-eventi').textContent = e.length;
+  document.getElementById('badge-servizi').textContent = s.length;
+  document.getElementById('badge-locali').textContent = l.length;
+  document.getElementById('badge-sponsor').textContent = (DATA.sponsor||[]).length;
+  renderRecentChanges();
+}
+
+function renderRecentChanges() {
+  const el = document.getElementById('recentChanges');
+  const changes = JSON.parse(localStorage.getItem('cms_recentChanges') || '[]');
+  if (!changes.length) {
+    el.innerHTML = '<p style="color:#64748b;font-size:14px;">Nessuna modifica recente</p>';
+    return;
+  }
+  el.innerHTML = changes.map(c => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;">
+      <i class="fas fa-circle" style="font-size:8px;color:#3b82f6;"></i>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:#1e293b;">${c.text}</div>
+        <div style="font-size:11px;color:#94a3b8;">${new Date(c.time).toLocaleString('it-IT')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// SEZIONE NOTIZIE
+// ============================================================
+function renderNotizie() {
+  const tbody = document.getElementById('tbodyNotizie');
+  const notizie = DATA.notizie || [];
+  if (!notizie.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-newspaper" style="font-size:32px;display:block;margin-bottom:8px;"></i>Nessuna notizia presente</td></tr>';
+    return;
+  }
+  tbody.innerHTML = notizie.map(n => `
+    <tr>
+      <td>
+        <div style="font-weight:600;color:#1e293b;font-size:14px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(n.titolo)}</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px;">${esc(n.autore||'Redazione')}</div>
+      </td>
+      <td><span class="badge badge-blue">${esc(n.categoria||'Generale')}</span></td>
+      <td>${statoBadge(n.stato,'pubblicata','bozza','archiviata')}</td>
+      <td style="font-size:13px;color:#64748b;white-space:nowrap;">${fmtDate(n.data)}</td>
+      <td>${n.evidenza ? '<i class="fas fa-star" style="color:#f59e0b;"></i>' : '<i class="far fa-star" style="color:#cbd5e1;"></i>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm btn-icon" onclick="openModal('notizia','${n.id}')" title="Modifica"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem('notizie','${n.id}')" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ============================================================
+// SEZIONE EVENTI
+// ============================================================
+function renderEventi() {
+  const tbody = document.getElementById('tbodyEventi');
+  const eventi = DATA.eventi || [];
+  if (!eventi.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-calendar-alt" style="font-size:32px;display:block;margin-bottom:8px;"></i>Nessun evento presente</td></tr>';
+    return;
+  }
+  tbody.innerHTML = eventi.map(e => `
+    <tr>
+      <td>
+        <div style="font-weight:600;color:#1e293b;font-size:14px;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(e.titolo)}</div>
+      </td>
+      <td style="font-size:13px;color:#64748b;white-space:nowrap;">${esc(e.dataInizio||'')}${e.orario?' — '+esc(e.orario):''}</td>
+      <td style="font-size:13px;color:#64748b;">${esc(e.luogo||'')}</td>
+      <td><span class="badge badge-green">${esc(e.categoria||'Generale')}</span></td>
+      <td>${statoBadge(e.stato,'pubblicato','bozza','annullato')}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm btn-icon" onclick="openModal('evento','${e.id}')" title="Modifica"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem('eventi','${e.id}')" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ============================================================
+// SEZIONE SERVIZI
+// ============================================================
+function renderServizi() {
+  const tbody = document.getElementById('tbodyServizi');
+  const servizi = DATA.servizi || [];
+  if (!servizi.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-wrench" style="font-size:32px;display:block;margin-bottom:8px;"></i>Nessun servizio presente</td></tr>';
+    return;
+  }
+  tbody.innerHTML = servizi.map(s => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <i class="fas ${esc(s.icona||'fa-info')} " style="color:#64748b;font-size:14px;"></i>
+          </div>
+          <div style="font-weight:600;color:#1e293b;font-size:14px;">${esc(s.nome)}</div>
+        </div>
+      </td>
+      <td><span class="badge badge-yellow">${esc(s.categoria||'Generale')}</span></td>
+      <td style="font-size:13px;color:#64748b;">${esc(s.orari||'')}</td>
+      <td style="font-size:13px;color:#64748b;">${esc(s.telefono||'—')}</td>
+      <td>${s.stato==='attivo'?'<span class="badge badge-green">Attivo</span>':'<span class="badge badge-gray">Inattivo</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm btn-icon" onclick="openModal('servizio','${s.id}')" title="Modifica"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem('servizi','${s.id}')" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ============================================================
+// SEZIONE LOCALI
+// ============================================================
+function renderLocali() {
+  const tbody = document.getElementById('tbodyLocali');
+  const locali = DATA.locali || [];
+  if (!locali.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-store" style="font-size:32px;display:block;margin-bottom:8px;"></i>Nessun locale presente</td></tr>';
+    return;
+  }
+  tbody.innerHTML = locali.map(l => `
+    <tr>
+      <td>
+        <div style="font-weight:600;color:#1e293b;font-size:14px;">${esc(l.nome)}</div>
+        ${l.indirizzo?`<div style="font-size:11px;color:#94a3b8;margin-top:2px;"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>${esc(l.indirizzo)}</div>`:''}
+      </td>
+      <td><span class="badge badge-blue">${esc(l.tipologia||'Locale')}</span></td>
+      <td style="font-size:13px;color:#64748b;">${esc(l.orari||'')}</td>
+      <td style="font-size:13px;color:#64748b;">${esc(l.telefono||'—')}</td>
+      <td>${l.stato==='aperto'?'<span class="badge badge-green">Aperto</span>':l.stato==='chiuso'?'<span class="badge badge-red">Chiuso</span>':'<span class="badge badge-gray">'+esc(l.stato)+'</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm btn-icon" onclick="openModal('locale','${l.id}')" title="Modifica"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem('locali','${l.id}')" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ============================================================
+// SEZIONE SPONSOR
+// ============================================================
+function renderSponsor() {
+  const tbody = document.getElementById('tbodySponsor');
+  const sponsor = DATA.sponsor || [];
+  if (!sponsor.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-handshake" style="font-size:32px;display:block;margin-bottom:8px;"></i>Nessun sponsor presente</td></tr>';
+    return;
+  }
+  tbody.innerHTML = sponsor.map(s => `
+    <tr>
+      <td style="font-weight:600;color:#1e293b;">${esc(s.nome)}</td>
+      <td>${s.logo?`<img src="${esc(s.logo)}" alt="${esc(s.nome)}" style="height:40px;object-fit:contain;border-radius:4px;" onerror="this.style.display='none'">`:'<span style="color:#94a3b8;font-size:13px;">Nessun logo</span>'}</td>
+      <td style="font-size:13px;color:#64748b;">${s.sito?`<a href="${esc(s.sito)}" target="_blank" style="color:#2563eb;">${esc(s.sito)}</a>`:'—'}</td>
+      <td>${s.attivo!==false?'<span class="badge badge-green">Sì</span>':'<span class="badge badge-gray">No</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-primary btn-sm btn-icon" onclick="openModal('sponsor','${s.id}')" title="Modifica"><i class="fas fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteItem('sponsor','${s.id}')" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function loadSponsorSettings() {
+  const ss = DATA.sponsorSettings || {};
+  if (document.getElementById('spon-title')) document.getElementById('spon-title').value = ss.title || 'I nostri sponsor';
+  if (document.getElementById('spon-cols')) document.getElementById('spon-cols').value = ss.cols || '4';
+  if (document.getElementById('spon-position')) document.getElementById('spon-position').value = ss.position || 'after-news';
+}
+
+function saveSponsorSettings() {
+  DATA.sponsorSettings = {
+    title: document.getElementById('spon-title').value,
+    cols: document.getElementById('spon-cols').value,
+    position: document.getElementById('spon-position').value
+  };
+  markChanged('Impostazioni sponsor aggiornate');
+}
+
+// ============================================================
+// IDENTITÀ
+// ============================================================
+function loadIdentitaUI() {
+  const id = DATA.identita || {};
+  document.getElementById('id-nome').value = id.nome || '';
+  document.getElementById('id-tag').value = id.tag || '';
+  document.getElementById('id-desc').value = id.desc || '';
+  document.getElementById('id-email').value = id.email || '';
+  document.getElementById('id-col').value = id.col || '#1e40af';
+  document.getElementById('id-col-hex').value = id.col || '#1e40af';
+  document.getElementById('id-logo').value = id.logo || '';
+  const soc = id.social || {};
+  document.getElementById('id-fb').value = soc.fb || '';
+  document.getElementById('id-ig').value = soc.ig || '';
+  document.getElementById('id-tw').value = soc.tw || '';
+  document.getElementById('id-yt').value = soc.yt || '';
+  updateLogoPreview(id.logo || '');
+
+  document.getElementById('id-logo').addEventListener('input', () => updateLogoPreview(document.getElementById('id-logo').value));
+  document.getElementById('id-col').addEventListener('input', e => { document.getElementById('id-col-hex').value = e.target.value; });
+}
+
+function syncColorHex(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) document.getElementById('id-col').value = val;
+}
+
+function updateLogoPreview(url) {
+  const img = document.getElementById('logoPreview');
+  const ph = document.getElementById('logoPlaceholder');
+  if (url) {
+    img.src = url;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    ph.style.display = 'block';
+  }
+}
+
+function saveIdentita() {
+  DATA.identita = {
+    nome: document.getElementById('id-nome').value,
+    tag: document.getElementById('id-tag').value,
+    desc: document.getElementById('id-desc').value,
+    email: document.getElementById('id-email').value,
+    col: document.getElementById('id-col').value,
+    logo: document.getElementById('id-logo').value,
+    social: {
+      fb: document.getElementById('id-fb').value,
+      ig: document.getElementById('id-ig').value,
+      tw: document.getElementById('id-tw').value,
+      yt: document.getElementById('id-yt').value
+    }
+  };
+  markChanged('Identità sito aggiornata');
+}
+
+// ============================================================
+// HERO
+// ============================================================
+function loadHeroUI() {
+  const h = DATA.hero || {};
+  const home = h.home || {};
+  const news = h.news || {};
+  const events = h.events || {};
+  document.getElementById('hero-home-url').value = home.url || '';
+  document.getElementById('hero-home-title').value = home.title || '';
+  document.getElementById('hero-home-sub').value = home.sub || '';
+  document.getElementById('hero-home-cta').value = home.cta || '';
+  document.getElementById('hero-home-ctalink').value = home.ctalink || '';
+  document.getElementById('hero-news-url').value = news.url || '';
+  document.getElementById('hero-news-title').value = news.title || '';
+  document.getElementById('hero-events-url').value = events.url || '';
+  document.getElementById('hero-events-title').value = events.title || '';
+
+  document.getElementById('hero-home-url').addEventListener('input', e => {
+    const p = document.getElementById('heroHomePreview');
+    if (e.target.value) { p.style.backgroundImage = `url(${e.target.value})`; p.innerHTML = ''; }
+    else { p.style.backgroundImage = ''; p.innerHTML = '<span style="color:#94a3b8;font-size:13px;"><i class="fas fa-image" style="margin-right:6px;"></i>Anteprima immagine</span>'; }
+  });
+  if (home.url) {
+    const p = document.getElementById('heroHomePreview');
+    p.style.backgroundImage = `url(${home.url})`;
+    p.innerHTML = '';
+  }
+}
+
+function showHeroTab(tab, btn) {
+  ['home','news','events'].forEach(t => {
+    document.getElementById('heroTab-'+t).style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function saveHero() {
+  DATA.hero = {
+    home: {
+      url: document.getElementById('hero-home-url').value,
+      title: document.getElementById('hero-home-title').value,
+      sub: document.getElementById('hero-home-sub').value,
+      cta: document.getElementById('hero-home-cta').value,
+      ctalink: document.getElementById('hero-home-ctalink').value
+    },
+    news: {
+      url: document.getElementById('hero-news-url').value,
+      title: document.getElementById('hero-news-title').value
+    },
+    events: {
+      url: document.getElementById('hero-events-url').value,
+      title: document.getElementById('hero-events-title').value
+    }
+  };
+  markChanged('Hero aggiornato');
+}
+
+// ============================================================
+// LAYOUT
+// ============================================================
+function loadLayoutUI() {
+  const lay = DATA.layout || {};
+  document.getElementById('lay-newsLayout').value = lay.newsLayout || 'grid';
+  document.getElementById('lay-newsPerPage').value = lay.newsPerPage || '9';
+  document.getElementById('lay-newsOrder').value = lay.newsOrder || 'newest';
+  document.getElementById('lay-newsTabs').value = lay.newsTabs || 'hide';
+  renderSectionsList(lay.sections || []);
+}
+
+function renderSectionsList(sections) {
+  const el = document.getElementById('sectionsList');
+  if (!sections.length) { el.innerHTML = '<p style="color:#94a3b8;font-size:14px;">Nessuna sezione configurata</p>'; return; }
+  el.innerHTML = sections.map((s, i) => `
+    <div class="section-row" draggable="true" data-idx="${i}">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <i class="fas fa-grip-vertical drag-handle" style="color:#cbd5e1;"></i>
+        <span style="font-size:18px;">${s.icon || '📄'}</span>
+        <span style="font-size:14px;font-weight:500;color:#1e293b;">${s.label}</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${s.vis !== false ? 'checked' : ''} onchange="toggleSection('${s.id}', this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  `).join('');
+}
+
+function toggleSection(id, vis) {
+  if (!DATA.layout) DATA.layout = {};
+  if (!DATA.layout.sections) DATA.layout.sections = [];
+  const sec = DATA.layout.sections.find(s => s.id === id);
+  if (sec) sec.vis = vis;
+  markChanged(`Sezione "${id}" ${vis?'abilitata':'disabilitata'}`);
+}
+
+function saveLayout() {
+  if (!DATA.layout) DATA.layout = {};
+  DATA.layout.newsLayout = document.getElementById('lay-newsLayout').value;
+  DATA.layout.newsPerPage = document.getElementById('lay-newsPerPage').value;
+  DATA.layout.newsOrder = document.getElementById('lay-newsOrder').value;
+  DATA.layout.newsTabs = document.getElementById('lay-newsTabs').value;
+  markChanged('Layout aggiornato');
+}
+
+// ============================================================
+// FOOTER
+// ============================================================
+function loadFooterUI() {
+  const f = DATA.footer || {};
+  document.getElementById('foot-copy').value = f.copy || '';
+  document.getElementById('foot-slogan').value = f.slogan || '';
+  document.getElementById('foot-desc').value = f.desc || '';
+  document.getElementById('foot-addr').value = f.addr || '';
+  document.getElementById('foot-email').value = f.email || '';
+  document.getElementById('foot-tel').value = f.tel || '';
+  document.getElementById('foot-piva').value = f.piva || '';
+}
+
+function saveFooter() {
+  DATA.footer = {
+    copy: document.getElementById('foot-copy').value,
+    slogan: document.getElementById('foot-slogan').value,
+    desc: document.getElementById('foot-desc').value,
+    addr: document.getElementById('foot-addr').value,
+    email: document.getElementById('foot-email').value,
+    tel: document.getElementById('foot-tel').value,
+    piva: document.getElementById('foot-piva').value,
+    links: (DATA.footer || {}).links || []
+  };
+  markChanged('Footer aggiornato');
+}
+
+// ============================================================
+// MODAL — FORMS DINAMICI
+// ============================================================
+const MODAL_FORMS = {
+  notizia: {
+    title: 'Notizia',
+    fields: () => `
+      <div class="grid-2">
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Titolo *</label>
+          <input type="text" id="mf-titolo" class="form-input" placeholder="Titolo della notizia" required>
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" id="mf-categoria" class="form-input" placeholder="Generale, Politica, Sport...">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select id="mf-stato" class="form-input form-select">
+            <option value="pubblicata">Pubblicata</option>
+            <option value="bozza">Bozza</option>
+            <option value="archiviata">Archiviata</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Autore</label>
+          <input type="text" id="mf-autore" class="form-input" placeholder="Redazione">
+        </div>
+        <div>
+          <label class="form-label">Data pubblicazione</label>
+          <input type="datetime-local" id="mf-data" class="form-input">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">URL Immagine</label>
+          <input type="url" id="mf-immagine" class="form-input" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Contenuto</label>
+          <textarea id="mf-contenuto" class="form-input" rows="5" placeholder="Testo della notizia..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">Tag (separati da virgola)</label>
+          <input type="text" id="mf-tag" class="form-input" placeholder="apricena, notizie, ...">
+        </div>
+        <div>
+          <label class="form-label" style="display:flex;align-items:center;gap:10px;">
+            <label class="toggle"><input type="checkbox" id="mf-evidenza"><span class="toggle-slider"></span></label>
+            In evidenza
+          </label>
+        </div>
+      </div>
+    `,
+    populate: (item) => {
+      document.getElementById('mf-titolo').value = item.titolo || '';
+      document.getElementById('mf-categoria').value = item.categoria || '';
+      document.getElementById('mf-stato').value = item.stato || 'pubblicata';
+      document.getElementById('mf-autore').value = item.autore || 'Redazione';
+      document.getElementById('mf-data').value = item.data ? item.data.slice(0,16) : new Date().toISOString().slice(0,16);
+      document.getElementById('mf-immagine').value = item.immagine || '';
+      document.getElementById('mf-contenuto').value = item.contenuto || '';
+      document.getElementById('mf-tag').value = Array.isArray(item.tag) ? item.tag.join(', ') : (item.tag || '');
+      document.getElementById('mf-evidenza').checked = !!item.evidenza;
+    },
+    collect: (item) => ({
+      ...item,
+      titolo: document.getElementById('mf-titolo').value.trim(),
+      categoria: document.getElementById('mf-categoria').value.trim() || 'Generale',
+      stato: document.getElementById('mf-stato').value,
+      autore: document.getElementById('mf-autore').value.trim() || 'Redazione',
+      data: new Date(document.getElementById('mf-data').value).toISOString(),
+      immagine: document.getElementById('mf-immagine').value.trim(),
+      contenuto: document.getElementById('mf-contenuto').value.trim(),
+      tag: document.getElementById('mf-tag').value.split(',').map(t=>t.trim()).filter(Boolean),
+      evidenza: document.getElementById('mf-evidenza').checked,
+      updatedAt: new Date().toISOString()
+    }),
+    collection: 'notizie',
+    idPrefix: 'n'
+  },
+
+  evento: {
+    title: 'Evento',
+    fields: () => `
+      <div class="grid-2">
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Titolo *</label>
+          <input type="text" id="mf-titolo" class="form-input" placeholder="Titolo dell'evento" required>
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" id="mf-categoria" class="form-input" placeholder="Cultura, Sport, Musica...">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select id="mf-stato" class="form-input form-select">
+            <option value="pubblicato">Pubblicato</option>
+            <option value="bozza">Bozza</option>
+            <option value="annullato">Annullato</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Data inizio</label>
+          <input type="date" id="mf-dataInizio" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Data fine</label>
+          <input type="date" id="mf-dataFine" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Orario</label>
+          <input type="time" id="mf-orario" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Prezzo</label>
+          <input type="text" id="mf-prezzo" class="form-input" placeholder="Gratuito / 5€...">
+        </div>
+        <div>
+          <label class="form-label">Luogo</label>
+          <input type="text" id="mf-luogo" class="form-input" placeholder="Piazza, Via...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Indirizzo</label>
+          <input type="text" id="mf-indirizzo" class="form-input" placeholder="Via Roma 1, Apricena (FG)">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">URL Immagine</label>
+          <input type="url" id="mf-immagine" class="form-input" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Descrizione</label>
+          <textarea id="mf-descrizione" class="form-input" rows="4" placeholder="Descrizione dell'evento..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">Link esterno</label>
+          <input type="url" id="mf-link" class="form-input" placeholder="https://...">
+        </div>
+      </div>
+    `,
+    populate: (item) => {
+      document.getElementById('mf-titolo').value = item.titolo || '';
+      document.getElementById('mf-categoria').value = item.categoria || '';
+      document.getElementById('mf-stato').value = item.stato || 'pubblicato';
+      document.getElementById('mf-dataInizio').value = item.dataInizio || '';
+      document.getElementById('mf-dataFine').value = item.dataFine || '';
+      document.getElementById('mf-orario').value = item.orario || '';
+      document.getElementById('mf-prezzo').value = item.prezzo || '';
+      document.getElementById('mf-luogo').value = item.luogo || '';
+      document.getElementById('mf-indirizzo').value = item.indirizzo || '';
+      document.getElementById('mf-immagine').value = item.immagine || '';
+      document.getElementById('mf-descrizione').value = item.descrizione || '';
+      document.getElementById('mf-link').value = item.link || '';
+    },
+    collect: (item) => ({
+      ...item,
+      titolo: document.getElementById('mf-titolo').value.trim(),
+      categoria: document.getElementById('mf-categoria').value.trim() || 'Generale',
+      stato: document.getElementById('mf-stato').value,
+      dataInizio: document.getElementById('mf-dataInizio').value,
+      dataFine: document.getElementById('mf-dataFine').value,
+      orario: document.getElementById('mf-orario').value,
+      prezzo: document.getElementById('mf-prezzo').value.trim(),
+      luogo: document.getElementById('mf-luogo').value.trim(),
+      indirizzo: document.getElementById('mf-indirizzo').value.trim(),
+      immagine: document.getElementById('mf-immagine').value.trim(),
+      descrizione: document.getElementById('mf-descrizione').value.trim(),
+      link: document.getElementById('mf-link').value.trim(),
+      updatedAt: new Date().toISOString()
+    }),
+    collection: 'eventi',
+    idPrefix: 'e'
+  },
+
+  servizio: {
+    title: 'Servizio',
+    fields: () => `
+      <div class="grid-2">
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Nome *</label>
+          <input type="text" id="mf-nome" class="form-input" placeholder="Nome del servizio" required>
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" id="mf-categoria" class="form-input" placeholder="Enti Pubblici, Sanità, Cultura...">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select id="mf-stato" class="form-input form-select">
+            <option value="attivo">Attivo</option>
+            <option value="inattivo">Inattivo</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Icona Font Awesome</label>
+          <input type="text" id="mf-icona" class="form-input" placeholder="fa-building-columns">
+        </div>
+        <div>
+          <label class="form-label">Orari</label>
+          <input type="text" id="mf-orari" class="form-input" placeholder="Lun-Ven: 09:00 - 13:00">
+        </div>
+        <div>
+          <label class="form-label">Telefono</label>
+          <input type="tel" id="mf-telefono" class="form-input" placeholder="+39 ...">
+        </div>
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" id="mf-email" class="form-input" placeholder="info@...">
+        </div>
+        <div>
+          <label class="form-label">Sito web</label>
+          <input type="url" id="mf-sito" class="form-input" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Indirizzo</label>
+          <input type="text" id="mf-indirizzo" class="form-input" placeholder="Via Roma 1, Apricena (FG)">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Descrizione</label>
+          <textarea id="mf-descrizione" class="form-input" rows="3" placeholder="Descrizione del servizio..."></textarea>
+        </div>
+      </div>
+    `,
+    populate: (item) => {
+      document.getElementById('mf-nome').value = item.nome || '';
+      document.getElementById('mf-categoria').value = item.categoria || '';
+      document.getElementById('mf-stato').value = item.stato || 'attivo';
+      document.getElementById('mf-icona').value = item.icona || '';
+      document.getElementById('mf-orari').value = item.orari || '';
+      document.getElementById('mf-telefono').value = item.telefono || '';
+      document.getElementById('mf-email').value = item.email || '';
+      document.getElementById('mf-sito').value = item.sito || '';
+      document.getElementById('mf-indirizzo').value = item.indirizzo || '';
+      document.getElementById('mf-descrizione').value = item.descrizione || '';
+    },
+    collect: (item) => ({
+      ...item,
+      nome: document.getElementById('mf-nome').value.trim(),
+      categoria: document.getElementById('mf-categoria').value.trim() || 'Generale',
+      stato: document.getElementById('mf-stato').value,
+      icona: document.getElementById('mf-icona').value.trim() || 'fa-info',
+      orari: document.getElementById('mf-orari').value.trim(),
+      telefono: document.getElementById('mf-telefono').value.trim(),
+      email: document.getElementById('mf-email').value.trim(),
+      sito: document.getElementById('mf-sito').value.trim(),
+      indirizzo: document.getElementById('mf-indirizzo').value.trim(),
+      descrizione: document.getElementById('mf-descrizione').value.trim(),
+      updatedAt: new Date().toISOString()
+    }),
+    collection: 'servizi',
+    idPrefix: 's'
+  },
+
+  locale: {
+    title: 'Locale',
+    fields: () => `
+      <div class="grid-2">
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Nome *</label>
+          <input type="text" id="mf-nome" class="form-input" placeholder="Nome del locale" required>
+        </div>
+        <div>
+          <label class="form-label">Tipologia</label>
+          <select id="mf-tipologia" class="form-input form-select">
+            <option value="Bar">Bar</option>
+            <option value="Ristorante">Ristorante</option>
+            <option value="Pizzeria">Pizzeria</option>
+            <option value="Pub">Pub</option>
+            <option value="Pasticceria">Pasticceria</option>
+            <option value="Trattoria">Trattoria</option>
+            <option value="Gelateria">Gelateria</option>
+            <option value="Negozio">Negozio</option>
+            <option value="Altro">Altro</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select id="mf-stato" class="form-input form-select">
+            <option value="aperto">Aperto</option>
+            <option value="chiuso">Chiuso</option>
+            <option value="temporaneamente-chiuso">Temporaneamente chiuso</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Orari</label>
+          <input type="text" id="mf-orari" class="form-input" placeholder="Lun-Dom: 08:00 - 22:00">
+        </div>
+        <div>
+          <label class="form-label">Telefono</label>
+          <input type="tel" id="mf-telefono" class="form-input" placeholder="+39 ...">
+        </div>
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" id="mf-email" class="form-input" placeholder="info@...">
+        </div>
+        <div>
+          <label class="form-label">Sito web</label>
+          <input type="url" id="mf-sito" class="form-input" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Indirizzo</label>
+          <input type="text" id="mf-indirizzo" class="form-input" placeholder="Via Roma 1, Apricena (FG)">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">URL Immagine</label>
+          <input type="url" id="mf-immagine" class="form-input" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Link Google Maps</label>
+          <input type="url" id="mf-mappa" class="form-input" placeholder="https://maps.google.com/...">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Descrizione</label>
+          <textarea id="mf-descrizione" class="form-input" rows="3" placeholder="Descrizione del locale..."></textarea>
+        </div>
+      </div>
+    `,
+    populate: (item) => {
+      document.getElementById('mf-nome').value = item.nome || '';
+      document.getElementById('mf-tipologia').value = item.tipologia || 'Bar';
+      document.getElementById('mf-stato').value = item.stato || 'aperto';
+      document.getElementById('mf-orari').value = item.orari || '';
+      document.getElementById('mf-telefono').value = item.telefono || '';
+      document.getElementById('mf-email').value = item.email || '';
+      document.getElementById('mf-sito').value = item.sito || '';
+      document.getElementById('mf-indirizzo').value = item.indirizzo || '';
+      document.getElementById('mf-immagine').value = item.immagine || '';
+      document.getElementById('mf-mappa').value = item.mappa || '';
+      document.getElementById('mf-descrizione').value = item.descrizione || '';
+    },
+    collect: (item) => ({
+      ...item,
+      nome: document.getElementById('mf-nome').value.trim(),
+      tipologia: document.getElementById('mf-tipologia').value,
+      stato: document.getElementById('mf-stato').value,
+      orari: document.getElementById('mf-orari').value.trim(),
+      telefono: document.getElementById('mf-telefono').value.trim(),
+      email: document.getElementById('mf-email').value.trim(),
+      sito: document.getElementById('mf-sito').value.trim(),
+      indirizzo: document.getElementById('mf-indirizzo').value.trim(),
+      immagine: document.getElementById('mf-immagine').value.trim(),
+      mappa: document.getElementById('mf-mappa').value.trim(),
+      descrizione: document.getElementById('mf-descrizione').value.trim(),
+      updatedAt: new Date().toISOString()
+    }),
+    collection: 'locali',
+    idPrefix: 'l'
+  },
+
+  sponsor: {
+    title: 'Sponsor',
+    fields: () => `
+      <div class="grid-2">
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Nome *</label>
+          <input type="text" id="mf-nome" class="form-input" placeholder="Nome dello sponsor" required>
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">URL Logo</label>
+          <input type="url" id="mf-logo" class="form-input" placeholder="https://...">
+        </div>
+        <div>
+          <label class="form-label">Sito web</label>
+          <input type="url" id="mf-sito" class="form-input" placeholder="https://...">
+        </div>
+        <div>
+          <label class="form-label">Attivo</label>
+          <label class="toggle" style="margin-top:10px;display:block;">
+            <input type="checkbox" id="mf-attivo" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="form-label">Descrizione</label>
+          <textarea id="mf-descrizione" class="form-input" rows="2" placeholder="Breve descrizione..."></textarea>
+        </div>
+      </div>
+    `,
+    populate: (item) => {
+      document.getElementById('mf-nome').value = item.nome || '';
+      document.getElementById('mf-logo').value = item.logo || '';
+      document.getElementById('mf-sito').value = item.sito || '';
+      document.getElementById('mf-attivo').checked = item.attivo !== false;
+      document.getElementById('mf-descrizione').value = item.descrizione || '';
+    },
+    collect: (item) => ({
+      ...item,
+      nome: document.getElementById('mf-nome').value.trim(),
+      logo: document.getElementById('mf-logo').value.trim(),
+      sito: document.getElementById('mf-sito').value.trim(),
+      attivo: document.getElementById('mf-attivo').checked,
+      descrizione: document.getElementById('mf-descrizione').value.trim(),
+      updatedAt: new Date().toISOString()
+    }),
+    collection: 'sponsor',
+    idPrefix: 'sp'
+  }
+};
+
+function openModal(type, editId = null) {
+  modalType = type;
+  modalEditId = editId;
+  const cfg = MODAL_FORMS[type];
+  if (!cfg) return;
+
+  document.getElementById('modalTitle').textContent = (editId ? 'Modifica ' : 'Nuovo ') + cfg.title;
+  document.getElementById('modalBody').innerHTML = cfg.fields();
+  document.getElementById('modalOverlay').style.display = 'flex';
+
+  if (editId) {
+    const col = DATA[cfg.collection] || [];
+    const item = col.find(i => i.id === editId);
+    if (item) cfg.populate(item);
+  } else {
+    // Valori default per nuovo
+    const now = new Date().toISOString().slice(0,16);
+    try {
+      if (document.getElementById('mf-data')) document.getElementById('mf-data').value = now;
+      if (document.getElementById('mf-dataInizio')) document.getElementById('mf-dataInizio').value = now.slice(0,10);
+    } catch(e){}
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+  modalType = null; modalEditId = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveModalItem() {
+  const cfg = MODAL_FORMS[modalType];
+  if (!cfg) return;
+
+  const col = DATA[cfg.collection] || [];
+
+  // Validazione
+  const titleField = document.getElementById('mf-titolo') || document.getElementById('mf-nome');
+  if (titleField && !titleField.value.trim()) {
+    toast('Il campo titolo/nome è obbligatorio', 'error');
+    titleField.focus();
+    return;
+  }
+
+  if (modalEditId) {
+    const idx = col.findIndex(i => i.id === modalEditId);
+    if (idx !== -1) {
+      col[idx] = cfg.collect(col[idx]);
+    }
+  } else {
+    const newItem = cfg.collect({
+      id: genId(cfg.idPrefix, col),
+      createdAt: new Date().toISOString()
+    });
+    col.push(newItem);
+    DATA[cfg.collection] = col;
+  }
+
+  DATA[cfg.collection] = col;
+  closeModal();
+
+  // Render aggiornato
+  const renderMap = { notizie: renderNotizie, eventi: renderEventi, servizi: renderServizi, locali: renderLocali, sponsor: renderSponsor };
+  if (renderMap[cfg.collection]) renderMap[cfg.collection]();
+  updateDashboard();
+  markChanged(`${cfg.title} ${modalEditId ? 'modificata' : 'aggiunta'}`);
+}
+
+// ============================================================
+// DELETE
+// ============================================================
+function deleteItem(collection, id) {
+  if (!confirm('Sei sicuro di voler eliminare questo elemento?')) return;
+  DATA[collection] = (DATA[collection] || []).filter(i => i.id !== id);
+  const renderMap = { notizie: renderNotizie, eventi: renderEventi, servizi: renderServizi, locali: renderLocali, sponsor: renderSponsor };
+  if (renderMap[collection]) renderMap[collection]();
+  updateDashboard();
+  markChanged('Elemento eliminato');
+}
+
+// ============================================================
+// UTENTI
+// ============================================================
+function renderUserTable() {
+  const tbody = document.getElementById('tbodyUtenti');
+  tbody.innerHTML = USERS.map((u, i) => `
+    <tr>
+      <td style="font-weight:600;color:#1e293b;">${esc(u.username)}</td>
+      <td>${roleBadge(u.role)}</td>
+      <td style="font-size:13px;color:#64748b;">${u.createdAt ? new Date(u.createdAt).toLocaleDateString('it-IT') : '—'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          ${i > 0 || USERS.length > 1 ? `<button class="btn btn-danger btn-sm btn-icon" onclick="deleteUser(${i})" title="Elimina"><i class="fas fa-trash"></i></button>` : ''}
+          ${u.username !== currentUser?.username ? '' : '<span class="badge badge-blue" style="font-size:11px;">Tu</span>'}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function roleBadge(role) {
+  if (role === 'superadmin') return '<span class="badge badge-red"><i class="fas fa-crown" style="margin-right:4px;font-size:10px;"></i>Super Admin</span>';
+  if (role === 'admin') return '<span class="badge badge-yellow"><i class="fas fa-shield-halved" style="margin-right:4px;font-size:10px;"></i>Admin</span>';
+  return '<span class="badge badge-blue"><i class="fas fa-pen" style="margin-right:4px;font-size:10px;"></i>Editor</span>';
+}
+
+function openAddUserModal() {
+  document.getElementById('newUserName').value = '';
+  document.getElementById('newUserPass').value = '';
+  document.getElementById('newUserRole').value = 'editor';
+  document.getElementById('userModalOverlay').style.display = 'flex';
+}
+
+function closeUserModal() {
+  document.getElementById('userModalOverlay').style.display = 'none';
+}
+
+function addUser() {
+  const uname = document.getElementById('newUserName').value.trim();
+  const pass = document.getElementById('newUserPass').value;
+  const role = document.getElementById('newUserRole').value;
+  if (!uname || !pass) { toast('Username e password obbligatori', 'error'); return; }
+  if (USERS.find(u => u.username === uname)) { toast('Username già in uso', 'error'); return; }
+  USERS.push({ username: uname, password: pass, role, createdAt: new Date().toISOString() });
+  saveUsers();
+  renderUserTable();
+  closeUserModal();
+  toast('Utente aggiunto con successo', 'success');
+}
+
+function deleteUser(idx) {
+  if (USERS[idx].username === currentUser?.username) { toast('Non puoi eliminare te stesso', 'error'); return; }
+  if (!confirm(`Eliminare l'utente "${USERS[idx].username}"?`)) return;
+  USERS.splice(idx, 1);
+  saveUsers();
+  renderUserTable();
+  toast('Utente eliminato', 'success');
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(id) {
+  document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const sec = document.getElementById('sec-'+id);
+  if (sec) sec.classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(el => {
+    if (el.getAttribute('onclick') && el.getAttribute('onclick').includes(`'${id}'`)) el.classList.add('active');
+  });
+  currentSection = id;
+  const titles = {
+    dashboard: ['Dashboard', 'Pannello di controllo'],
+    notizie: ['Notizie', 'Gestisci gli articoli del sito'],
+    eventi: ['Eventi', 'Gestisci il calendario eventi'],
+    servizi: ['Servizi', 'Servizi pubblici e privati'],
+    locali: ['Locali', 'Ristoranti, bar e negozi'],
+    sponsor: ['Sponsor', 'Partner e inserzionisti'],
+    identita: ['Identità sito', 'Logo, colori e info generali'],
+    hero: ['Hero / Header', 'Immagini e testi delle sezioni hero'],
+    layout: ['Layout', 'Visibilità sezioni e impostazioni'],
+    footer: ['Footer', 'Testi e link del footer'],
+    github: ['GitHub', 'Configurazione e pubblicazione'],
+    utenti: ['Utenti & Ruoli', 'Gestisci admin ed editor']
+  };
+  const t = titles[id] || [id, ''];
+  document.getElementById('topbarTitle').textContent = t[0];
+  document.getElementById('topbarSub').textContent = t[1];
+
+  // Mobile: chiudi sidebar
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+  }
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (window.innerWidth <= 900) {
+    sb.classList.toggle('mobile-open');
+  } else {
+    sb.classList.toggle('collapsed');
+    document.getElementById('mainContent').classList.toggle('full');
+  }
+}
+
+// ============================================================
+// CHANGES & PUBLISH BAR
+// ============================================================
+function markChanged(desc) {
+  hasChanges = true;
+  saveLocal();
+  updatePublishBar();
+
+  const changes = JSON.parse(localStorage.getItem('cms_recentChanges') || '[]');
+  changes.unshift({ text: desc, time: new Date().toISOString() });
+  localStorage.setItem('cms_recentChanges', JSON.stringify(changes.slice(0, 5)));
+  renderRecentChanges();
+  toast(desc + ' — Ricordati di pubblicare!', 'info');
+}
+
+function updatePublishBar() {
+  const bar = document.getElementById('publishBar');
+  if (hasChanges && currentUser?.role !== 'editor') {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+function discardChanges() {
+  if (!confirm('Annullare tutte le modifiche e ricaricare i dati salvati?')) return;
+  loadLocal();
+  renderAll();
+  hasChanges = false;
+  updatePublishBar();
+  toast('Modifiche annullate', 'info');
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function genId(prefix, arr) {
+  const existing = arr.map(i => i.id || '').filter(id => id.startsWith(prefix));
+  const nums = existing.map(id => parseInt(id.replace(prefix,'').replace(/\D/g,'')) || 0);
+  const max = nums.length ? Math.max(...nums) : 0;
+  return `${prefix}${String(max+1).padStart(3,'0')}`;
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('it-IT'); } catch(e) { return d; }
+}
+
+function statoBadge(stato, pub, boz, ter) {
+  if (stato === pub) return `<span class="badge badge-green">${pub}</span>`;
+  if (stato === boz) return `<span class="badge badge-yellow">${boz}</span>`;
+  if (stato === ter) return `<span class="badge badge-red">${ter}</span>`;
+  return `<span class="badge badge-gray">${esc(stato||'—')}</span>`;
+}
+
+function toast(msg, type = 'info') {
+  const icons = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `<i class="fas ${icons[type] || 'fa-info-circle'}"></i><span>${msg}</span>`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'fadeOut .3s ease forwards';
+    setTimeout(() => el.remove(), 300);
+  }, type === 'error' ? 6000 : 3500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadLocal();
+</script>
+</body>
+</html>
