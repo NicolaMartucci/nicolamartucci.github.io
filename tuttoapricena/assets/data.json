@@ -1,3 +1,18 @@
 {
-  "notizie": []
+  "notizie": [
+    {
+      "id": "n001",
+      "createdAt": "2026-04-03T13:33:31.289Z",
+      "titolo": "prova",
+      "categoria": "sport",
+      "stato": "pubblicata",
+      "autore": "Redazione",
+      "data": "2026-04-03T11:33:00.000Z",
+      "immagine": "",
+      "contenuto": "aaaaaaaa",
+      "tag": [],
+      "evidenza": false,
+      "updatedAt": "2026-04-03T13:33:31.289Z"
+    }
+  ]
 }
