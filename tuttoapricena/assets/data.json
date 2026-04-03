@@ -56,7 +56,15 @@
     }
   ],
   "eventi": [],
-  "sponsor": [],
+  "sponsor": [
+    {
+      "id": "s1775215112117",
+      "nome": "nicola martucci",
+      "logo": "",
+      "sito": "",
+      "tier": "partner"
+    }
+  ],
   "sponsorSettings": {
     "position": "after-news",
     "title": "I nostri sponsor",
