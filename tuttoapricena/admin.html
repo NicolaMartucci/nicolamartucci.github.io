@@ -1026,26 +1026,15 @@ async function syncFromGitHub(silent = false) {
   }
 
   try {
-    // Usa API GitHub con autenticazione per leggere il file (evita cache e problemi CORS)
-    const apiUrl = `https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}&t=${Date.now()}`;
-    const resp = await fetch(apiUrl, {
-      headers: {
-        'Authorization': `Bearer ${cfg.token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Cache-Control': 'no-cache'
-      }
-    });
+// Usa raw.githubusercontent.com per evitare problemi CORS su Firefox
+    const rawUrl = `https://raw.githubusercontent.com/${cfg.repo}/${cfg.branch}/${cfg.path}?t=${Date.now()}`;
+    const resp = await fetch(rawUrl, { cache: 'no-store' });
 
-    if (!resp.ok) {
-      const errData = await resp.json().catch(() => ({}));
-      throw new Error(errData.message || `HTTP ${resp.status}`);
+if (!resp.ok) {
+      throw new Error(`File non trovato (HTTP ${resp.status}). Controlla il percorso: ${cfg.path}`);
     }
 
-    const fileInfo = await resp.json();
-    // Il contenuto è in base64 — decodifica UTF-8
-    const jsonStr = fromBase64UTF8(fileInfo.content.replace(/\n/g, ''));
-    const remoteData = JSON.parse(jsonStr);
-
+    const remoteData = await resp.json();
     // Merge COMPLETO: sovrascrive tutto con i dati remoti
     DATA = remoteData;
 
