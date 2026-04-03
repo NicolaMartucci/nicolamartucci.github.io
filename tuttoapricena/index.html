@@ -15,12 +15,213 @@
   <body>
     <div id="root"></div>
 <script>
-(function(){
-  fetch('/tuttoapricena/assets/data.json?t='+Date.now())
-    .then(r=>r.ok?r.json():null)
-    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})
-    .catch(()=>{});
+(function() {
+  console.log('🔄 TuttoApricena CMS - Caricamento dati...');
+  
+  // ⚙️ CONFIGURAZIONE - Cambia questo percorso se necessario
+  const DATA_PATH = 'tuttoapricena/assets/data.json';
+  
+  // Costruisci URL assoluto
+  const baseUrl = window.location.origin;
+  const dataUrl = `${baseUrl}/${DATA_PATH}?nocache=${Date.now()}`;
+  
+  console.log('📂 Caricamento da:', dataUrl);
+  
+  fetch(dataUrl)
+    .then(response => {
+      console.log('📡 Risposta ricevuta:', response.status, response.statusText);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      return response.json();
+    })
+    .then(data => {
+      console.log('✅ Dati caricati con successo!');
+      console.log('📊 Statistiche:');
+      console.log('  • Notizie:', data.notizie?.length || 0);
+      console.log('  • Eventi:', data.eventi?.length || 0);
+      console.log('  • Sponsor:', data.sponsor?.length || 0);
+      console.log('📦 Dati completi:', data);
+      
+      // Salva i dati in una variabile globale
+      window.TA_DATA = data;
+      
+      // Notifica che i dati sono pronti
+      document.dispatchEvent(new Event('ta-ready'));
+      
+      // 🎯 INSERISCI QUI IL CODICE PER MOSTRARE I DATI
+      renderSito(data);
+    })
+    .catch(error => {
+      console.error('❌ Errore caricamento dati:', error);
+      console.error('💡 Possibili cause:');
+      console.error('  1. Il file data.json non esiste ancora (pubblica dal CMS)');
+      console.error('  2. Il percorso è sbagliato (controlla DATA_PATH)');
+      console.error('  3. Problema di CORS (verifica configurazione GitHub Pages)');
+    });
 })();
+
+// ═══════════════════════════════════════════════════════════════════════
+// 🎨 FUNZIONE DI RENDERING - Personalizza questa parte
+// ═══════════════════════════════════════════════════════════════════════
+function renderSito(data) {
+  console.log('🎨 Rendering sito...');
+  
+  // ────────────────────────────────────────────────────────────────────
+  // 📰 NOTIZIE
+  // ────────────────────────────────────────────────────────────────────
+  const containerNotizie = document.getElementById('notizie-container');
+  if (containerNotizie && data.notizie && data.notizie.length > 0) {
+    // Filtra solo notizie pubblicate
+    const notiziepubblicate = data.notizie.filter(n => n.status === 'pubblicata');
+    
+    // Ordina per data (più recenti prima)
+    notiziepubblicate.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Genera HTML
+    const html = notiziePublicate.map(notizia => `
+      <article class="notizia">
+        ${notizia.img ? `<img src="${notizia.img}" alt="${notizia.title}" />` : ''}
+        <h3>${notizia.title}</h3>
+        <p class="meta">
+          <span class="categoria">${notizia.cat || 'News'}</span>
+          <span class="data">${formatData(notizia.date)}</span>
+          ${notizia.author ? `<span class="autore">di ${notizia.author}</span>` : ''}
+        </p>
+        <p class="sommario">${notizia.summary || ''}</p>
+        ${notizia.body ? `
+          <div class="testo">${notizia.body}</div>
+        ` : ''}
+        ${notizia.tags && notizia.tags.length > 0 ? `
+          <div class="tags">
+            ${notizia.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+        ` : ''}
+      </article>
+    `).join('');
+    
+    containerNotizie.innerHTML = html;
+    console.log('✅ Renderizzate', notiziePublicate.length, 'notizie');
+  }
+  
+  // ────────────────────────────────────────────────────────────────────
+  // 📅 EVENTI
+  // ────────────────────────────────────────────────────────────────────
+  const containerEventi = document.getElementById('eventi-container');
+  if (containerEventi && data.eventi && data.eventi.length > 0) {
+    // Filtra eventi programmati e in corso
+    const eventiAttivi = data.eventi.filter(e => 
+      e.status === 'programmato' || e.status === 'in-corso'
+    );
+    
+    const html = eventiAttivi.map(evento => `
+      <article class="evento">
+        ${evento.img ? `<img src="${evento.img}" alt="${evento.title}" />` : ''}
+        <h3>${evento.title}</h3>
+        <p class="meta">
+          <span class="data">📅 ${formatDataOra(evento.start)}</span>
+          ${evento.place ? `<span class="luogo">📍 ${evento.place}</span>` : ''}
+        </p>
+        <p class="descrizione">${evento.desc || ''}</p>
+        ${evento.org ? `<p class="organizzatore">Organizzatore: ${evento.org}</p>` : ''}
+        ${evento.link ? `<a href="${evento.link}" target="_blank" class="btn">Maggiori info</a>` : ''}
+      </article>
+    `).join('');
+    
+    containerEventi.innerHTML = html;
+    console.log('✅ Renderizzati', eventiAttivi.length, 'eventi');
+  }
+  
+  // ────────────────────────────────────────────────────────────────────
+  // 🤝 SPONSOR
+  // ────────────────────────────────────────────────────────────────────
+  const containerSponsor = document.getElementById('sponsor-container');
+  if (containerSponsor && data.sponsor && data.sponsor.length > 0) {
+    const html = data.sponsor.map(sponsor => `
+      <div class="sponsor">
+        ${sponsor.sito ? `<a href="${sponsor.sito}" target="_blank">` : ''}
+          ${sponsor.logo ? `<img src="${sponsor.logo}" alt="${sponsor.nome}" />` : `<span>${sponsor.nome}</span>`}
+        ${sponsor.sito ? `</a>` : ''}
+      </div>
+    `).join('');
+    
+    containerSponsor.innerHTML = html;
+    console.log('✅ Renderizzati', data.sponsor.length, 'sponsor');
+  }
+  
+  // ────────────────────────────────────────────────────────────────────
+  // 🎨 IDENTITÀ (Logo, Nome sito, ecc.)
+  // ────────────────────────────────────────────────────────────────────
+  if (data.identita) {
+    // Logo nel header
+    const logoHeader = document.querySelector('.logo img');
+    if (logoHeader && data.identita.logo) {
+      logoHeader.src = data.identita.logo;
+      logoHeader.alt = data.identita.nome;
+    }
+    
+    // Nome sito nel title
+    if (data.identita.nome) {
+      document.title = data.identita.nome + (data.identita.tag ? ' - ' + data.identita.tag : '');
+    }
+    
+    // Colore principale (opzionale)
+    if (data.identita.col) {
+      document.documentElement.style.setProperty('--color-primary', data.identita.col);
+    }
+  }
+  
+  // ────────────────────────────────────────────────────────────────────
+  // 🖼️ HERO (Banner principale)
+  // ────────────────────────────────────────────────────────────────────
+  if (data.hero && data.hero.home) {
+    const heroSection = document.querySelector('.hero');
+    if (heroSection) {
+      if (data.hero.home.url) {
+        heroSection.style.backgroundImage = `url(${data.hero.home.url})`;
+      }
+      
+      const heroTitle = heroSection.querySelector('h1');
+      if (heroTitle && data.hero.home.title) {
+        heroTitle.textContent = data.hero.home.title;
+      }
+      
+      const heroSub = heroSection.querySelector('.subtitle');
+      if (heroSub && data.hero.home.sub) {
+        heroSub.textContent = data.hero.home.sub;
+      }
+    }
+  }
+  
+  console.log('✅ Rendering completato!');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// 🛠️ UTILITY - Funzioni helper
+// ═══════════════════════════════════════════════════════════════════════
+function formatData(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('it-IT', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+}
+
+function formatDataOra(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('it-IT', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 </script>
   </body>
 </html>
