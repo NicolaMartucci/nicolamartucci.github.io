@@ -2,8 +2,8 @@
   "identita": {
     "nome": "TuttoApricena",
     "tag": "Il portale di Apricena",
-    "desc": "Notizie, eventi e informazioni su Apricena.",
-    "email": "",
+    "desc": "Il portale di informazione della città di Apricena, in provincia di Foggia.",
+    "email": "info@tuttoapricena.it",
     "col": "#1e40af",
     "logo": "",
     "social": {
@@ -17,7 +17,7 @@
     "home": {
       "url": "",
       "title": "Benvenuti ad Apricena",
-      "sub": "",
+      "sub": "Notizie, eventi, servizi e molto altro dalla città di Apricena",
       "cta": "Leggi le notizie",
       "ctalink": "#notizie"
     },
@@ -31,9 +31,9 @@
     }
   },
   "footer": {
-    "copy": "Â© 2026 TuttoApricena. Tutti i diritti riservati.",
+    "copy": "© 2026 TuttoApricena. Tutti i diritti riservati.",
     "slogan": "TuttoApricena",
-    "desc": "Il portale di informazione della cittÃ  di Apricena.",
+    "desc": "Il portale di informazione della città di Apricena.",
     "addr": "Apricena (FG), Italia",
     "email": "",
     "tel": "",
@@ -42,22 +42,120 @@
   },
   "notizie": [
     {
-      "id": "n1775216304997",
-      "title": "aaaaa",
-      "cat": "sport",
-      "date": "2026-04-03",
-      "author": "",
-      "summary": "",
-      "body": "",
-      "img": "",
-      "status": "pubblicata",
-      "featured": "0",
-      "tags": []
+      "id": "n001",
+      "titolo": "Benvenuti su TuttoApricena",
+      "contenuto": "Questo è il portale dedicato alla città di Apricena. Qui troverai notizie, eventi, servizi e tutto quello che riguarda la nostra comunità.",
+      "categoria": "Generale",
+      "immagine": "",
+      "stato": "pubblicata",
+      "evidenza": true,
+      "tag": ["benvenuto", "apricena"],
+      "autore": "Redazione",
+      "data": "2026-01-01T09:00:00.000Z",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
     }
   ],
-  "eventi": [],
-  "servizi": [],
-  "locali": [],
+  "eventi": [
+    {
+      "id": "e001",
+      "titolo": "Inaugurazione TuttoApricena",
+      "descrizione": "Inaugurazione ufficiale del portale dedicato alla città di Apricena.",
+      "dataInizio": "2026-01-01",
+      "dataFine": "",
+      "orario": "10:00",
+      "luogo": "Apricena (FG)",
+      "indirizzo": "",
+      "prezzo": "Gratuito",
+      "link": "",
+      "immagine": "",
+      "stato": "pubblicato",
+      "categoria": "Generale",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    }
+  ],
+  "servizi": [
+    {
+      "id": "s001",
+      "nome": "Comune di Apricena",
+      "categoria": "Enti Pubblici",
+      "icona": "fa-building-columns",
+      "descrizione": "Uffici comunali e servizi al cittadino.",
+      "orari": "Lun-Ven: 09:00 - 13:00",
+      "telefono": "",
+      "email": "",
+      "sito": "",
+      "indirizzo": "Piazza Municipio, Apricena (FG)",
+      "stato": "attivo",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    },
+    {
+      "id": "s002",
+      "nome": "ASL Foggia - Distretto Apricena",
+      "categoria": "Sanità",
+      "icona": "fa-hospital",
+      "descrizione": "Servizi sanitari del distretto ASL.",
+      "orari": "Lun-Ven: 08:00 - 14:00",
+      "telefono": "",
+      "email": "",
+      "sito": "",
+      "indirizzo": "Apricena (FG)",
+      "stato": "attivo",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    },
+    {
+      "id": "s003",
+      "nome": "Biblioteca Comunale",
+      "categoria": "Cultura",
+      "icona": "fa-book",
+      "descrizione": "La biblioteca comunale di Apricena, con sala lettura e prestito libri.",
+      "orari": "Lun-Ven: 09:00 - 13:00 / 15:00 - 18:00",
+      "telefono": "",
+      "email": "",
+      "sito": "",
+      "indirizzo": "Apricena (FG)",
+      "stato": "attivo",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    }
+  ],
+  "locali": [
+    {
+      "id": "l001",
+      "nome": "Bar Centrale",
+      "tipologia": "Bar",
+      "descrizione": "Il bar nel cuore di Apricena.",
+      "orari": "Lun-Dom: 06:00 - 22:00",
+      "telefono": "",
+      "email": "",
+      "sito": "",
+      "indirizzo": "Apricena (FG)",
+      "mappa": "",
+      "immagine": "",
+      "stato": "aperto",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    },
+    {
+      "id": "l002",
+      "nome": "Ristorante da esempio",
+      "tipologia": "Ristorante",
+      "descrizione": "Cucina tipica pugliese nel centro di Apricena.",
+      "orari": "Mer-Lun: 12:00 - 15:00 / 19:00 - 23:00",
+      "telefono": "",
+      "email": "",
+      "sito": "",
+      "indirizzo": "Apricena (FG)",
+      "mappa": "",
+      "immagine": "",
+      "stato": "aperto",
+      "createdAt": "2026-01-01T09:00:00.000Z",
+      "updatedAt": "2026-01-01T09:00:00.000Z"
+    }
+  ],
   "sponsor": [],
   "sponsorSettings": {
     "position": "after-news",
@@ -66,42 +164,14 @@
   },
   "layout": {
     "sections": [
-      {
-        "id": "hero",
-        "label": "Hero principale",
-        "icon": "ð¼",
-        "vis": true
-      },
-      {
-        "id": "notizie",
-        "label": "Notizie",
-        "icon": "ð°",
-        "vis": true
-      },
-      {
-        "id": "eventi",
-        "label": "Eventi",
-        "icon": "ð",
-        "vis": true
-      },
-      {
-        "id": "sponsor",
-        "label": "Sponsor",
-        "icon": "ð¤",
-        "vis": true
-      },
-      {
-        "id": "contatti",
-        "label": "Contatti",
-        "icon": "ð",
-        "vis": true
-      },
-      {
-        "id": "footer",
-        "label": "Footer",
-        "icon": "ð",
-        "vis": true
-      }
+      { "id": "hero",     "label": "Hero principale", "icon": "🖼",  "vis": true },
+      { "id": "notizie",  "label": "Notizie",         "icon": "📰",  "vis": true },
+      { "id": "eventi",   "label": "Eventi",           "icon": "📅",  "vis": true },
+      { "id": "servizi",  "label": "Servizi",          "icon": "⚙️", "vis": true },
+      { "id": "locali",   "label": "Locali",           "icon": "🏪",  "vis": true },
+      { "id": "sponsor",  "label": "Sponsor",          "icon": "🤝",  "vis": true },
+      { "id": "contatti", "label": "Contatti",         "icon": "📞",  "vis": true },
+      { "id": "footer",   "label": "Footer",           "icon": "📄",  "vis": true }
     ],
     "newsLayout": "grid",
     "newsPerPage": "9",
