@@ -1,105 +1,115 @@
 <!doctype html>
 <html lang="it">
-  <head>
-    <meta charset="UTF-8" />
-    <script>
-  // Ripristina la rotta SPA dopo redirect da 404.html
-  (function() {
-    var redirect = sessionStorage.getItem('spa_redirect');
-    if (redirect) {
-      sessionStorage.removeItem('spa_redirect');
-      window.history.replaceState(null, null, redirect);
-    }
-  })();
-</script>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="TuttoApricena - Il portale informativo di Apricena. Notizie, eventi, servizi, locali e molto altro." />
-    <title>TuttoApricena — Il portale di Apricena</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/tuttoapricena/assets/index-mu_m6hmP.js"></script>
-    <link rel="stylesheet" crossorigin href="/tuttoapricena/assets/index-BaybhRHq.css">
-  </head>
-  <body>
-    <div id="root"></div>
-
-<!-- ══════════════════════════════════════════════════════════════════════════════ -->
-<!-- CARICAMENTO DATI CMS - TuttoApricena -->
-<!-- ══════════════════════════════════════════════════════════════════════════════ -->
-<script>
-(function() {
-  console.log('🔄 TuttoApricena - Caricamento dati CMS...');
-  
-  const dataUrl = '/tuttoapricena/assets/data.json';
-  const cacheBuster = '?t=' + Date.now();
-  
-  fetch(dataUrl + cacheBuster)
-    .then(response => {
-      console.log('📡 Risposta ricevuta:', response.status, response.statusText);
-      
-      if (!response.ok) {
-        throw new Error('Errore HTTP ' + response.status + ' - Il file data.json potrebbe non esistere ancora');
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    (function() {
+      var redirect = sessionStorage.getItem('spa_redirect');
+      if (redirect) {
+        sessionStorage.removeItem('spa_redirect');
+        window.history.replaceState(null, null, redirect);
       }
-      
-      return response.json();
-    })
-    .then(data => {
-      console.log('✅ Dati CMS caricati con successo!');
-      console.log('📊 Statistiche:');
-      console.log('  - Notizie:', (data.notizie || []).length);
-      console.log('  - Eventi:', (data.eventi || []).length);
-      console.log('  - Sponsor:', (data.sponsor || []).length);
-      console.log('📦 Oggetto completo:', data);
-      
-      // Rende i dati disponibili globalmente
-      window.TA_DATA = data;
-      
-      // Dispatch evento per notificare che i dati sono pronti
-      const event = new CustomEvent('ta-ready', { detail: data });
-      document.dispatchEvent(event);
-      
-      console.log('🎉 Evento "ta-ready" dispatched - I componenti React possono ora usare window.TA_DATA');
-    })
-    .catch(error => {
-      console.error('❌ Errore caricamento dati CMS:', error.message);
-      console.warn('💡 Soluzione: Pubblica i dati dal CMS (admin.html) cliccando "Pubblica sul sito"');
-      
-      // Fallback: dati vuoti per evitare errori nell'app
-      window.TA_DATA = {
-        identita: { nome: 'TuttoApricena', tag: 'Il portale di Apricena' },
-        notizie: [],
-        eventi: [],
-        sponsor: [],
-        hero: {},
-        footer: {},
-        layout: { sections: [] }
-      };
-      
-      // Dispatch evento anche in caso di errore (con dati vuoti)
-      document.dispatchEvent(new Event('ta-ready'));
-    });
-})();
-</script>
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TuttoApricena - Il portale informativo di Apricena. Notizie, eventi, servizi, locali e molto altro." />
+  <title>TuttoApricena — Il portale di Apricena</title>
+  <link rel="stylesheet" href="/tuttoapricena/assets/index.css">
+</head>
+<body>
 
-<!-- ══════════════════════════════════════════════════════════════════════════════ -->
-<!-- DEBUG: Mostra dati caricati (rimuovi in produzione) -->
-<!-- ══════════════════════════════════════════════════════════════════════════════ -->
-<script>
-document.addEventListener('ta-ready', function() {
-  console.log('🎯 Evento ta-ready ricevuto!');
-  console.log('🔍 window.TA_DATA disponibile:', !!window.TA_DATA);
-  
-  if (window.TA_DATA) {
-    console.table({
-      'Notizie': (window.TA_DATA.notizie || []).length,
-      'Eventi': (window.TA_DATA.eventi || []).length,
-      'Sponsor': (window.TA_DATA.sponsor || []).length
-    });
-  }
-});
-</script>
+  <!-- HEADER -->
+  <header id="site-header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <img id="site-logo" src="" alt="Logo">
+      <h1 id="site-title">TuttoApricena</h1>
+      <p id="site-subtitle">Il portale di Apricena</p>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <ul>
+      <li><a href="#notizie">📰 Notizie</a></li>
+      <li><a href="#eventi">📅 Eventi</a></li>
+      <li><a href="#servizi">🏛️ Servizi</a></li>
+      <li><a href="#locali">🍕 Locali</a></li>
+      <li><a href="#sponsor">🤝 Sponsor</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- NOTIZIE -->
+    <section class="section" id="notizie">
+      <div class="section-header">
+        <h2 class="section-title">📰 Notizie</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="notizie-list" class="news-grid">
+        <div class="empty-state"><span>⏳</span>Caricamento notizie...</div>
+      </div>
+    </section>
+
+    <!-- EVENTI -->
+    <section class="section" id="eventi">
+      <div class="section-header">
+        <h2 class="section-title">📅 Eventi</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="eventi-list">
+        <div class="empty-state"><span>⏳</span>Caricamento eventi...</div>
+      </div>
+    </section>
+
+    <!-- SERVIZI -->
+    <section class="section" id="servizi">
+      <div class="section-header">
+        <h2 class="section-title">🏛️ Servizi</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="servizi-list">
+        <div class="empty-state"><span>⏳</span>Caricamento servizi...</div>
+      </div>
+    </section>
+
+    <!-- LOCALI -->
+    <section class="section" id="locali">
+      <div class="section-header">
+        <h2 class="section-title">🍕 Locali</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="locali-list">
+        <div class="empty-state"><span>⏳</span>Caricamento locali...</div>
+      </div>
+    </section>
+
+    <!-- SPONSOR -->
+    <section class="section" id="section-sponsor">
+      <div class="section-header">
+        <h2 class="section-title">🤝 Sponsor</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="sponsor-list">
+        <div class="empty-state"><span>⏳</span>Caricamento sponsor...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div id="social-links" class="social-links"></div>
+    <div id="footer-copy">© 2026 TuttoApricena — Tutti i diritti riservati</div>
+  </footer>
+
+  <!-- JS -->
+  <script src="/tuttoapricena/assets/index.js"></script>
+
+</body>
+</html>
 
   </body>
 </html>
