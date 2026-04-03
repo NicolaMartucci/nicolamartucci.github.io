@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔍 Debug Completo TuttoApricena</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { 
+      font-size: 28px; 
+      margin-bottom: 10px;
+      color: #d63031;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .step {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border-left: 4px solid #ddd;
+    }
+    .step.loading { border-color: #f39c12; }
+    .step.success { border-color: #27ae60; }
+    .step.error { border-color: #e74c3c; }
+    .step h2 {
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step.loading h2::before { content: '⏳'; }
+    .step.success h2::before { content: '✅'; }
+    .step.error h2::before { content: '❌'; }
+    .info {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .success-text { color: #27ae60; font-weight: 600; }
+    .error-text { color: #e74c3c; font-weight: 600; }
+    .warning-text { color: #f39c12; font-weight: 600; }
+    button {
+      background: #d63031;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover { background: #c0392b; }
+    .data-preview {
+      background: #2c3e50;
+      color: #ecf0f1;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .key { color: #3498db; }
+    .string { color: #2ecc71; }
+    .number { color: #e67e22; }
+    .counter {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 Debug Completo TuttoApricena</h1>
+    <p class="subtitle">Diagnostica del caricamento dati CMS → Sito</p>
+
+    <div class="step loading" id="step1">
+      <h2>STEP 1: Verifica file data.json su GitHub</h2>
+      <p>Controllo se il file esiste e se è raggiungibile...</p>
+      <div class="info" id="step1-info">In attesa...</div>
+    </div>
+
+    <div class="step loading" id="step2">
+      <h2>STEP 2: Download del file</h2>
+      <p>Scarico il contenuto del file JSON...</p>
+      <div class="info" id="step2-info">In attesa...</div>
+    </div>
+
+    <div class="step loading" id="step3">
+      <h2>STEP 3: Parsing dei dati</h2>
+      <p>Converto il JSON in oggetti JavaScript...</p>
+      <div class="info" id="step3-info">In attesa...</div>
+    </div>
+
+    <div class="step loading" id="step4">
+      <h2>STEP 4: Analisi contenuto</h2>
+      <p>Verifico quali dati sono presenti nel file...</p>
+      <div class="info" id="step4-info">In attesa...</div>
+    </div>
+
+    <div class="step loading" id="step5">
+      <h2>STEP 5: Anteprima dati completa</h2>
+      <p>Visualizzazione JSON completo</p>
+      <div class="data-preview" id="step5-info">In attesa...</div>
+    </div>
+
+    <button onclick="location.reload()">🔄 Riprova diagnostica</button>
+  </div>
+
+  <script>
+    const FILE_URL = '/tuttoapricena/assets/data.json';
+    
+    async function diagnose() {
+      console.log('🔍 Avvio diagnostica completa...');
+      
+      // STEP 1: Verifica esistenza file
+      try {
+        updateStep('step1', 'loading', 'Tentativo connessione a: ' + FILE_URL);
+        
+        const response = await fetch(FILE_URL + '?t=' + Date.now());
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        const contentLength = response.headers.get('content-length');
+        
+        updateStep('step1', 'success', 
+          `✅ File trovato!\n` +
+          `URL: ${FILE_URL}\n` +
+          `Status: ${response.status} ${response.statusText}\n` +
+          `Content-Type: ${contentType}\n` +
+          `Dimensione: ${contentLength ? (contentLength + ' bytes') : 'sconosciuta'}\n` +
+          `Cache busting: OK (timestamp aggiunto)`
+        );
+        
+        // STEP 2: Download
+        updateStep('step2', 'loading', 'Download in corso...');
+        const text = await response.text();
+        
+        updateStep('step2', 'success', 
+          `✅ Download completato!\n` +
+          `Dimensione scaricata: ${text.length} caratteri\n` +
+          `Prime righe:\n${text.substring(0, 200)}...`
+        );
+        
+        // STEP 3: Parsing
+        updateStep('step3', 'loading', 'Parsing JSON...');
+        let data;
+        try {
+          data = JSON.parse(text);
+          updateStep('step3', 'success', 
+            `✅ JSON valido!\n` +
+            `Chiavi principali trovate: ${Object.keys(data).join(', ')}`
+          );
+        } catch (e) {
+          throw new Error(`Parsing fallito: ${e.message}`);
+        }
+        
+        // STEP 4: Analisi contenuto
+        updateStep('step4', 'loading', 'Analisi dati...');
+        
+        const notizie = data.notizie || [];
+        const eventi = data.eventi || [];
+        const sponsor = data.sponsor || [];
+        const identita = data.identita || {};
+        const hero = data.hero || {};
+        const footer = data.footer || {};
+        
+        let analysis = `✅ DATI CARICATI CON SUCCESSO!\n\n`;
+        analysis += `📊 STATISTICHE:\n`;
+        analysis += `  • Notizie totali: ${notizie.length}\n`;
+        
+        if (notizie.length > 0) {
+          const pubblicate = notizie.filter(n => n.status === 'pubblicata').length;
+          const bozze = notizie.filter(n => n.status === 'bozza').length;
+          const categorie = [...new Set(notizie.map(n => n.cat))];
+          
+          analysis += `    - Pubblicate: ${pubblicate}\n`;
+          analysis += `    - Bozze: ${bozze}\n`;
+          analysis += `    - Categorie: ${categorie.join(', ')}\n\n`;
+          
+          analysis += `📰 NOTIZIE PRESENTI:\n`;
+          notizie.forEach((n, i) => {
+            analysis += `  ${i+1}. "${n.title}"\n`;
+            analysis += `     → Categoria: ${n.cat || 'N/A'}\n`;
+            analysis += `     → Status: ${n.status || 'N/A'}\n`;
+            analysis += `     → Data: ${n.date || 'N/A'}\n`;
+            analysis += `     → Autore: ${n.author || 'N/A'}\n`;
+            analysis += `     → Ha immagine: ${n.img ? 'Sì' : 'No'}\n`;
+            analysis += `     → ID: ${n.id}\n\n`;
+          });
+        } else {
+          analysis += `    ⚠️ NESSUNA NOTIZIA TROVATA!\n\n`;
+        }
+        
+        analysis += `  • Eventi totali: ${eventi.length}\n`;
+        analysis += `  • Sponsor totali: ${sponsor.length}\n\n`;
+        
+        analysis += `🎨 IDENTITÀ SITO:\n`;
+        analysis += `  • Nome: ${identita.nome || 'N/A'}\n`;
+        analysis += `  • Tagline: ${identita.tag || 'N/A'}\n`;
+        analysis += `  • Logo: ${identita.logo ? 'Presente' : 'Assente'}\n\n`;
+        
+        analysis += `🖼 HERO:\n`;
+        analysis += `  • Homepage: ${hero.home?.title || 'N/A'}\n`;
+        analysis += `  • Notizie: ${hero.news?.title || 'N/A'}\n`;
+        analysis += `  • Eventi: ${hero.events?.title || 'N/A'}\n`;
+        
+        updateStep('step4', notizie.length > 0 ? 'success' : 'error', analysis);
+        
+        // STEP 5: Preview completa
+        updateStep('step5', 'success', JSON.stringify(data, null, 2));
+        
+        // Salva in window per ispezione
+        window.TA_DATA = data;
+        console.log('✅ Dati salvati in window.TA_DATA');
+        console.log('📊 Notizie:', notizie);
+        console.log('📅 Eventi:', eventi);
+        console.log('🤝 Sponsor:', sponsor);
+        
+        if (notizie.length === 0) {
+          console.error('⚠️ PROBLEMA: Il file data.json non contiene notizie!');
+          console.log('🔧 SOLUZIONE: Vai su admin.html → crea una notizia → pubblica sul sito');
+        }
+        
+      } catch (error) {
+        console.error('❌ ERRORE:', error);
+        
+        const currentStep = document.querySelector('.step.loading');
+        if (currentStep) {
+          updateStep(currentStep.id, 'error', 
+            `❌ ERRORE: ${error.message}\n\n` +
+            `🔧 POSSIBILI CAUSE:\n` +
+            `1. Il file data.json non esiste ancora su GitHub\n` +
+            `   → Vai su admin.html e clicca "Pubblica sul sito"\n\n` +
+            `2. Il percorso del file è sbagliato\n` +
+            `   → Verifica che sia: tuttoapricena/assets/data.json\n\n` +
+            `3. Problema di CORS o permessi\n` +
+            `   → Verifica che il repository sia pubblico\n\n` +
+            `4. La cache del browser è vecchia\n` +
+            `   → Premi CTRL+SHIFT+R per ricaricare\n\n` +
+            `URL tentato: ${FILE_URL}`
+          );
+        }
+      }
+    }
+    
+    function updateStep(stepId, status, message) {
+      const step = document.getElementById(stepId);
+      const info = document.getElementById(stepId + '-info');
+      
+      step.className = 'step ' + status;
+      info.textContent = message;
+      
+      console.log(`[${stepId}] ${status}:`, message);
+    }
+    
+    // Avvia diagnostica automaticamente
+    diagnose();
+  </script>
+</body>
+</html>
