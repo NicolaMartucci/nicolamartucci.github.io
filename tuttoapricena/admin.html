@@ -646,32 +646,24 @@ tbody tr:hover td{background:var(--g1)}
 
 <script>
 // ══════════════════════════════════════════════════════
-// CODIFICA/DECODIFICA UTF-8 BASE64 MODERNI
+// CODIFICA UTF-8 MODERNA per GitHub API
 // ══════════════════════════════════════════════════════
 function utf8ToBase64(str) {
-  try {
-    // Metodo moderno con TextEncoder
-    const bytes = new TextEncoder().encode(str);
-    const binString = Array.from(bytes, byte => String.fromCodePoint(byte)).join('');
-    return btoa(binString);
-  } catch (e) {
-    console.error('Errore encoding UTF-8:', e);
-    // Fallback
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode('0x' + p1)));
-  }
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  let binary = '';
+  data.forEach(byte => binary += String.fromCharCode(byte));
+  return btoa(binary);
 }
 
 function base64ToUtf8(base64) {
-  try {
-    // Metodo moderno con TextDecoder
-    const binString = atob(base64);
-    const bytes = Uint8Array.from(binString, m => m.codePointAt(0));
-    return new TextDecoder().decode(bytes);
-  } catch (e) {
-    console.error('Errore decoding UTF-8:', e);
-    // Fallback
-    return decodeURIComponent(Array.prototype.map.call(atob(base64), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
   }
+  const decoder = new TextDecoder();
+  return decoder.decode(bytes);
 }
 
 // ══════════════════════════════════════════════════════
@@ -686,7 +678,6 @@ function H(s) {
   return h.toString(16);
 }
 
-// Costanti predefinite dell'admin
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'admin123';
 const ADMIN_HASH = H(ADMIN_PASS);
@@ -725,8 +716,10 @@ function loadDB() {
     const adminIdx = parsed.users.findIndex(u => u.id === 'u1');
     if (adminIdx < 0) {
       parsed.users.unshift({ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() });
-    } else if (!parsed.users[adminIdx].hash) {
-      parsed.users[adminIdx].hash = ADMIN_HASH;
+    } else {
+      if (!parsed.users[adminIdx].hash) {
+        parsed.users[adminIdx].hash = ADMIN_HASH;
+      }
     }
     return parsed;
   } catch (e) {
@@ -747,7 +740,7 @@ function saveDB() {
   localStorage.setItem('ta_db', JSON.stringify(d));
   dirty = true;
   syncUI();
-  toast('💾 Modifiche salvate localmente', false);
+  toast('💾 Modifiche salvate localmente');
 }
 
 function resetDB() {
@@ -763,7 +756,6 @@ function resetDB() {
   toast('✓ Dati ripristinati. Usa admin / admin123');
 }
 
-// ── LOGIN
 function doLogin() {
   const u = V('lu').trim(), p = V('lp');
   const rem = document.getElementById('lrem').checked;
@@ -801,7 +793,6 @@ function doLogout() {
   E('lp').value = '';
 }
 
-// ── NAVIGATION
 const crumbs = { dash: 'Dashboard', identita: 'Identità & Logo', hero: 'Hero & Banner', footer: 'Footer', notizie: 'Notizie', eventi: 'Eventi', sponsor: 'Sponsor', layout: 'Sezioni & Ordine', utenti: 'Utenti', github: 'GitHub & Sync' };
 function go(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
@@ -822,7 +813,6 @@ function go(id) {
   if (id === 'github') lGh();
 }
 
-// ── SYNC UI
 function syncUI() {
   const tok = getTok(), sd = E('sdot'), sl = E('slabel'), gw = E('ghwarn');
   if (!tok) { sd.className = 'sdot err'; sl.textContent = 'GitHub non configurato'; if (gw) gw.classList.add('on'); }
@@ -831,7 +821,6 @@ function syncUI() {
   E('pubbtn').style.display = tok ? 'flex' : 'none';
 }
 
-// ── DASHBOARD
 function rDash() {
   const nP = DB.notizie.filter(x => x.status === 'pubblicata').length;
   E('dstats').innerHTML = `
@@ -854,44 +843,37 @@ function rDash() {
     </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
 }
 
-// ── IDENTITÀ
 function lId() { const d = DB.identita; SV('id-nome', d.nome || ''); SV('id-tag', d.tag || ''); SV('id-desc', d.desc || ''); SV('id-email', d.email || ''); SV('id-col', d.col || ''); E('id-col-sw').value = d.col || '#d63031'; SV('id-fb', d.social?.fb || ''); SV('id-ig', d.social?.ig || ''); SV('id-tw', d.social?.tw || ''); SV('id-yt', d.social?.yt || ''); SV('logo-url', d.logo || ''); if (d.logo) prevUrl(d.logo, 'logo-img'); }
 function saveId() { DB.identita = { nome: V('id-nome'), tag: V('id-tag'), desc: V('id-desc'), email: V('id-email'), col: V('id-col'), logo: V('logo-url'), social: { fb: V('id-fb'), ig: V('id-ig'), tw: V('id-tw'), yt: V('id-yt') } }; saveDB(); al('a-id'); }
 
-// ── HERO
 function lHero() { const h = DB.hero; SV('hh-url', h.home?.url || ''); SV('hh-title', h.home?.title || ''); SV('hh-sub', h.home?.sub || ''); SV('hh-cta', h.home?.cta || ''); SV('hh-ctalink', h.home?.ctalink || ''); if (h.home?.url) prevUrl(h.home.url, 'hh-p'); SV('hn-url', h.news?.url || ''); SV('hn-title', h.news?.title || ''); if (h.news?.url) prevUrl(h.news.url, 'hn-p'); SV('he-url', h.events?.url || ''); SV('he-title', h.events?.title || ''); if (h.events?.url) prevUrl(h.events.url, 'he-p'); }
 function saveHero() { DB.hero = { home: { url: V('hh-url'), title: V('hh-title'), sub: V('hh-sub'), cta: V('hh-cta'), ctalink: V('hh-ctalink') }, news: { url: V('hn-url'), title: V('hn-title') }, events: { url: V('he-url'), title: V('he-title') } }; saveDB(); al('a-hero'); }
 function htab(id, btn) { ['h-home', 'h-news', 'h-ev'].forEach(t => E(t).style.display = 'none'); E(id).style.display = 'block'; document.querySelectorAll('#p-hero .tab').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
 
-// ── FOOTER
 function lFt() { const f = DB.footer || {}; SV('ft-copy', f.copy || ''); SV('ft-slogan', f.slogan || ''); SV('ft-desc', f.desc || ''); SV('ft-addr', f.addr || ''); SV('ft-email', f.email || ''); SV('ft-tel', f.tel || ''); SV('ft-piva', f.piva || ''); ftLinks = [...(f.links || [])]; rFtLinks(); updFtPrev(); }
 function saveFooter() { DB.footer = { copy: V('ft-copy'), slogan: V('ft-slogan'), desc: V('ft-desc'), addr: V('ft-addr'), email: V('ft-email'), tel: V('ft-tel'), piva: V('ft-piva'), links: ftLinks }; saveDB(); al('a-footer'); updFtPrev(); }
 function rFtLinks() { const c = E('ft-links'); if (!ftLinks.length) { c.innerHTML = '<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>'; return; } c.innerHTML = ftLinks.map((l, i) => `<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px"><input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/><input value="${esc(l.url)}" placeholder="URL" style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/><button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button></div>`).join(''); }
 function addFtLink() { ftLinks.push({ label: '', url: '' }); rFtLinks(); }
 function updFtPrev() { E('fp-brand').textContent = V('ft-slogan') || DB.identita?.nome || 'TuttoApricena'; E('fp-sub').textContent = V('ft-desc') || ''; E('fp-copy').textContent = V('ft-copy') || ''; E('fp-links').innerHTML = ftLinks.map(l => `<span>${l.label || 'Link'}</span>`).join(''); }
 
-// ── NOTIZIE
 function rNews() { const list = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)); E('news-sub').textContent = `${list.length} totali · ${list.filter(x => x.status === 'pubblicata').length} pubblicate`; const tb = E('news-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`; return; } tb.innerHTML = list.map(n => `<tr><td>${n.img ? `<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>` : ''}<div class="ttn">${n.title}</div><div class="ttm">${n.author || ''}</div></td><td><span class="bdg bblu">${n.cat || ''}</span></td><td style="font-size:12px;color:var(--t3)">${n.date || ''}</td><td><span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status || ''}</span></td><td>${n.featured == '1' ? '<span style="color:var(--amb);font-size:15px">★</span>' : '<span style="color:var(--t4)">—</span>'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button></div></td></tr>`).join(''); }
 function openNews() { cNF(); E('mn-tit').textContent = 'Nuova notizia'; om('mo-news'); }
 function editNews(id) { const n = DB.notizie.find(x => x.id === id); if (!n) return; SV('n-id', n.id); SV('n-title', n.title || ''); SV('n-cat', n.cat || 'attualita'); SV('n-date', n.date || ''); SV('n-author', n.author || ''); SV('n-sum', n.summary || ''); SV('n-body', n.body || ''); SV('n-img-url', n.img || ''); SV('n-status', n.status || 'pubblicata'); SV('n-feat', n.featured || '0'); SV('n-tags', (n.tags || []).join(', ')); if (n.img) prevUrl(n.img, 'n-ip'); E('mn-tit').textContent = 'Modifica notizia'; om('mo-news'); }
 function cNF() { ['n-id', 'n-title', 'n-author', 'n-sum', 'n-body', 'n-img-url', 'n-tags'].forEach(i => SV(i, '')); SV('n-date', tod()); SV('n-cat', 'attualita'); SV('n-status', 'pubblicata'); SV('n-feat', '0'); const p = E('n-ip'); p.classList.remove('on'); p.src = ''; }
 function saveNews() { const t = V('n-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('n-id') || 'n' + Date.now(); const d = { id, title: t, cat: V('n-cat'), date: V('n-date'), author: V('n-author'), summary: V('n-sum'), body: V('n-body'), img: V('n-img-url'), status: V('n-status'), featured: V('n-feat'), tags: V('n-tags').split(',').map(x => x.trim()).filter(Boolean) }; const ix = DB.notizie.findIndex(x => x.id === id); if (ix >= 0) DB.notizie[ix] = d; else DB.notizie.unshift(d); saveDB(); cm('mo-news'); rNews(); al('a-news'); }
 
-// ── EVENTI
 function rEv() { const list = [...DB.eventi].sort((a, b) => new Date(a.start) - new Date(b.start)); E('ev-sub').textContent = `${list.length} eventi totali`; const tb = E('ev-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`; return; } tb.innerHTML = list.map(e => `<tr><td><div class="ttn">${e.title}</div><div class="ttm">${e.org || ''}</div></td><td style="font-size:12px;color:var(--t2)">${e.start ? e.start.substring(0, 10) : ''}</td><td style="font-size:12px;color:var(--t3)">${e.place || '—'}</td><td><span class="bdg bblu">${e.cat || ''}</span></td><td><span class="bdg ${e.status === 'programmato' ? 'bok2' : e.status === 'in-corso' ? 'bwrn' : e.status === 'annullato' ? 'bred' : 'bgry'}">${e.status || ''}</span></td><td><div class="tact"><button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button></div></td></tr>`).join(''); }
 function openEv() { cEF(); E('mev-tit').textContent = 'Nuovo evento'; om('mo-ev'); }
 function editEv(id) { const e = DB.eventi.find(x => x.id === id); if (!e) return; SV('e-id', e.id); SV('e-title', e.title || ''); SV('e-start', e.start || ''); SV('e-end', e.end || ''); SV('e-place', e.place || ''); SV('e-cat', e.cat || 'festa'); SV('e-desc', e.desc || ''); SV('e-img-url', e.img || ''); SV('e-org', e.org || ''); SV('e-status', e.status || 'programmato'); SV('e-link', e.link || ''); if (e.img) prevUrl(e.img, 'e-ip'); E('mev-tit').textContent = 'Modifica evento'; om('mo-ev'); }
 function cEF() { ['e-id', 'e-title', 'e-start', 'e-end', 'e-place', 'e-desc', 'e-img-url', 'e-org', 'e-link'].forEach(i => SV(i, '')); SV('e-cat', 'festa'); SV('e-status', 'programmato'); const p = E('e-ip'); p.classList.remove('on'); p.src = ''; }
 function saveEv() { const t = V('e-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('e-id') || 'e' + Date.now(); const d = { id, title: t, start: V('e-start'), end: V('e-end'), place: V('e-place'), cat: V('e-cat'), desc: V('e-desc'), img: V('e-img-url'), org: V('e-org'), status: V('e-status'), link: V('e-link') }; const ix = DB.eventi.findIndex(x => x.id === id); if (ix >= 0) DB.eventi[ix] = d; else DB.eventi.unshift(d); saveDB(); cm('mo-ev'); rEv(); al('a-ev'); }
 
-// ── SPONSOR
 function rSpon() { const g = E('spg'), em = E('spem'); E('spon-cnt').textContent = DB.sponsor.length; if (!DB.sponsor.length) { g.innerHTML = ''; em.style.display = 'block'; return; } em.style.display = 'none'; g.innerHTML = DB.sponsor.map(s => `<div class="spc"><button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>${s.logo ? `<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>` : '<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}<div class="spnm">${s.nome}</div><div class="sptier">${s.tier}</div></div>`).join(''); }
 function lSponSet() { const ss = DB.sponsorSettings || {}; SV('sp-pos', ss.position || 'after-news'); SV('sp-title', ss.title || ''); SV('sp-cols', ss.cols || '4'); }
 function saveSponSet() { DB.sponsorSettings = { position: V('sp-pos'), title: V('sp-title'), cols: V('sp-cols') }; saveDB(); al('a-spon'); }
 function openSpon() { ['s-nome', 's-logo-url', 's-sito'].forEach(i => SV(i, '')); SV('s-tier', 'partner'); const p = E('s-ip'); p.classList.remove('on'); p.src = ''; om('mo-spon'); }
 function saveSpon() { const n = V('s-nome').trim(); if (!n) { alert('Nome obbligatorio'); return; } DB.sponsor.push({ id: 's' + Date.now(), nome: n, logo: V('s-logo-url'), sito: V('s-sito'), tier: V('s-tier') }); saveDB(); cm('mo-spon'); rSpon(); al('a-spon'); }
 
-// ── LAYOUT
 function rLay() { const sl = E('slist'); sl.innerHTML = DB.layout.sections.map((s, i) => `<div class="srow" draggable="true" data-i="${i}" ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)"><span class="dh">⠿</span><span class="sico">${s.icon}</span><span class="snm">${s.label}</span><label class="sw"><input type="checkbox" ${s.vis ? 'checked' : ''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/><span class="sws"></span></label><span style="font-size:11px;color:var(--t3);width:50px">${s.vis ? 'Visibile' : 'Nascosta'}</span></div>`).join(''); SV('lay-nl', DB.layout.newsLayout || 'grid'); SV('lay-pp', DB.layout.newsPerPage || '9'); SV('lay-ord', DB.layout.newsOrder || 'newest'); SV('lay-tabs', DB.layout.newsTabs || 'hide'); }
 function dS(e) { dragIdx = +e.currentTarget.dataset.i; e.currentTarget.classList.add('dragging'); }
 function dO(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
@@ -899,7 +881,6 @@ function dL(e) { e.currentTarget.classList.remove('over'); }
 function dD(e) { e.preventDefault(); e.currentTarget.classList.remove('over'); const ti = +e.currentTarget.dataset.i; if (dragIdx === null || dragIdx === ti) return; const a = DB.layout.sections; const it = a.splice(dragIdx, 1)[0]; a.splice(ti, 0, it); dragIdx = null; document.querySelectorAll('.srow').forEach(r => { r.classList.remove('dragging'); r.classList.remove('over'); }); rLay(); }
 function saveLayout() { DB.layout.newsLayout = V('lay-nl'); DB.layout.newsPerPage = V('lay-pp'); DB.layout.newsOrder = V('lay-ord'); DB.layout.newsTabs = V('lay-tabs'); saveDB(); al('a-lay'); }
 
-// ── UTENTI
 function rUsers() { E('usr-tb').innerHTML = DB.users.map(u => `<tr><td><div class="ttn">${u.username}</div></td><td><span class="bdg ${u.role === 'admin' ? 'bred' : 'bwrn'}">${u.role}</span></td><td style="font-size:12px;color:var(--t3)">${u.created || '—'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>${u.id === 'u1' ? '<span style="font-size:11px;color:var(--t4)">Principale</span>' : `<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}</div></td></tr>`).join(''); }
 function openUser() { SV('u-id', ''); SV('u-uname', ''); SV('u-pass', ''); SV('u-role', 'editor'); E('u-phi').style.display = 'none'; E('mu-tit').textContent = 'Nuovo utente'; om('mo-usr'); }
 function editUser(id) { const u = DB.users.find(x => x.id === id); if (!u) return; SV('u-id', u.id); SV('u-uname', u.username); SV('u-pass', ''); SV('u-role', u.role); E('u-phi').style.display = 'inline'; E('mu-tit').textContent = 'Modifica utente'; om('mo-usr'); }
@@ -918,7 +899,6 @@ function saveUser() {
   saveDB(); cm('mo-usr'); rUsers(); al('a-usr');
 }
 
-// ── DELETE
 function cDel(type, id, name) { E('del-msg').textContent = `Stai per eliminare "${name}". Azione irreversibile.`; E('del-ok').onclick = () => doDel(type, id); om('mo-del'); }
 function doDel(type, id) {
   if (type === 'notizia') DB.notizie = DB.notizie.filter(x => x.id !== id);
@@ -933,7 +913,9 @@ function doDel(type, id) {
   rDash();
 }
 
-// ── GITHUB
+// ══════════════════════════════════════════════════════
+// GITHUB SYNC & PUBLISH
+// ══════════════════════════════════════════════════════
 function addLog(msg, ok = true) {
   const el = E('pub-log'); if (!el) return;
   const ts = new Date().toLocaleTimeString('it-IT');
@@ -990,11 +972,8 @@ async function ghReq(method, path, body) {
 
 async function publishNow() {
   if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
-  const btn = E('pubbtn');
-  btn.disabled = true; 
-  E('sdot').className = 'sdot busy'; 
-  E('slabel').textContent = 'Pubblicazione...';
-  addLog('=== Avvio pubblicazione ===');
+  E('pubbtn').disabled = true; E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Pubblicazione...';
+  addLog('=== PUBBLICAZIONE SUL SITO ===');
   addLog('Owner: ' + (DB.github.owner || '?') + ' | Repo: ' + (DB.github.repo || '?') + ' | Branch: ' + (DB.github.branch || 'main'));
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
@@ -1010,87 +989,81 @@ async function publishNow() {
     }
     const exp = { identita: DB.identita, hero: DB.hero, footer: DB.footer, notizie: DB.notizie, eventi: DB.eventi, sponsor: DB.sponsor, sponsorSettings: DB.sponsorSettings, layout: DB.layout };
     const json = JSON.stringify(exp, null, 2);
-    addLog('Dati preparati: ' + DB.notizie.length + ' notizie, ' + DB.eventi.length + ' eventi, ' + DB.sponsor.length + ' sponsor');
-    
-    // ✅ USO DELLA NUOVA FUNZIONE UTF-8
+    addLog('📦 Dati preparati: ' + DB.notizie.length + ' notizie, ' + DB.eventi.length + ' eventi, ' + DB.sponsor.length + ' sponsor');
     const content = utf8ToBase64(json);
-    
+    addLog('📝 JSON codificato in base64 (' + content.length + ' caratteri)');
     const body = { message: 'CMS update — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
     if (sha) body.sha = sha;
-    addLog('Invio a GitHub API...');
+    addLog('☁️ Invio a GitHub API...');
     const res = await ghReq('PUT', path, body);
-    addLog('✅ Pubblicato con successo! Commit: ' + (res.commit?.sha?.substring(0, 8) || 'ok'));
-    dirty = false; 
-    E('sdot').className = 'sdot ok'; 
-    E('slabel').textContent = 'Sito aggiornato ✓';
-    toast('✓ Pubblicato! Il sito si aggiorna in 10–30 secondi.');
+    addLog('✅ PUBBLICATO CON SUCCESSO! Commit: ' + (res.commit?.sha?.substring(0, 8) || 'ok'));
+    addLog('→ Il sito si aggiorna in 10–30 secondi');
+    dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sito aggiornato ✓';
+    toast('✓ Pubblicato! Il sito si aggiorna in 10–30 sec.');
   } catch (e) {
-    addLog('ERRORE PUBBLICAZIONE: ' + e.message, false);
+    addLog('❌ ERRORE PUBBLICAZIONE: ' + e.message, false);
     addLog('→ Controlla: token valido? Permessi Contents R+W? Repo/path corretti?', false);
-    E('sdot').className = 'sdot err'; 
-    E('slabel').textContent = 'Errore';
+    E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore';
     toast('✕ ' + e.message, true);
   }
-  finally { btn.disabled = false; }
+  finally { E('pubbtn').disabled = false; }
 }
 
 async function syncFrom() {
-  if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
-  E('sdot').className = 'sdot busy'; 
-  E('slabel').textContent = 'Sincronizzazione...';
-  addLog('=== Avvio sincronizzazione dal sito ===');
+  if (!getTok()) { toast('⚠️ Token non configurato', true); go('github'); return; }
+  E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Sincronizzazione...';
+  addLog('=== SINCRONIZZAZIONE DAL SITO ===');
+  addLog('⚠️ IMPORTANTE: questa operazione sovrascrive i dati locali con quelli su GitHub');
   try {
     const path = DB.github.path || 'tuttoapricena/assets/data.json';
-    addLog('Lettura: ' + path);
+    addLog('📂 Percorso file: ' + path);
+    addLog('📡 Richiesta a GitHub...');
     const cur = await ghReq('GET', path);
+    addLog('📥 File ricevuto da GitHub (SHA: ' + cur.sha.substring(0, 8) + ')');
+    addLog('🔓 Decodifica da base64...');
+    const decoded = base64ToUtf8(cur.content.replace(/\n/g, ''));
+    addLog('✓ Decodificato ' + decoded.length + ' caratteri');
+    const dec = JSON.parse(decoded);
     
-    if (!cur || !cur.content) {
-      throw new Error('File non trovato o vuoto su GitHub — pubblica prima i dati dal CMS');
+    // LOG DETTAGLIATO: mostra cosa c'è nel file remoto
+    addLog('📊 DATI LETTI DA GITHUB:');
+    addLog('  → Notizie: ' + (dec.notizie?.length || 0));
+    addLog('  → Eventi: ' + (dec.eventi?.length || 0));
+    addLog('  → Sponsor: ' + (dec.sponsor?.length || 0));
+    addLog('  → Identità: ' + (dec.identita?.nome || 'non presente'));
+    
+    // Se tutti gli array sono vuoti, avvisa l'utente
+    if (!dec.notizie?.length && !dec.eventi?.length && !dec.sponsor?.length) {
+      addLog('⚠️ ATTENZIONE: il file su GitHub è vuoto o non contiene dati', false);
+      addLog('→ Hai pubblicato almeno una volta? Usa "Pubblica sul sito" prima.', false);
+      toast('⚠️ File su GitHub vuoto — pubblica prima dei dati', true);
+      E('sdot').className = 'sdot err'; E('slabel').textContent = 'File vuoto';
+      return;
     }
     
-    addLog('File trovato, dimensione Base64: ' + cur.content.length + ' caratteri');
-    
-    // ✅ Decodifica Base64 -> UTF-8 -> JSON
-    const base64Clean = cur.content.replace(/\n/g, '').replace(/\s/g, '');
-    addLog('Decodifica contenuto Base64...');
-    const jsonString = base64ToUtf8(base64Clean);
-    addLog('JSON decodificato, lunghezza: ' + jsonString.length + ' caratteri');
-    
-    const dec = JSON.parse(jsonString);
-    
-    // Verifica che i dati siano validi
-    if (!dec || typeof dec !== 'object') {
-      throw new Error('Formato dati non valido nel file GitHub');
-    }
-    
-    addLog('Dati parsati: ' + (dec.notizie?.length || 0) + ' notizie, ' + (dec.eventi?.length || 0) + ' eventi, ' + (dec.sponsor?.length || 0) + ' sponsor');
-    
-    // Mantieni utenti e config GitHub locali
     const lu = DB.users, lg = DB.github;
     DB = { ...defDB(), ...dec, users: lu, github: lg };
-    saveDB(); 
-    dirty = false; 
-    E('sdot').className = 'sdot ok'; 
-    E('slabel').textContent = 'Sincronizzato ✓';
-    addLog('✅ Sincronizzazione completata con successo');
-    rDash(); 
-    toast('✓ Dati sincronizzati dal sito!');
+    saveDB(); dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sincronizzato ✓';
+    addLog('✅ SINCRONIZZAZIONE COMPLETATA');
+    rDash(); toast('✓ Dati sincronizzati dal sito!');
   } catch (e) {
-    addLog('ERRORE SYNC: ' + e.message, false);
-    if (e.message.includes('404') || e.message.includes('non trovato')) {
+    addLog('❌ ERRORE SYNC: ' + e.message, false);
+    if (e.message.includes('404') || e.message.includes('not found')) {
       addLog('→ Il file data.json non esiste ancora su GitHub', false);
-      addLog('→ Soluzione: clicca "Pubblica sul sito" per creare il file', false);
+      addLog('→ SOLUZIONE: usa "Pubblica sul sito" almeno una volta per crearlo', false);
+      toast('⚠️ File non trovato su GitHub — pubblica prima', true);
+    } else {
+      addLog('→ Controlla: token valido? Percorso corretto? Repo accessibile?', false);
+      toast('✕ ' + e.message, true);
     }
-    E('sdot').className = 'sdot err'; 
-    E('slabel').textContent = 'Errore sync';
-    toast('✕ ' + e.message, true);
+    E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore sync';
   }
 }
 
 async function testGh() {
   const owner = V('gh-owner'), repo = V('gh-repo'), tok = V('gh-token').trim() || getTok();
   if (!tok) { showAlerr('Token mancante — inserisci il token prima di testare'); return; }
-  addLog('=== Test connessione GitHub ===');
+  addLog('=== TEST CONNESSIONE GITHUB ===');
   addLog('Repo: ' + owner + '/' + repo);
   try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': 'token ' + tok } });
@@ -1111,11 +1084,9 @@ async function testGh() {
 }
 function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 6000); }
 
-// ── IMMAGINI
 function handleImg(input, prevId, urlId) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { SV(urlId, e.target.result); prevUrl(e.target.result, prevId); }; r.readAsDataURL(f); }
 function prevUrl(url, id) { const e = E(id); if (!e) return; if (url) { e.src = url; e.classList.add('on'); } else { e.classList.remove('on'); e.src = ''; } if (id === 'logo-img') { if (url) { e.style.display = 'block'; E('logo-empty').style.display = 'none'; } else { e.style.display = 'none'; E('logo-empty').style.display = 'block'; } } }
 
-// ── UTILS
 const E = id => document.getElementById(id);
 const V = id => { const e = E(id); return e ? e.value : ''; };
 const SV = (id, v) => { const e = E(id); if (e) e.value = v; };
