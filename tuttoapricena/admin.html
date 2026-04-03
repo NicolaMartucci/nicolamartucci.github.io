@@ -1044,20 +1044,43 @@ async function syncFrom() {
     addLog('Lettura: ' + path);
     const cur = await ghReq('GET', path);
     
-    // ✅ USO DELLA NUOVA FUNZIONE UTF-8
-    const dec = JSON.parse(base64ToUtf8(cur.content.replace(/\n/g, '')));
+    if (!cur || !cur.content) {
+      throw new Error('File non trovato o vuoto su GitHub — pubblica prima i dati dal CMS');
+    }
     
+    addLog('File trovato, dimensione Base64: ' + cur.content.length + ' caratteri');
+    
+    // ✅ Decodifica Base64 -> UTF-8 -> JSON
+    const base64Clean = cur.content.replace(/\n/g, '').replace(/\s/g, '');
+    addLog('Decodifica contenuto Base64...');
+    const jsonString = base64ToUtf8(base64Clean);
+    addLog('JSON decodificato, lunghezza: ' + jsonString.length + ' caratteri');
+    
+    const dec = JSON.parse(jsonString);
+    
+    // Verifica che i dati siano validi
+    if (!dec || typeof dec !== 'object') {
+      throw new Error('Formato dati non valido nel file GitHub');
+    }
+    
+    addLog('Dati parsati: ' + (dec.notizie?.length || 0) + ' notizie, ' + (dec.eventi?.length || 0) + ' eventi, ' + (dec.sponsor?.length || 0) + ' sponsor');
+    
+    // Mantieni utenti e config GitHub locali
     const lu = DB.users, lg = DB.github;
     DB = { ...defDB(), ...dec, users: lu, github: lg };
     saveDB(); 
     dirty = false; 
     E('sdot').className = 'sdot ok'; 
     E('slabel').textContent = 'Sincronizzato ✓';
-    addLog('✅ Sincronizzazione completata: ' + (dec.notizie?.length || 0) + ' notizie, ' + (dec.eventi?.length || 0) + ' eventi');
+    addLog('✅ Sincronizzazione completata con successo');
     rDash(); 
     toast('✓ Dati sincronizzati dal sito!');
   } catch (e) {
     addLog('ERRORE SYNC: ' + e.message, false);
+    if (e.message.includes('404') || e.message.includes('non trovato')) {
+      addLog('→ Il file data.json non esiste ancora su GitHub', false);
+      addLog('→ Soluzione: clicca "Pubblica sul sito" per creare il file', false);
+    }
     E('sdot').className = 'sdot err'; 
     E('slabel').textContent = 'Errore sync';
     toast('✕ ' + e.message, true);
