@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Data.json - TuttoApricena</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #1a202c;
+    }
+    .status {
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .loading {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #92400e;
+    }
+    .success {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      color: #065f46;
+    }
+    .error {
+      background: #fee2e2;
+      border: 2px solid #ef4444;
+      color: #991b1b;
+    }
+    .data {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #5568d3;
+    }
+    .step {
+      margin: 15px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+    .step::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔍 Test Data.json</h1>
+    <p style="color: #6b7280; margin-bottom: 20px;">Verifica se i dati del CMS esistono su GitHub</p>
+    
+    <div id="result" class="status loading">
+      ⏳ Caricamento in corso...
+    </div>
+
+    <div id="details" style="display: none;">
+      <h3 style="margin-top: 25px; margin-bottom: 10px; color: #1a202c;">📊 Dettagli:</h3>
+      <div id="stats" style="font-size: 14px; color: #374151;"></div>
+      <div id="jsonData" class="data" style="display: none;"></div>
+    </div>
+
+    <button class="btn" onclick="location.reload()">🔄 Riprova</button>
+  </div>
+
+  <script>
+    const dataUrl = '/tuttoapricena/assets/data.json?t=' + Date.now();
+    const resultDiv = document.getElementById('result');
+    const detailsDiv = document.getElementById('details');
+    const statsDiv = document.getElementById('stats');
+    const jsonDataDiv = document.getElementById('jsonData');
+
+    console.log('🔍 Tentativo di caricare:', dataUrl);
+
+    fetch(dataUrl)
+      .then(response => {
+        console.log('📡 Risposta ricevuta:', response.status, response.statusText);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        return response.json();
+      })
+      .then(data => {
+        console.log('✅ Dati caricati con successo:', data);
+        
+        // Conta i dati
+        const notizie = data.notizie?.length || 0;
+        const eventi = data.eventi?.length || 0;
+        const sponsor = data.sponsor?.length || 0;
+
+        resultDiv.className = 'status success';
+        resultDiv.innerHTML = `
+          <strong>✅ FILE TROVATO!</strong><br>
+          Il file <code>data.json</code> esiste ed è stato caricato correttamente!
+        `;
+
+        detailsDiv.style.display = 'block';
+        statsDiv.innerHTML = `
+          <div class="step"><strong>Notizie:</strong> ${notizie}</div>
+          <div class="step"><strong>Eventi:</strong> ${eventi}</div>
+          <div class="step"><strong>Sponsor:</strong> ${sponsor}</div>
+          <div class="step"><strong>Nome sito:</strong> ${data.identita?.nome || 'Non impostato'}</div>
+        `;
+
+        // Mostra le notizie se ci sono
+        if (notizie > 0) {
+          let notizieHTML = '<h4 style="margin-top:15px; margin-bottom:8px;">📰 Notizie trovate:</h4>';
+          data.notizie.forEach((n, i) => {
+            notizieHTML += `
+              <div style="padding: 10px; background: white; border-radius: 6px; margin: 8px 0; border-left: 3px solid #667eea;">
+                <strong>${i + 1}. ${n.title || 'Senza titolo'}</strong><br>
+                <small style="color: #6b7280;">
+                  📁 ${n.cat || '—'} | 
+                  📅 ${n.date || '—'} | 
+                  🏷️ ${n.status || '—'}
+                  ${n.featured === '1' ? ' | ⭐ In evidenza' : ''}
+                </small>
+              </div>
+            `;
+          });
+          statsDiv.innerHTML += notizieHTML;
+        }
+
+        // Mostra JSON completo (opzionale)
+        jsonDataDiv.textContent = JSON.stringify(data, null, 2);
+        jsonDataDiv.style.display = 'block';
+
+      })
+      .catch(error => {
+        console.error('❌ Errore:', error);
+        
+        resultDiv.className = 'status error';
+        
+        if (error.message.includes('404')) {
+          resultDiv.innerHTML = `
+            <strong>❌ FILE NON TROVATO</strong><br><br>
+            Il file <code>data.json</code> non esiste ancora su GitHub.<br><br>
+            <strong>📋 COSA FARE:</strong><br>
+            <div class="step">Apri <code>admin.html</code></div>
+            <div class="step">Crea almeno 1 notizia</div>
+            <div class="step">Vai su "GitHub & Sync"</div>
+            <div class="step">Clicca "Pubblica sul sito"</div>
+            <div class="step">Aspetta il messaggio di successo</div>
+            <div class="step">Ricarica questa pagina (F5)</div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <strong>❌ ERRORE DI CARICAMENTO</strong><br><br>
+            ${error.message}<br><br>
+            <strong>Possibili cause:</strong><br>
+            <div class="step">Repository non pubblicato su GitHub Pages</div>
+            <div class="step">Percorso file errato</div>
+            <div class="step">Problemi di connessione</div>
+          `;
+        }
+
+        detailsDiv.style.display = 'block';
+        statsDiv.innerHTML = `
+          <div class="step"><strong>URL tentato:</strong> <code>${dataUrl}</code></div>
+          <div class="step"><strong>Repository:</strong> nicolamartucci.github.io</div>
+          <div class="step"><strong>Path atteso:</strong> tuttoapricena/assets/data.json</div>
+        `;
+      });
+  </script>
+</body>
+</html>
