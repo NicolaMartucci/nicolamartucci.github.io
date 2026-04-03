@@ -40,7 +40,21 @@
     "piva": "",
     "links": []
   },
-  "notizie": [],
+  "notizie": [
+    {
+      "id": "n1775212411863",
+      "title": "prova",
+      "cat": "attualita",
+      "date": "2026-04-03",
+      "author": "",
+      "summary": "a",
+      "body": "aaaa",
+      "img": "",
+      "status": "pubblicata",
+      "featured": "0",
+      "tags": []
+    }
+  ],
   "eventi": [],
   "sponsor": [],
   "sponsorSettings": {
