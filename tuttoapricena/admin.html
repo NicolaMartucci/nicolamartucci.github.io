@@ -46,6 +46,8 @@ input,select,textarea,button{font-family:var(--ff);font-size:14px;color:var(--t1
 .lbtn:hover{background:#b91c1c}
 .lerr{color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;display:none}
 .lerr.x{display:block}
+.lreset{font-size:11px;color:var(--t4);text-align:center;margin-top:10px;cursor:pointer;text-decoration:underline}
+.lreset:hover{color:var(--red)}
 
 /* SHELL */
 #APP{display:none;height:100vh;flex-direction:row;overflow:hidden}
@@ -239,11 +241,12 @@ tbody tr:hover td{background:var(--g1)}
     <div class="rem"><input type="checkbox" id="lrem" /><label for="lrem">Ricorda le credenziali di accesso</label></div>
     <button class="lbtn" onclick="doLogin()">Accedi</button>
     <div class="lerr" id="lerr">Username o password non corretti</div>
+    <div class="lreset" onclick="resetDB()">Problemi di accesso? Reimposta i dati</div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="APP" style="display:flex">
+<div id="APP" style="display:none">
   <nav class="nav">
     <div class="nbrand">
       <div><div class="nbmark">Tutto<span>Apricena</span></div></div>
@@ -486,7 +489,7 @@ tbody tr:hover td{background:var(--g1)}
       <li>Aggiungi lo snippet sotto nel tuo <code>index.html</code> per leggere i dati</li>
     </ol></div>
   </div>
-  <div class="card"><div class="chd">Snippet per index.html (aggiungi prima di &lt;/body&gt;)</div>
+  <div class="card"><div class="chd">Snippet per index.html</div>
     <div class="snippet"><code id="gh-snip"></code></div>
     <button class="btn bg bsm" style="margin-top:9px" onclick="copySnip()">Copia snippet</button>
   </div>
@@ -592,271 +595,361 @@ tbody tr:hover td{background:var(--g1)}
 
 <script>
 // ══════════════════════════════════════════════════════
-// SECURITY: Token is stored ONLY in localStorage['ta_tok']
-// It is NEVER written into any file or the DB object.
-// Published data.json NEVER contains the token or user hashes.
+// FNV-1a 32-bit hash — usato per le password
+// IMPORTANTE: questa funzione DEVE essere definita PRIMA
+// di qualsiasi chiamata a defDB() o caricamento del DB
 // ══════════════════════════════════════════════════════
+function H(s) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h.toString(16);
+}
 
-// FNV-1a 32-bit hash — consistent, fast
-function H(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h.toString(16)}
+// Costanti predefinite dell'admin — calcolate subito
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin123';
+const ADMIN_HASH = H(ADMIN_PASS); // calcolato una volta sola
 
-function defDB(){return{
-  users:[{id:'u1',username:'admin',hash:H('admin123'),role:'admin',created:tod()}],
-  identita:{nome:'TuttoApricena',tag:'Il portale di Apricena',desc:'',email:'',col:'#d63031',logo:'',social:{fb:'',ig:'',tw:'',yt:''}},
-  hero:{home:{url:'',title:'Benvenuti ad Apricena',sub:'',cta:'Scopri le notizie',ctalink:'#notizie'},news:{url:'',title:'Ultime notizie'},events:{url:'',title:'Eventi in programma'}},
-  footer:{copy:'© 2025 TuttoApricena. Tutti i diritti riservati.',slogan:'TuttoApricena',desc:'',addr:'Apricena (FG), Italia',email:'',tel:'',piva:'',links:[]},
-  notizie:[],eventi:[],sponsor:[],
-  sponsorSettings:{position:'after-news',title:'I nostri sponsor',cols:'4'},
-  layout:{sections:[
-    {id:'hero',label:'Hero principale',icon:'🖼',vis:true},
-    {id:'notizie',label:'Notizie',icon:'📰',vis:true},
-    {id:'eventi',label:'Eventi',icon:'📅',vis:true},
-    {id:'sponsor',label:'Sponsor',icon:'🤝',vis:true},
-    {id:'contatti',label:'Contatti',icon:'📞',vis:true},
-    {id:'footer',label:'Footer',icon:'📄',vis:true}
-  ],newsLayout:'grid',newsPerPage:'9',newsOrder:'newest',newsTabs:'hide'},
-  github:{owner:'NicolaMartucci',repo:'nicolamartucci.github.io',branch:'main',path:'tuttoapricena/assets/data.json'}
-}}
+function tod() { return new Date().toISOString().substring(0, 10); }
 
-let DB=(()=>{try{const s=localStorage.getItem('ta_db');return s?JSON.parse(s):defDB()}catch(e){return defDB()}})();
-let CU=null,ftLinks=[],dragIdx=null,dirty=false;
+function defDB() {
+  return {
+    users: [{ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() }],
+    identita: { nome: 'TuttoApricena', tag: 'Il portale di Apricena', desc: '', email: '', col: '#d63031', logo: '', social: { fb: '', ig: '', tw: '', yt: '' } },
+    hero: { home: { url: '', title: 'Benvenuti ad Apricena', sub: '', cta: 'Scopri le notizie', ctalink: '#notizie' }, news: { url: '', title: 'Ultime notizie' }, events: { url: '', title: 'Eventi in programma' } },
+    footer: { copy: '© 2025 TuttoApricena. Tutti i diritti riservati.', slogan: 'TuttoApricena', desc: '', addr: 'Apricena (FG), Italia', email: '', tel: '', piva: '', links: [] },
+    notizie: [], eventi: [], sponsor: [],
+    sponsorSettings: { position: 'after-news', title: 'I nostri sponsor', cols: '4' },
+    layout: {
+      sections: [
+        { id: 'hero', label: 'Hero principale', icon: '🖼', vis: true },
+        { id: 'notizie', label: 'Notizie', icon: '📰', vis: true },
+        { id: 'eventi', label: 'Eventi', icon: '📅', vis: true },
+        { id: 'sponsor', label: 'Sponsor', icon: '🤝', vis: true },
+        { id: 'contatti', label: 'Contatti', icon: '📞', vis: true },
+        { id: 'footer', label: 'Footer', icon: '📄', vis: true }
+      ],
+      newsLayout: 'grid', newsPerPage: '9', newsOrder: 'newest', newsTabs: 'hide'
+    },
+    github: { owner: 'NicolaMartucci', repo: 'nicolamartucci.github.io', branch: 'main', path: 'tuttoapricena/assets/data.json' }
+  };
+}
 
-const getTok=()=>localStorage.getItem('ta_tok')||'';
-const setTok=t=>t?localStorage.setItem('ta_tok',t):localStorage.removeItem('ta_tok');
+// ── Caricamento DB con validazione e riparazione automatica
+function loadDB() {
+  try {
+    const raw = localStorage.getItem('ta_db');
+    if (!raw) return defDB();
+    const parsed = JSON.parse(raw);
+    // Assicurati che ci sia sempre l'utente admin con hash corretto
+    if (!parsed.users) parsed.users = [];
+    const adminIdx = parsed.users.findIndex(u => u.id === 'u1');
+    if (adminIdx < 0) {
+      // Admin rimosso: lo riaggiungiamo
+      parsed.users.unshift({ id: 'u1', username: ADMIN_USER, hash: ADMIN_HASH, role: 'admin', created: tod() });
+    } else {
+      // Admin presente: aggiorna solo l'hash se non corrisponde
+      // (questo risolve il caso in cui il DB è stato salvato con un hash diverso)
+      if (!parsed.users[adminIdx].hash) {
+        parsed.users[adminIdx].hash = ADMIN_HASH;
+      }
+    }
+    return parsed;
+  } catch (e) {
+    console.warn('DB corrotto, ripristino dal default', e);
+    return defDB();
+  }
+}
 
-function saveDB(){
-  const d=JSON.parse(JSON.stringify(DB));
-  delete d.github?.token; // safety: never store token in DB
-  localStorage.setItem('ta_db',JSON.stringify(d));
-  dirty=true; syncUI();
+let DB = loadDB();
+let CU = null, ftLinks = [], dragIdx = null, dirty = false;
+
+const getTok = () => localStorage.getItem('ta_tok') || '';
+const setTok = t => t ? localStorage.setItem('ta_tok', t) : localStorage.removeItem('ta_tok');
+
+function saveDB() {
+  const d = JSON.parse(JSON.stringify(DB));
+  delete d.github?.token; // sicurezza: il token non va nel DB
+  localStorage.setItem('ta_db', JSON.stringify(d));
+  dirty = true;
+  syncUI();
+}
+
+// ── RESET DB (link di recupero nella pagina login)
+function resetDB() {
+  if (!confirm('Questa operazione cancellerà tutti i dati salvati nel browser e ripristinerà le credenziali predefinite (admin / admin123). Continuare?')) return;
+  localStorage.removeItem('ta_db');
+  localStorage.removeItem('ta_ru');
+  localStorage.removeItem('ta_rp');
+  localStorage.removeItem('ta_rem');
+  DB = defDB();
+  E('lerr').classList.remove('x');
+  E('lu').value = ADMIN_USER;
+  E('lp').value = '';
+  toast('✓ Dati ripristinati. Usa admin / admin123');
 }
 
 // ── LOGIN
-function doLogin(){
-  const u=V('lu').trim(),p=V('lp'),rem=document.getElementById('lrem').checked;
-  const found=DB.users.find(x=>x.username===u&&x.hash===H(p));
-  if(!found){E('lerr').classList.add('x');return;}
-  if(rem){localStorage.setItem('ta_ru',u);localStorage.setItem('ta_rp',p);localStorage.setItem('ta_rem','1')}
-  else{localStorage.removeItem('ta_ru');localStorage.removeItem('ta_rp');localStorage.removeItem('ta_rem')}
-  CU=found;
-  E('LS').style.display='none';E('APP').style.display='flex';
-  E('nav-av').textContent=u[0].toUpperCase();E('nav-nm').textContent=u;
-  E('nav-rl').textContent=found.role==='admin'?'Administrator':'Editor';
-  if(found.role!=='admin')document.querySelectorAll('.admin-only').forEach(x=>x.style.display='none');
-  go('dash');syncUI();
+function doLogin() {
+  const u = V('lu').trim(), p = V('lp');
+  const rem = document.getElementById('lrem').checked;
+  const hashed = H(p);
+  // Debug in console (rimovibile in produzione)
+  console.log('Login attempt:', u, '| hash:', hashed);
+  console.log('Users in DB:', DB.users.map(x => ({ u: x.username, h: x.hash })));
+  const found = DB.users.find(x => x.username === u && x.hash === hashed);
+  if (!found) {
+    E('lerr').classList.add('x');
+    return;
+  }
+  E('lerr').classList.remove('x');
+  if (rem) {
+    localStorage.setItem('ta_ru', u);
+    localStorage.setItem('ta_rp', p);
+    localStorage.setItem('ta_rem', '1');
+  } else {
+    localStorage.removeItem('ta_ru');
+    localStorage.removeItem('ta_rp');
+    localStorage.removeItem('ta_rem');
+  }
+  CU = found;
+  E('LS').style.display = 'none';
+  E('APP').style.display = 'flex';
+  E('nav-av').textContent = u[0].toUpperCase();
+  E('nav-nm').textContent = u;
+  E('nav-rl').textContent = found.role === 'admin' ? 'Administrator' : 'Editor';
+  if (found.role !== 'admin') document.querySelectorAll('.admin-only').forEach(x => x.style.display = 'none');
+  go('dash');
+  syncUI();
 }
-function doLogout(){CU=null;E('APP').style.display='none';E('LS').style.display='flex';}
+
+function doLogout() {
+  CU = null;
+  E('APP').style.display = 'none';
+  E('LS').style.display = 'flex';
+  E('lp').value = '';
+}
 
 // ── NAVIGATION
-const crumbs={dash:'Dashboard',identita:'Identità & Logo',hero:'Hero & Banner',footer:'Footer',notizie:'Notizie',eventi:'Eventi',sponsor:'Sponsor',layout:'Sezioni & Ordine',utenti:'Utenti',github:'GitHub & Sync'};
-function go(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  const pg=E('p-'+id);if(pg)pg.classList.add('on');
-  const ni=E('ni-'+id);if(ni)ni.classList.add('on');
-  E('tbc').textContent=crumbs[id]||id;
-  E('pubbtn').style.display=getTok()?'flex':'none';
-  if(id==='dash')rDash();if(id==='identita')lId();if(id==='hero')lHero();
-  if(id==='footer')lFt();if(id==='notizie')rNews();if(id==='eventi')rEv();
-  if(id==='sponsor'){rSpon();lSponSet();}if(id==='layout')rLay();
-  if(id==='utenti')rUsers();if(id==='github')lGh();
+const crumbs = { dash: 'Dashboard', identita: 'Identità & Logo', hero: 'Hero & Banner', footer: 'Footer', notizie: 'Notizie', eventi: 'Eventi', sponsor: 'Sponsor', layout: 'Sezioni & Ordine', utenti: 'Utenti', github: 'GitHub & Sync' };
+function go(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  const pg = E('p-' + id); if (pg) pg.classList.add('on');
+  const ni = E('ni-' + id); if (ni) ni.classList.add('on');
+  E('tbc').textContent = crumbs[id] || id;
+  E('pubbtn').style.display = getTok() ? 'flex' : 'none';
+  if (id === 'dash') rDash();
+  if (id === 'identita') lId();
+  if (id === 'hero') lHero();
+  if (id === 'footer') lFt();
+  if (id === 'notizie') rNews();
+  if (id === 'eventi') rEv();
+  if (id === 'sponsor') { rSpon(); lSponSet(); }
+  if (id === 'layout') rLay();
+  if (id === 'utenti') rUsers();
+  if (id === 'github') lGh();
 }
 
 // ── SYNC UI
-function syncUI(){
-  const tok=getTok(),sd=E('sdot'),sl=E('slabel'),gw=E('ghwarn');
-  if(!tok){sd.className='sdot err';sl.textContent='GitHub non configurato';if(gw)gw.classList.add('on')}
-  else if(dirty){sd.className='sdot busy';sl.textContent='Modifiche in attesa...';if(gw)gw.classList.remove('on')}
-  else{sd.className='sdot ok';sl.textContent='Sito aggiornato';if(gw)gw.classList.remove('on')}
-  E('pubbtn').style.display=tok?'flex':'none';
+function syncUI() {
+  const tok = getTok(), sd = E('sdot'), sl = E('slabel'), gw = E('ghwarn');
+  if (!tok) { sd.className = 'sdot err'; sl.textContent = 'GitHub non configurato'; if (gw) gw.classList.add('on'); }
+  else if (dirty) { sd.className = 'sdot busy'; sl.textContent = 'Modifiche in attesa...'; if (gw) gw.classList.remove('on'); }
+  else { sd.className = 'sdot ok'; sl.textContent = 'Sito aggiornato'; if (gw) gw.classList.remove('on'); }
+  E('pubbtn').style.display = tok ? 'flex' : 'none';
 }
 
 // ── DASHBOARD
-function rDash(){
-  const nP=DB.notizie.filter(x=>x.status==='pubblicata').length;
-  E('dstats').innerHTML=`
+function rDash() {
+  const nP = DB.notizie.filter(x => x.status === 'pubblicata').length;
+  E('dstats').innerHTML = `
     <div class="stat red"><div class="statn">${DB.notizie.length}</div><div class="statl">Notizie totali</div></div>
     <div class="stat grn"><div class="statn">${nP}</div><div class="statl">Pubblicate</div></div>
     <div class="stat amb"><div class="statn">${DB.eventi.length}</div><div class="statl">Eventi</div></div>
     <div class="stat blu"><div class="statn">${DB.sponsor.length}</div><div class="statl">Sponsor</div></div>`;
-  const news=[...DB.notizie].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
-  E('dnews').innerHTML=news.length?news.map(n=>`
+  const news = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+  E('dnews').innerHTML = news.length ? news.map(n => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:pointer" onclick="editNews('${n.id}')">
-      ${n.img?`<img src="${n.img}" style="width:29px;height:29px;border-radius:5px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>`:'<div style="width:29px;height:29px;background:var(--g2);border-radius:5px;flex-shrink:0"></div>'}
-      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.title}</div><div style="font-size:11px;color:var(--t3)">${n.date||''}</div></div>
-      <span class="bdg ${n.status==='pubblicata'?'bok2':n.status==='bozza'?'bwrn':'bgry'}">${n.status}</span>
-    </div>`).join(''):'<div class="empty" style="padding:16px"><div class="emico">📰</div><div class="emtxt">Nessuna notizia</div></div>';
-  const evs=[...DB.eventi].filter(e=>e.status!=='concluso'&&e.status!=='annullato').slice(0,5);
-  E('devs').innerHTML=evs.length?evs.map(e=>`
+      ${n.img ? `<img src="${n.img}" style="width:29px;height:29px;border-radius:5px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>` : '<div style="width:29px;height:29px;background:var(--g2);border-radius:5px;flex-shrink:0"></div>'}
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.title}</div><div style="font-size:11px;color:var(--t3)">${n.date || ''}</div></div>
+      <span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status}</span>
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📰</div><div class="emtxt">Nessuna notizia</div></div>';
+  const evs = [...DB.eventi].filter(e => e.status !== 'concluso' && e.status !== 'annullato').slice(0, 5);
+  E('devs').innerHTML = evs.length ? evs.map(e => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)">
       <div style="width:29px;height:29px;background:var(--amb-l);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📅</div>
-      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div><div style="font-size:11px;color:var(--t3)">${e.start?e.start.substring(0,10):''}</div></div>
-    </div>`).join(''):'<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div><div style="font-size:11px;color:var(--t3)">${e.start ? e.start.substring(0, 10) : ''}</div></div>
+    </div>`).join('') : '<div class="empty" style="padding:16px"><div class="emico">📅</div><div class="emtxt">Nessun evento</div></div>';
 }
 
 // ── IDENTITÀ
-function lId(){const d=DB.identita;SV('id-nome',d.nome||'');SV('id-tag',d.tag||'');SV('id-desc',d.desc||'');SV('id-email',d.email||'');SV('id-col',d.col||'');E('id-col-sw').value=d.col||'#d63031';SV('id-fb',d.social?.fb||'');SV('id-ig',d.social?.ig||'');SV('id-tw',d.social?.tw||'');SV('id-yt',d.social?.yt||'');SV('logo-url',d.logo||'');if(d.logo)prevUrl(d.logo,'logo-img');}
-function saveId(){DB.identita={nome:V('id-nome'),tag:V('id-tag'),desc:V('id-desc'),email:V('id-email'),col:V('id-col'),logo:V('logo-url'),social:{fb:V('id-fb'),ig:V('id-ig'),tw:V('id-tw'),yt:V('id-yt')}};saveDB();al('a-id');}
+function lId() { const d = DB.identita; SV('id-nome', d.nome || ''); SV('id-tag', d.tag || ''); SV('id-desc', d.desc || ''); SV('id-email', d.email || ''); SV('id-col', d.col || ''); E('id-col-sw').value = d.col || '#d63031'; SV('id-fb', d.social?.fb || ''); SV('id-ig', d.social?.ig || ''); SV('id-tw', d.social?.tw || ''); SV('id-yt', d.social?.yt || ''); SV('logo-url', d.logo || ''); if (d.logo) prevUrl(d.logo, 'logo-img'); }
+function saveId() { DB.identita = { nome: V('id-nome'), tag: V('id-tag'), desc: V('id-desc'), email: V('id-email'), col: V('id-col'), logo: V('logo-url'), social: { fb: V('id-fb'), ig: V('id-ig'), tw: V('id-tw'), yt: V('id-yt') } }; saveDB(); al('a-id'); }
 
 // ── HERO
-function lHero(){const h=DB.hero;SV('hh-url',h.home?.url||'');SV('hh-title',h.home?.title||'');SV('hh-sub',h.home?.sub||'');SV('hh-cta',h.home?.cta||'');SV('hh-ctalink',h.home?.ctalink||'');if(h.home?.url)prevUrl(h.home.url,'hh-p');SV('hn-url',h.news?.url||'');SV('hn-title',h.news?.title||'');if(h.news?.url)prevUrl(h.news.url,'hn-p');SV('he-url',h.events?.url||'');SV('he-title',h.events?.title||'');if(h.events?.url)prevUrl(h.events.url,'he-p');}
-function saveHero(){DB.hero={home:{url:V('hh-url'),title:V('hh-title'),sub:V('hh-sub'),cta:V('hh-cta'),ctalink:V('hh-ctalink')},news:{url:V('hn-url'),title:V('hn-title')},events:{url:V('he-url'),title:V('he-title')}};saveDB();al('a-hero');}
-function htab(id,btn){['h-home','h-news','h-ev'].forEach(t=>E(t).style.display='none');E(id).style.display='block';document.querySelectorAll('#p-hero .tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function lHero() { const h = DB.hero; SV('hh-url', h.home?.url || ''); SV('hh-title', h.home?.title || ''); SV('hh-sub', h.home?.sub || ''); SV('hh-cta', h.home?.cta || ''); SV('hh-ctalink', h.home?.ctalink || ''); if (h.home?.url) prevUrl(h.home.url, 'hh-p'); SV('hn-url', h.news?.url || ''); SV('hn-title', h.news?.title || ''); if (h.news?.url) prevUrl(h.news.url, 'hn-p'); SV('he-url', h.events?.url || ''); SV('he-title', h.events?.title || ''); if (h.events?.url) prevUrl(h.events.url, 'he-p'); }
+function saveHero() { DB.hero = { home: { url: V('hh-url'), title: V('hh-title'), sub: V('hh-sub'), cta: V('hh-cta'), ctalink: V('hh-ctalink') }, news: { url: V('hn-url'), title: V('hn-title') }, events: { url: V('he-url'), title: V('he-title') } }; saveDB(); al('a-hero'); }
+function htab(id, btn) { ['h-home', 'h-news', 'h-ev'].forEach(t => E(t).style.display = 'none'); E(id).style.display = 'block'; document.querySelectorAll('#p-hero .tab').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
 
 // ── FOOTER
-function lFt(){const f=DB.footer||{};SV('ft-copy',f.copy||'');SV('ft-slogan',f.slogan||'');SV('ft-desc',f.desc||'');SV('ft-addr',f.addr||'');SV('ft-email',f.email||'');SV('ft-tel',f.tel||'');SV('ft-piva',f.piva||'');ftLinks=[...(f.links||[])];rFtLinks();updFtPrev();}
-function saveFooter(){DB.footer={copy:V('ft-copy'),slogan:V('ft-slogan'),desc:V('ft-desc'),addr:V('ft-addr'),email:V('ft-email'),tel:V('ft-tel'),piva:V('ft-piva'),links:ftLinks};saveDB();al('a-footer');updFtPrev();}
-function rFtLinks(){const c=E('ft-links');if(!ftLinks.length){c.innerHTML='<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>';return;}c.innerHTML=ftLinks.map((l,i)=>`<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px"><input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/><input value="${esc(l.url)}" placeholder="URL" style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/><button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button></div>`).join('');}
-function addFtLink(){ftLinks.push({label:'',url:''});rFtLinks();}
-function updFtPrev(){E('fp-brand').textContent=V('ft-slogan')||DB.identita?.nome||'TuttoApricena';E('fp-sub').textContent=V('ft-desc')||'';E('fp-copy').textContent=V('ft-copy')||'';E('fp-links').innerHTML=ftLinks.map(l=>`<span>${l.label||'Link'}</span>`).join('');}
+function lFt() { const f = DB.footer || {}; SV('ft-copy', f.copy || ''); SV('ft-slogan', f.slogan || ''); SV('ft-desc', f.desc || ''); SV('ft-addr', f.addr || ''); SV('ft-email', f.email || ''); SV('ft-tel', f.tel || ''); SV('ft-piva', f.piva || ''); ftLinks = [...(f.links || [])]; rFtLinks(); updFtPrev(); }
+function saveFooter() { DB.footer = { copy: V('ft-copy'), slogan: V('ft-slogan'), desc: V('ft-desc'), addr: V('ft-addr'), email: V('ft-email'), tel: V('ft-tel'), piva: V('ft-piva'), links: ftLinks }; saveDB(); al('a-footer'); updFtPrev(); }
+function rFtLinks() { const c = E('ft-links'); if (!ftLinks.length) { c.innerHTML = '<p style="font-size:12px;color:var(--t4);padding:5px 0">Nessun link</p>'; return; } c.innerHTML = ftLinks.map((l, i) => `<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px"><input value="${esc(l.label)}" placeholder="Testo" style="flex:1;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].label=this.value;updFtPrev()"/><input value="${esc(l.url)}" placeholder="URL" style="flex:2;padding:7px 10px;border:1.5px solid var(--bd2);border-radius:var(--r);outline:none" oninput="ftLinks[${i}].url=this.value"/><button class="btn bdel bico bsm" onclick="ftLinks.splice(${i},1);rFtLinks()">✕</button></div>`).join(''); }
+function addFtLink() { ftLinks.push({ label: '', url: '' }); rFtLinks(); }
+function updFtPrev() { E('fp-brand').textContent = V('ft-slogan') || DB.identita?.nome || 'TuttoApricena'; E('fp-sub').textContent = V('ft-desc') || ''; E('fp-copy').textContent = V('ft-copy') || ''; E('fp-links').innerHTML = ftLinks.map(l => `<span>${l.label || 'Link'}</span>`).join(''); }
 
 // ── NOTIZIE
-function rNews(){const list=[...DB.notizie].sort((a,b)=>new Date(b.date)-new Date(a.date));E('news-sub').textContent=`${list.length} totali · ${list.filter(x=>x.status==='pubblicata').length} pubblicate`;const tb=E('news-tb');if(!list.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`;return;}tb.innerHTML=list.map(n=>`<tr><td>${n.img?`<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>`:''}
-<div class="ttn">${n.title}</div><div class="ttm">${n.author||''}</div></td>
-<td><span class="bdg bblu">${n.cat||''}</span></td>
-<td style="font-size:12px;color:var(--t3)">${n.date||''}</td>
-<td><span class="bdg ${n.status==='pubblicata'?'bok2':n.status==='bozza'?'bwrn':'bgry'}">${n.status||''}</span></td>
-<td>${n.featured=='1'?'<span style="color:var(--amb);font-size:15px">★</span>':'<span style="color:var(--t4)">—</span>'}</td>
-<td><div class="tact"><button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button></div></td></tr>`).join('');}
-function openNews(){cNF();E('mn-tit').textContent='Nuova notizia';om('mo-news');}
-function editNews(id){const n=DB.notizie.find(x=>x.id===id);if(!n)return;SV('n-id',n.id);SV('n-title',n.title||'');SV('n-cat',n.cat||'attualita');SV('n-date',n.date||'');SV('n-author',n.author||'');SV('n-sum',n.summary||'');SV('n-body',n.body||'');SV('n-img-url',n.img||'');SV('n-status',n.status||'pubblicata');SV('n-feat',n.featured||'0');SV('n-tags',(n.tags||[]).join(', '));if(n.img)prevUrl(n.img,'n-ip');E('mn-tit').textContent='Modifica notizia';om('mo-news');}
-function cNF(){['n-id','n-title','n-author','n-sum','n-body','n-img-url','n-tags'].forEach(i=>SV(i,''));SV('n-date',tod());SV('n-cat','attualita');SV('n-status','pubblicata');SV('n-feat','0');const p=E('n-ip');p.classList.remove('on');p.src='';}
-function saveNews(){const t=V('n-title').trim();if(!t){alert('Titolo obbligatorio');return;}const id=V('n-id')||'n'+Date.now();const d={id,title:t,cat:V('n-cat'),date:V('n-date'),author:V('n-author'),summary:V('n-sum'),body:V('n-body'),img:V('n-img-url'),status:V('n-status'),featured:V('n-feat'),tags:V('n-tags').split(',').map(x=>x.trim()).filter(Boolean)};const ix=DB.notizie.findIndex(x=>x.id===id);if(ix>=0)DB.notizie[ix]=d;else DB.notizie.unshift(d);saveDB();cm('mo-news');rNews();al('a-news');}
+function rNews() { const list = [...DB.notizie].sort((a, b) => new Date(b.date) - new Date(a.date)); E('news-sub').textContent = `${list.length} totali · ${list.filter(x => x.status === 'pubblicata').length} pubblicate`; const tb = E('news-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📰</div><div class="emtxt">Nessuna notizia. Clicca "+ Nuova notizia"</div></div></td></tr>`; return; } tb.innerHTML = list.map(n => `<tr><td>${n.img ? `<img src="${n.img}" class="tth" onerror="this.style.display='none'"/>` : ''}<div class="ttn">${n.title}</div><div class="ttm">${n.author || ''}</div></td><td><span class="bdg bblu">${n.cat || ''}</span></td><td style="font-size:12px;color:var(--t3)">${n.date || ''}</td><td><span class="bdg ${n.status === 'pubblicata' ? 'bok2' : n.status === 'bozza' ? 'bwrn' : 'bgry'}">${n.status || ''}</span></td><td>${n.featured == '1' ? '<span style="color:var(--amb);font-size:15px">★</span>' : '<span style="color:var(--t4)">—</span>'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editNews('${n.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('notizia','${n.id}','${esc(n.title)}')">✕</button></div></td></tr>`).join(''); }
+function openNews() { cNF(); E('mn-tit').textContent = 'Nuova notizia'; om('mo-news'); }
+function editNews(id) { const n = DB.notizie.find(x => x.id === id); if (!n) return; SV('n-id', n.id); SV('n-title', n.title || ''); SV('n-cat', n.cat || 'attualita'); SV('n-date', n.date || ''); SV('n-author', n.author || ''); SV('n-sum', n.summary || ''); SV('n-body', n.body || ''); SV('n-img-url', n.img || ''); SV('n-status', n.status || 'pubblicata'); SV('n-feat', n.featured || '0'); SV('n-tags', (n.tags || []).join(', ')); if (n.img) prevUrl(n.img, 'n-ip'); E('mn-tit').textContent = 'Modifica notizia'; om('mo-news'); }
+function cNF() { ['n-id', 'n-title', 'n-author', 'n-sum', 'n-body', 'n-img-url', 'n-tags'].forEach(i => SV(i, '')); SV('n-date', tod()); SV('n-cat', 'attualita'); SV('n-status', 'pubblicata'); SV('n-feat', '0'); const p = E('n-ip'); p.classList.remove('on'); p.src = ''; }
+function saveNews() { const t = V('n-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('n-id') || 'n' + Date.now(); const d = { id, title: t, cat: V('n-cat'), date: V('n-date'), author: V('n-author'), summary: V('n-sum'), body: V('n-body'), img: V('n-img-url'), status: V('n-status'), featured: V('n-feat'), tags: V('n-tags').split(',').map(x => x.trim()).filter(Boolean) }; const ix = DB.notizie.findIndex(x => x.id === id); if (ix >= 0) DB.notizie[ix] = d; else DB.notizie.unshift(d); saveDB(); cm('mo-news'); rNews(); al('a-news'); }
 
 // ── EVENTI
-function rEv(){const list=[...DB.eventi].sort((a,b)=>new Date(a.start)-new Date(b.start));E('ev-sub').textContent=`${list.length} eventi totali`;const tb=E('ev-tb');if(!list.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`;return;}tb.innerHTML=list.map(e=>`<tr><td><div class="ttn">${e.title}</div><div class="ttm">${e.org||''}</div></td>
-<td style="font-size:12px;color:var(--t2)">${e.start?e.start.substring(0,10):''}</td>
-<td style="font-size:12px;color:var(--t3)">${e.place||'—'}</td>
-<td><span class="bdg bblu">${e.cat||''}</span></td>
-<td><span class="bdg ${e.status==='programmato'?'bok2':e.status==='in-corso'?'bwrn':e.status==='annullato'?'bred':'bgry'}">${e.status||''}</span></td>
-<td><div class="tact"><button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button></div></td></tr>`).join('');}
-function openEv(){cEF();E('mev-tit').textContent='Nuovo evento';om('mo-ev');}
-function editEv(id){const e=DB.eventi.find(x=>x.id===id);if(!e)return;SV('e-id',e.id);SV('e-title',e.title||'');SV('e-start',e.start||'');SV('e-end',e.end||'');SV('e-place',e.place||'');SV('e-cat',e.cat||'festa');SV('e-desc',e.desc||'');SV('e-img-url',e.img||'');SV('e-org',e.org||'');SV('e-status',e.status||'programmato');SV('e-link',e.link||'');if(e.img)prevUrl(e.img,'e-ip');E('mev-tit').textContent='Modifica evento';om('mo-ev');}
-function cEF(){['e-id','e-title','e-start','e-end','e-place','e-desc','e-img-url','e-org','e-link'].forEach(i=>SV(i,''));SV('e-cat','festa');SV('e-status','programmato');const p=E('e-ip');p.classList.remove('on');p.src='';}
-function saveEv(){const t=V('e-title').trim();if(!t){alert('Titolo obbligatorio');return;}const id=V('e-id')||'e'+Date.now();const d={id,title:t,start:V('e-start'),end:V('e-end'),place:V('e-place'),cat:V('e-cat'),desc:V('e-desc'),img:V('e-img-url'),org:V('e-org'),status:V('e-status'),link:V('e-link')};const ix=DB.eventi.findIndex(x=>x.id===id);if(ix>=0)DB.eventi[ix]=d;else DB.eventi.unshift(d);saveDB();cm('mo-ev');rEv();al('a-ev');}
+function rEv() { const list = [...DB.eventi].sort((a, b) => new Date(a.start) - new Date(b.start)); E('ev-sub').textContent = `${list.length} eventi totali`; const tb = E('ev-tb'); if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="emico">📅</div><div class="emtxt">Nessun evento. Clicca "+ Nuovo evento"</div></div></td></tr>`; return; } tb.innerHTML = list.map(e => `<tr><td><div class="ttn">${e.title}</div><div class="ttm">${e.org || ''}</div></td><td style="font-size:12px;color:var(--t2)">${e.start ? e.start.substring(0, 10) : ''}</td><td style="font-size:12px;color:var(--t3)">${e.place || '—'}</td><td><span class="bdg bblu">${e.cat || ''}</span></td><td><span class="bdg ${e.status === 'programmato' ? 'bok2' : e.status === 'in-corso' ? 'bwrn' : e.status === 'annullato' ? 'bred' : 'bgry'}">${e.status || ''}</span></td><td><div class="tact"><button class="btn bg bsm bico" onclick="editEv('${e.id}')">✏</button><button class="btn bdel bsm bico" onclick="cDel('evento','${e.id}','${esc(e.title)}')">✕</button></div></td></tr>`).join(''); }
+function openEv() { cEF(); E('mev-tit').textContent = 'Nuovo evento'; om('mo-ev'); }
+function editEv(id) { const e = DB.eventi.find(x => x.id === id); if (!e) return; SV('e-id', e.id); SV('e-title', e.title || ''); SV('e-start', e.start || ''); SV('e-end', e.end || ''); SV('e-place', e.place || ''); SV('e-cat', e.cat || 'festa'); SV('e-desc', e.desc || ''); SV('e-img-url', e.img || ''); SV('e-org', e.org || ''); SV('e-status', e.status || 'programmato'); SV('e-link', e.link || ''); if (e.img) prevUrl(e.img, 'e-ip'); E('mev-tit').textContent = 'Modifica evento'; om('mo-ev'); }
+function cEF() { ['e-id', 'e-title', 'e-start', 'e-end', 'e-place', 'e-desc', 'e-img-url', 'e-org', 'e-link'].forEach(i => SV(i, '')); SV('e-cat', 'festa'); SV('e-status', 'programmato'); const p = E('e-ip'); p.classList.remove('on'); p.src = ''; }
+function saveEv() { const t = V('e-title').trim(); if (!t) { alert('Titolo obbligatorio'); return; } const id = V('e-id') || 'e' + Date.now(); const d = { id, title: t, start: V('e-start'), end: V('e-end'), place: V('e-place'), cat: V('e-cat'), desc: V('e-desc'), img: V('e-img-url'), org: V('e-org'), status: V('e-status'), link: V('e-link') }; const ix = DB.eventi.findIndex(x => x.id === id); if (ix >= 0) DB.eventi[ix] = d; else DB.eventi.unshift(d); saveDB(); cm('mo-ev'); rEv(); al('a-ev'); }
 
 // ── SPONSOR
-function rSpon(){const g=E('spg'),em=E('spem');E('spon-cnt').textContent=DB.sponsor.length;if(!DB.sponsor.length){g.innerHTML='';em.style.display='block';return;}em.style.display='none';g.innerHTML=DB.sponsor.map(s=>`<div class="spc"><button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>${s.logo?`<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>`:'<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}<div class="spnm">${s.nome}</div><div class="sptier">${s.tier}</div></div>`).join('');}
-function lSponSet(){const ss=DB.sponsorSettings||{};SV('sp-pos',ss.position||'after-news');SV('sp-title',ss.title||'');SV('sp-cols',ss.cols||'4');}
-function saveSponSet(){DB.sponsorSettings={position:V('sp-pos'),title:V('sp-title'),cols:V('sp-cols')};saveDB();al('a-spon');}
-function openSpon(){['s-nome','s-logo-url','s-sito'].forEach(i=>SV(i,''));SV('s-tier','partner');const p=E('s-ip');p.classList.remove('on');p.src='';om('mo-spon');}
-function saveSpon(){const n=V('s-nome').trim();if(!n){alert('Nome obbligatorio');return;}DB.sponsor.push({id:'s'+Date.now(),nome:n,logo:V('s-logo-url'),sito:V('s-sito'),tier:V('s-tier')});saveDB();cm('mo-spon');rSpon();al('a-spon');}
+function rSpon() { const g = E('spg'), em = E('spem'); E('spon-cnt').textContent = DB.sponsor.length; if (!DB.sponsor.length) { g.innerHTML = ''; em.style.display = 'block'; return; } em.style.display = 'none'; g.innerHTML = DB.sponsor.map(s => `<div class="spc"><button class="spdel" onclick="cDel('sponsor','${s.id}','${esc(s.nome)}')">✕</button>${s.logo ? `<img class="splogo" src="${s.logo}" onerror="this.style.display='none'"/>` : '<div style="width:60px;height:32px;background:var(--g2);border-radius:3px;margin:0 auto 6px"></div>'}<div class="spnm">${s.nome}</div><div class="sptier">${s.tier}</div></div>`).join(''); }
+function lSponSet() { const ss = DB.sponsorSettings || {}; SV('sp-pos', ss.position || 'after-news'); SV('sp-title', ss.title || ''); SV('sp-cols', ss.cols || '4'); }
+function saveSponSet() { DB.sponsorSettings = { position: V('sp-pos'), title: V('sp-title'), cols: V('sp-cols') }; saveDB(); al('a-spon'); }
+function openSpon() { ['s-nome', 's-logo-url', 's-sito'].forEach(i => SV(i, '')); SV('s-tier', 'partner'); const p = E('s-ip'); p.classList.remove('on'); p.src = ''; om('mo-spon'); }
+function saveSpon() { const n = V('s-nome').trim(); if (!n) { alert('Nome obbligatorio'); return; } DB.sponsor.push({ id: 's' + Date.now(), nome: n, logo: V('s-logo-url'), sito: V('s-sito'), tier: V('s-tier') }); saveDB(); cm('mo-spon'); rSpon(); al('a-spon'); }
 
 // ── LAYOUT
-function rLay(){const sl=E('slist');sl.innerHTML=DB.layout.sections.map((s,i)=>`<div class="srow" draggable="true" data-i="${i}" ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)"><span class="dh">⠿</span><span class="sico">${s.icon}</span><span class="snm">${s.label}</span><label class="sw"><input type="checkbox" ${s.vis?'checked':''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/><span class="sws"></span></label><span style="font-size:11px;color:var(--t3);width:50px">${s.vis?'Visibile':'Nascosta'}</span></div>`).join('');SV('lay-nl',DB.layout.newsLayout||'grid');SV('lay-pp',DB.layout.newsPerPage||'9');SV('lay-ord',DB.layout.newsOrder||'newest');SV('lay-tabs',DB.layout.newsTabs||'hide');}
-function dS(e){dragIdx=+e.currentTarget.dataset.i;e.currentTarget.classList.add('dragging');}
-function dO(e){e.preventDefault();e.currentTarget.classList.add('over');}
-function dL(e){e.currentTarget.classList.remove('over');}
-function dD(e){e.preventDefault();e.currentTarget.classList.remove('over');const ti=+e.currentTarget.dataset.i;if(dragIdx===null||dragIdx===ti)return;const a=DB.layout.sections;const it=a.splice(dragIdx,1)[0];a.splice(ti,0,it);dragIdx=null;document.querySelectorAll('.srow').forEach(r=>{r.classList.remove('dragging');r.classList.remove('over')});rLay();}
-function saveLayout(){DB.layout.newsLayout=V('lay-nl');DB.layout.newsPerPage=V('lay-pp');DB.layout.newsOrder=V('lay-ord');DB.layout.newsTabs=V('lay-tabs');saveDB();al('a-lay');}
+function rLay() { const sl = E('slist'); sl.innerHTML = DB.layout.sections.map((s, i) => `<div class="srow" draggable="true" data-i="${i}" ondragstart="dS(event)" ondragover="dO(event)" ondrop="dD(event)" ondragleave="dL(event)"><span class="dh">⠿</span><span class="sico">${s.icon}</span><span class="snm">${s.label}</span><label class="sw"><input type="checkbox" ${s.vis ? 'checked' : ''} onchange="DB.layout.sections[${i}].vis=this.checked;rLay()"/><span class="sws"></span></label><span style="font-size:11px;color:var(--t3);width:50px">${s.vis ? 'Visibile' : 'Nascosta'}</span></div>`).join(''); SV('lay-nl', DB.layout.newsLayout || 'grid'); SV('lay-pp', DB.layout.newsPerPage || '9'); SV('lay-ord', DB.layout.newsOrder || 'newest'); SV('lay-tabs', DB.layout.newsTabs || 'hide'); }
+function dS(e) { dragIdx = +e.currentTarget.dataset.i; e.currentTarget.classList.add('dragging'); }
+function dO(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
+function dL(e) { e.currentTarget.classList.remove('over'); }
+function dD(e) { e.preventDefault(); e.currentTarget.classList.remove('over'); const ti = +e.currentTarget.dataset.i; if (dragIdx === null || dragIdx === ti) return; const a = DB.layout.sections; const it = a.splice(dragIdx, 1)[0]; a.splice(ti, 0, it); dragIdx = null; document.querySelectorAll('.srow').forEach(r => { r.classList.remove('dragging'); r.classList.remove('over'); }); rLay(); }
+function saveLayout() { DB.layout.newsLayout = V('lay-nl'); DB.layout.newsPerPage = V('lay-pp'); DB.layout.newsOrder = V('lay-ord'); DB.layout.newsTabs = V('lay-tabs'); saveDB(); al('a-lay'); }
 
 // ── UTENTI
-function rUsers(){E('usr-tb').innerHTML=DB.users.map(u=>`<tr><td><div class="ttn">${u.username}</div></td><td><span class="bdg ${u.role==='admin'?'bred':'bwrn'}">${u.role}</span></td><td style="font-size:12px;color:var(--t3)">${u.created||'—'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>${u.id==='u1'?'<span style="font-size:11px;color:var(--t4)">Principale</span>':`<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}</div></td></tr>`).join('');}
-function openUser(){SV('u-id','');SV('u-uname','');SV('u-pass','');SV('u-role','editor');E('u-phi').style.display='none';E('mu-tit').textContent='Nuovo utente';om('mo-usr');}
-function editUser(id){const u=DB.users.find(x=>x.id===id);if(!u)return;SV('u-id',u.id);SV('u-uname',u.username);SV('u-pass','');SV('u-role',u.role);E('u-phi').style.display='inline';E('mu-tit').textContent='Modifica utente';om('mo-usr');}
-function saveUser(){
-  const uname=V('u-uname').trim(),pass=V('u-pass'),id=V('u-id');
-  if(!uname){alert('Username obbligatorio');return;}
-  if(!id&&pass.length<6){alert('Password: minimo 6 caratteri');return;}
-  if(!id){
-    if(DB.users.find(u=>u.username===uname)){alert('Username già usato');return;}
-    // FIX: use same H() function consistently
-    DB.users.push({id:'u'+Date.now(),username:uname,hash:H(pass),role:V('u-role'),created:tod()});
-  }else{
-    const u=DB.users.find(x=>x.id===id);if(!u)return;
-    u.username=uname;u.role=V('u-role');
-    if(pass.length>=6)u.hash=H(pass); // FIX: same hash function
+function rUsers() { E('usr-tb').innerHTML = DB.users.map(u => `<tr><td><div class="ttn">${u.username}</div></td><td><span class="bdg ${u.role === 'admin' ? 'bred' : 'bwrn'}">${u.role}</span></td><td style="font-size:12px;color:var(--t3)">${u.created || '—'}</td><td><div class="tact"><button class="btn bg bsm bico" onclick="editUser('${u.id}')">✏</button>${u.id === 'u1' ? '<span style="font-size:11px;color:var(--t4)">Principale</span>' : `<button class="btn bdel bsm bico" onclick="cDel('utente','${u.id}','${esc(u.username)}')">✕</button>`}</div></td></tr>`).join(''); }
+function openUser() { SV('u-id', ''); SV('u-uname', ''); SV('u-pass', ''); SV('u-role', 'editor'); E('u-phi').style.display = 'none'; E('mu-tit').textContent = 'Nuovo utente'; om('mo-usr'); }
+function editUser(id) { const u = DB.users.find(x => x.id === id); if (!u) return; SV('u-id', u.id); SV('u-uname', u.username); SV('u-pass', ''); SV('u-role', u.role); E('u-phi').style.display = 'inline'; E('mu-tit').textContent = 'Modifica utente'; om('mo-usr'); }
+function saveUser() {
+  const uname = V('u-uname').trim(), pass = V('u-pass'), id = V('u-id');
+  if (!uname) { alert('Username obbligatorio'); return; }
+  if (!id && pass.length < 6) { alert('Password: minimo 6 caratteri'); return; }
+  if (!id) {
+    if (DB.users.find(u => u.username === uname)) { alert('Username già usato'); return; }
+    DB.users.push({ id: 'u' + Date.now(), username: uname, hash: H(pass), role: V('u-role'), created: tod() });
+  } else {
+    const u = DB.users.find(x => x.id === id); if (!u) return;
+    u.username = uname; u.role = V('u-role');
+    if (pass.length >= 6) u.hash = H(pass);
   }
-  saveDB();cm('mo-usr');rUsers();al('a-usr');
+  saveDB(); cm('mo-usr'); rUsers(); al('a-usr');
 }
 
 // ── DELETE
-function cDel(type,id,name){E('del-msg').textContent=`Stai per eliminare "${name}". Azione irreversibile.`;E('del-ok').onclick=()=>doDel(type,id);om('mo-del');}
-function doDel(type,id){
-  if(type==='notizia')DB.notizie=DB.notizie.filter(x=>x.id!==id);
-  if(type==='evento')DB.eventi=DB.eventi.filter(x=>x.id!==id);
-  if(type==='sponsor')DB.sponsor=DB.sponsor.filter(x=>x.id!==id);
-  if(type==='utente'){if(id==='u1'){toast('Non puoi eliminare l\'account admin principale',true);cm('mo-del');return;}DB.users=DB.users.filter(x=>x.id!==id);}
-  saveDB();cm('mo-del');
-  if(type==='notizia')rNews();if(type==='evento')rEv();if(type==='sponsor')rSpon();if(type==='utente')rUsers();
+function cDel(type, id, name) { E('del-msg').textContent = `Stai per eliminare "${name}". Azione irreversibile.`; E('del-ok').onclick = () => doDel(type, id); om('mo-del'); }
+function doDel(type, id) {
+  if (type === 'notizia') DB.notizie = DB.notizie.filter(x => x.id !== id);
+  if (type === 'evento') DB.eventi = DB.eventi.filter(x => x.id !== id);
+  if (type === 'sponsor') DB.sponsor = DB.sponsor.filter(x => x.id !== id);
+  if (type === 'utente') { if (id === 'u1') { toast('Non puoi eliminare l\'account admin principale', true); cm('mo-del'); return; } DB.users = DB.users.filter(x => x.id !== id); }
+  saveDB(); cm('mo-del');
+  if (type === 'notizia') rNews();
+  if (type === 'evento') rEv();
+  if (type === 'sponsor') rSpon();
+  if (type === 'utente') rUsers();
   rDash();
 }
 
 // ── GITHUB
-function lGh(){const g=DB.github||{};SV('gh-owner',g.owner||'NicolaMartucci');SV('gh-repo',g.repo||'nicolamartucci.github.io');SV('gh-branch',g.branch||'main');SV('gh-path',g.path||'tuttoapricena/assets/data.json');SV('gh-token',getTok());E('gh-snip').textContent=buildSnip();}
-function saveGh(){DB.github={owner:V('gh-owner'),repo:V('gh-repo'),branch:V('gh-branch'),path:V('gh-path')};const tok=V('gh-token').trim();setTok(tok);saveDB();syncUI();al('a-gh');E('pubbtn').style.display=tok?'flex':'none';E('gh-snip').textContent=buildSnip();}
-function buildSnip(){return`<script>\n(function(){\n  fetch('/tuttoapricena/assets/data.json?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`;}
-function copySnip(){navigator.clipboard.writeText(E('gh-snip').textContent).then(()=>toast('✓ Snippet copiato!'));}
+function lGh() { const g = DB.github || {}; SV('gh-owner', g.owner || 'NicolaMartucci'); SV('gh-repo', g.repo || 'nicolamartucci.github.io'); SV('gh-branch', g.branch || 'main'); SV('gh-path', g.path || 'tuttoapricena/assets/data.json'); SV('gh-token', getTok()); E('gh-snip').textContent = buildSnip(); }
+function saveGh() { DB.github = { owner: V('gh-owner'), repo: V('gh-repo'), branch: V('gh-branch'), path: V('gh-path') }; const tok = V('gh-token').trim(); setTok(tok); saveDB(); syncUI(); al('a-gh'); E('pubbtn').style.display = tok ? 'flex' : 'none'; E('gh-snip').textContent = buildSnip(); }
+function buildSnip() { return `<script>\n(function(){\n  fetch('/tuttoapricena/assets/data.json?t='+Date.now())\n    .then(r=>r.ok?r.json():null)\n    .then(d=>{if(d)window.TA_DATA=d;document.dispatchEvent(new Event('ta-ready'));})\n    .catch(()=>{});\n})();\n<\/script>`; }
+function copySnip() { navigator.clipboard.writeText(E('gh-snip').textContent).then(() => toast('✓ Snippet copiato!')); }
 
-async function ghReq(method,path,body){
-  const g=DB.github,tok=getTok();if(!tok)throw new Error('Token non configurato');
-  const r=await fetch(`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`,{method,headers:{'Authorization':'token '+tok,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:body?JSON.stringify(body):undefined});
-  if(!r.ok){const e=await r.json();throw new Error(e.message||'HTTP '+r.status);}
+async function ghReq(method, path, body) {
+  const g = DB.github, tok = getTok(); if (!tok) throw new Error('Token non configurato');
+  const r = await fetch(`https://api.github.com/repos/${g.owner}/${g.repo}/contents/${path}`, { method, headers: { 'Authorization': 'token ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: body ? JSON.stringify(body) : undefined });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || 'HTTP ' + r.status); }
   return r.json();
 }
 
-async function publishNow(){
-  if(!getTok()){toast('Token non configurato',true);go('github');return;}
-  E('pubbtn').disabled=true;E('sdot').className='sdot busy';E('slabel').textContent='Pubblicazione...';
-  try{
-    const path=DB.github.path||'tuttoapricena/assets/data.json';
-    let sha=null;try{const cur=await ghReq('GET',path);sha=cur.sha;}catch(e){}
-    // Export ONLY content data — NO users, NO github config, NO tokens
-    const exp={identita:DB.identita,hero:DB.hero,footer:DB.footer,notizie:DB.notizie,eventi:DB.eventi,sponsor:DB.sponsor,sponsorSettings:DB.sponsorSettings,layout:DB.layout};
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(exp,null,2))));
-    const body={message:'CMS — '+new Date().toLocaleString('it-IT'),content,branch:DB.github.branch||'main'};
-    if(sha)body.sha=sha;
-    await ghReq('PUT',path,body);
-    dirty=false;E('sdot').className='sdot ok';E('slabel').textContent='Sito aggiornato ✓';
+async function publishNow() {
+  if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
+  E('pubbtn').disabled = true; E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Pubblicazione...';
+  try {
+    const path = DB.github.path || 'tuttoapricena/assets/data.json';
+    let sha = null; try { const cur = await ghReq('GET', path); sha = cur.sha; } catch (e) { }
+    const exp = { identita: DB.identita, hero: DB.hero, footer: DB.footer, notizie: DB.notizie, eventi: DB.eventi, sponsor: DB.sponsor, sponsorSettings: DB.sponsorSettings, layout: DB.layout };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(exp, null, 2))));
+    const body = { message: 'CMS — ' + new Date().toLocaleString('it-IT'), content, branch: DB.github.branch || 'main' };
+    if (sha) body.sha = sha;
+    await ghReq('PUT', path, body);
+    dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sito aggiornato ✓';
     toast('✓ Pubblicato! Il sito si aggiorna in 10–30 secondi.');
-  }catch(e){E('sdot').className='sdot err';E('slabel').textContent='Errore';toast('✕ '+e.message,true);}
-  finally{E('pubbtn').disabled=false;}
+  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore'; toast('✕ ' + e.message, true); }
+  finally { E('pubbtn').disabled = false; }
 }
 
-async function syncFrom(){
-  if(!getTok()){toast('Token non configurato',true);go('github');return;}
-  E('sdot').className='sdot busy';E('slabel').textContent='Sincronizzazione...';
-  try{
-    const path=DB.github.path||'tuttoapricena/assets/data.json';
-    const cur=await ghReq('GET',path);
-    const dec=JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g,'')))));
-    const lu=DB.users,lg=DB.github;
-    DB={...defDB(),...dec,users:lu,github:lg};
-    saveDB();dirty=false;E('sdot').className='sdot ok';E('slabel').textContent='Sincronizzato ✓';
-    rDash();toast('✓ Dati sincronizzati dal sito!');
-  }catch(e){E('sdot').className='sdot err';E('slabel').textContent='Errore sync';toast('✕ '+e.message,true);}
+async function syncFrom() {
+  if (!getTok()) { toast('Token non configurato', true); go('github'); return; }
+  E('sdot').className = 'sdot busy'; E('slabel').textContent = 'Sincronizzazione...';
+  try {
+    const path = DB.github.path || 'tuttoapricena/assets/data.json';
+    const cur = await ghReq('GET', path);
+    const dec = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, '')))));
+    const lu = DB.users, lg = DB.github;
+    DB = { ...defDB(), ...dec, users: lu, github: lg };
+    saveDB(); dirty = false; E('sdot').className = 'sdot ok'; E('slabel').textContent = 'Sincronizzato ✓';
+    rDash(); toast('✓ Dati sincronizzati dal sito!');
+  } catch (e) { E('sdot').className = 'sdot err'; E('slabel').textContent = 'Errore sync'; toast('✕ ' + e.message, true); }
 }
 
-async function testGh(){
-  const owner=V('gh-owner'),repo=V('gh-repo'),tok=V('gh-token').trim()||getTok();
-  if(!tok){showAlerr('Token mancante');return;}
-  try{const r=await fetch(`https://api.github.com/repos/${owner}/${repo}`,{headers:{'Authorization':'token '+tok}});
-    if(r.ok){al('a-gh');toast('✓ Connessione GitHub OK!');}
-    else{const e=await r.json();showAlerr(e.message||'Errore '+r.status);}
-  }catch(e){showAlerr(e.message);}
+async function testGh() {
+  const owner = V('gh-owner'), repo = V('gh-repo'), tok = V('gh-token').trim() || getTok();
+  if (!tok) { showAlerr('Token mancante'); return; }
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': 'token ' + tok } });
+    if (r.ok) { al('a-gh'); toast('✓ Connessione GitHub OK!'); }
+    else { const e = await r.json(); showAlerr(e.message || 'Errore ' + r.status); }
+  } catch (e) { showAlerr(e.message); }
 }
-function showAlerr(msg){const e=E('a-gherr'),s=E('a-gherr-msg');if(s)s.textContent=msg;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),4000);}
+function showAlerr(msg) { const e = E('a-gherr'), s = E('a-gherr-msg'); if (s) s.textContent = msg; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 4000); }
 
-// ── IMAGES
-function handleImg(input,prevId,urlId){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{SV(urlId,e.target.result);prevUrl(e.target.result,prevId)};r.readAsDataURL(f);}
-function prevUrl(url,id){const e=E(id);if(!e)return;if(url){e.src=url;e.classList.add('on');}else{e.classList.remove('on');e.src='';}if(id==='logo-img'){if(url){e.style.display='block';E('logo-empty').style.display='none';}else{e.style.display='none';E('logo-empty').style.display='block';}}}
+// ── IMMAGINI
+function handleImg(input, prevId, urlId) { const f = input.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { SV(urlId, e.target.result); prevUrl(e.target.result, prevId); }; r.readAsDataURL(f); }
+function prevUrl(url, id) { const e = E(id); if (!e) return; if (url) { e.src = url; e.classList.add('on'); } else { e.classList.remove('on'); e.src = ''; } if (id === 'logo-img') { if (url) { e.style.display = 'block'; E('logo-empty').style.display = 'none'; } else { e.style.display = 'none'; E('logo-empty').style.display = 'block'; } } }
 
 // ── UTILS
-const E=id=>document.getElementById(id);
-const V=id=>{const e=E(id);return e?e.value:''};
-const SV=(id,v)=>{const e=E(id);if(e)e.value=v};
-function tod(){return new Date().toISOString().substring(0,10);}
-function esc(s){return(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function om(id){E(id).classList.add('on');}
-function cm(id){E(id).classList.remove('on');}
-function al(id){const e=E(id);if(!e)return;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),3000);}
-function toast(msg,err=false){const t=E('toast');t.textContent=msg;t.style.background=err?'#dc2626':'#16a34a';t.style.color='#fff';t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3500);}
+const E = id => document.getElementById(id);
+const V = id => { const e = E(id); return e ? e.value : ''; };
+const SV = (id, v) => { const e = E(id); if (e) e.value = v; };
+function esc(s) { return (s || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function om(id) { E(id).classList.add('on'); }
+function cm(id) { E(id).classList.remove('on'); }
+function al(id) { const e = E(id); if (!e) return; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 3000); }
+function toast(msg, err = false) { const t = E('toast'); t.textContent = msg; t.style.background = err ? '#dc2626' : '#16a34a'; t.style.color = '#fff'; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 3500); }
 
-document.querySelectorAll('.ovl').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+document.querySelectorAll('.ovl').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
 
-window.addEventListener('DOMContentLoaded',()=>{
-  if(localStorage.getItem('ta_rem')){const u=localStorage.getItem('ta_ru'),p=localStorage.getItem('ta_rp');if(u)SV('lu',u);if(p)SV('lp',p);E('lrem').checked=true;}
-  if(!getTok())E('lnotice').classList.add('x');
+window.addEventListener('DOMContentLoaded', () => {
+  // Ripristina credenziali salvate
+  if (localStorage.getItem('ta_rem')) {
+    const u = localStorage.getItem('ta_ru'), p = localStorage.getItem('ta_rp');
+    if (u) SV('lu', u);
+    if (p) SV('lp', p);
+    E('lrem').checked = true;
+  }
+  // Mostra avviso prima configurazione se non c'è token
+  if (!getTok()) E('lnotice').classList.add('x');
+  // Log hash per debug (rimuovibile in produzione)
+  console.log('=== CMS Login Info ===');
+  console.log('admin hash atteso:', ADMIN_HASH);
+  console.log('DB users:', JSON.stringify(DB.users.map(u => ({ id: u.id, username: u.username, hash: u.hash }))));
 });
 </script>
 </body>
