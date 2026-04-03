@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuttoApricena — CMS Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #1e40af;
+    --primary-light: #3b82f6;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --sidebar-w: 260px;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; margin: 0; }
+  
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+  /* LOGIN */
+  #loginScreen {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #2563eb 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    background: white;
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+  }
+
+  /* LAYOUT */
+  #appScreen { display: none; min-height: 100vh; }
+  #sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: linear-gradient(180deg, #1e3a5f 0%, #1e40af 100%);
+    z-index: 100; overflow-y: auto;
+    transition: transform .3s;
+  }
+  #sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); }
+  #mainContent {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+    transition: margin-left .3s;
+  }
+  #mainContent.full { margin-left: 0; }
+  
+  /* TOPBAR */
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 24px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+
+  /* SIDEBAR NAV */
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255,255,255,.75);
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 2px 10px;
+    transition: all .2s;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.15); color: white; }
+  .nav-item.active { background: rgba(255,255,255,.2); color: white; }
+  .nav-item i { width: 20px; text-align: center; font-size: 16px; }
+
+  /* CARDS */
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border: 1px solid #f0f4f8;
+  }
+  .content-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border: 1px solid #f0f4f8;
+    margin-bottom: 24px;
+  }
+
+  /* TABS */
+  .tab-btn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all .2s;
+    color: #64748b;
+    background: transparent;
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .tab-btn:not(.active):hover {
+    border-color: #cbd5e1;
+    color: #334155;
+  }
+
+  /* FORMS */
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .form-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid #e2e8f0; border-radius: 10px;
+    font-size: 14px; color: #1e293b;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    background: #fafafa;
+  }
+  .form-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,.1); background: white; }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; }
+  textarea.form-input { resize: vertical; min-height: 100px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all .2s; text-decoration: none;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,64,175,.3); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #16a34a; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-secondary { background: #f1f5f9; color: #475569; border: 1.5px solid #e2e8f0; }
+  .btn-secondary:hover { background: #e2e8f0; }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-accent:hover { background: #d97706; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+  .btn-icon { padding: 8px; border-radius: 8px; width: 36px; height: 36px; justify-content: center; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid #e2e8f0; }
+  .data-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #374151; vertical-align: middle; }
+  .data-table tr:hover td { background: #f8fafc; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-yellow { background: #fef3c7; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #b91c1c; }
+  .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+  .badge-purple { background: #ede9fe; color: #7c3aed; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: white;
+    border-radius: 20px;
+    width: 100%; max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0,0,0,.25);
+  }
+  .modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: white; z-index: 1;
+  }
+  .modal-body { padding: 24px 28px; }
+  .modal-footer { padding: 20px 28px; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; justify-content: flex-end; }
+
+  /* TOAST */
+  #toastContainer {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .toast {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    animation: slideIn .3s ease;
+    min-width: 280px; max-width: 380px;
+    color: white;
+  }
+  .toast-success { background: #16a34a; }
+  .toast-error { background: #dc2626; }
+  .toast-info { background: #2563eb; }
+  .toast-warning { background: #d97706; }
+  @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideOut { to { transform: translateX(120%); opacity: 0; } }
+
+  /* LOADER */
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .page-loader {
+    position: fixed; inset: 0; background: rgba(255,255,255,.9);
+    z-index: 500; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+  }
+  .big-spinner { width: 48px; height: 48px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin .8s linear infinite; }
+
+  /* IMAGE PREVIEW */
+  .img-preview { width: 100%; height: 160px; border-radius: 10px; object-fit: cover; border: 2px solid #e2e8f0; margin-top: 8px; }
+  .img-placeholder { width: 100%; height: 120px; border-radius: 10px; background: #f1f5f9; border: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; margin-top: 8px; }
+
+  /* SECTION TOGGLE */
+  .section-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #f8fafc; border-radius: 12px; margin-bottom: 10px; }
+  
+  /* TOGGLE */
+  .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: .3s; }
+  .toggle-slider:before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+  .toggle input:checked + .toggle-slider { background: var(--primary); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+  /* SEARCH */
+  .search-box { position: relative; }
+  .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+  .search-box input { padding-left: 36px; }
+
+  /* COLOR PICKER */
+  .color-input-wrap { display: flex; align-items: center; gap: 10px; }
+  .color-input-wrap input[type="color"] { width: 44px; height: 44px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; padding: 2px; background: white; }
+
+  /* DRAG HANDLE */
+  .drag-handle { cursor: grab; color: #94a3b8; }
+  .drag-handle:hover { color: #475569; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.mobile-open { transform: translateX(0); }
+    #mainContent { margin-left: 0; }
+  }
+
+  /* SECTION PAGES */
+  .section-page { display: none; }
+  .section-page.active { display: block; }
+
+  /* AVATAR */
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: white;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width .5s; }
+
+  /* RICH TEXT SIMPLE */
+  .rich-toolbar { display: flex; gap: 4px; padding: 8px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-bottom: none; border-radius: 10px 10px 0 0; flex-wrap: wrap; }
+  .rich-toolbar button { padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-size: 12px; font-weight: 600; color: #374151; transition: all .15s; }
+  .rich-toolbar button:hover { background: var(--primary); color: white; border-color: var(--primary); }
+  .rich-editor { width: 100%; min-height: 180px; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 0 0 10px 10px; font-size: 14px; outline: none; line-height: 1.6; }
+  .rich-editor:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+  .empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
+  .empty-state p { font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="pageLoader" class="page-loader">
+  <div class="big-spinner"></div>
+  <p style="color:#475569;font-weight:600">Caricamento CMS...</p>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+
+<!-- =================== LOGIN SCREEN =================== -->
+<div id="loginScreen" style="display:none">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:64px;height:64px;background:linear-gradient(135deg,#1e40af,#3b82f6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+        <i class="fas fa-newspaper" style="font-size:28px;color:white"></i>
+      </div>
+      <h1 style="font-size:22px;font-weight:800;color:#1e293b;margin:0">TuttoApricena</h1>
+      <p style="color:#64748b;font-size:14px;margin:6px 0 0">Content Management System</p>
+    </div>
+
+    <div id="loginError" style="display:none;background:#fee2e2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px"></div>
+
+    <div style="margin-bottom:16px">
+      <label class="form-label">Username</label>
+      <div style="position:relative">
+        <i class="fas fa-user" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8"></i>
+        <input id="loginUser" type="text" class="form-input" style="padding-left:36px" placeholder="Il tuo username" autocomplete="username">
+      </div>
+    </div>
+    <div style="margin-bottom:20px">
+      <label class="form-label">Password</label>
+      <div style="position:relative">
+        <i class="fas fa-lock" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8"></i>
+        <input id="loginPass" type="password" class="form-input" style="padding-left:36px;padding-right:40px" placeholder="La tua password" autocomplete="current-password">
+        <button onclick="toggleLoginPass()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8"><i class="fas fa-eye" id="loginPassIcon"></i></button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
+      <input type="checkbox" id="rememberMe" style="width:16px;height:16px;cursor:pointer">
+      <label for="rememberMe" style="font-size:13px;color:#64748b;cursor:pointer">Ricordami per 30 giorni</label>
+    </div>
+    <button onclick="doLogin()" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px">
+      <i class="fas fa-sign-in-alt"></i> Accedi
+    </button>
+    <div style="margin-top:20px;text-align:center">
+      <button onclick="showResetModal()" style="background:none;border:none;color:#3b82f6;font-size:13px;cursor:pointer">Problemi di accesso? Reimposta i dati</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== APP SCREEN =================== -->
+<div id="appScreen">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div style="padding:20px 16px 10px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <div style="width:40px;height:40px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="fas fa-newspaper" style="color:white;font-size:18px"></i>
+        </div>
+        <div>
+          <div style="color:white;font-weight:800;font-size:15px">TuttoApricena</div>
+          <div style="color:rgba(255,255,255,.6);font-size:11px">CMS Admin</div>
+        </div>
+      </div>
+      
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);padding:0 10px;margin-bottom:8px">Principale</div>
+      <div class="nav-item active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+      
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);padding:0 10px;margin:16px 0 8px">Contenuti</div>
+      <div class="nav-item" onclick="showSection('notizie')"><i class="fas fa-newspaper"></i> Notizie</div>
+      <div class="nav-item" onclick="showSection('eventi')"><i class="fas fa-calendar-alt"></i> Eventi</div>
+      <div class="nav-item" onclick="showSection('servizi')"><i class="fas fa-concierge-bell"></i> Servizi</div>
+      <div class="nav-item" onclick="showSection('locali')"><i class="fas fa-store"></i> Locali</div>
+      <div class="nav-item" onclick="showSection('sponsor')"><i class="fas fa-handshake"></i> Sponsor</div>
+      
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);padding:0 10px;margin:16px 0 8px">Impostazioni</div>
+      <div class="nav-item" onclick="showSection('identita')"><i class="fas fa-id-card"></i> Identità sito</div>
+      <div class="nav-item" onclick="showSection('hero')"><i class="fas fa-image"></i> Hero / Header</div>
+      <div class="nav-item" onclick="showSection('layout')"><i class="fas fa-th-large"></i> Layout</div>
+      <div class="nav-item" onclick="showSection('footer')"><i class="fas fa-align-left"></i> Footer</div>
+      <div class="nav-item" onclick="showSection('github')"><i class="fab fa-github"></i> GitHub / API</div>
+      <div class="nav-item" onclick="showSection('utenti')"><i class="fas fa-users"></i> Utenti & Ruoli</div>
+    </div>
+    
+    <div style="padding:16px;margin-top:auto;border-top:1px solid rgba(255,255,255,.1)">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.1);border-radius:10px">
+        <div class="avatar" id="sidebarAvatarEl" style="background:var(--accent);flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div id="sidebarUsername" style="color:white;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+          <div id="sidebarRole" style="color:rgba(255,255,255,.6);font-size:11px"></div>
+        </div>
+        <button onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.6);padding:4px" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div style="display:flex;align-items:center;gap:16px">
+        <button onclick="toggleSidebar()" style="background:none;border:none;cursor:pointer;color:#475569;font-size:20px;padding:4px">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div>
+          <h2 id="topbarTitle" style="margin:0;font-size:18px;font-weight:700;color:#1e293b">Dashboard</h2>
+          <p id="topbarSub" style="margin:0;font-size:12px;color:#94a3b8">Pannello di controllo</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onclick="syncFromGitHub()" class="btn btn-secondary btn-sm" id="syncBtn">
+          <i class="fas fa-sync-alt"></i> Sincronizza
+        </button>
+        <button onclick="publishToGitHub()" class="btn btn-success btn-sm" id="publishBtn">
+          <i class="fab fa-github"></i> Pubblica live
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div style="padding:28px">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div id="sec-dashboard" class="section-page active">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:28px">
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-size:13px;color:#64748b;font-weight:600">Notizie</span>
+              <div style="width:40px;height:40px;background:#dbeafe;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-newspaper" style="color:#2563eb"></i>
+              </div>
+            </div>
+            <div id="statNotizie" style="font-size:32px;font-weight:800;color:#1e293b">0</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px">articoli totali</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-size:13px;color:#64748b;font-weight:600">Eventi</span>
+              <div style="width:40px;height:40px;background:#dcfce7;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-calendar" style="color:#16a34a"></i>
+              </div>
+            </div>
+            <div id="statEventi" style="font-size:32px;font-weight:800;color:#1e293b">0</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px">eventi programmati</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-size:13px;color:#64748b;font-weight:600">Servizi</span>
+              <div style="width:40px;height:40px;background:#fef3c7;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-concierge-bell" style="color:#d97706"></i>
+              </div>
+            </div>
+            <div id="statServizi" style="font-size:32px;font-weight:800;color:#1e293b">0</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px">servizi elencati</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-size:13px;color:#64748b;font-weight:600">Locali</span>
+              <div style="width:40px;height:40px;background:#ede9fe;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-store" style="color:#7c3aed"></i>
+              </div>
+            </div>
+            <div id="statLocali" style="font-size:32px;font-weight:800;color:#1e293b">0</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px">locali registrati</div>
+          </div>
+          <div class="stat-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-size:13px;color:#64748b;font-weight:600">Sponsor</span>
+              <div style="width:40px;height:40px;background:#fce7f3;border-radius:10px;display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-handshake" style="color:#db2777"></i>
+              </div>
+            </div>
+            <div id="statSponsor" style="font-size:32px;font-weight:800;color:#1e293b">0</div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:4px">sponsor attivi</div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:28px">
+          <div class="content-card" style="margin-bottom:0">
+            <h3 style="font-size:15px;font-weight:700;color:#1e293b;margin:0 0 16px">Azioni rapide</h3>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button onclick="openModal('notizie')" class="btn btn-primary" style="justify-content:center"><i class="fas fa-plus"></i> Nuova notizia</button>
+              <button onclick="openModal('eventi')" class="btn btn-secondary" style="justify-content:center"><i class="fas fa-plus"></i> Nuovo evento</button>
+              <button onclick="openModal('servizi')" class="btn btn-secondary" style="justify-content:center"><i class="fas fa-plus"></i> Nuovo servizio</button>
+              <button onclick="openModal('locali')" class="btn btn-secondary" style="justify-content:center"><i class="fas fa-plus"></i> Nuovo locale</button>
+            </div>
+          </div>
+          <div class="content-card" style="margin-bottom:0">
+            <h3 style="font-size:15px;font-weight:700;color:#1e293b;margin:0 0 16px">Stato GitHub</h3>
+            <div id="githubStatus">
+              <div style="padding:14px;background:#f8fafc;border-radius:10px;font-size:13px;color:#64748b">
+                <i class="fab fa-github" style="margin-right:8px"></i>Verifica configurazione...
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <button onclick="syncFromGitHub()" class="btn btn-secondary" style="width:100%;justify-content:center;font-size:13px">
+                <i class="fas fa-sync-alt"></i> Sincronizza ora
+              </button>
+            </div>
+          </div>
+          <div class="content-card" style="margin-bottom:0">
+            <h3 style="font-size:15px;font-weight:700;color:#1e293b;margin:0 0 16px">Ultime modifiche</h3>
+            <div id="recentChanges" style="font-size:13px;color:#64748b">Nessuna modifica recente</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NOTIZIE ===== -->
+      <div id="sec-notizie" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;gap:10px">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-input" style="width:220px" placeholder="Cerca notizie..." oninput="filterNotizie(this.value)">
+              </div>
+              <select class="form-input form-select" style="width:160px" onchange="filterNotizieStatus(this.value)">
+                <option value="">Tutti gli stati</option>
+                <option value="pubblicata">Pubblicata</option>
+                <option value="bozza">Bozza</option>
+                <option value="archiviata">Archiviata</option>
+              </select>
+            </div>
+            <button onclick="openModal('notizie')" class="btn btn-primary"><i class="fas fa-plus"></i> Nuova notizia</button>
+          </div>
+          <div id="notizieTable"><div class="empty-state"><i class="fas fa-newspaper"></i><p>Nessuna notizia trovata</p></div></div>
+        </div>
+      </div>
+
+      <!-- ===== EVENTI ===== -->
+      <div id="sec-eventi" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" class="form-input" style="width:220px" placeholder="Cerca eventi..." oninput="filterEventi(this.value)">
+            </div>
+            <button onclick="openModal('eventi')" class="btn btn-primary"><i class="fas fa-plus"></i> Nuovo evento</button>
+          </div>
+          <div id="eventiTable"><div class="empty-state"><i class="fas fa-calendar-alt"></i><p>Nessun evento trovato</p></div></div>
+        </div>
+      </div>
+
+      <!-- ===== SERVIZI ===== -->
+      <div id="sec-servizi" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" class="form-input" style="width:220px" placeholder="Cerca servizi..." oninput="filterServizi(this.value)">
+            </div>
+            <button onclick="openModal('servizi')" class="btn btn-primary"><i class="fas fa-plus"></i> Nuovo servizio</button>
+          </div>
+          <div id="serviziTable"><div class="empty-state"><i class="fas fa-concierge-bell"></i><p>Nessun servizio trovato</p></div></div>
+        </div>
+      </div>
+
+      <!-- ===== LOCALI ===== -->
+      <div id="sec-locali" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" class="form-input" style="width:220px" placeholder="Cerca locali..." oninput="filterLocali(this.value)">
+            </div>
+            <button onclick="openModal('locali')" class="btn btn-primary"><i class="fas fa-plus"></i> Nuovo locale</button>
+          </div>
+          <div id="localiTable"><div class="empty-state"><i class="fas fa-store"></i><p>Nessun locale trovato</p></div></div>
+        </div>
+      </div>
+
+      <!-- ===== SPONSOR ===== -->
+      <div id="sec-sponsor" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" class="form-input" style="width:220px" placeholder="Cerca sponsor..." oninput="filterSponsor(this.value)">
+            </div>
+            <button onclick="openModal('sponsor')" class="btn btn-primary"><i class="fas fa-plus"></i> Nuovo sponsor</button>
+          </div>
+          <div style="margin-bottom:20px;padding:16px;background:#f8fafc;border-radius:12px">
+            <h4 style="font-size:13px;font-weight:700;color:#374151;margin:0 0 12px">Impostazioni sezione sponsor</h4>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+              <div>
+                <label class="form-label">Titolo sezione</label>
+                <input type="text" class="form-input" id="sponsorTitle" value="I nostri sponsor" oninput="saveSponsorSettings()">
+              </div>
+              <div>
+                <label class="form-label">Colonne griglia</label>
+                <select class="form-input form-select" id="sponsorCols" onchange="saveSponsorSettings()">
+                  <option value="2">2 colonne</option>
+                  <option value="3">3 colonne</option>
+                  <option value="4" selected>4 colonne</option>
+                  <option value="5">5 colonne</option>
+                  <option value="6">6 colonne</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Posizione</label>
+                <select class="form-input form-select" id="sponsorPos" onchange="saveSponsorSettings()">
+                  <option value="after-news">Dopo le notizie</option>
+                  <option value="after-events">Dopo gli eventi</option>
+                  <option value="bottom">In fondo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div id="sponsorTable"><div class="empty-state"><i class="fas fa-handshake"></i><p>Nessuno sponsor trovato</p></div></div>
+        </div>
+      </div>
+
+      <!-- ===== IDENTITÀ SITO ===== -->
+      <div id="sec-identita" class="section-page">
+        <div class="content-card">
+          <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 24px">Identità del sito</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div>
+              <label class="form-label">Nome del sito</label>
+              <input type="text" class="form-input" id="siteName" placeholder="TuttoApricena" oninput="markDirty()">
+            </div>
+            <div>
+              <label class="form-label">Tagline / Slogan</label>
+              <input type="text" class="form-input" id="siteTag" placeholder="Il portale di Apricena" oninput="markDirty()">
+            </div>
+            <div style="grid-column:1/-1">
+              <label class="form-label">Descrizione</label>
+              <textarea class="form-input" id="siteDesc" rows="3" oninput="markDirty()" placeholder="Descrizione breve del sito"></textarea>
+            </div>
+            <div>
+              <label class="form-label">Email di contatto</label>
+              <input type="email" class="form-input" id="siteEmail" oninput="markDirty()" placeholder="info@tuttoapricena.it">
+            </div>
+            <div>
+              <label class="form-label">Colore principale</label>
+              <div class="color-input-wrap">
+                <input type="color" id="siteColor" value="#1e40af" onchange="markDirty()">
+                <input type="text" class="form-input" id="siteColorText" placeholder="#1e40af" oninput="updateColorPicker()">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">URL Logo (immagine)</label>
+              <input type="url" class="form-input" id="siteLogo" oninput="previewLogo();markDirty()" placeholder="https://...">
+              <div id="logoPreviewWrap"></div>
+            </div>
+            <div style="grid-column:1/-1">
+              <h4 style="font-size:14px;font-weight:700;color:#374151;margin:8px 0 16px">Social media</h4>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div>
+                  <label class="form-label"><i class="fab fa-facebook" style="color:#1877f2"></i> Facebook</label>
+                  <input type="url" class="form-input" id="socialFb" oninput="markDirty()" placeholder="https://facebook.com/...">
+                </div>
+                <div>
+                  <label class="form-label"><i class="fab fa-instagram" style="color:#e1306c"></i> Instagram</label>
+                  <input type="url" class="form-input" id="socialIg" oninput="markDirty()" placeholder="https://instagram.com/...">
+                </div>
+                <div>
+                  <label class="form-label"><i class="fab fa-twitter" style="color:#1da1f2"></i> Twitter/X</label>
+                  <input type="url" class="form-input" id="socialTw" oninput="markDirty()" placeholder="https://twitter.com/...">
+                </div>
+                <div>
+                  <label class="form-label"><i class="fab fa-youtube" style="color:#ff0000"></i> YouTube</label>
+                  <input type="url" class="form-input" id="socialYt" oninput="markDirty()" placeholder="https://youtube.com/...">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:12px">
+            <button onclick="saveIdentita()" class="btn btn-primary"><i class="fas fa-save"></i> Salva identità</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== HERO ===== -->
+      <div id="sec-hero" class="section-page">
+        <div class="content-card">
+          <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 8px">Hero / Header</h3>
+          <p style="font-size:13px;color:#64748b;margin:0 0 24px">Configura le immagini e i testi delle sezioni hero del sito</p>
+          
+          <!-- Tabs hero -->
+          <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+            <button class="tab-btn active" onclick="switchHeroTab('home',this)">🏠 Home</button>
+            <button class="tab-btn" onclick="switchHeroTab('news',this)">📰 Notizie</button>
+            <button class="tab-btn" onclick="switchHeroTab('events',this)">📅 Eventi</button>
+          </div>
+
+          <div id="heroTab-home">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div style="grid-column:1/-1">
+                <label class="form-label">Immagine di sfondo (URL)</label>
+                <input type="url" class="form-input" id="heroHomeUrl" oninput="previewHero('home');markDirty()" placeholder="https://... (URL immagine)">
+                <div id="heroHomePreview" style="margin-top:8px"></div>
+              </div>
+              <div>
+                <label class="form-label">Titolo principale</label>
+                <input type="text" class="form-input" id="heroHomeTitle" oninput="markDirty()" placeholder="Benvenuti ad Apricena">
+              </div>
+              <div>
+                <label class="form-label">Sottotitolo</label>
+                <input type="text" class="form-input" id="heroHomeSub" oninput="markDirty()" placeholder="Il portale della città">
+              </div>
+              <div>
+                <label class="form-label">Testo CTA (bottone)</label>
+                <input type="text" class="form-input" id="heroHomeCta" oninput="markDirty()" placeholder="Leggi le notizie">
+              </div>
+              <div>
+                <label class="form-label">Link CTA</label>
+                <input type="text" class="form-input" id="heroHomeCtaLink" oninput="markDirty()" placeholder="#notizie">
+              </div>
+            </div>
+          </div>
+          <div id="heroTab-news" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div style="grid-column:1/-1">
+                <label class="form-label">Immagine di sfondo (URL)</label>
+                <input type="url" class="form-input" id="heroNewsUrl" oninput="previewHero('news');markDirty()" placeholder="https://...">
+                <div id="heroNewsPreview" style="margin-top:8px"></div>
+              </div>
+              <div style="grid-column:1/-1">
+                <label class="form-label">Titolo</label>
+                <input type="text" class="form-input" id="heroNewsTitle" oninput="markDirty()" placeholder="Ultime notizie">
+              </div>
+            </div>
+          </div>
+          <div id="heroTab-events" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+              <div style="grid-column:1/-1">
+                <label class="form-label">Immagine di sfondo (URL)</label>
+                <input type="url" class="form-input" id="heroEventsUrl" oninput="previewHero('events');markDirty()" placeholder="https://...">
+                <div id="heroEventsPreview" style="margin-top:8px"></div>
+              </div>
+              <div style="grid-column:1/-1">
+                <label class="form-label">Titolo</label>
+                <input type="text" class="form-input" id="heroEventsTitle" oninput="markDirty()" placeholder="Eventi in programma">
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:24px">
+            <button onclick="saveHero()" class="btn btn-primary"><i class="fas fa-save"></i> Salva hero</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== LAYOUT ===== -->
+      <div id="sec-layout" class="section-page">
+        <div class="content-card">
+          <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 8px">Layout del sito</h3>
+          <p style="font-size:13px;color:#64748b;margin:0 0 24px">Gestisci la visibilità delle sezioni e le impostazioni di visualizzazione</p>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div>
+              <h4 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#374151">Visibilità sezioni</h4>
+              <div id="sectionToggles"></div>
+            </div>
+            <div>
+              <h4 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#374151">Impostazioni notizie</h4>
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div>
+                  <label class="form-label">Layout notizie</label>
+                  <select class="form-input form-select" id="newsLayout" onchange="markDirty()">
+                    <option value="grid">Griglia</option>
+                    <option value="list">Lista</option>
+                    <option value="masonry">Masonry</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Notizie per pagina</label>
+                  <select class="form-input form-select" id="newsPerPage" onchange="markDirty()">
+                    <option value="3">3</option>
+                    <option value="6">6</option>
+                    <option value="9">9</option>
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Ordine notizie</label>
+                  <select class="form-input form-select" id="newsOrder" onchange="markDirty()">
+                    <option value="newest">Più recenti prima</option>
+                    <option value="oldest">Più vecchie prima</option>
+                    <option value="alpha">Alfabetico</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Tab categorie</label>
+                  <select class="form-input form-select" id="newsTabs" onchange="markDirty()">
+                    <option value="show">Mostra</option>
+                    <option value="hide">Nascondi</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:24px">
+            <button onclick="saveLayout()" class="btn btn-primary"><i class="fas fa-save"></i> Salva layout</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <div id="sec-footer" class="section-page">
+        <div class="content-card">
+          <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 24px">Impostazioni footer</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div style="grid-column:1/-1">
+              <label class="form-label">Copyright</label>
+              <input type="text" class="form-input" id="footerCopy" oninput="markDirty()" placeholder="© 2026 TuttoApricena">
+            </div>
+            <div>
+              <label class="form-label">Slogan footer</label>
+              <input type="text" class="form-input" id="footerSlogan" oninput="markDirty()" placeholder="TuttoApricena">
+            </div>
+            <div>
+              <label class="form-label">Descrizione footer</label>
+              <input type="text" class="form-input" id="footerDesc" oninput="markDirty()" placeholder="Il portale di...">
+            </div>
+            <div>
+              <label class="form-label">Indirizzo</label>
+              <input type="text" class="form-input" id="footerAddr" oninput="markDirty()" placeholder="Apricena (FG), Italia">
+            </div>
+            <div>
+              <label class="form-label">Email footer</label>
+              <input type="email" class="form-input" id="footerEmail" oninput="markDirty()">
+            </div>
+            <div>
+              <label class="form-label">Telefono</label>
+              <input type="text" class="form-input" id="footerTel" oninput="markDirty()">
+            </div>
+            <div>
+              <label class="form-label">Partita IVA / CF</label>
+              <input type="text" class="form-input" id="footerPiva" oninput="markDirty()">
+            </div>
+          </div>
+          <div style="margin-top:24px">
+            <button onclick="saveFooter()" class="btn btn-primary"><i class="fas fa-save"></i> Salva footer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GITHUB ===== -->
+      <div id="sec-github" class="section-page">
+        <div class="content-card">
+          <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 8px"><i class="fab fa-github"></i> Configurazione GitHub</h3>
+          <p style="font-size:13px;color:#64748b;margin:0 0 24px">Configura le credenziali per publicare i contenuti su GitHub Pages</p>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+            <div>
+              <label class="form-label">GitHub Token (Personal Access Token)</label>
+              <div style="position:relative">
+                <input type="password" class="form-input" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" style="padding-right:40px">
+                <button onclick="toggleToken()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8"><i class="fas fa-eye" id="tokenIcon"></i></button>
+              </div>
+              <p style="font-size:11px;color:#94a3b8;margin-top:4px">Permessi necessari: <code>repo</code> (Contents write)</p>
+            </div>
+            <div>
+              <label class="form-label">Repository (es: NicolaMartucci/nicolamartucci.github.io)</label>
+              <input type="text" class="form-input" id="ghRepo" placeholder="username/repo">
+            </div>
+            <div>
+              <label class="form-label">Branch</label>
+              <input type="text" class="form-input" id="ghBranch" placeholder="main" value="main">
+            </div>
+            <div>
+              <label class="form-label">Percorso file data.json</label>
+              <input type="text" class="form-input" id="ghPath" placeholder="tuttoapricena/assets/data.json">
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button onclick="saveGithubConfig()" class="btn btn-primary"><i class="fas fa-save"></i> Salva configurazione</button>
+            <button onclick="testGithubConnection()" class="btn btn-secondary"><i class="fas fa-plug"></i> Testa connessione</button>
+            <button onclick="syncFromGitHub()" class="btn btn-secondary"><i class="fas fa-cloud-download-alt"></i> Sincronizza da GitHub</button>
+            <button onclick="publishToGitHub()" class="btn btn-success"><i class="fab fa-github"></i> Pubblica live ora</button>
+          </div>
+          
+          <div id="ghTestResult" style="margin-top:20px"></div>
+        </div>
+      </div>
+
+      <!-- ===== UTENTI ===== -->
+      <div id="sec-utenti" class="section-page">
+        <div class="content-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <h3 style="font-size:17px;font-weight:700;color:#1e293b;margin:0 0 4px">Utenti & Ruoli</h3>
+              <p style="font-size:13px;color:#64748b;margin:0">Gestisci admin ed editor del CMS</p>
+            </div>
+            <button onclick="openUserModal()" class="btn btn-primary"><i class="fas fa-user-plus"></i> Aggiungi utente</button>
+          </div>
+          <div id="usersTable"></div>
+        </div>
+        
+        <div class="content-card">
+          <h3 style="font-size:15px;font-weight:700;color:#1e293b;margin:0 0 16px">Informazioni sui ruoli</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div style="padding:16px;background:#dbeafe;border-radius:12px">
+              <div style="font-weight:700;color:#1d4ed8;margin-bottom:8px"><i class="fas fa-crown"></i> Super Admin</div>
+              <ul style="font-size:13px;color:#374151;margin:0;padding-left:16px;line-height:1.8">
+                <li>Accesso completo</li>
+                <li>Gestione utenti</li>
+                <li>Configurazione GitHub</li>
+                <li>Pubblica contenuti</li>
+              </ul>
+            </div>
+            <div style="padding:16px;background:#fef3c7;border-radius:12px">
+              <div style="font-weight:700;color:#92400e;margin-bottom:8px"><i class="fas fa-user-shield"></i> Admin</div>
+              <ul style="font-size:13px;color:#374151;margin:0;padding-left:16px;line-height:1.8">
+                <li>Gestisce contenuti</li>
+                <li>Pubblica contenuti</li>
+                <li>Impostazioni sito</li>
+              </ul>
+            </div>
+            <div style="padding:16px;background:#dcfce7;border-radius:12px">
+              <div style="font-weight:700;color:#15803d;margin-bottom:8px"><i class="fas fa-pencil-alt"></i> Editor</div>
+              <ul style="font-size:13px;color:#374151;margin:0;padding-left:16px;line-height:1.8">
+                <li>Crea/modifica contenuti</li>
+                <li>Non può pubblicare</li>
+                <li>Non vede GitHub config</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /padding -->
+  </div><!-- /mainContent -->
+</div><!-- /appScreen -->
+
+<!-- =================== MODALS =================== -->
+
+<!-- MODAL NOTIZIA -->
+<div id="modal-notizie" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-notizie')">
+  <div class="modal-box" style="max-width:780px">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalNotizieTitle">Nuova notizia</h3>
+      <button onclick="closeModal('modal-notizie')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="notiziaId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="grid-column:1/-1">
+          <label class="form-label">Titolo *</label>
+          <input type="text" class="form-input" id="notiziaTitle" placeholder="Titolo della notizia">
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" class="form-input" id="notiziaCat" placeholder="es: sport, cultura, cronaca..." list="catList">
+          <datalist id="catList">
+            <option value="sport">
+            <option value="cultura">
+            <option value="cronaca">
+            <option value="politica">
+            <option value="economia">
+            <option value="sanità">
+            <option value="scuola">
+            <option value="ambiente">
+            <option value="eventi">
+          </datalist>
+        </div>
+        <div>
+          <label class="form-label">Data pubblicazione</label>
+          <input type="date" class="form-input" id="notiziaDate">
+        </div>
+        <div>
+          <label class="form-label">Autore</label>
+          <input type="text" class="form-input" id="notiziaAuthor" placeholder="Nome autore">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select class="form-input form-select" id="notiziaStatus">
+            <option value="pubblicata">Pubblicata</option>
+            <option value="bozza">Bozza</option>
+            <option value="archiviata">Archiviata</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Sommario</label>
+          <textarea class="form-input" id="notiziaSummary" rows="2" placeholder="Breve descrizione della notizia..."></textarea>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Testo completo</label>
+          <div class="rich-toolbar">
+            <button onclick="fmt('bold')"><b>B</b></button>
+            <button onclick="fmt('italic')"><i>I</i></button>
+            <button onclick="fmt('underline')"><u>U</u></button>
+            <button onclick="fmt('strikeThrough')"><s>S</s></button>
+            <button onclick="fmt('insertUnorderedList')">• Lista</button>
+            <button onclick="fmt('insertOrderedList')">1. Lista</button>
+            <button onclick="insertLink()"><i class="fas fa-link"></i></button>
+            <button onclick="fmt('removeFormat')">✕ Pulisci</button>
+          </div>
+          <div class="rich-editor" id="notiziaBody" contenteditable="true"></div>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Immagine (URL)</label>
+          <input type="url" class="form-input" id="notiziaImg" placeholder="https://..." oninput="previewNotiziaImg()">
+          <div id="notiziaImgPreview" style="margin-top:8px"></div>
+        </div>
+        <div style="grid-column:1/-1;display:flex;align-items:center;gap:12px">
+          <label class="toggle"><input type="checkbox" id="notiziaFeatured"><span class="toggle-slider"></span></label>
+          <span style="font-size:14px;color:#374151">Notizia in evidenza</span>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Tag (separati da virgola)</label>
+          <input type="text" class="form-input" id="notiziaTags" placeholder="apricena, sport, notizie...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-notizie')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveNotizia()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EVENTO -->
+<div id="modal-eventi" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-eventi')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalEventiTitle">Nuovo evento</h3>
+      <button onclick="closeModal('modal-eventi')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="eventoId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="grid-column:1/-1">
+          <label class="form-label">Titolo evento *</label>
+          <input type="text" class="form-input" id="eventoTitle" placeholder="Nome dell'evento">
+        </div>
+        <div>
+          <label class="form-label">Data inizio</label>
+          <input type="date" class="form-input" id="eventoDateStart">
+        </div>
+        <div>
+          <label class="form-label">Data fine (opzionale)</label>
+          <input type="date" class="form-input" id="eventoDateEnd">
+        </div>
+        <div>
+          <label class="form-label">Orario</label>
+          <input type="time" class="form-input" id="eventoTime">
+        </div>
+        <div>
+          <label class="form-label">Luogo</label>
+          <input type="text" class="form-input" id="eventoPlace" placeholder="Es: Piazza del Municipio">
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" class="form-input" id="eventoCat" placeholder="Es: musica, sport, cultura...">
+        </div>
+        <div>
+          <label class="form-label">Prezzo / Ingresso</label>
+          <input type="text" class="form-input" id="eventoPrice" placeholder="Es: gratuito, €5.00...">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Descrizione</label>
+          <textarea class="form-input" id="eventoDesc" rows="3" placeholder="Descrizione dell'evento..."></textarea>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Immagine (URL)</label>
+          <input type="url" class="form-input" id="eventoImg" placeholder="https://..." oninput="previewEventoImg()">
+          <div id="eventoImgPreview" style="margin-top:8px"></div>
+        </div>
+        <div>
+          <label class="form-label">Link esterno (opzionale)</label>
+          <input type="url" class="form-input" id="eventoLink" placeholder="https://...">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select class="form-input form-select" id="eventoStatus">
+            <option value="attivo">Attivo</option>
+            <option value="annullato">Annullato</option>
+            <option value="concluso">Concluso</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-eventi')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveEvento()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SERVIZIO -->
+<div id="modal-servizi" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-servizi')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalServiziTitle">Nuovo servizio</h3>
+      <button onclick="closeModal('modal-servizi')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="servizioId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="grid-column:1/-1">
+          <label class="form-label">Nome servizio *</label>
+          <input type="text" class="form-input" id="servizioTitle" placeholder="Es: Ufficio Anagrafe, Biblioteca...">
+        </div>
+        <div>
+          <label class="form-label">Categoria</label>
+          <input type="text" class="form-input" id="servizioCat" placeholder="Es: comunale, sanitario, scolastico...">
+        </div>
+        <div>
+          <label class="form-label">Icona (FontAwesome class)</label>
+          <input type="text" class="form-input" id="servizioIcon" placeholder="Es: fas fa-hospital">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Descrizione</label>
+          <textarea class="form-input" id="servizioDesc" rows="3" placeholder="Descrizione del servizio..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">Indirizzo</label>
+          <input type="text" class="form-input" id="servizioAddr" placeholder="Via Roma, 1...">
+        </div>
+        <div>
+          <label class="form-label">Telefono</label>
+          <input type="text" class="form-input" id="servizioTel" placeholder="+39 ...">
+        </div>
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="servizioEmail">
+        </div>
+        <div>
+          <label class="form-label">Sito web</label>
+          <input type="url" class="form-input" id="servizioWeb" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Orari di apertura</label>
+          <textarea class="form-input" id="servizioOrari" rows="2" placeholder="Lun-Ven 9:00-13:00, 15:00-17:00..."></textarea>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Immagine (URL)</label>
+          <input type="url" class="form-input" id="servizioImg" placeholder="https://..." oninput="previewServizioImg()">
+          <div id="servizioImgPreview" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-servizi')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveServizio()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOCALE -->
+<div id="modal-locali" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-locali')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalLocaliTitle">Nuovo locale</h3>
+      <button onclick="closeModal('modal-locali')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="localeId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="grid-column:1/-1">
+          <label class="form-label">Nome locale *</label>
+          <input type="text" class="form-input" id="localeName" placeholder="Es: Bar del Corso, Ristorante La Piazza...">
+        </div>
+        <div>
+          <label class="form-label">Tipologia</label>
+          <input type="text" class="form-input" id="localeCat" placeholder="Es: ristorante, bar, pizzeria..." list="localeCatList">
+          <datalist id="localeCatList">
+            <option value="ristorante">
+            <option value="bar">
+            <option value="pizzeria">
+            <option value="pub">
+            <option value="pasticceria">
+            <option value="gelateria">
+            <option value="negozio">
+            <option value="supermercato">
+            <option value="farmacia">
+            <option value="parrucchiere">
+          </datalist>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Descrizione</label>
+          <textarea class="form-input" id="localeDesc" rows="3" placeholder="Descrizione del locale..."></textarea>
+        </div>
+        <div>
+          <label class="form-label">Indirizzo</label>
+          <input type="text" class="form-input" id="localeAddr" placeholder="Via Roma, 1...">
+        </div>
+        <div>
+          <label class="form-label">Telefono</label>
+          <input type="text" class="form-input" id="localeTel" placeholder="+39 ...">
+        </div>
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="localeEmail">
+        </div>
+        <div>
+          <label class="form-label">Sito web</label>
+          <input type="url" class="form-input" id="localeWeb" placeholder="https://...">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Orari</label>
+          <textarea class="form-input" id="localeOrari" rows="2" placeholder="Lun-Dom 08:00-23:00..."></textarea>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Immagine (URL)</label>
+          <input type="url" class="form-input" id="localeImg" placeholder="https://..." oninput="previewLocaleImg()">
+          <div id="localeImgPreview" style="margin-top:8px"></div>
+        </div>
+        <div>
+          <label class="form-label">Google Maps (URL o embed)</label>
+          <input type="url" class="form-input" id="localeMaps" placeholder="https://maps.google.com/...">
+        </div>
+        <div>
+          <label class="form-label">Stato</label>
+          <select class="form-input form-select" id="localeStatus">
+            <option value="aperto">Aperto</option>
+            <option value="chiuso">Chiuso</option>
+            <option value="in-pausa">In pausa stagionale</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-locali')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveLocale()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SPONSOR -->
+<div id="modal-sponsor" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-sponsor')">
+  <div class="modal-box" style="max-width:580px">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalSponsorTitle">Nuovo sponsor</h3>
+      <button onclick="closeModal('modal-sponsor')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="sponsorId">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="grid-column:1/-1">
+          <label class="form-label">Nome sponsor *</label>
+          <input type="text" class="form-input" id="sponsorName" placeholder="Nome azienda/sponsor">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Logo URL *</label>
+          <input type="url" class="form-input" id="sponsorLogo" placeholder="https://..." oninput="previewSponsorImg()">
+          <div id="sponsorImgPreview" style="margin-top:8px"></div>
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Link (click su logo)</label>
+          <input type="url" class="form-input" id="sponsorLink" placeholder="https://...">
+        </div>
+        <div>
+          <label class="form-label">Livello</label>
+          <select class="form-input form-select" id="sponsorLevel">
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+            <option value="bronze">Bronze</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Ordine (numero)</label>
+          <input type="number" class="form-input" id="sponsorOrder" min="0" value="0">
+        </div>
+        <div style="grid-column:1/-1">
+          <label class="form-label">Descrizione (opzionale)</label>
+          <textarea class="form-input" id="sponsorDesc" rows="2" placeholder="Breve descrizione dello sponsor..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-sponsor')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveSponsor()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL UTENTE -->
+<div id="modal-utente" class="modal-overlay" style="display:none" onclick="closeModalOutside(event,'modal-utente')">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b" id="modalUtenteTitle">Aggiungi utente</h3>
+      <button onclick="closeModal('modal-utente')" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="utenteId">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <label class="form-label">Username *</label>
+          <input type="text" class="form-input" id="utenteUsername" placeholder="username">
+        </div>
+        <div>
+          <label class="form-label">Nome visualizzato</label>
+          <input type="text" class="form-input" id="utenteDisplayName" placeholder="Nome Cognome">
+        </div>
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="utenteEmail" placeholder="email@esempio.it">
+        </div>
+        <div>
+          <label class="form-label">Password *</label>
+          <input type="password" class="form-input" id="utentePassword" placeholder="Minimo 6 caratteri" autocomplete="new-password">
+        </div>
+        <div>
+          <label class="form-label">Ruolo</label>
+          <select class="form-input form-select" id="utenteRole">
+            <option value="admin">Admin</option>
+            <option value="editor">Editor</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-utente')" class="btn btn-secondary">Annulla</button>
+      <button onclick="saveUser()" class="btn btn-primary"><i class="fas fa-save"></i> Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRM DELETE -->
+<div id="modal-delete" class="modal-overlay" style="display:none">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#1e293b">Conferma eliminazione</h3>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;padding:16px 0">
+        <div style="width:64px;height:64px;background:#fee2e2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+          <i class="fas fa-trash" style="font-size:24px;color:#dc2626"></i>
+        </div>
+        <h4 style="margin:0 0 8px;color:#1e293b" id="deleteMessage">Eliminare questo elemento?</h4>
+        <p style="color:#64748b;font-size:13px;margin:0">Questa azione è irreversibile. Il contenuto verrà eliminato definitivamente.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-delete')" class="btn btn-secondary">Annulla</button>
+      <button onclick="confirmDelete()" class="btn btn-danger"><i class="fas fa-trash"></i> Elimina</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESET -->
+<div id="modal-reset" class="modal-overlay" style="display:none">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#ef4444">⚠️ Reimposta dati</h3>
+    </div>
+    <div class="modal-body">
+      <p style="color:#374151;font-size:14px">Questa operazione elimina tutti i dati del CMS salvati in locale (utenti, contenuti, configurazione GitHub). Usa solo se hai perso le credenziali.</p>
+      <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:#664d03">
+        <strong>Attenzione:</strong> Dopo il reset l'accesso verrà effettuato con le credenziali di default: <br><code>admin / admin123</code>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('modal-reset')" class="btn btn-secondary">Annulla</button>
+      <button onclick="resetAllData()" class="btn btn-danger"><i class="fas fa-exclamation-triangle"></i> Reimposta tutto</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+//  TuttoApricena CMS — Admin Panel
+//  Versione: 2.0 — Pure HTML/CSS/JS
+// =============================================
+
+const CMS_VERSION = '2.0';
+const DEFAULT_USERS = [
+  { id: 'u1', username: 'admin', password: hashPass('admin123'), displayName: 'Administrator', email: '', role: 'superadmin', createdAt: Date.now() }
+];
+
+// ---- STORAGE KEYS ----
+const KEYS = {
+  users: 'ta_cms_users',
+  session: 'ta_cms_session',
+  data: 'ta_cms_data',
+  ghConfig: 'ta_cms_gh',
+  remember: 'ta_cms_remember',
+  changelog: 'ta_cms_changelog'
+};
+
+// ---- STATE ----
+let CMS = {
+  currentUser: null,
+  data: null,
+  ghConfig: { token: '', repo: 'NicolaMartucci/nicolamartucci.github.io', branch: 'main', path: 'tuttoapricena/assets/data.json' },
+  isDirty: false,
+  deleteCallback: null,
+  currentSection: 'dashboard'
+};
+
+// =============================================
+//  UTILS
+// =============================================
+
+function hashPass(p) {
+  // Simple hash for demo — in prod use proper hashing
+  let h = 0;
+  for (let i = 0; i < p.length; i++) { h = ((h << 5) - h) + p.charCodeAt(i); h |= 0; }
+  return 'h:' + Math.abs(h).toString(36) + p.length;
+}
+
+function genId(prefix) {
+  return prefix + Date.now() + Math.random().toString(36).substr(2,5);
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return d; }
+}
+
+function truncate(str, n=60) {
+  if (!str) return '';
+  return str.length > n ? str.slice(0,n) + '...' : str;
+}
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(KEYS.users)) || DEFAULT_USERS; } catch(e) { return DEFAULT_USERS; }
+}
+
+function saveUsers(users) {
+  localStorage.setItem(KEYS.users, JSON.stringify(users));
+}
+
+function getGhConfig() {
+  try { return JSON.parse(localStorage.getItem(KEYS.ghConfig)) || CMS.ghConfig; } catch(e) { return CMS.ghConfig; }
+}
+
+function saveGhConfig(cfg) {
+  localStorage.setItem(KEYS.ghConfig, JSON.stringify(cfg));
+  CMS.ghConfig = cfg;
+}
+
+function getLocalData() {
+  try { return JSON.parse(localStorage.getItem(KEYS.data)); } catch(e) { return null; }
+}
+
+function saveLocalData(data) {
+  localStorage.setItem(KEYS.data, JSON.stringify(data));
+  CMS.data = data;
+}
+
+function defaultData() {
+  return {
+    identita: { nome: 'TuttoApricena', tag: 'Il portale di Apricena', desc: '', email: '', col: '', logo: '', social: { fb:'',ig:'',tw:'',yt:'' } },
+    hero: {
+      home: { url:'', title:'Benvenuti ad Apricena', sub:'', cta:'Leggi le notizie', ctalink:'#notizie' },
+      news: { url:'', title:'Ultime notizie' },
+      events: { url:'', title:'Eventi in programma' }
+    },
+    footer: { copy:'© 2026 TuttoApricena. Tutti i diritti riservati.', slogan:'TuttoApricena', desc:'Il portale di informazione della città di Apricena.', addr:'Apricena (FG), Italia', email:'', tel:'', piva:'', links:[] },
+    notizie: [],
+    eventi: [],
+    servizi: [],
+    locali: [],
+    sponsor: [],
+    sponsorSettings: { position:'after-news', title:'I nostri sponsor', cols:'4' },
+    layout: {
+      sections: [
+        { id:'hero', label:'Hero principale', icon:'🖼', vis:true },
+        { id:'notizie', label:'Notizie', icon:'📰', vis:true },
+        { id:'eventi', label:'Eventi', icon:'📅', vis:true },
+        { id:'servizi', label:'Servizi', icon:'⚙️', vis:true },
+        { id:'locali', label:'Locali', icon:'🏪', vis:true },
+        { id:'sponsor', label:'Sponsor', icon:'🤝', vis:true },
+        { id:'contatti', label:'Contatti', icon:'📞', vis:true },
+        { id:'footer', label:'Footer', icon:'📄', vis:true }
+      ],
+      newsLayout:'grid', newsPerPage:'9', newsOrder:'newest', newsTabs:'hide'
+    }
+  };
+}
+
+function addChangelog(msg) {
+  try {
+    let log = JSON.parse(localStorage.getItem(KEYS.changelog)) || [];
+    log.unshift({ msg, ts: Date.now(), user: CMS.currentUser?.username || 'system' });
+    if (log.length > 20) log = log.slice(0, 20);
+    localStorage.setItem(KEYS.changelog, JSON.stringify(log));
+  } catch(e) {}
+}
+
+function getChangelog() {
+  try { return JSON.parse(localStorage.getItem(KEYS.changelog)) || []; } catch(e) { return []; }
+}
+
+// =============================================
+//  TOAST
+// =============================================
+
+function toast(msg, type='info', duration=3500) {
+  const icons = { success:'✓', error:'✕', info:'ℹ', warning:'⚠' };
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `<span style="font-size:16px">${icons[type]||'ℹ'}</span><span style="flex:1">${msg}</span>`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'slideOut .3s ease forwards';
+    setTimeout(() => el.remove(), 300);
+  }, duration);
+}
+
+// =============================================
+//  LOGIN / AUTH
+// =============================================
+
+function toggleLoginPass() {
+  const inp = document.getElementById('loginPass');
+  const icon = document.getElementById('loginPassIcon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+  else { inp.type = 'password'; icon.className = 'fas fa-eye'; }
+}
+
+function showResetModal() { document.getElementById('modal-reset').style.display='flex'; }
+
+function resetAllData() {
+  [KEYS.users, KEYS.session, KEYS.data, KEYS.ghConfig, KEYS.remember, KEYS.changelog].forEach(k => localStorage.removeItem(k));
+  closeModal('modal-reset');
+  toast('Dati reimpostati. Usa admin / admin123', 'warning', 5000);
+  setTimeout(() => location.reload(), 1000);
+}
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  if (!user || !pass) { errEl.textContent='Inserisci username e password'; errEl.style.display='block'; return; }
+
+  const users = getUsers();
+  const found = users.find(u => u.username === user && u.password === hashPass(pass));
+  if (!found) { errEl.textContent='Username o password non corretti'; errEl.style.display='block'; return; }
+
+  const session = { userId: found.id, username: found.username, displayName: found.displayName||found.username, role: found.role, ts: Date.now() };
+  if (remember) {
+    localStorage.setItem(KEYS.remember, JSON.stringify({ ...session, expiry: Date.now() + 30*24*60*60*1000 }));
+  }
+  sessionStorage.setItem(KEYS.session, JSON.stringify(session));
+  CMS.currentUser = session;
+  startApp();
+}
+
+function checkSession() {
+  // Check sessionStorage first
+  try {
+    let s = JSON.parse(sessionStorage.getItem(KEYS.session));
+    if (s) { CMS.currentUser = s; return true; }
+  } catch(e) {}
+  // Check remember
+  try {
+    let r = JSON.parse(localStorage.getItem(KEYS.remember));
+    if (r && r.expiry > Date.now()) { CMS.currentUser = r; return true; }
+  } catch(e) {}
+  return false;
+}
+
+function doLogout() {
+  sessionStorage.removeItem(KEYS.session);
+  localStorage.removeItem(KEYS.remember);
+  CMS.currentUser = null;
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  toast('Disconnesso con successo', 'info');
+}
+
+// =============================================
+//  BOOT
+// =============================================
+
+window.addEventListener('load', async () => {
+  // Ensure default users exist
+  if (!localStorage.getItem(KEYS.users)) saveUsers(DEFAULT_USERS);
+
+  if (checkSession()) {
+    startApp();
+  } else {
+    document.getElementById('pageLoader').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }
+
+  // Enter key on login
+  document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginPass').focus(); });
+});
+
+async function startApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'block';
+  document.getElementById('pageLoader').style.display = 'flex';
+
+  // Load GH config
+  CMS.ghConfig = getGhConfig();
+
+  // Load data
+  let localData = getLocalData();
+  if (!localData) {
+    // Try sync from GitHub first
+    localData = await fetchFromGitHub(true);
+    if (!localData) localData = defaultData();
+    saveLocalData(localData);
+  }
+  CMS.data = localData;
+
+  // Populate UI
+  populateUI();
+  updateSidebar();
+  updateDashboard();
+  checkGitHubStatus();
+
+  document.getElementById('pageLoader').style.display = 'none';
+}
+
+// =============================================
+//  GITHUB API
+// =============================================
+
+async function fetchFromGitHub(silent=false) {
+  const cfg = CMS.ghConfig;
+  if (!cfg.token || !cfg.repo || !cfg.path) {
+    if (!silent) toast('Configura prima il token GitHub nella sezione GitHub/API', 'warning');
+    return null;
+  }
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+      headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!resp.ok) { if (!silent) toast('Errore GitHub: ' + resp.status, 'error'); return null; }
+    const json = await resp.json();
+    const decoded = atob(json.content.replace(/\n/g,''));
+    return JSON.parse(decoded);
+  } catch(e) {
+    if (!silent) toast('Errore nel recupero dati: ' + e.message, 'error');
+    return null;
+  }
+}
+
+async function getFileSha() {
+  const cfg = CMS.ghConfig;
+  try {
+    // Aggiungi timestamp per evitare cache del browser
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}&t=${Date.now()}`, {
+      headers: {
+        'Authorization': `token ${cfg.token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+    if (!resp.ok) return null;
+    const json = await resp.json();
+    return json.sha || null;
+  } catch(e) { return null; }
+}
+
+async function syncFromGitHub() {
+  const btn = document.getElementById('syncBtn');
+  btn.innerHTML = '<span class="spinner" style="border-top-color:#475569"></span> Sync...';
+  btn.disabled = true;
+  try {
+    const data = await fetchFromGitHub();
+    if (data) {
+      // Merge: keep local additions for sections not in remote
+      const merged = { ...defaultData(), ...data };
+      if (!merged.servizi) merged.servizi = [];
+      if (!merged.locali) merged.locali = [];
+      saveLocalData(merged);
+      CMS.data = merged;
+      populateUI();
+      updateDashboard();
+      addChangelog('Sincronizzazione da GitHub completata');
+      toast('Dati sincronizzati da GitHub con successo!', 'success');
+    }
+  } finally {
+    btn.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizza';
+    btn.disabled = false;
+  }
+}
+
+async function publishToGitHub(retryCount = 0) {
+  const cfg = CMS.ghConfig;
+  if (!cfg.token || !cfg.repo || !cfg.path) {
+    toast('Configura il token GitHub prima di pubblicare', 'warning');
+    showSection('github');
+    return;
+  }
+  const btn = document.getElementById('publishBtn');
+  btn.innerHTML = '<span class="spinner"></span> Recupero SHA...';
+  btn.disabled = true;
+
+  try {
+    // 1️⃣ Recupera SEMPRE il SHA fresco appena prima di pubblicare
+    toast('🔄 Recupero SHA aggiornato da GitHub...', 'info', 2000);
+    const sha = await getFileSha();
+
+    btn.innerHTML = '<span class="spinner"></span> Pubblicazione...';
+
+    // 2️⃣ Codifica il contenuto in base64
+    const jsonString = JSON.stringify(CMS.data, null, 2);
+    // Usa TextEncoder per gestire correttamente tutti i caratteri UTF-8
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(jsonString);
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    const content = btoa(binary);
+
+    const body = {
+      message: `CMS: aggiornamento dati [${new Date().toLocaleString('it-IT')}]`,
+      content,
+      branch: cfg.branch
+    };
+    // 3️⃣ Includi SHA solo se il file esiste già (aggiornamento), altrimenti crea nuovo
+    if (sha) {
+      body.sha = sha;
+      console.log('📌 SHA usato per la pubblicazione:', sha);
+    } else {
+      console.log('📌 Nessun SHA trovato — il file verrà creato ex-novo');
+    }
+
+    // 4️⃣ Esegui il PUT su GitHub
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${cfg.token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache'
+      },
+      body: JSON.stringify(body)
+    });
+
+    const respJson = await resp.json();
+
+    if (resp.ok) {
+      CMS.isDirty = false;
+      // Salva il nuovo SHA per future pubblicazioni
+      if (respJson.content && respJson.content.sha) {
+        console.log('✅ Nuovo SHA salvato:', respJson.content.sha);
+      }
+      addChangelog('Pubblicato su GitHub');
+      toast('✅ Pubblicato su GitHub con successo! Le modifiche saranno live tra pochi istanti.', 'success', 5000);
+    } else if (resp.status === 409 && retryCount < 3) {
+      // 5️⃣ Conflitto SHA: riprova automaticamente fino a 3 volte
+      console.warn(`⚠️ Conflitto SHA (tentativo ${retryCount + 1}/3), riprovo...`);
+      toast(`⚠️ Conflitto SHA rilevato, nuovo tentativo automatico (${retryCount + 1}/3)...`, 'warning', 3000);
+      btn.innerHTML = '<i class="fab fa-github"></i> Pubblica live';
+      btn.disabled = false;
+      setTimeout(() => publishToGitHub(retryCount + 1), 1500);
+      return;
+    } else {
+      const errMsg = respJson.message || `HTTP ${resp.status}`;
+      console.error('❌ Errore pubblicazione GitHub:', respJson);
+      toast(`❌ Errore pubblicazione: ${errMsg}`, 'error', 6000);
+    }
+  } catch(e) {
+    console.error('❌ Eccezione durante la pubblicazione:', e);
+    toast('Errore di rete: ' + e.message, 'error');
+  } finally {
+    btn.innerHTML = '<i class="fab fa-github"></i> Pubblica live';
+    btn.disabled = false;
+  }
+}
+
+async function testGithubConnection() {
+  const token = document.getElementById('ghToken').value.trim();
+  const repo = document.getElementById('ghRepo').value.trim();
+  const branch = document.getElementById('ghBranch').value.trim() || 'main';
+  const path = document.getElementById('ghPath').value.trim();
+  const resEl = document.getElementById('ghTestResult');
+
+  if (!token || !repo) { toast('Inserisci token e repository', 'warning'); return; }
+  resEl.innerHTML = '<div style="padding:12px;background:#f8fafc;border-radius:10px;font-size:13px;color:#64748b"><span class="spinner" style="border-top-color:#64748b"></span> Test in corso...</div>';
+  
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${repo}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    const json = await resp.json();
+    if (resp.ok) {
+      // Test file access
+      let fileOk = false;
+      if (path) {
+        const fresp = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`, {
+          headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        fileOk = fresp.ok;
+      }
+      resEl.innerHTML = `<div style="padding:14px;background:#dcfce7;border-radius:10px;font-size:13px;color:#15803d">
+        <strong>✅ Connessione riuscita!</strong><br>
+        Repository: <strong>${json.full_name}</strong><br>
+        Branch: ${branch} | File data.json: ${fileOk ? '✅ trovato' : '⚠️ non trovato (verrà creato alla prima pubblicazione)'}
+      </div>`;
+      toast('Connessione GitHub OK!', 'success');
+    } else {
+      resEl.innerHTML = `<div style="padding:14px;background:#fee2e2;border-radius:10px;font-size:13px;color:#b91c1c"><strong>❌ Errore:</strong> ${json.message}</div>`;
+    }
+  } catch(e) {
+    resEl.innerHTML = `<div style="padding:14px;background:#fee2e2;border-radius:10px;font-size:13px;color:#b91c1c"><strong>❌ Errore di rete:</strong> ${e.message}</div>`;
+  }
+}
+
+async function checkGitHubStatus() {
+  const cfg = CMS.ghConfig;
+  const el = document.getElementById('githubStatus');
+  if (!cfg.token || !cfg.repo) {
+    el.innerHTML = `<div style="padding:14px;background:#fef3c7;border-radius:10px;font-size:13px;color:#92400e"><i class="fas fa-exclamation-triangle"></i> Token GitHub non configurato. <button onclick="showSection('github')" style="background:none;border:none;color:#1d4ed8;cursor:pointer;font-size:13px;padding:0;text-decoration:underline">Configura ora</button></div>`;
+    return;
+  }
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${cfg.repo}`, {
+      headers: { 'Authorization': `token ${cfg.token}` }
+    });
+    if (resp.ok) {
+      el.innerHTML = `<div style="padding:14px;background:#dcfce7;border-radius:10px;font-size:13px;color:#15803d"><i class="fab fa-github"></i> Connesso a <strong>${cfg.repo}</strong> • Branch: ${cfg.branch}</div>`;
+    } else {
+      el.innerHTML = `<div style="padding:14px;background:#fee2e2;border-radius:10px;font-size:13px;color:#b91c1c"><i class="fas fa-times-circle"></i> Errore connessione GitHub (${resp.status})</div>`;
+    }
+  } catch(e) {
+    el.innerHTML = `<div style="padding:14px;background:#f8fafc;border-radius:10px;font-size:13px;color:#64748b"><i class="fab fa-github"></i> Impossibile verificare (offline?)</div>`;
+  }
+}
+
+// =============================================
+//  UI HELPERS
+// =============================================
+
+function updateSidebar() {
+  const u = CMS.currentUser;
+  if (!u) return;
+  const initials = (u.displayName||u.username).split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('sidebarAvatarEl').textContent = initials;
+  document.getElementById('sidebarUsername').textContent = u.displayName || u.username;
+  document.getElementById('sidebarRole').textContent = { superadmin:'Super Admin', admin:'Amministratore', editor:'Editor' }[u.role] || u.role;
+  
+  // Hide GitHub section for editors
+  if (u.role === 'editor') {
+    document.querySelectorAll('.nav-item').forEach(el => {
+      if (el.textContent.includes('GitHub')) el.style.display = 'none';
+    });
+    document.getElementById('publishBtn').style.display = 'none';
+  }
+}
+
+function updateDashboard() {
+  const d = CMS.data;
+  if (!d) return;
+  document.getElementById('statNotizie').textContent = (d.notizie||[]).length;
+  document.getElementById('statEventi').textContent = (d.eventi||[]).length;
+  document.getElementById('statServizi').textContent = (d.servizi||[]).length;
+  document.getElementById('statLocali').textContent = (d.locali||[]).length;
+  document.getElementById('statSponsor').textContent = (d.sponsor||[]).length;
+
+  // Recent changes
+  const log = getChangelog();
+  const el = document.getElementById('recentChanges');
+  if (!log.length) { el.textContent = 'Nessuna modifica recente'; return; }
+  el.innerHTML = log.slice(0,5).map(l => `
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f5f9">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--primary);margin-top:5px;flex-shrink:0"></div>
+      <div>
+        <div style="font-size:13px;color:#374151">${l.msg}</div>
+        <div style="font-size:11px;color:#94a3b8">${new Date(l.ts).toLocaleString('it-IT')} · ${l.user}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function markDirty() { CMS.isDirty = true; }
+
+function showSection(id) {
+  document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  
+  const page = document.getElementById('sec-' + id);
+  if (page) page.classList.add('active');
+  
+  document.querySelectorAll('.nav-item').forEach(el => {
+    if (el.getAttribute('onclick') && el.getAttribute('onclick').includes("'" + id + "'")) el.classList.add('active');
+  });
+
+  const titles = {
+    dashboard: ['Dashboard', 'Pannello di controllo'],
+    notizie: ['Notizie', 'Gestisci gli articoli del sito'],
+    eventi: ['Eventi', 'Gestisci gli eventi'],
+    servizi: ['Servizi', 'Gestisci i servizi della città'],
+    locali: ['Locali', 'Gestisci i locali e attività'],
+    sponsor: ['Sponsor', 'Gestisci gli sponsor del sito'],
+    identita: ['Identità sito', 'Logo, nome, social e colori'],
+    hero: ['Hero / Header', 'Immagini e testi degli header'],
+    layout: ['Layout', 'Disposizione e visibilità sezioni'],
+    footer: ['Footer', 'Testi e informazioni del piè di pagina'],
+    github: ['GitHub / API', 'Configurazione pubblicazione'],
+    utenti: ['Utenti & Ruoli', 'Gestisci gli accessi al CMS']
+  };
+
+  const t = titles[id] || [id, ''];
+  document.getElementById('topbarTitle').textContent = t[0];
+  document.getElementById('topbarSub').textContent = t[1];
+  CMS.currentSection = id;
+
+  // Render section-specific content
+  if (id === 'notizie') renderNotizie();
+  else if (id === 'eventi') renderEventi();
+  else if (id === 'servizi') renderServizi();
+  else if (id === 'locali') renderLocali();
+  else if (id === 'sponsor') { renderSponsor(); loadSponsorSettings(); }
+  else if (id === 'identita') loadIdentita();
+  else if (id === 'hero') loadHero();
+  else if (id === 'layout') loadLayout();
+  else if (id === 'footer') loadFooter();
+  else if (id === 'github') loadGithubForm();
+  else if (id === 'utenti') renderUsers();
+  else if (id === 'dashboard') { updateDashboard(); checkGitHubStatus(); }
+}
+
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const m = document.getElementById('mainContent');
+  if (window.innerWidth <= 768) {
+    s.classList.toggle('mobile-open');
+  } else {
+    s.classList.toggle('collapsed');
+    m.classList.toggle('full');
+  }
+}
+
+function populateUI() {
+  // This just sets data; rendering happens on showSection
+  loadIdentita();
+  loadHero();
+  loadLayout();
+  loadFooter();
+  loadSponsorSettings();
+  if (CMS.ghConfig) loadGithubForm();
+}
+
+// =============================================
+//  MODALS
+// =============================================
+
+function openModal(type, id=null) {
+  const modal = document.getElementById('modal-' + type);
+  if (!modal) return;
+  modal.style.display = 'flex';
+
+  if (type === 'notizie') {
+    const item = id ? (CMS.data.notizie||[]).find(n=>n.id===id) : null;
+    document.getElementById('modalNotizieTitle').textContent = item ? 'Modifica notizia' : 'Nuova notizia';
+    document.getElementById('notiziaId').value = id || '';
+    document.getElementById('notiziaTitle').value = item?.title || '';
+    document.getElementById('notiziaCat').value = item?.cat || '';
+    document.getElementById('notiziaDate').value = item?.date || new Date().toISOString().split('T')[0];
+    document.getElementById('notiziaAuthor').value = item?.author || CMS.currentUser?.displayName || '';
+    document.getElementById('notiziaStatus').value = item?.status || 'pubblicata';
+    document.getElementById('notiziaSummary').value = item?.summary || '';
+    document.getElementById('notiziaBody').innerHTML = item?.body || '';
+    document.getElementById('notiziaImg').value = item?.img || '';
+    document.getElementById('notiziaFeatured').checked = item?.featured == '1' || item?.featured === true;
+    document.getElementById('notiziaTags').value = (item?.tags||[]).join(', ');
+    previewNotiziaImg();
+  } else if (type === 'eventi') {
+    const item = id ? (CMS.data.eventi||[]).find(e=>e.id===id) : null;
+    document.getElementById('modalEventiTitle').textContent = item ? 'Modifica evento' : 'Nuovo evento';
+    document.getElementById('eventoId').value = id || '';
+    document.getElementById('eventoTitle').value = item?.title || '';
+    document.getElementById('eventoDateStart').value = item?.dateStart || '';
+    document.getElementById('eventoDateEnd').value = item?.dateEnd || '';
+    document.getElementById('eventoTime').value = item?.time || '';
+    document.getElementById('eventoPlace').value = item?.place || '';
+    document.getElementById('eventoCat').value = item?.cat || '';
+    document.getElementById('eventoPrice').value = item?.price || '';
+    document.getElementById('eventoDesc').value = item?.desc || '';
+    document.getElementById('eventoImg').value = item?.img || '';
+    document.getElementById('eventoLink').value = item?.link || '';
+    document.getElementById('eventoStatus').value = item?.status || 'attivo';
+    previewEventoImg();
+  } else if (type === 'servizi') {
+    const item = id ? (CMS.data.servizi||[]).find(s=>s.id===id) : null;
+    document.getElementById('modalServiziTitle').textContent = item ? 'Modifica servizio' : 'Nuovo servizio';
+    document.getElementById('servizioId').value = id || '';
+    document.getElementById('servizioTitle').value = item?.title || '';
+    document.getElementById('servizioCat').value = item?.cat || '';
+    document.getElementById('servizioIcon').value = item?.icon || '';
+    document.getElementById('servizioDesc').value = item?.desc || '';
+    document.getElementById('servizioAddr').value = item?.addr || '';
+    document.getElementById('servizioTel').value = item?.tel || '';
+    document.getElementById('servizioEmail').value = item?.email || '';
+    document.getElementById('servizioWeb').value = item?.web || '';
+    document.getElementById('servizioOrari').value = item?.orari || '';
+    document.getElementById('servizioImg').value = item?.img || '';
+    previewServizioImg();
+  } else if (type === 'locali') {
+    const item = id ? (CMS.data.locali||[]).find(l=>l.id===id) : null;
+    document.getElementById('modalLocaliTitle').textContent = item ? 'Modifica locale' : 'Nuovo locale';
+    document.getElementById('localeId').value = id || '';
+    document.getElementById('localeName').value = item?.name || '';
+    document.getElementById('localeCat').value = item?.cat || '';
+    document.getElementById('localeDesc').value = item?.desc || '';
+    document.getElementById('localeAddr').value = item?.addr || '';
+    document.getElementById('localeTel').value = item?.tel || '';
+    document.getElementById('localeEmail').value = item?.email || '';
+    document.getElementById('localeWeb').value = item?.web || '';
+    document.getElementById('localeOrari').value = item?.orari || '';
+    document.getElementById('localeImg').value = item?.img || '';
+    document.getElementById('localeMaps').value = item?.maps || '';
+    document.getElementById('localeStatus').value = item?.status || 'aperto';
+    previewLocaleImg();
+  } else if (type === 'sponsor') {
+    const item = id ? (CMS.data.sponsor||[]).find(s=>s.id===id) : null;
+    document.getElementById('modalSponsorTitle').textContent = item ? 'Modifica sponsor' : 'Nuovo sponsor';
+    document.getElementById('sponsorId').value = id || '';
+    document.getElementById('sponsorName').value = item?.name || '';
+    document.getElementById('sponsorLogo').value = item?.logo || '';
+    document.getElementById('sponsorLink').value = item?.link || '';
+    document.getElementById('sponsorLevel').value = item?.level || 'standard';
+    document.getElementById('sponsorOrder').value = item?.order || 0;
+    document.getElementById('sponsorDesc').value = item?.desc || '';
+    previewSponsorImg();
+  }
+}
+
+function openUserModal(id=null) {
+  const modal = document.getElementById('modal-utente');
+  modal.style.display = 'flex';
+  const users = getUsers();
+  const item = id ? users.find(u=>u.id===id) : null;
+  document.getElementById('modalUtenteTitle').textContent = item ? 'Modifica utente' : 'Aggiungi utente';
+  document.getElementById('utenteId').value = id || '';
+  document.getElementById('utenteUsername').value = item?.username || '';
+  document.getElementById('utenteDisplayName').value = item?.displayName || '';
+  document.getElementById('utenteEmail').value = item?.email || '';
+  document.getElementById('utentePassword').value = '';
+  document.getElementById('utentePassword').placeholder = id ? 'Lascia vuoto per non cambiare' : 'Minimo 6 caratteri';
+  document.getElementById('utenteRole').value = item?.role || 'editor';
+}
+
+function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+function closeModalOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// =============================================
+//  RICH TEXT
+// =============================================
+
+function fmt(cmd) {
+  document.getElementById('notiziaBody').focus();
+  document.execCommand(cmd, false, null);
+}
+
+function insertLink() {
+  const url = prompt('URL del link:');
+  if (url) { document.getElementById('notiziaBody').focus(); document.execCommand('createLink', false, url); }
+}
+
+// =============================================
+//  IMAGE PREVIEWS
+// =============================================
+
+function previewImg(inputId, previewId) {
+  const url = document.getElementById(inputId).value;
+  const el = document.getElementById(previewId);
+  if (url) {
+    el.innerHTML = `<img src="${url}" class="img-preview" onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'>❌ Immagine non trovata</div>'">`;
+  } else { el.innerHTML = ''; }
+}
+function previewNotiziaImg() { previewImg('notiziaImg','notiziaImgPreview'); }
+function previewEventoImg() { previewImg('eventoImg','eventoImgPreview'); }
+function previewServizioImg() { previewImg('servizioImg','servizioImgPreview'); }
+function previewLocaleImg() { previewImg('localeImg','localeImgPreview'); }
+function previewSponsorImg() { previewImg('sponsorLogo','sponsorImgPreview'); }
+function previewLogo() { previewImg('siteLogo','logoPreviewWrap'); }
+function previewHero(tab) {
+  const map = { home:['heroHomeUrl','heroHomePreview'], news:['heroNewsUrl','heroNewsPreview'], events:['heroEventsUrl','heroEventsPreview'] };
+  const [inputId, prevId] = map[tab];
+  const url = document.getElementById(inputId).value;
+  const el = document.getElementById(prevId);
+  if (url) {
+    el.innerHTML = `<img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;border:2px solid #e2e8f0" onerror="this.parentElement.innerHTML='<div class=\\'img-placeholder\\'>❌ Immagine non trovata</div>'">`;
+  } else { el.innerHTML = ''; }
+}
+
+// =============================================
+//  SAVE ITEMS
+// =============================================
+
+function saveNotizia() {
+  const id = document.getElementById('notiziaId').value;
+  const title = document.getElementById('notiziaTitle').value.trim();
+  if (!title) { toast('Inserisci il titolo', 'warning'); return; }
+
+  const tags = document.getElementById('notiziaTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const item = {
+    id: id || genId('n'),
+    title,
+    cat: document.getElementById('notiziaCat').value.trim(),
+    date: document.getElementById('notiziaDate').value,
+    author: document.getElementById('notiziaAuthor').value.trim(),
+    summary: document.getElementById('notiziaSummary').value.trim(),
+    body: document.getElementById('notiziaBody').innerHTML,
+    img: document.getElementById('notiziaImg').value.trim(),
+    status: document.getElementById('notiziaStatus').value,
+    featured: document.getElementById('notiziaFeatured').checked ? '1' : '0',
+    tags,
+    updatedAt: Date.now()
+  };
+
+  if (!CMS.data.notizie) CMS.data.notizie = [];
+  if (id) {
+    const idx = CMS.data.notizie.findIndex(n=>n.id===id);
+    if (idx > -1) CMS.data.notizie[idx] = item;
+  } else {
+    CMS.data.notizie.unshift(item);
+  }
+
+  saveLocalData(CMS.data);
+  addChangelog(`Notizia "${title}" ${id?'modificata':'aggiunta'}`);
+  closeModal('modal-notizie');
+  renderNotizie();
+  updateDashboard();
+  toast(`Notizia ${id?'aggiornata':'aggiunta'} con successo!`, 'success');
+  markDirty();
+}
+
+function saveEvento() {
+  const id = document.getElementById('eventoId').value;
+  const title = document.getElementById('eventoTitle').value.trim();
+  if (!title) { toast('Inserisci il titolo', 'warning'); return; }
+
+  const item = {
+    id: id || genId('e'),
+    title,
+    dateStart: document.getElementById('eventoDateStart').value,
+    dateEnd: document.getElementById('eventoDateEnd').value,
+    time: document.getElementById('eventoTime').value,
+    place: document.getElementById('eventoPlace').value.trim(),
+    cat: document.getElementById('eventoCat').value.trim(),
+    price: document.getElementById('eventoPrice').value.trim(),
+    desc: document.getElementById('eventoDesc').value.trim(),
+    img: document.getElementById('eventoImg').value.trim(),
+    link: document.getElementById('eventoLink').value.trim(),
+    status: document.getElementById('eventoStatus').value,
+    updatedAt: Date.now()
+  };
+
+  if (!CMS.data.eventi) CMS.data.eventi = [];
+  if (id) {
+    const idx = CMS.data.eventi.findIndex(e=>e.id===id);
+    if (idx > -1) CMS.data.eventi[idx] = item;
+  } else {
+    CMS.data.eventi.unshift(item);
+  }
+
+  saveLocalData(CMS.data);
+  addChangelog(`Evento "${title}" ${id?'modificato':'aggiunto'}`);
+  closeModal('modal-eventi');
+  renderEventi();
+  updateDashboard();
+  toast(`Evento ${id?'aggiornato':'aggiunto'}!`, 'success');
+  markDirty();
+}
+
+function saveServizio() {
+  const id = document.getElementById('servizioId').value;
+  const title = document.getElementById('servizioTitle').value.trim();
+  if (!title) { toast('Inserisci il nome del servizio', 'warning'); return; }
+
+  const item = {
+    id: id || genId('s'),
+    title,
+    cat: document.getElementById('servizioCat').value.trim(),
+    icon: document.getElementById('servizioIcon').value.trim(),
+    desc: document.getElementById('servizioDesc').value.trim(),
+    addr: document.getElementById('servizioAddr').value.trim(),
+    tel: document.getElementById('servizioTel').value.trim(),
+    email: document.getElementById('servizioEmail').value.trim(),
+    web: document.getElementById('servizioWeb').value.trim(),
+    orari: document.getElementById('servizioOrari').value.trim(),
+    img: document.getElementById('servizioImg').value.trim(),
+    updatedAt: Date.now()
+  };
+
+  if (!CMS.data.servizi) CMS.data.servizi = [];
+  if (id) {
+    const idx = CMS.data.servizi.findIndex(s=>s.id===id);
+    if (idx > -1) CMS.data.servizi[idx] = item;
+  } else {
+    CMS.data.servizi.push(item);
+  }
+
+  saveLocalData(CMS.data);
+  addChangelog(`Servizio "${title}" ${id?'modificato':'aggiunto'}`);
+  closeModal('modal-servizi');
+  renderServizi();
+  updateDashboard();
+  toast(`Servizio ${id?'aggiornato':'aggiunto'}!`, 'success');
+  markDirty();
+}
+
+function saveLocale() {
+  const id = document.getElementById('localeId').value;
+  const name = document.getElementById('localeName').value.trim();
+  if (!name) { toast('Inserisci il nome del locale', 'warning'); return; }
+
+  const item = {
+    id: id || genId('l'),
+    name,
+    cat: document.getElementById('localeCat').value.trim(),
+    desc: document.getElementById('localeDesc').value.trim(),
+    addr: document.getElementById('localeAddr').value.trim(),
+    tel: document.getElementById('localeTel').value.trim(),
+    email: document.getElementById('localeEmail').value.trim(),
+    web: document.getElementById('localeWeb').value.trim(),
+    orari: document.getElementById('localeOrari').value.trim(),
+    img: document.getElementById('localeImg').value.trim(),
+    maps: document.getElementById('localeMaps').value.trim(),
+    status: document.getElementById('localeStatus').value,
+    updatedAt: Date.now()
+  };
+
+  if (!CMS.data.locali) CMS.data.locali = [];
+  if (id) {
+    const idx = CMS.data.locali.findIndex(l=>l.id===id);
+    if (idx > -1) CMS.data.locali[idx] = item;
+  } else {
+    CMS.data.locali.push(item);
+  }
+
+  saveLocalData(CMS.data);
+  addChangelog(`Locale "${name}" ${id?'modificato':'aggiunto'}`);
+  closeModal('modal-locali');
+  renderLocali();
+  updateDashboard();
+  toast(`Locale ${id?'aggiornato':'aggiunto'}!`, 'success');
+  markDirty();
+}
+
+function saveSponsor() {
+  const id = document.getElementById('sponsorId').value;
+  const name = document.getElementById('sponsorName').value.trim();
+  if (!name) { toast('Inserisci il nome dello sponsor', 'warning'); return; }
+
+  const item = {
+    id: id || genId('sp'),
+    name,
+    logo: document.getElementById('sponsorLogo').value.trim(),
+    link: document.getElementById('sponsorLink').value.trim(),
+    level: document.getElementById('sponsorLevel').value,
+    order: parseInt(document.getElementById('sponsorOrder').value) || 0,
+    desc: document.getElementById('sponsorDesc').value.trim(),
+    updatedAt: Date.now()
+  };
+
+  if (!CMS.data.sponsor) CMS.data.sponsor = [];
+  if (id) {
+    const idx = CMS.data.sponsor.findIndex(s=>s.id===id);
+    if (idx > -1) CMS.data.sponsor[idx] = item;
+  } else {
+    CMS.data.sponsor.push(item);
+  }
+
+  saveLocalData(CMS.data);
+  addChangelog(`Sponsor "${name}" ${id?'modificato':'aggiunto'}`);
+  closeModal('modal-sponsor');
+  renderSponsor();
+  updateDashboard();
+  toast(`Sponsor ${id?'aggiornato':'aggiunto'}!`, 'success');
+  markDirty();
+}
+
+function saveUser() {
+  const id = document.getElementById('utenteId').value;
+  const username = document.getElementById('utenteUsername').value.trim();
+  const password = document.getElementById('utentePassword').value;
+  const displayName = document.getElementById('utenteDisplayName').value.trim();
+  const email = document.getElementById('utenteEmail').value.trim();
+  const role = document.getElementById('utenteRole').value;
+
+  if (!username) { toast('Username obbligatorio', 'warning'); return; }
+  if (!id && (!password || password.length < 6)) { toast('Password di almeno 6 caratteri', 'warning'); return; }
+
+  const users = getUsers();
+  const existing = users.find(u => u.username === username && u.id !== id);
+  if (existing) { toast('Username già in uso', 'error'); return; }
+
+  // Prevent removing last superadmin
+  if (id) {
+    const current = users.find(u=>u.id===id);
+    if (current?.role === 'superadmin' && role !== 'superadmin') {
+      const otherSuperadmins = users.filter(u=>u.role==='superadmin'&&u.id!==id);
+      if (!otherSuperadmins.length) { toast('Deve esserci almeno un Super Admin', 'error'); return; }
+    }
+  }
+
+  if (id) {
+    const idx = users.findIndex(u=>u.id===id);
+    if (idx>-1) {
+      users[idx] = { ...users[idx], username, displayName, email, role };
+      if (password) users[idx].password = hashPass(password);
+    }
+  } else {
+    users.push({ id: genId('u'), username, displayName, email, role, password: hashPass(password), createdAt: Date.now() });
+  }
+
+  saveUsers(users);
+  addChangelog(`Utente "${username}" ${id?'modificato':'aggiunto'}`);
+  closeModal('modal-utente');
+  renderUsers();
+  toast(`Utente ${id?'aggiornato':'aggiunto'}!`, 'success');
+}
+
+// =============================================
+//  DELETE
+// =============================================
+
+let _deleteState = { type: null, id: null };
+
+function confirmDeleteItem(type, id, name) {
+  _deleteState = { type, id };
+  document.getElementById('deleteMessage').textContent = `Eliminare "${name}"?`;
+  document.getElementById('modal-delete').style.display = 'flex';
+}
+
+function confirmDelete() {
+  const { type, id } = _deleteState;
+  if (!type || !id) return;
+
+  const map = { notizie:'notizie', eventi:'eventi', servizi:'servizi', locali:'locali', sponsor:'sponsor' };
+  if (map[type]) {
+    CMS.data[map[type]] = (CMS.data[map[type]]||[]).filter(i => (i.id||i) !== id);
+    saveLocalData(CMS.data);
+    addChangelog(`Eliminato ${type} #${id}`);
+    markDirty();
+    closeModal('modal-delete');
+    if (type === 'notizie') renderNotizie();
+    else if (type === 'eventi') renderEventi();
+    else if (type === 'servizi') renderServizi();
+    else if (type === 'locali') renderLocali();
+    else if (type === 'sponsor') renderSponsor();
+    updateDashboard();
+    toast('Elemento eliminato', 'success');
+  } else if (type === 'utente') {
+    const users = getUsers();
+    const toDelete = users.find(u=>u.id===id);
+    if (toDelete?.role === 'superadmin') {
+      const others = users.filter(u=>u.role==='superadmin'&&u.id!==id);
+      if (!others.length) { toast('Non puoi eliminare l\'unico Super Admin', 'error'); closeModal('modal-delete'); return; }
+    }
+    saveUsers(users.filter(u=>u.id!==id));
+    addChangelog(`Utente eliminato #${id}`);
+    closeModal('modal-delete');
+    renderUsers();
+    toast('Utente eliminato', 'success');
+  }
+}
+
+// =============================================
+//  RENDER TABLES
+// =============================================
+
+function statusBadge(s) {
+  const map = {
+    pubblicata: 'badge-green', bozza: 'badge-yellow', archiviata: 'badge-gray',
+    attivo: 'badge-green', annullato: 'badge-red', concluso: 'badge-gray',
+    aperto: 'badge-green', chiuso: 'badge-red', 'in-pausa': 'badge-yellow'
+  };
+  return `<span class="badge ${map[s]||'badge-gray'}">${s||'—'}</span>`;
+}
+
+function levelBadge(l) {
+  const map = { gold:'badge-yellow', silver:'badge-gray', bronze:'badge-red', standard:'badge-blue' };
+  return `<span class="badge ${map[l]||'badge-gray'}">${l||'—'}</span>`;
+}
+
+let _notizieFilter = '', _notizieStatusFilter = '';
+function filterNotizie(v) { _notizieFilter = v.toLowerCase(); renderNotizie(); }
+function filterNotizieStatus(v) { _notizieStatusFilter = v; renderNotizie(); }
+
+function renderNotizie() {
+  let items = CMS.data?.notizie || [];
+  if (_notizieFilter) items = items.filter(i => (i.title||'').toLowerCase().includes(_notizieFilter) || (i.cat||'').toLowerCase().includes(_notizieFilter));
+  if (_notizieStatusFilter) items = items.filter(i => i.status === _notizieStatusFilter);
+  
+  const el = document.getElementById('notizieTable');
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-newspaper"></i><p>Nessuna notizia trovata</p></div>'; return; }
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Titolo</th><th>Categoria</th><th>Data</th><th>Autore</th><th>Stato</th><th>Evidenza</th><th style="width:120px">Azioni</th>
+    </tr></thead>
+    <tbody>${items.map(n=>`<tr>
+      <td><strong style="color:#1e293b">${truncate(n.title||'—',50)}</strong>${n.img?'<span style="color:#94a3b8;font-size:11px;margin-left:6px"><i class="fas fa-image"></i></span>':''}</td>
+      <td>${n.cat?`<span class="badge badge-blue">${n.cat}</span>`:'—'}</td>
+      <td style="white-space:nowrap">${formatDate(n.date)}</td>
+      <td>${n.author||'—'}</td>
+      <td>${statusBadge(n.status)}</td>
+      <td style="text-align:center">${n.featured=='1'||n.featured===true?'⭐':'—'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openModal('notizie','${n.id}')" class="btn btn-secondary btn-sm btn-icon" title="Modifica"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDeleteItem('notizie','${n.id}','${(n.title||'').replace(/'/g,'')}')" class="btn btn-danger btn-sm btn-icon" title="Elimina"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+let _eventiFilter = '';
+function filterEventi(v) { _eventiFilter = v.toLowerCase(); renderEventi(); }
+
+function renderEventi() {
+  let items = CMS.data?.eventi || [];
+  if (_eventiFilter) items = items.filter(i => (i.title||'').toLowerCase().includes(_eventiFilter) || (i.place||'').toLowerCase().includes(_eventiFilter));
+  
+  const el = document.getElementById('eventiTable');
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-alt"></i><p>Nessun evento trovato</p></div>'; return; }
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Titolo</th><th>Data</th><th>Luogo</th><th>Categoria</th><th>Stato</th><th style="width:120px">Azioni</th>
+    </tr></thead>
+    <tbody>${items.map(e=>`<tr>
+      <td><strong style="color:#1e293b">${truncate(e.title||'—',45)}</strong></td>
+      <td style="white-space:nowrap">${formatDate(e.dateStart)}${e.dateEnd&&e.dateEnd!==e.dateStart?' → '+formatDate(e.dateEnd):''}</td>
+      <td>${e.place||'—'}</td>
+      <td>${e.cat?`<span class="badge badge-purple">${e.cat}</span>`:'—'}</td>
+      <td>${statusBadge(e.status)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openModal('eventi','${e.id}')" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDeleteItem('eventi','${e.id}','${(e.title||'').replace(/'/g,'')}')" class="btn btn-danger btn-sm btn-icon"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+let _serviziFilter = '';
+function filterServizi(v) { _serviziFilter = v.toLowerCase(); renderServizi(); }
+
+function renderServizi() {
+  let items = CMS.data?.servizi || [];
+  if (_serviziFilter) items = items.filter(i => (i.title||'').toLowerCase().includes(_serviziFilter) || (i.cat||'').toLowerCase().includes(_serviziFilter));
+  
+  const el = document.getElementById('serviziTable');
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-concierge-bell"></i><p>Nessun servizio trovato</p></div>'; return; }
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Nome</th><th>Categoria</th><th>Indirizzo</th><th>Telefono</th><th style="width:120px">Azioni</th>
+    </tr></thead>
+    <tbody>${items.map(s=>`<tr>
+      <td><div style="display:flex;align-items:center;gap:8px">${s.icon?`<i class="${s.icon}" style="color:#64748b;width:16px"></i>`:''}<strong style="color:#1e293b">${s.title||'—'}</strong></div></td>
+      <td>${s.cat?`<span class="badge badge-blue">${s.cat}</span>`:'—'}</td>
+      <td>${s.addr||'—'}</td>
+      <td>${s.tel||'—'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openModal('servizi','${s.id}')" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDeleteItem('servizi','${s.id}','${(s.title||'').replace(/'/g,'')}')" class="btn btn-danger btn-sm btn-icon"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+let _localiFilter = '';
+function filterLocali(v) { _localiFilter = v.toLowerCase(); renderLocali(); }
+
+function renderLocali() {
+  let items = CMS.data?.locali || [];
+  if (_localiFilter) items = items.filter(i => (i.name||'').toLowerCase().includes(_localiFilter) || (i.cat||'').toLowerCase().includes(_localiFilter));
+  
+  const el = document.getElementById('localiTable');
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-store"></i><p>Nessun locale trovato</p></div>'; return; }
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Nome</th><th>Tipologia</th><th>Indirizzo</th><th>Telefono</th><th>Stato</th><th style="width:120px">Azioni</th>
+    </tr></thead>
+    <tbody>${items.map(l=>`<tr>
+      <td>${l.img?`<div style="display:flex;align-items:center;gap:8px"><img src="${l.img}" style="width:32px;height:32px;object-fit:cover;border-radius:6px"><strong>${l.name||'—'}</strong></div>`:`<strong style="color:#1e293b">${l.name||'—'}</strong>`}</td>
+      <td>${l.cat?`<span class="badge badge-purple">${l.cat}</span>`:'—'}</td>
+      <td>${l.addr||'—'}</td>
+      <td>${l.tel||'—'}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openModal('locali','${l.id}')" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDeleteItem('locali','${l.id}','${(l.name||'').replace(/'/g,'')}')" class="btn btn-danger btn-sm btn-icon"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+let _sponsorFilter = '';
+function filterSponsor(v) { _sponsorFilter = v.toLowerCase(); renderSponsor(); }
+
+function renderSponsor() {
+  let items = CMS.data?.sponsor || [];
+  if (_sponsorFilter) items = items.filter(i => (i.name||'').toLowerCase().includes(_sponsorFilter));
+  items = items.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  
+  const el = document.getElementById('sponsorTable');
+  if (!items.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-handshake"></i><p>Nessuno sponsor trovato</p></div>'; return; }
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Logo</th><th>Nome</th><th>Livello</th><th>Link</th><th>Ordine</th><th style="width:120px">Azioni</th>
+    </tr></thead>
+    <tbody>${items.map(s=>`<tr>
+      <td>${s.logo?`<img src="${s.logo}" style="height:40px;max-width:100px;object-fit:contain;border-radius:6px" onerror="this.style.display='none'">`:'—'}</td>
+      <td><strong style="color:#1e293b">${s.name||'—'}</strong></td>
+      <td>${levelBadge(s.level)}</td>
+      <td>${s.link?`<a href="${s.link}" target="_blank" style="color:#2563eb;font-size:12px"><i class="fas fa-external-link-alt"></i> Link</a>`:'—'}</td>
+      <td>${s.order||0}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openModal('sponsor','${s.id}')" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-edit"></i></button>
+          <button onclick="confirmDeleteItem('sponsor','${s.id}','${(s.name||'').replace(/'/g,'')}')" class="btn btn-danger btn-sm btn-icon"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function renderUsers() {
+  const users = getUsers();
+  const el = document.getElementById('usersTable');
+  const roleMap = { superadmin:'Super Admin', admin:'Admin', editor:'Editor' };
+  const roleClass = { superadmin:'badge-blue', admin:'badge-yellow', editor:'badge-green' };
+  
+  el.innerHTML = `<div style="overflow-x:auto"><table class="data-table">
+    <thead><tr>
+      <th>Utente</th><th>Username</th><th>Email</th><th>Ruolo</th><th>Creato il</th><th style="width:130px">Azioni</th>
+    </tr></thead>
+    <tbody>${users.map(u=>`<tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="avatar" style="background:${u.role==='superadmin'?'#2563eb':u.role==='admin'?'#d97706':'#16a34a'};width:36px;height:36px;font-size:13px">${(u.displayName||u.username).slice(0,2).toUpperCase()}</div>
+          <span style="font-weight:600;color:#1e293b">${u.displayName||u.username}</span>
+        </div>
+      </td>
+      <td><code style="background:#f1f5f9;padding:2px 8px;border-radius:6px;font-size:13px">${u.username}</code></td>
+      <td>${u.email||'—'}</td>
+      <td><span class="badge ${roleClass[u.role]||'badge-gray'}">${roleMap[u.role]||u.role}</span></td>
+      <td style="white-space:nowrap">${u.createdAt?new Date(u.createdAt).toLocaleDateString('it-IT'):'—'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="openUserModal('${u.id}')" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-edit"></i></button>
+          ${u.id!==CMS.currentUser?.userId?`<button onclick="confirmDeleteItem('utente','${u.id}','${u.username}')" class="btn btn-danger btn-sm btn-icon"><i class="fas fa-trash"></i></button>`:'<button class="btn btn-secondary btn-sm btn-icon" disabled title="Non puoi eliminare te stesso" style="opacity:.4"><i class="fas fa-trash"></i></button>'}
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// =============================================
+//  IDENTITÀ
+// =============================================
+
+function loadIdentita() {
+  const d = CMS.data?.identita;
+  if (!d) return;
+  document.getElementById('siteName').value = d.nome || '';
+  document.getElementById('siteTag').value = d.tag || '';
+  document.getElementById('siteDesc').value = d.desc || '';
+  document.getElementById('siteEmail').value = d.email || '';
+  document.getElementById('siteColor').value = d.col || '#1e40af';
+  document.getElementById('siteColorText').value = d.col || '';
+  document.getElementById('siteLogo').value = d.logo || '';
+  document.getElementById('socialFb').value = d.social?.fb || '';
+  document.getElementById('socialIg').value = d.social?.ig || '';
+  document.getElementById('socialTw').value = d.social?.tw || '';
+  document.getElementById('socialYt').value = d.social?.yt || '';
+  previewLogo();
+}
+
+function updateColorPicker() {
+  const v = document.getElementById('siteColorText').value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(v)) document.getElementById('siteColor').value = v;
+  markDirty();
+}
+
+function saveIdentita() {
+  if (!CMS.data) return;
+  CMS.data.identita = {
+    nome: document.getElementById('siteName').value.trim(),
+    tag: document.getElementById('siteTag').value.trim(),
+    desc: document.getElementById('siteDesc').value.trim(),
+    email: document.getElementById('siteEmail').value.trim(),
+    col: document.getElementById('siteColor').value,
+    logo: document.getElementById('siteLogo').value.trim(),
+    social: {
+      fb: document.getElementById('socialFb').value.trim(),
+      ig: document.getElementById('socialIg').value.trim(),
+      tw: document.getElementById('socialTw').value.trim(),
+      yt: document.getElementById('socialYt').value.trim()
+    }
+  };
+  saveLocalData(CMS.data);
+  addChangelog('Identità sito aggiornata');
+  markDirty();
+  toast('Identità salvata!', 'success');
+}
+
+// =============================================
+//  HERO
+// =============================================
+
+function loadHero() {
+  const h = CMS.data?.hero;
+  if (!h) return;
+  document.getElementById('heroHomeUrl').value = h.home?.url || '';
+  document.getElementById('heroHomeTitle').value = h.home?.title || '';
+  document.getElementById('heroHomeSub').value = h.home?.sub || '';
+  document.getElementById('heroHomeCta').value = h.home?.cta || '';
+  document.getElementById('heroHomeCtaLink').value = h.home?.ctalink || '';
+  document.getElementById('heroNewsUrl').value = h.news?.url || '';
+  document.getElementById('heroNewsTitle').value = h.news?.title || '';
+  document.getElementById('heroEventsUrl').value = h.events?.url || '';
+  document.getElementById('heroEventsTitle').value = h.events?.title || '';
+  previewHero('home');
+  previewHero('news');
+  previewHero('events');
+}
+
+function switchHeroTab(tab, btn) {
+  ['home','news','events'].forEach(t => {
+    document.getElementById('heroTab-' + t).style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('heroTab-' + tab).style.display = 'block';
+  btn.classList.add('active');
+}
+
+function saveHero() {
+  if (!CMS.data) return;
+  CMS.data.hero = {
+    home: {
+      url: document.getElementById('heroHomeUrl').value.trim(),
+      title: document.getElementById('heroHomeTitle').value.trim(),
+      sub: document.getElementById('heroHomeSub').value.trim(),
+      cta: document.getElementById('heroHomeCta').value.trim(),
+      ctalink: document.getElementById('heroHomeCtaLink').value.trim()
+    },
+    news: {
+      url: document.getElementById('heroNewsUrl').value.trim(),
+      title: document.getElementById('heroNewsTitle').value.trim()
+    },
+    events: {
+      url: document.getElementById('heroEventsUrl').value.trim(),
+      title: document.getElementById('heroEventsTitle').value.trim()
+    }
+  };
+  saveLocalData(CMS.data);
+  addChangelog('Hero aggiornato');
+  markDirty();
+  toast('Hero salvato!', 'success');
+}
+
+// =============================================
+//  LAYOUT
+// =============================================
+
+function loadLayout() {
+  const l = CMS.data?.layout;
+  if (!l) return;
+  
+  document.getElementById('newsLayout').value = l.newsLayout || 'grid';
+  document.getElementById('newsPerPage').value = l.newsPerPage || '9';
+  document.getElementById('newsOrder').value = l.newsOrder || 'newest';
+  document.getElementById('newsTabs').value = l.newsTabs || 'hide';
+
+  const togglesEl = document.getElementById('sectionToggles');
+  const sections = l.sections || [];
+  togglesEl.innerHTML = sections.map(s => `
+    <div class="section-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">${s.icon||''}</span>
+        <span style="font-size:14px;font-weight:500;color:#374151">${s.label||s.id}</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${s.vis?'checked':''} onchange="updateSectionVis('${s.id}',this.checked)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  `).join('');
+}
+
+function updateSectionVis(id, val) {
+  if (!CMS.data?.layout?.sections) return;
+  const sec = CMS.data.layout.sections.find(s=>s.id===id);
+  if (sec) sec.vis = val;
+  markDirty();
+}
+
+function saveLayout() {
+  if (!CMS.data) return;
+  if (!CMS.data.layout) CMS.data.layout = {};
+  CMS.data.layout.newsLayout = document.getElementById('newsLayout').value;
+  CMS.data.layout.newsPerPage = document.getElementById('newsPerPage').value;
+  CMS.data.layout.newsOrder = document.getElementById('newsOrder').value;
+  CMS.data.layout.newsTabs = document.getElementById('newsTabs').value;
+  saveLocalData(CMS.data);
+  addChangelog('Layout aggiornato');
+  markDirty();
+  toast('Layout salvato!', 'success');
+}
+
+// =============================================
+//  FOOTER
+// =============================================
+
+function loadFooter() {
+  const f = CMS.data?.footer;
+  if (!f) return;
+  document.getElementById('footerCopy').value = f.copy || '';
+  document.getElementById('footerSlogan').value = f.slogan || '';
+  document.getElementById('footerDesc').value = f.desc || '';
+  document.getElementById('footerAddr').value = f.addr || '';
+  document.getElementById('footerEmail').value = f.email || '';
+  document.getElementById('footerTel').value = f.tel || '';
+  document.getElementById('footerPiva').value = f.piva || '';
+}
+
+function saveFooter() {
+  if (!CMS.data) return;
+  CMS.data.footer = {
+    copy: document.getElementById('footerCopy').value.trim(),
+    slogan: document.getElementById('footerSlogan').value.trim(),
+    desc: document.getElementById('footerDesc').value.trim(),
+    addr: document.getElementById('footerAddr').value.trim(),
+    email: document.getElementById('footerEmail').value.trim(),
+    tel: document.getElementById('footerTel').value.trim(),
+    piva: document.getElementById('footerPiva').value.trim(),
+    links: CMS.data.footer?.links || []
+  };
+  saveLocalData(CMS.data);
+  addChangelog('Footer aggiornato');
+  markDirty();
+  toast('Footer salvato!', 'success');
+}
+
+// =============================================
+//  SPONSOR SETTINGS
+// =============================================
+
+function loadSponsorSettings() {
+  const ss = CMS.data?.sponsorSettings;
+  if (!ss) return;
+  const titleEl = document.getElementById('sponsorTitle');
+  const colsEl = document.getElementById('sponsorCols');
+  const posEl = document.getElementById('sponsorPos');
+  if (titleEl) titleEl.value = ss.title || 'I nostri sponsor';
+  if (colsEl) colsEl.value = ss.cols || '4';
+  if (posEl) posEl.value = ss.position || 'after-news';
+}
+
+function saveSponsorSettings() {
+  if (!CMS.data) return;
+  CMS.data.sponsorSettings = {
+    title: document.getElementById('sponsorTitle')?.value || 'I nostri sponsor',
+    cols: document.getElementById('sponsorCols')?.value || '4',
+    position: document.getElementById('sponsorPos')?.value || 'after-news'
+  };
+  saveLocalData(CMS.data);
+  markDirty();
+}
+
+// =============================================
+//  GITHUB FORM
+// =============================================
+
+function loadGithubForm() {
+  const cfg = CMS.ghConfig;
+  document.getElementById('ghToken').value = cfg.token || '';
+  document.getElementById('ghRepo').value = cfg.repo || '';
+  document.getElementById('ghBranch').value = cfg.branch || 'main';
+  document.getElementById('ghPath').value = cfg.path || 'tuttoapricena/assets/data.json';
+}
+
+function saveGithubConfig() {
+  const cfg = {
+    token: document.getElementById('ghToken').value.trim(),
+    repo: document.getElementById('ghRepo').value.trim(),
+    branch: document.getElementById('ghBranch').value.trim() || 'main',
+    path: document.getElementById('ghPath').value.trim()
+  };
+  saveGhConfig(cfg);
+  addChangelog('Configurazione GitHub aggiornata');
+  toast('Configurazione GitHub salvata!', 'success');
+  checkGitHubStatus();
+}
+
+function toggleToken() {
+  const inp = document.getElementById('ghToken');
+  const icon = document.getElementById('tokenIcon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+  else { inp.type = 'password'; icon.className = 'fas fa-eye'; }
+}
+
+// =============================================
+//  WINDOW BEFOREUNLOAD
+// =============================================
+
+window.addEventListener('beforeunload', e => {
+  if (CMS.isDirty) {
+    e.preventDefault();
+    e.returnValue = 'Hai modifiche non pubblicate su GitHub. Continuare?';
+  }
+});
+</script>
+</body>
+</html>
