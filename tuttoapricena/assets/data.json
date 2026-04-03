@@ -40,21 +40,7 @@
     "piva": "",
     "links": []
   },
-  "notizie": [
-    {
-      "id": "n1775214098311",
-      "title": "prova",
-      "cat": "sport",
-      "date": "2026-04-03",
-      "author": "",
-      "summary": "aaaaaaaaa",
-      "body": "aaaaaaaaaaaaaaa",
-      "img": "",
-      "status": "pubblicata",
-      "featured": "0",
-      "tags": []
-    }
-  ],
+  "notizie": [],
   "eventi": [],
   "sponsor": [],
   "sponsorSettings": {
