@@ -1,18 +1,3 @@
 {
-  "notizie": [
-    {
-      "id": "n001",
-      "createdAt": "2026-04-03T13:26:02.138Z",
-      "titolo": "aaaaaaa",
-      "categoria": "Generale",
-      "stato": "pubblicata",
-      "autore": "Redazione",
-      "data": "2026-04-03T11:25:00.000Z",
-      "immagine": "",
-      "contenuto": "aaaaaaaa",
-      "tag": [],
-      "evidenza": false,
-      "updatedAt": "2026-04-03T13:26:02.138Z"
-    }
-  ]
+  "notizie": []
 }
