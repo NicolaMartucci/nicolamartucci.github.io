@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CMS Admin — TuttoApricena</title>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--p:#1A1A2E;--a:#E8A838;--s:#F8F6F1;--w:#fff;--d:#DC2626;--ok:#16A34A;--mu:#6B7280;--bd:#E5E7EB;--sw:240px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--p);min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+/* LOGIN */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--p),#2a2a5e);}
+.lcard{background:var(--w);border-radius:20px;padding:44px 40px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+.llogo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:32px;}
+.llogo-i{width:44px;height:44px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;}
+.llogo-i span{color:var(--p);font-weight:900;font-size:14px;}
+.llogo-t{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;}
+.llogo-t em{color:var(--a);font-style:normal;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;}
+.fg input,.fg select{width:100%;padding:11px 14px;border:1px solid var(--bd);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;}
+.fg input:focus{border-color:var(--a);}
+.fck{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mu);margin-bottom:18px;}
+.fck input{width:auto;}
+.lbtn{width:100%;background:var(--a);color:var(--p);font-weight:700;font-size:15px;padding:13px;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.lbtn:hover{background:var(--p);color:var(--w);}
+.lerr{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.3);color:var(--d);border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;display:none;}
+/* APP */
+#app{display:none;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sw);background:var(--p);z-index:100;display:flex;flex-direction:column;overflow-y:auto;}
+.sb-top{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-row{display:flex;align-items:center;gap:8px;}
+.sb-ico{width:34px;height:34px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;}
+.sb-ico span{color:var(--p);font-weight:900;font-size:11px;}
+.sb-name{font-family:'Playfair Display',serif;font-size:17px;color:#fff;font-weight:900;}
+.sb-name em{color:var(--a);font-style:normal;}
+.sb-tag{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
+.sb-nav{flex:1;padding:14px 0;}
+.grp{padding:0 10px;margin-bottom:2px;}
+.grp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.28);padding:10px 8px 5px;}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;margin-bottom:1px;}
+.ni:hover{color:#fff;background:rgba(255,255,255,.06);}
+.ni.on{color:var(--a);background:rgba(232,168,56,.12);}
+.sb-bot{padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);}
+.sb-u{display:flex;align-items:center;gap:10px;}
+.uav{width:34px;height:34px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--p);flex-shrink:0;}
+.un{font-size:13px;font-weight:600;color:#fff;}
+.ur{font-size:11px;color:rgba(255,255,255,.35);}
+.ulg{margin-left:auto;cursor:pointer;color:rgba(255,255,255,.35);transition:color .2s;}
+.ulg:hover{color:var(--d);}
+/* MAIN */
+.amain{margin-left:var(--sw);padding:28px;min-height:100vh;}
+.pt{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;margin-bottom:4px;}
+.ps{color:var(--mu);font-size:13px;margin-bottom:26px;}
+/* STATS */
+.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+.scard{background:var(--w);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.sico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.sval{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1;}
+.slbl{font-size:12px;color:var(--mu);margin-top:4px;}
+/* CARD */
+.card{background:var(--w);border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);overflow:hidden;margin-bottom:22px;}
+.card-h{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.card-t{font-weight:700;font-size:15px;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-p{background:var(--a);color:var(--p);}.btn-p:hover{background:#C8881A;}
+.btn-d{background:rgba(220,38,38,.1);color:var(--d);}.btn-d:hover{background:var(--d);color:#fff;}
+.btn-o{background:transparent;border:1px solid var(--bd);color:var(--p);}.btn-o:hover{border-color:var(--a);color:var(--a);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-x{background:none;border:none;cursor:pointer;color:var(--mu);padding:6px;border-radius:6px;transition:all .2s;display:flex;}
+.btn-x:hover{color:var(--p);background:var(--s);}
+/* TABLE */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);background:#F9FAFB;border-bottom:1px solid var(--bd);}
+td{padding:13px 16px;font-size:13px;border-bottom:1px solid #F3F4F6;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FAFAFA;}
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;}
+.bg{background:rgba(232,168,56,.15);color:#92680f;}
+.bs{background:rgba(148,163,184,.15);color:#475569;}
+.bb{background:rgba(205,127,50,.15);color:#854d0e;}
+.ba{background:rgba(22,163,74,.1);color:#15803d;}
+.bi{background:rgba(220,38,38,.1);color:#b91c1c;}
+/* FORM */
+.mfg{margin-bottom:14px;}
+.mfg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;}
+.mfg input,.mfg textarea,.mfg select{width:100%;padding:10px 14px;border:1px solid var(--bd);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#fff;}
+.mfg input:focus,.mfg textarea:focus{border-color:var(--a);}
+.mfg textarea{resize:vertical;min-height:90px;}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.2);}
+.modal-h{padding:20px 24px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.modal-t{font-weight:700;font-size:16px;}
+.modal-b{padding:24px;}
+.modal-f{padding:16px 24px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:10px;}
+/* SEARCH */
+.srch{position:relative;flex:1;min-width:180px;}
+.srch svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none;}
+.srch input{width:100%;padding:9px 14px 9px 34px;border:1px solid var(--bd);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;}
+.srch input:focus{border-color:var(--a);}
+/* SECTION */
+.sec{display:none;}.sec.on{display:block;}
+/* SETTINGS */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.scard2{background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.scard2 h3{font-weight:700;font-size:15px;margin-bottom:14px;}
+.crow{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.crow label{font-size:13px;flex:1;}
+.crow input[type=color]{width:46px;height:32px;border:1px solid var(--bd);border-radius:6px;cursor:pointer;padding:2px;}
+/* UPLOAD */
+.upz{border:2px dashed var(--bd);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;}
+.upz:hover,.upz.drag{border-color:var(--a);background:rgba(232,168,56,.04);}
+/* COLLAB */
+.citem{display:flex;align-items:center;gap:12px;background:#F9FAFB;border-radius:10px;padding:12px 16px;margin-bottom:10px;}
+.cav{width:36px;height:36px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--p);flex-shrink:0;}
+/* ALERT */
+.al{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.al-ok{background:rgba(22,163,74,.1);color:#15803d;border:1px solid rgba(22,163,74,.2);}
+.al-err{background:rgba(220,38,38,.08);color:var(--d);border:1px solid rgba(220,38,38,.2);}
+.al-inf{background:rgba(2,132,199,.08);color:#0369a1;border:1px solid rgba(2,132,199,.2);}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:transform .3s;}.amain{margin-left:0;padding:14px;}.srow{grid-template-columns:1fr 1fr;}.fr2{grid-template-columns:1fr;}.sg{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lcard">
+    <div class="llogo"><div class="llogo-i"><span>TA</span></div><span class="llogo-t">Tutto<em>Apricena</em></span></div>
+    <h2 style="text-align:center;font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:6px;">Accesso CMS</h2>
+    <p style="text-align:center;color:var(--mu);font-size:13px;margin-bottom:26px;">Pannello di gestione contenuti</p>
+    <div class="fg"><label>Username</label><input id="lu" placeholder="admin" /></div>
+    <div class="fg"><label>Password</label><input type="password" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()" /></div>
+    <div class="fck"><input type="checkbox" id="rem"><label for="rem">Ricorda le credenziali</label></div>
+    <button class="lbtn" onclick="login()">Accedi</button>
+    <div class="lerr" id="lerr">Credenziali non valide. Riprova.</div>
+    <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--a);cursor:pointer;" onclick="alert('Per recuperare la password scrivi a info@tuttoapricena.it')">Password dimenticata?</p>
+    <p style="text-align:center;margin-top:8px;font-size:11px;color:var(--mu)">Demo: admin / tuttoapricena2025</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-row"><div class="sb-ico"><span>TA</span></div>
+        <div><div class="sb-name">Tutto<em>Apricena</em></div><div class="sb-tag">CMS Admin</div></div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="grp"><div class="grp-lbl">Panoramica</div>
+        <div class="ni on" onclick="nav('dash',this)"><i data-lucide="layout-dashboard" width="16" height="16"></i>Dashboard</div>
+      </div>
+      <div class="grp"><div class="grp-lbl">Contenuti</div>
+        <div class="ni" onclick="nav('notizie',this)"><i data-lucide="newspaper" width="16" height="16"></i>Notizie</div>
+        <div class="ni" onclick="nav('eventi',this)"><i data-lucide="calendar" width="16" height="16"></i>Eventi</div>
+        <div class="ni" onclick="nav('farmacie',this)"><i data-lucide="plus-square" width="16" height="16"></i>Farmacie</div>
+        <div class="ni" onclick="nav('servizi',this)"><i data-lucide="building-2" width="16" height="16"></i>Servizi</div>
+        <div class="ni" onclick="nav('locali',this)"><i data-lucide="map-pin" width="16" height="16"></i>Locali</div>
+        <div class="ni" onclick="nav('sponsor',this)"><i data-lucide="star" width="16" height="16"></i>Sponsor</div>
+      </div>
+      <div class="grp"><div class="grp-lbl">Gestione</div>
+        <div class="ni" onclick="nav('media',this)"><i data-lucide="image" width="16" height="16"></i>Media</div>
+        <div class="ni" onclick="nav('collab',this)"><i data-lucide="users" width="16" height="16"></i>Collaboratori</div>
+        <div class="ni" onclick="nav('settings',this)"><i data-lucide="settings" width="16" height="16"></i>Impostazioni</div>
+        <div class="ni" onclick="nav('github',this)"><i data-lucide="github" width="16" height="16"></i>GitHub Sync</div>
+      </div>
+    </div>
+    <div class="sb-bot"><div class="sb-u">
+      <div class="uav" id="uav">A</div>
+      <div><div class="un" id="un">Admin</div><div class="ur">Amministratore</div></div>
+      <div class="ulg" onclick="logout()" title="Logout"><i data-lucide="log-out" width="16" height="16"></i></div>
+    </div></div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="amain">
+
+    <!-- DASHBOARD -->
+    <div class="sec on" id="s-dash">
+      <div class="pt">Dashboard</div><div class="ps" id="d-date"></div>
+      <div class="srow">
+        <div class="scard"><div class="sico" style="background:rgba(2,132,199,.1)"><i data-lucide="newspaper" width="20" height="20" color="#0284C7"></i></div><div class="sval" id="st-n">0</div><div class="slbl">Notizie</div></div>
+        <div class="scard"><div class="sico" style="background:rgba(124,58,237,.1)"><i data-lucide="calendar" width="20" height="20" color="#7C3AED"></i></div><div class="sval" id="st-e">0</div><div class="slbl">Eventi</div></div>
+        <div class="scard"><div class="sico" style="background:rgba(22,163,74,.1)"><i data-lucide="store" width="20" height="20" color="#16A34A"></i></div><div class="sval" id="st-l">0</div><div class="slbl">Locali</div></div>
+        <div class="scard"><div class="sico" style="background:rgba(232,168,56,.15)"><i data-lucide="star" width="20" height="20" color="#E8A838"></i></div><div class="sval" id="st-s">0</div><div class="slbl">Sponsor attivi</div></div>
+      </div>
+      <div class="card"><div class="card-h"><span class="card-t">Farmacia di turno oggi</span><button class="btn btn-o btn-sm" onclick="nav('farmacie')">Gestisci</button></div><div style="padding:18px" id="d-farm"></div></div>
+      <div class="card"><div class="card-h"><span class="card-t">Ultime notizie</span><button class="btn btn-p btn-sm" onclick="openM('n')"><i data-lucide="plus" width="13" height="13"></i>Nuova</button></div><div class="tw"><table id="dt-n2"></table></div></div>
+    </div>
+
+    <!-- NOTIZIE -->
+    <div class="sec" id="s-notizie">
+      <div class="pt">Notizie</div><div class="ps">Gestisci gli articoli del portale</div>
+      <div class="card"><div class="card-h">
+        <div class="srch"><i data-lucide="search" width="14" height="14"></i><input placeholder="Cerca notizie..." oninput="filter('dt-n',this.value)"></div>
+        <button class="btn btn-p" onclick="openM('n')"><i data-lucide="plus" width="14" height="14"></i>Nuova notizia</button>
+      </div><div class="tw"><table id="dt-n"></table></div></div>
+    </div>
+
+    <!-- EVENTI -->
+    <div class="sec" id="s-eventi">
+      <div class="pt">Eventi</div><div class="ps">Gestisci il calendario eventi</div>
+      <div class="card"><div class="card-h">
+        <div class="srch"><i data-lucide="search" width="14" height="14"></i><input placeholder="Cerca eventi..." oninput="filter('dt-e',this.value)"></div>
+        <button class="btn btn-p" onclick="openM('e')"><i data-lucide="plus" width="14" height="14"></i>Nuovo evento</button>
+      </div><div class="tw"><table id="dt-e"></table></div></div>
+    </div>
+
+    <!-- FARMACIE -->
+    <div class="sec" id="s-farmacie">
+      <div class="pt">Farmacie di Turno</div><div class="ps">Rotazione ciclica automatica — modifica l'ordine per cambiare la sequenza</div>
+      <div class="al al-inf"><i data-lucide="info" width="15" height="15"></i>Le farmacie ruotano ciclicamente ogni giorno a partire dal 1 gennaio 2025. La farmacia #1 è quella del giorno 0, #2 del giorno 1, ecc.</div>
+      <div class="card"><div class="card-h"><span class="card-t">Elenco farmacie</span><button class="btn btn-p" onclick="openM('f')"><i data-lucide="plus" width="14" height="14"></i>Aggiungi</button></div><div class="tw"><table id="dt-f"></table></div></div>
+    </div>
+
+    <!-- SERVIZI -->
+    <div class="sec" id="s-servizi">
+      <div class="pt">Servizi Utili</div><div class="ps">Gestisci i servizi e i contatti utili della città</div>
+      <div class="card"><div class="card-h">
+        <div class="srch"><i data-lucide="search" width="14" height="14"></i><input placeholder="Cerca servizi..." oninput="filter('dt-sv',this.value)"></div>
+        <button class="btn btn-p" onclick="openM('sv')"><i data-lucide="plus" width="14" height="14"></i>Nuovo servizio</button>
+      </div><div class="tw"><table id="dt-sv"></table></div></div>
+    </div>
+
+    <!-- LOCALI -->
+    <div class="sec" id="s-locali">
+      <div class="pt">Locali & Attività</div><div class="ps">Gestisci ristoranti, bar, negozi e attività commerciali</div>
+      <div class="card"><div class="card-h">
+        <div class="srch"><i data-lucide="search" width="14" height="14"></i><input placeholder="Cerca locali..." oninput="filter('dt-l',this.value)"></div>
+        <button class="btn btn-p" onclick="openM('l')"><i data-lucide="plus" width="14" height="14"></i>Nuovo locale</button>
+      </div><div class="tw"><table id="dt-l"></table></div></div>
+    </div>
+
+    <!-- SPONSOR -->
+    <div class="sec" id="s-sponsor">
+      <div class="pt">Sponsor</div><div class="ps">Gestisci gli sponsor e i partner del portale</div>
+      <div class="card"><div class="card-h"><span class="card-t">Lista sponsor</span><button class="btn btn-p" onclick="openM('sp')"><i data-lucide="plus" width="14" height="14"></i>Nuovo sponsor</button></div><div class="tw"><table id="dt-sp"></table></div></div>
+    </div>
+
+    <!-- MEDIA -->
+    <div class="sec" id="s-media">
+      <div class="pt">Media & Immagini</div><div class="ps">Carica e gestisci immagini per il sito</div>
+      <div class="card"><div class="card-h"><span class="card-t">Carica nuovi file</span></div>
+        <div style="padding:20px">
+          <div class="upz" id="upz" onclick="document.getElementById('fi').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropF(event)">
+            <i data-lucide="upload-cloud" width="38" height="38" color="var(--mu)"></i>
+            <p style="color:var(--mu);font-size:13px;margin-top:8px"><strong>Clicca per caricare</strong> o trascina qui</p>
+            <p style="color:var(--mu);font-size:12px">PNG, JPG, WEBP — max 10MB</p>
+          </div>
+          <input type="file" id="fi" multiple accept="image/*" style="display:none" onchange="uploadF(this.files)">
+          <div id="uprev" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:14px;"></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-h"><span class="card-t">Libreria media</span></div>
+        <div style="padding:20px"><div id="mlib" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;"></div>
+          <p id="mlib-empty" style="color:var(--mu);font-size:13px;text-align:center;padding:20px 0">Nessuna immagine caricata. Usa il form sopra per aggiungere.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLABORATORI -->
+    <div class="sec" id="s-collab">
+      <div class="pt">Collaboratori</div><div class="ps">Utenti con accesso al CMS</div>
+      <div class="card"><div class="card-h"><span class="card-t">Utenti attivi</span><button class="btn btn-p" onclick="openM('c')"><i data-lucide="user-plus" width="14" height="14"></i>Aggiungi</button></div>
+        <div style="padding:20px" id="clist"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="sec" id="s-settings">
+      <div class="pt">Impostazioni</div><div class="ps">Configura il sito e personalizza l'aspetto</div>
+      <div class="sg">
+        <div class="scard2"><h3>Informazioni sito</h3>
+          <div class="mfg"><label>Nome sito</label><input value="TuttoApricena"></div>
+          <div class="mfg"><label>Sottotitolo</label><input value="Il portale informativo di Apricena"></div>
+          <div class="mfg"><label>Email contatto</label><input value="info@tuttoapricena.it"></div>
+          <div class="mfg"><label>Facebook URL</label><input placeholder="https://facebook.com/..."></div>
+          <div class="mfg"><label>Instagram URL</label><input placeholder="https://instagram.com/..."></div>
+          <button class="btn btn-p" onclick="toast('Impostazioni salvate!')">Salva</button>
+        </div>
+        <div class="scard2"><h3>Colori del sito</h3>
+          <div class="crow"><label>Colore primario</label><input type="color" value="#1A1A2E" oninput="document.getElementById('prev-p').style.background=this.value"></div>
+          <div class="crow"><label>Colore accent (oro)</label><input type="color" value="#E8A838" oninput="document.getElementById('prev-a').style.background=this.value"></div>
+          <div class="crow"><label>Sfondo pagine</label><input type="color" value="#F8F6F1"></div>
+          <div style="background:var(--s);border-radius:10px;padding:12px;margin-top:8px">
+            <strong style="font-size:12px">Anteprima:</strong>
+            <div style="display:flex;gap:8px;margin-top:8px"><div id="prev-p" style="width:40px;height:40px;border-radius:8px;background:#1A1A2E"></div><div id="prev-a" style="width:40px;height:40px;border-radius:8px;background:#E8A838"></div></div>
+          </div>
+          <button class="btn btn-p" style="margin-top:14px" onclick="toast('Colori salvati! Aggiorna data.js per applicare.')">Salva colori</button>
+        </div>
+        <div class="scard2"><h3>SEO & Meta</h3>
+          <div class="mfg"><label>Meta description</label><textarea>Notizie, eventi, farmacie di turno, servizi e tutto quello che accade ad Apricena (FG), Puglia.</textarea></div>
+          <div class="mfg"><label>Parole chiave</label><input value="Apricena, notizie Apricena, eventi Apricena, Puglia, Gargano"></div>
+          <div class="mfg"><label>Google Analytics ID</label><input placeholder="G-XXXXXXXXXX"></div>
+          <button class="btn btn-p" onclick="toast('SEO salvato!')">Salva</button>
+        </div>
+        <div class="scard2"><h3>Cambio password</h3>
+          <div class="mfg"><label>Password attuale</label><input type="password" id="pw1" placeholder="••••••••"></div>
+          <div class="mfg"><label>Nuova password</label><input type="password" id="pw2" placeholder="••••••••"></div>
+          <div class="mfg"><label>Conferma nuova password</label><input type="password" id="pw3" placeholder="••••••••"></div>
+          <button class="btn btn-p" onclick="changePwd()">Aggiorna password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GITHUB -->
+    <div class="sec" id="s-github">
+      <div class="pt">GitHub Sync</div><div class="ps">Pubblica i contenuti aggiornati sul sito via GitHub API</div>
+      <div class="card"><div class="card-h"><span class="card-t">Configurazione repository</span></div>
+        <div style="padding:24px">
+          <div class="fr2">
+            <div class="mfg"><label>GitHub Personal Access Token</label><input type="password" id="gh-tk" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"></div>
+            <div class="mfg"><label>Repository (username/repo)</label><input id="gh-repo" placeholder="tuousername/tuttoapricena"></div>
+          </div>
+          <div class="fr2">
+            <div class="mfg"><label>Branch</label><input id="gh-br" value="main"></div>
+            <div class="mfg"><label>Percorso file dati</label><input id="gh-path" value="tuttoapricena/assets/js/data.js"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-o" onclick="ghTest()"><i data-lucide="plug" width="14" height="14"></i>Test connessione</button>
+            <button class="btn btn-p" onclick="ghSync()"><i data-lucide="upload-cloud" width="14" height="14"></i>Pubblica sul sito</button>
+          </div>
+          <div id="gh-status" style="margin-top:14px"></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-h"><span class="card-t">Istruzioni</span></div>
+        <div style="padding:20px"><ol style="padding-left:18px;color:var(--mu);font-size:14px;line-height:2.2">
+          <li>Su GitHub vai in <strong style="color:var(--p)">Settings → Developer settings → Personal access tokens → Classic</strong></li>
+          <li>Crea un token con scope <code style="background:#F3F4F6;padding:2px 6px;border-radius:4px">repo</code> (accesso completo ai repository)</li>
+          <li>Incollalo nel campo sopra insieme al nome del tuo repository</li>
+          <li>Modifica contenuti nel CMS (notizie, eventi, locali...)</li>
+          <li>Clicca <strong style="color:var(--p)">Pubblica sul sito</strong>: il file <code style="background:#F3F4F6;padding:2px 6px;border-radius:4px">data.js</code> viene aggiornato su GitHub</li>
+          <li>Con <strong style="color:var(--p)">GitHub Pages</strong> attivo, il sito si aggiorna automaticamente entro 1-2 minuti</li>
+        </ol></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeM()">
+  <div class="modal">
+    <div class="modal-h"><span class="modal-t" id="modal-title">Titolo</span><button class="btn-x" onclick="closeM()"><i data-lucide="x" width="18" height="18"></i></button></div>
+    <div class="modal-b" id="modal-body"></div>
+    <div class="modal-f" id="modal-foot"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="tst" style="position:fixed;bottom:24px;right:24px;background:var(--p);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:8px;pointer-events:none;"></div>
+
+<script src="../assets/js/data.js"></script>
+<script>
+// ===== STATE =====
+var S = {
+  users:[{id:1,u:'admin',p:'tuttoapricena2025',nome:'Amministratore',email:'admin@tuttoapricena.it',r:'Admin'}],
+  cu:null, n:[], e:[], f:[], sv:[], l:[], sp:[], media:[]
+};
+
+// ===== AUTH =====
+function login(){
+  var u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value.trim();
+  var found=S.users.find(function(x){return x.u===u&&x.p===p;});
+  if(!found){document.getElementById('lerr').style.display='block';return;}
+  S.cu=found;
+  if(document.getElementById('rem').checked) localStorage.setItem('ta_c',JSON.stringify({u:u,p:p}));
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  initApp();
+}
+function logout(){
+  localStorage.removeItem('ta_c');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login').style.display='flex';
+  document.getElementById('lp').value='';
+}
+function changePwd(){
+  var p1=document.getElementById('pw1').value, p2=document.getElementById('pw2').value, p3=document.getElementById('pw3').value;
+  if(!p1||!p2||!p3){toast('Compila tutti i campi.','err');return;}
+  if(p1!==S.cu.p){toast('Password attuale errata.','err');return;}
+  if(p2!==p3){toast('Le nuove password non corrispondono.','err');return;}
+  S.cu.p=p2; S.users.find(function(x){return x.id===S.cu.id;}).p=p2;
+  toast('Password aggiornata!');
+}
+(function(){ var s=localStorage.getItem('ta_c'); if(s){try{var d=JSON.parse(s);document.getElementById('lu').value=d.u;document.getElementById('lp').value=d.p;document.getElementById('rem').checked=true;}catch(e){}} })();
+
+// ===== INIT =====
+function initApp(){
+  S.n=TA.notizie.map(function(x){return Object.assign({},x);});
+  S.e=TA.eventi.map(function(x){return Object.assign({},x);});
+  S.f=TA.farmacie.map(function(x){return Object.assign({},x);});
+  S.sv=TA.servizi.map(function(x){return Object.assign({},x);});
+  S.l=TA.locali.map(function(x){return Object.assign({},x);});
+  S.sp=TA.sponsor.map(function(x){return Object.assign({},x);});
+  document.getElementById('uav').textContent=S.cu.nome[0];
+  document.getElementById('un').textContent=S.cu.nome;
+  document.getElementById('d-date').textContent=new Date().toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  refreshStats(); renderFarm(); renderAll(); renderCollab(); lucide.createIcons();
+}
+function refreshStats(){
+  document.getElementById('st-n').textContent=S.n.length;
+  document.getElementById('st-e').textContent=S.e.length;
+  document.getElementById('st-l').textContent=S.l.length;
+  document.getElementById('st-s').textContent=S.sp.filter(function(s){return s.attivo;}).length;
+}
+function renderAll(){
+  renderTable('dt-n',S.n,'n'); renderTable('dt-n2',S.n.slice(0,4),'n',true);
+  renderTable('dt-e',S.e,'e'); renderTable('dt-f',S.f,'f');
+  renderTable('dt-sv',S.sv,'sv'); renderTable('dt-l',S.l,'l');
+  renderTable('dt-sp',S.sp,'sp');
+  lucide.createIcons();
+}
+
+// ===== TABLES =====
+function renderTable(id,data,type,mini){
+  var el=document.getElementById(id); if(!el) return;
+  var headers={'n':['Titolo','Categoria','Data','Evidenza',''],'e':['Titolo','Categoria','Data','Luogo',''],'f':['#','Nome','Indirizzo','Telefono','Notturno',''],'sv':['Nome','Categoria','Telefono',''],'l':['Nome','Tipo','Indirizzo','Evidenza',''],'sp':['Nome','Livello','Attivo','']};
+  var h=headers[type]||[];
+  var thead='<thead><tr>'+h.map(function(x){return '<th>'+x+'</th>';}).join('')+'</tr></thead>';
+  var tbody='<tbody>'+data.map(function(item,i){return '<tr data-q="'+rowSearch(item,type)+'">' + rowCells(item,i,type,mini) + '</tr>';}).join('')+'</tbody>';
+  el.innerHTML=thead+tbody;
+  lucide.createIcons();
+}
+function rowSearch(item,type){
+  if(type==='n') return (item.titolo+' '+item.categoria).toLowerCase();
+  if(type==='e') return (item.titolo+' '+item.categoria+' '+item.luogo).toLowerCase();
+  if(type==='f') return (item.nome+' '+item.indirizzo).toLowerCase();
+  if(type==='sv') return (item.nome+' '+item.categoria).toLowerCase();
+  if(type==='l') return (item.nome+' '+item.tipo).toLowerCase();
+  if(type==='sp') return (item.nome+' '+item.livello).toLowerCase();
+  return '';
+}
+function rowCells(item,i,type,mini){
+  var acts=mini?'':'<td><div style="display:flex;gap:6px;"><button class="btn btn-o btn-sm" onclick="editItem(\''+type+'\','+i+')"><i data-lucide="edit-2" width="12" height="12"></i> Modifica</button><button class="btn btn-d btn-sm" onclick="delItem(\''+type+'\','+i+')"><i data-lucide="trash-2" width="12" height="12"></i></button></div></td>';
+  var cc=TA.getCatColor;
+  if(type==='n') return '<td><strong>'+item.titolo+'</strong><div style="color:var(--mu);font-size:11px;margin-top:2px">'+item.abstract.slice(0,55)+'...</div></td><td><span class="badge" style="background:'+cc(item.categoriaSlug)+'20;color:'+cc(item.categoriaSlug)+'">'+item.categoria+'</span></td><td style="white-space:nowrap">'+fmt(item.data)+'</td>'+(mini?'':'<td><span class="badge '+(item.inEvidenza?'ba':'bi')+'">'+(item.inEvidenza?'Sì':'No')+'</span></td>')+acts;
+  if(type==='e') return '<td><strong>'+item.titolo+'</strong></td><td><span class="badge bg">'+item.categoria+'</span></td><td style="white-space:nowrap">'+fmt(item.dataInizio)+'</td><td style="font-size:12px;color:var(--mu)">'+item.luogo+'</td>'+acts;
+  if(type==='f') return '<td style="font-weight:700;color:var(--a)">'+(i+1)+'</td><td><strong>'+item.nome+'</strong></td><td style="font-size:12px;color:var(--mu)">'+item.indirizzo+'</td><td>'+item.telefono+'</td><td><span class="badge '+(item.notturno?'ba':'bi')+'">'+(item.notturno?'Sì':'No')+'</span></td>'+acts;
+  if(type==='sv') return '<td><strong>'+item.nome+'</strong></td><td><span class="badge bs">'+item.categoria+'</span></td><td>'+item.telefono+'</td>'+acts;
+  if(type==='l') return '<td><strong>'+item.nome+'</strong></td><td><span class="badge bs">'+item.tipo+'</span></td><td style="font-size:12px;color:var(--mu)">'+item.indirizzo+'</td><td><span class="badge '+(item.inEvidenza?'ba':'bi')+'">'+(item.inEvidenza?'Sì':'No')+'</span></td>'+acts;
+  if(type==='sp') return '<td><strong>'+item.nome+'</strong><div style="color:var(--mu);font-size:11px;margin-top:2px">'+item.descrizione.slice(0,50)+'...</div></td><td><span class="badge b'+item.livello.toLowerCase()[0]+'">'+item.livello+'</span></td><td><span class="badge '+(item.attivo?'ba':'bi')+'">'+(item.attivo?'Attivo':'Inattivo')+'</span></td>'+acts;
+  return '';
+}
+function fmt(d){return new Date(d).toLocaleDateString('it-IT',{day:'numeric',month:'short',year:'numeric'});}
+function filter(id,val){
+  var t=document.getElementById(id); if(!t) return;
+  t.querySelectorAll('tbody tr').forEach(function(r){r.style.display=(!val||r.getAttribute('data-q').includes(val.toLowerCase()))?'':'none';});
+}
+
+// ===== FARMACIA CARD =====
+function renderFarm(){
+  var f=TA.getFarmaciaOfDay();
+  document.getElementById('d-farm').innerHTML='<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="width:48px;height:48px;border-radius:12px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="plus" width="22" height="22" color="#fff" stroke-width="3"></i></div><div style="flex:1"><strong style="font-size:16px;color:var(--p);display:block">'+f.nome+'</strong><span style="color:var(--mu);font-size:13px">'+f.indirizzo+' &nbsp;·&nbsp; '+f.telefono+'</span></div><span class="badge ba">Aperta oggi</span></div>';
+  lucide.createIcons();
+}
+
+// ===== COLLABORATORI =====
+function renderCollab(){
+  var el=document.getElementById('clist'); if(!el) return;
+  el.innerHTML=S.users.map(function(u){
+    return '<div class="citem"><div class="cav">'+u.nome[0]+'</div><div style="flex:1"><strong style="font-size:14px">'+u.nome+'</strong><div style="font-size:12px;color:var(--mu)">'+u.email+'</div></div><span class="badge '+(u.r==='Admin'?'bg':'bs')+'">'+u.r+'</span>'+(u.id!==1?'<button class="btn btn-d btn-sm" onclick="delCollab('+u.id+')"><i data-lucide="trash-2" width="12" height="12"></i></button>':'')+' </div>';
+  }).join('');
+  lucide.createIcons();
+}
+function delCollab(id){if(!confirm('Rimuovere questo collaboratore?'))return;S.users=S.users.filter(function(u){return u.id!==id;});renderCollab();toast('Collaboratore rimosso');}
+
+// ===== DELETE =====
+function delItem(type,idx){
+  if(!confirm('Eliminare questo elemento?'))return;
+  S[type].splice(idx,1); renderAll(); refreshStats(); toast('Eliminato');
+}
+
+// ===== MODAL =====
+var editIdx=-1, editType='';
+function openM(type,idx){
+  editType=type; editIdx=(idx!==undefined)?idx:-1;
+  var item=(idx!==undefined)?S[type][idx]:{};
+  var T=document.getElementById('modal-title');
+  var B=document.getElementById('modal-body');
+  var F=document.getElementById('modal-foot');
+  F.innerHTML='<button class="btn btn-o" onclick="closeM()">Annulla</button><button class="btn btn-p" onclick="saveItem()">Salva</button>';
+
+  if(type==='n'){
+    T.textContent=idx!==undefined?'Modifica Notizia':'Nuova Notizia';
+    B.innerHTML='<div class="fr2" style="grid-template-columns:1fr"><div class="mfg"><label>Titolo *</label><input id="f-titolo" value="'+(item.titolo||'')+'"></div></div>'+
+      '<div class="fr2"><div class="mfg"><label>Categoria</label><select id="f-cat">'+TA.categorieNotizie.map(function(c){return '<option value="'+c.slug+'"'+(item.categoriaSlug===c.slug?' selected':'')+'>'+c.nome+'</option>';}).join('')+'</select></div><div class="mfg"><label>Data</label><input type="date" id="f-data" value="'+(item.data||td())+'"></div></div>'+
+      '<div class="mfg"><label>Abstract</label><textarea id="f-abstract" rows="2">'+(item.abstract||'')+'</textarea></div>'+
+      '<div class="mfg"><label>Testo completo</label><textarea id="f-testo" rows="5">'+(item.testo||'')+'</textarea></div>'+
+      '<div class="fr2"><div class="mfg"><label>URL Immagine</label><input id="f-img" value="'+(item.immagine||'')+'" placeholder="https://images.unsplash.com/..."></div><div class="mfg"><label>Fonte</label><input id="f-fonte" value="'+(item.fonte||'')+'" placeholder="Es: Comune di Apricena"></div></div>'+
+      '<div class="mfg"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="f-ev" '+(item.inEvidenza?'checked':'')+' style="width:auto"> In evidenza (mostrata in home)</label></div>';
+  }else if(type==='e'){
+    T.textContent=idx!==undefined?'Modifica Evento':'Nuovo Evento';
+    B.innerHTML='<div class="mfg"><label>Titolo *</label><input id="f-titolo" value="'+(item.titolo||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Data inizio</label><input type="date" id="f-di" value="'+(item.dataInizio||td())+'"></div><div class="mfg"><label>Data fine</label><input type="date" id="f-df" value="'+(item.dataFine||td())+'"></div></div>'+
+      '<div class="fr2"><div class="mfg"><label>Orario (es: 21:00)</label><input id="f-ora" value="'+(item.orario||'')+'"></div><div class="mfg"><label>Categoria</label><input id="f-cat" value="'+(item.categoria||'')+'" placeholder="Es: Cultura, Sport, Gastronomia..."></div></div>'+
+      '<div class="mfg"><label>Luogo</label><input id="f-luogo" value="'+(item.luogo||'')+'"></div>'+
+      '<div class="mfg"><label>Descrizione</label><textarea id="f-desc">'+(item.descrizione||'')+'</textarea></div>'+
+      '<div class="mfg"><label>URL Immagine</label><input id="f-img" value="'+(item.immagine||'')+'" placeholder="https://images.unsplash.com/..."></div>';
+  }else if(type==='f'){
+    T.textContent=idx!==undefined?'Modifica Farmacia':'Nuova Farmacia';
+    B.innerHTML='<div class="mfg"><label>Nome farmacia *</label><input id="f-nome" value="'+(item.nome||'')+'"></div>'+
+      '<div class="mfg"><label>Indirizzo</label><input id="f-ind" value="'+(item.indirizzo||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Telefono</label><input id="f-tel" value="'+(item.telefono||'')+'"></div><div class="mfg"><label>Orario</label><input id="f-ora" value="'+(item.orario||'08:30 - 13:00 / 16:30 - 20:00')+'"></div></div>'+
+      '<div class="mfg"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="f-nott" '+(item.notturno?'checked':'')+' style="width:auto"> Effettua servizio notturno</label></div>';
+  }else if(type==='sv'){
+    T.textContent=idx!==undefined?'Modifica Servizio':'Nuovo Servizio';
+    B.innerHTML='<div class="mfg"><label>Nome *</label><input id="f-nome" value="'+(item.nome||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Categoria</label><select id="f-cat">'+TA.categorieServizi.map(function(c){return '<option value="'+c.slug+'"'+(item.categoriaSlug===c.slug?' selected':'')+'>'+c.nome+'</option>';}).join('')+'</select></div><div class="mfg"><label>Telefono</label><input id="f-tel" value="'+(item.telefono||'')+'"></div></div>'+
+      '<div class="mfg"><label>Indirizzo</label><input id="f-ind" value="'+(item.indirizzo||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Email</label><input id="f-email" value="'+(item.email||'')+'"></div><div class="mfg"><label>Sito web</label><input id="f-sito" value="'+(item.sitoWeb||'')+'"></div></div>'+
+      '<div class="mfg"><label>Orari</label><input id="f-orari" value="'+(item.orari||'')+'"></div>'+
+      '<div class="mfg"><label>Descrizione</label><textarea id="f-desc">'+(item.descrizione||'')+'</textarea></div>';
+  }else if(type==='l'){
+    T.textContent=idx!==undefined?'Modifica Locale':'Nuovo Locale';
+    B.innerHTML='<div class="mfg"><label>Nome *</label><input id="f-nome" value="'+(item.nome||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Tipo</label><select id="f-tipo">'+TA.tipiLocali.map(function(t){return '<option value="'+t.slug+'"'+(item.tipoSlug===t.slug?' selected':'')+'>'+t.nome+'</option>';}).join('')+'</select></div><div class="mfg"><label>Telefono</label><input id="f-tel" value="'+(item.telefono||'')+'"></div></div>'+
+      '<div class="mfg"><label>Indirizzo</label><input id="f-ind" value="'+(item.indirizzo||'')+'"></div>'+
+      '<div class="mfg"><label>Orari</label><input id="f-orari" value="'+(item.orari||'')+'"></div>'+
+      '<div class="mfg"><label>Descrizione</label><textarea id="f-desc">'+(item.descrizione||'')+'</textarea></div>'+
+      '<div class="mfg"><label>URL Immagine</label><input id="f-img" value="'+(item.immagine||'')+'"></div>'+
+      '<div class="mfg"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="f-ev" '+(item.inEvidenza?'checked':'')+' style="width:auto"> In evidenza in home</label></div>';
+  }else if(type==='sp'){
+    T.textContent=idx!==undefined?'Modifica Sponsor':'Nuovo Sponsor';
+    B.innerHTML='<div class="mfg"><label>Nome azienda *</label><input id="f-nome" value="'+(item.nome||'')+'"></div>'+
+      '<div class="fr2"><div class="mfg"><label>Livello</label><select id="f-liv"><option value="Gold"'+(item.livello==='Gold'?' selected':'')+'>Gold</option><option value="Silver"'+(item.livello==='Silver'?' selected':'')+'>Silver</option><option value="Bronze"'+(item.livello==='Bronze'?' selected':'')+'>Bronze</option></select></div><div class="mfg"><label>Sito web</label><input id="f-sito" value="'+(item.sitoWeb||'')+'"></div></div>'+
+      '<div class="mfg"><label>Descrizione</label><textarea id="f-desc">'+(item.descrizione||'')+'</textarea></div>'+
+      '<div class="mfg"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="f-att" '+(item.attivo!==false?'checked':'')+' style="width:auto"> Sponsor attivo (visibile sul sito)</label></div>';
+  }else if(type==='c'){
+    T.textContent='Nuovo Collaboratore';
+    F.innerHTML='<button class="btn btn-o" onclick="closeM()">Annulla</button><button class="btn btn-p" onclick="saveCollab()">Aggiungi</button>';
+    B.innerHTML='<div class="fr2"><div class="mfg"><label>Nome completo *</label><input id="f-nome"></div><div class="mfg"><label>Email *</label><input type="email" id="f-email"></div></div>'+
+      '<div class="fr2"><div class="mfg"><label>Username *</label><input id="f-user"></div><div class="mfg"><label>Password *</label><input type="password" id="f-pass"></div></div>'+
+      '<div class="mfg"><label>Ruolo</label><select id="f-ruolo"><option>Editor</option><option>Admin</option></select></div>';
+  }
+
+  document.getElementById('overlay').classList.add('open');
+  lucide.createIcons();
+}
+function editItem(type,idx){ openM(type,idx); }
+function closeM(){ document.getElementById('overlay').classList.remove('open'); }
+
+// ===== SAVE =====
+function g(id){var el=document.getElementById(id); return el?el.value:'';}
+function gc(id){var el=document.getElementById(id); return el?el.checked:false;}
+function slug(s){return s.toLowerCase().replace(/[àá]/g,'a').replace(/[èé]/g,'e').replace(/[ìí]/g,'i').replace(/[òó]/g,'o').replace(/[ùú]/g,'u').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function td(){return new Date().toISOString().split('T')[0];}
+
+function saveItem(){
+  var t=editType, i=editIdx;
+  var obj;
+  if(t==='n'){
+    var cat=TA.categorieNotizie.find(function(c){return c.slug===g('f-cat');})||TA.categorieNotizie[0];
+    obj={id:i>=0?S.n[i].id:Date.now(),slug:slug(g('f-titolo')),titolo:g('f-titolo'),categoria:cat.nome,categoriaSlug:cat.slug,immagine:g('f-img'),abstract:g('f-abstract'),testo:g('f-testo'),fonte:g('f-fonte'),fonteUrl:'',data:g('f-data'),inEvidenza:gc('f-ev'),tag:[]};
+    if(!obj.titolo){toast('Titolo obbligatorio','err');return;}
+    if(i>=0)S.n[i]=obj;else S.n.unshift(obj);
+  }else if(t==='e'){
+    obj={id:i>=0?S.e[i].id:Date.now(),slug:slug(g('f-titolo')),titolo:g('f-titolo'),categoria:g('f-cat'),dataInizio:g('f-di'),dataFine:g('f-df')||g('f-di'),orario:g('f-ora'),luogo:g('f-luogo'),descrizione:g('f-desc'),immagine:g('f-img'),inEvidenza:false};
+    if(!obj.titolo){toast('Titolo obbligatorio','err');return;}
+    if(i>=0)S.e[i]=obj;else S.e.unshift(obj);
+  }else if(t==='f'){
+    obj={id:i>=0?S.f[i].id:Date.now(),nome:g('f-nome'),indirizzo:g('f-ind'),telefono:g('f-tel'),orario:g('f-ora'),notturno:gc('f-nott')};
+    if(!obj.nome){toast('Nome obbligatorio','err');return;}
+    if(i>=0)S.f[i]=obj;else S.f.push(obj);
+  }else if(t==='sv'){
+    var catSv=TA.categorieServizi.find(function(c){return c.slug===g('f-cat');})||TA.categorieServizi[0];
+    obj={id:i>=0?S.sv[i].id:Date.now(),nome:g('f-nome'),categoria:catSv.nome,categoriaSlug:catSv.slug,icona:'building',indirizzo:g('f-ind'),telefono:g('f-tel'),email:g('f-email'),sitoWeb:g('f-sito'),orari:g('f-orari'),descrizione:g('f-desc')};
+    if(i>=0)S.sv[i]=obj;else S.sv.push(obj);
+  }else if(t==='l'){
+    var tipo=TA.tipiLocali.find(function(x){return x.slug===g('f-tipo');})||TA.tipiLocali[0];
+    obj={id:i>=0?S.l[i].id:Date.now(),slug:slug(g('f-nome')),nome:g('f-nome'),tipo:tipo.nome,tipoSlug:tipo.slug,descrizione:g('f-desc'),indirizzo:g('f-ind'),telefono:g('f-tel'),sitoWeb:'',instagram:'',orari:g('f-orari'),immagine:g('f-img'),inEvidenza:gc('f-ev')};
+    if(i>=0)S.l[i]=obj;else S.l.push(obj);
+  }else if(t==='sp'){
+    obj={id:i>=0?S.sp[i].id:Date.now(),nome:g('f-nome'),logo:'',sitoWeb:g('f-sito'),descrizione:g('f-desc'),livello:g('f-liv'),attivo:gc('f-att')};
+    if(i>=0)S.sp[i]=obj;else S.sp.push(obj);
+  }
+  closeM(); renderAll(); refreshStats(); toast('Salvato con successo!');
+}
+function saveCollab(){
+  var obj={id:Date.now(),u:g('f-user'),p:g('f-pass'),nome:g('f-nome'),email:g('f-email'),r:g('f-ruolo')};
+  if(!obj.nome||!obj.u||!obj.p){toast('Compila tutti i campi obbligatori','err');return;}
+  if(S.users.find(function(x){return x.u===obj.u;})){toast('Username già esistente','err');return;}
+  S.users.push(obj); closeM(); renderCollab(); toast('Collaboratore aggiunto!');
+}
+
+// ===== MEDIA =====
+function uploadF(files){
+  Array.from(files).forEach(function(file){
+    var r=new FileReader();
+    r.onload=function(ev){
+      S.media.push({name:file.name,url:ev.target.result});
+      addThumb(document.getElementById('uprev'),ev.target.result,file.name);
+      updateLib();
+    };
+    r.readAsDataURL(file);
+  });
+  toast('Immagine(i) caricate!');
+}
+function dropF(ev){ev.preventDefault();document.getElementById('upz').classList.remove('drag');uploadF(ev.dataTransfer.files);}
+function addThumb(container,url,name){
+  var d=document.createElement('div');
+  d.style.cssText='position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;';
+  d.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);padding:3px 6px;font-size:10px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+name+'</div>';
+  container.appendChild(d);
+}
+function updateLib(){
+  var lib=document.getElementById('mlib');
+  document.getElementById('mlib-empty').style.display=S.media.length?'none':'block';
+  lib.innerHTML=S.media.map(function(f,i){
+    return '<div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;"><img src="'+f.url+'" style="width:100%;height:100%;object-fit:cover;" title="'+f.name+'"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);padding:3px 6px;font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+f.name+'</div><button onclick="copyUrl('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.55);border:none;color:#fff;border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;">Copia URL</button></div>';
+  }).join('');
+}
+function copyUrl(i){navigator.clipboard.writeText(S.media[i].url).catch(function(){});toast('URL copiato!');}
+
+// ===== GITHUB =====
+async function ghTest(){
+  var tk=document.getElementById('gh-tk').value, repo=document.getElementById('gh-repo').value;
+  var el=document.getElementById('gh-status');
+  if(!tk||!repo){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Inserisci token e repository.</div>';lucide.createIcons();return;}
+  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Connessione in corso...</div>';lucide.createIcons();
+  try{
+    var r=await fetch('https://api.github.com/repos/'+repo,{headers:{'Authorization':'token '+tk}});
+    if(r.ok){el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i>Connessione riuscita! Repository trovato e accessibile.</div>';}
+    else{el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore '+r.status+': verifica token e nome repository.</div>';}
+  }catch(err){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore di rete: '+err.message+'</div>';}
+  lucide.createIcons();
+}
+async function ghSync(){
+  var tk=document.getElementById('gh-tk').value, repo=document.getElementById('gh-repo').value;
+  var br=document.getElementById('gh-br').value||'main', path=document.getElementById('gh-path').value||'tuttoapricena/assets/js/data.js';
+  var el=document.getElementById('gh-status');
+  if(!tk||!repo){el.innerHTML='<div class="al al-err">Configura token e repository prima.</div>';return;}
+  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Pubblicazione in corso...</div>';lucide.createIcons();
+  try{
+    var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+br,{headers:{'Authorization':'token '+tk}});
+    var sha=fr.ok?(await fr.json()).sha:null;
+    var content=buildDataJS();
+    var encoded=btoa(unescape(encodeURIComponent(content)));
+    var body={message:'CMS update: '+new Date().toLocaleString('it-IT'),content:encoded,branch:br};
+    if(sha)body.sha=sha;
+    var pr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+tk,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(pr.ok){el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i>Pubblicato con successo! Il sito si aggiornerà entro 1-2 minuti.</div>';}
+    else{var err=await pr.json();el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore: '+(err.message||pr.status)+'</div>';}
+  }catch(err){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>'+err.message+'</div>';}
+  lucide.createIcons();
+}
+function buildDataJS(){
+  var data={notizie:S.n,categorieNotizie:TA.categorieNotizie,eventi:S.e,farmacie:S.f,servizi:S.sv,categorieServizi:TA.categorieServizi,locali:S.l,tipiLocali:TA.tipiLocali,sponsor:S.sp};
+  return '// TUTTOAPRICENA — DATA FILE\n// Aggiornato dal CMS il '+new Date().toLocaleString('it-IT')+'\nconst TA = '+JSON.stringify(data,null,2)+';\n\nTA.getCatColor=function(slug){var c=TA.categorieNotizie.find(function(x){return x.slug===slug;});return c?c.colore:\'#E8A838\';};\nTA.formatDate=function(d,opts){return new Date(d).toLocaleDateString(\'it-IT\',opts||{day:\'numeric\',month:\'long\',year:\'numeric\'});};\nTA.getFarmaciaOfDay=function(date){var d=date||new Date();var epoch=new Date(\'2025-01-01\');var diff=Math.floor((d-epoch)/(86400000));var idx=((diff%TA.farmacie.length)+TA.farmacie.length)%TA.farmacie.length;return TA.farmacie[idx];};\nTA.getFarmacieProssimi=function(n){var result=[];var today=new Date();today.setHours(0,0,0,0);for(var i=0;i<n;i++){var d=new Date(today);d.setDate(today.getDate()+i);result.push({data:d,farmacia:TA.getFarmaciaOfDay(d)});}return result;};\nif(typeof module!==\'undefined\')module.exports=TA;\n';
+}
+
+// ===== NAV =====
+function nav(id,el){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on');});
+  var sec=document.getElementById('s-'+id);
+  if(sec)sec.classList.add('on');
+  if(el)el.classList.add('on');
+  else document.querySelectorAll('.ni').forEach(function(n){if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('on');});
+  window.scrollTo(0,0);
+  lucide.createIcons();
+}
+
+// ===== TOAST =====
+function toast(msg,type){
+  var el=document.getElementById('tst');
+  el.innerHTML=(type==='err'?'<i data-lucide="x-circle" width="15" height="15"></i>':'<i data-lucide="check-circle" width="15" height="15"></i>')+msg;
+  el.style.background=type==='err'?'var(--d)':'var(--p)';
+  el.style.transform='translateY(0)';el.style.opacity='1';
+  lucide.createIcons();
+  setTimeout(function(){el.style.transform='translateY(80px)';el.style.opacity='0';},2800);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmacie di Turno — TuttoApricena</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-farmacie">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/" class="active">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../chi-siamo/" class="link-plain">Chi siamo</a><a href="../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/" class="active">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+<main class="main-content">
+  <div class="page-header"><div class="page-header-inner"><em>Salute</em><h1>Farmacie di Turno</h1><p>Farmacia aperta oggi e rotazione settimanale ad Apricena</p></div></div>
+  <div class="container-narrow content-section">
+    <div class="farmacia-today-card" id="today-card">
+      <div class="farmacia-today-accent"></div>
+      <div class="farmacia-today-head">
+        <div class="farmacia-today-icon"><i data-lucide="plus" width="30" height="30" color="#fff" stroke-width="3"></i></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
+            <span class="badge-aperta"><i data-lucide="check-circle" width="11" height="11"></i>&nbsp;Aperta oggi</span>
+            <span class="badge-notturno" id="badge-notturno" style="display:none;">Servizio notturno</span>
+          </div>
+          <h2 class="farmacia-today-name" id="today-nome">Caricamento...</h2>
+        </div>
+      </div>
+      <div class="farmacia-details">
+        <div class="farmacia-detail-item"><i data-lucide="map-pin" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Indirizzo</span><span class="farmacia-detail-value" id="today-indirizzo"></span></div></div>
+        <div class="farmacia-detail-item"><i data-lucide="clock" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Orario</span><span class="farmacia-detail-value" id="today-orario"></span></div></div>
+        <div class="farmacia-detail-item"><i data-lucide="phone" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Telefono</span><a class="farmacia-detail-value" id="today-tel" href="#" style="color:var(--color-accent);text-decoration:none;"></a></div></div>
+      </div>
+    </div>
+    <h3 class="farmacia-rota-title">Rotazione prossimi 14 giorni</h3>
+    <div class="farmacia-rota-grid" id="rota-grid"></div>
+    <div style="background:#fff;border-radius:14px;padding:20px 24px;margin-top:32px;box-shadow:0 2px 12px rgba(26,26,46,0.06);border-left:4px solid var(--color-accent);">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <i data-lucide="info" width="18" height="18" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i>
+        <div>
+          <strong style="color:var(--color-primary);font-size:14px;">Informazioni utili</strong>
+          <p style="color:var(--color-text-muted);font-size:13px;margin-top:4px;line-height:1.6;">La rotazione delle farmacie viene aggiornata automaticamente ogni giorno. Per urgenze mediche chiamare il <strong>118</strong> o recarsi al Pronto Soccorso dell'Ospedale di San Severo.</p>
+        </div>
+      </div>
+    </div>
+    <h3 class="farmacia-rota-title" style="margin-top:40px;">Tutte le farmacie di Apricena</h3>
+    <div id="all-farmacie-grid" style="display:grid;gap:16px;"></div>
+  </div>
+</main>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li><li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../assets/js/data.js"></script><script src="../assets/js/main.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+var today = TA.getFarmaciaOfDay();
+document.getElementById('today-nome').textContent = today.nome;
+document.getElementById('today-indirizzo').textContent = today.indirizzo;
+document.getElementById('today-orario').textContent = today.orario;
+document.getElementById('today-tel').textContent = today.telefono;
+document.getElementById('today-tel').href = 'tel:' + today.telefono;
+if (today.notturno) document.getElementById('badge-notturno').style.display = '';
+
+var prossimi = TA.getFarmacieProssimi(14);
+var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+var rotaGrid = document.getElementById('rota-grid');
+rotaGrid.innerHTML = prossimi.map(function(item) {
+  var isToday = item.data.toDateString() === todayDate.toDateString();
+  return '<div class="farmacia-rota-item' + (isToday ? ' is-today' : '') + '">' +
+    '<div class="farmacia-rota-date"><div class="farmacia-rota-date-day">' + item.data.getDate() + '</div>' +
+    '<div class="farmacia-rota-date-month">' + item.data.toLocaleDateString('it-IT',{weekday:'short',month:'short'}) + '</div></div>' +
+    '<div class="farmacia-rota-sep"></div>' +
+    '<div style="flex:1;min-width:0;"><div class="farmacia-rota-nome">' + item.farmacia.nome + (isToday ? ' <span style="background:rgba(22,163,74,0.12);color:#16A34A;font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px;margin-left:6px;">Oggi</span>' : '') + '</div>' +
+    '<div class="farmacia-rota-addr">' + item.farmacia.indirizzo + '</div></div>' +
+    '<a href="tel:' + item.farmacia.telefono + '" class="farmacia-rota-tel"><i data-lucide="phone" width="13" height="13"></i>' + item.farmacia.telefono + '</a></div>';
+}).join('');
+
+var allGrid = document.getElementById('all-farmacie-grid');
+allGrid.innerHTML = TA.farmacie.map(function(f) {
+  return '<div style="background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 2px 12px rgba(26,26,46,0.06);display:flex;align-items:center;gap:20px;flex-wrap:wrap;">' +
+    '<div style="width:48px;height:48px;border-radius:12px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i data-lucide="plus" width="22" height="22" color="#fff" stroke-width="3"></i></div>' +
+    '<div style="flex:1;min-width:200px;"><strong style="font-family:var(--font-display);font-size:16px;color:var(--color-primary);">' + f.nome + '</strong>' +
+    '<div style="color:var(--color-text-muted);font-size:13px;margin-top:2px;">' + f.indirizzo + '</div>' +
+    '<div style="color:var(--color-text-muted);font-size:13px;">' + f.orario + '</div></div>' +
+    '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">' +
+    '<a href="tel:' + f.telefono + '" style="display:flex;align-items:center;gap:6px;color:var(--color-accent);font-weight:600;font-size:14px;"><i data-lucide="phone" width="13" height="13"></i>' + f.telefono + '</a>' +
+    (f.notturno ? '<span style="background:rgba(22,163,74,0.1);color:#16A34A;font-size:11px;font-weight:600;padding:3px 10px;border-radius:50px;">Servizio notturno</span>' : '') +
+    '</div></div>';
+}).join('');
+lucide.createIcons();
+</script>
+</body></html>

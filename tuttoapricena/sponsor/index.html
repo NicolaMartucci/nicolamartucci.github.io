@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sponsor — TuttoApricena</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-sponsor">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/" class="active">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../chi-siamo/" class="link-plain">Chi siamo</a><a href="../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/" class="active">Sponsor</a></nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+<main class="main-content">
+  <div class="page-header"><div class="page-header-inner"><em>Partner</em><h1>I nostri Sponsor</h1><p>Le aziende e le attività che sostengono TuttoApricena</p></div></div>
+  <div class="container content-section">
+    <div style="background:linear-gradient(135deg,var(--color-primary),#2a2a4e);border-radius:20px;padding:36px 40px;margin-bottom:48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:1.6rem;color:#fff;margin-bottom:8px;">Vuoi sponsorizzare TuttoApricena?</h2>
+        <p style="color:rgba(255,255,255,0.65);font-size:15px;max-width:480px;">Raggiungi tutta la comunità di Apricena. Visibilità sul portale più letto della città, con piani personalizzati per ogni esigenza.</p>
+      </div>
+      <a href="../contatti/" class="btn-primary" style="flex-shrink:0;">Contattaci <i data-lucide="arrow-right" width="17" height="17"></i></a>
+    </div>
+    <!-- Gold -->
+    <div style="margin-bottom:40px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="height:2px;flex:1;background:var(--color-accent);opacity:0.4;"></div><span style="color:var(--color-accent);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;white-space:nowrap;">★ Gold Partners</span><div style="height:2px;flex:1;background:var(--color-accent);opacity:0.4;"></div></div>
+      <div class="sponsor-full-grid" id="gold-grid"></div>
+    </div>
+    <!-- Silver -->
+    <div style="margin-bottom:40px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="height:2px;flex:1;background:#94A3B8;opacity:0.4;"></div><span style="color:#94A3B8;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;white-space:nowrap;">Silver Partners</span><div style="height:2px;flex:1;background:#94A3B8;opacity:0.4;"></div></div>
+      <div class="sponsor-full-grid" id="silver-grid"></div>
+    </div>
+    <!-- Bronze -->
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="height:2px;flex:1;background:#CD7F32;opacity:0.4;"></div><span style="color:#CD7F32;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;white-space:nowrap;">Bronze Partners</span><div style="height:2px;flex:1;background:#CD7F32;opacity:0.4;"></div></div>
+      <div class="sponsor-full-grid" id="bronze-grid"></div>
+    </div>
+  </div>
+</main>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li><li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../assets/js/data.js"></script><script src="../assets/js/main.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+function initials(nome) { return nome.split(' ').slice(0,2).map(function(w){return w[0];}).join('').toUpperCase(); }
+function renderSponsorGrid(containerId, level) {
+  var list = TA.sponsor.filter(function(s){ return s.attivo && s.livello === level; });
+  var el = document.getElementById(containerId);
+  el.innerHTML = list.map(function(s) {
+    return '<div class="sponsor-full-card">' +
+      '<div class="sponsor-full-logo">' + initials(s.nome) + '</div>' +
+      '<div class="sponsor-full-name">' + s.nome + '</div>' +
+      '<div class="sponsor-full-level ' + s.livello + '">' + s.livello + ' Partner</div>' +
+      '<p class="sponsor-full-desc">' + s.descrizione + '</p>' +
+      (s.sitoWeb ? '<a href="' + s.sitoWeb + '" target="_blank" rel="noopener" class="sponsor-full-cta">Visita il sito</a>' : '<a href="../contatti/" class="sponsor-full-cta">Contatta</a>') +
+    '</div>';
+  }).join('');
+}
+renderSponsorGrid('gold-grid','Gold');
+renderSponsorGrid('silver-grid','Silver');
+renderSponsorGrid('bronze-grid','Bronze');
+lucide.createIcons();
+</script>
+</body></html>
