@@ -329,6 +329,7 @@ tr:hover td{background:#FAFAFA;}
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn btn-o" onclick="ghTest()"><i data-lucide="plug" width="14" height="14"></i>Test connessione</button>
             <button class="btn btn-p" onclick="ghSync()"><i data-lucide="upload-cloud" width="14" height="14"></i>Pubblica sul sito</button>
+            <button class="btn btn-o" onclick="downloadDataJS()" title="Scarica data.js manualmente"><i data-lucide="download" width="14" height="14"></i>Scarica data.js</button>
           </div>
           <div id="gh-status" style="margin-top:14px"></div>
         </div>
@@ -623,36 +624,129 @@ function updateLib(){
 function copyUrl(i){navigator.clipboard.writeText(S.media[i].url).catch(function(){});toast('URL copiato!');}
 
 // ===== GITHUB =====
+function ghHeaders(tk){
+  return {
+    'Authorization': 'Bearer '+tk,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+
 async function ghTest(){
-  var tk=document.getElementById('gh-tk').value, repo=document.getElementById('gh-repo').value;
+  var tk=document.getElementById('gh-tk').value.trim();
+  var repo=document.getElementById('gh-repo').value.trim();
   var el=document.getElementById('gh-status');
-  if(!tk||!repo){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Inserisci token e repository.</div>';lucide.createIcons();return;}
-  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Connessione in corso...</div>';lucide.createIcons();
+  if(!tk||!repo){
+    el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Inserisci token e nome repository prima di testare.</div>';
+    lucide.createIcons(); return;
+  }
+  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Connessione in corso...</div>';
+  lucide.createIcons();
   try{
-    var r=await fetch('https://api.github.com/repos/'+repo,{headers:{'Authorization':'token '+tk}});
-    if(r.ok){el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i>Connessione riuscita! Repository trovato e accessibile.</div>';}
-    else{el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore '+r.status+': verifica token e nome repository.</div>';}
-  }catch(err){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore di rete: '+err.message+'</div>';}
+    var r=await fetch('https://api.github.com/repos/'+repo, {
+      method:'GET',
+      mode:'cors',
+      headers: ghHeaders(tk)
+    });
+    if(r.ok){
+      var data=await r.json();
+      el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i>Connessione riuscita! Repository "<strong>'+data.full_name+'</strong>" trovato e accessibile.</div>';
+    } else if(r.status===401){
+      el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Token non valido o scaduto. Crea un nuovo token su GitHub → Settings → Developer settings.</div>';
+    } else if(r.status===404){
+      el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Repository non trovato. Verifica il nome (formato: <strong>username/nome-repo</strong>).</div>';
+    } else {
+      el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore '+r.status+'. Verifica token e repository.</div>';
+    }
+  } catch(err){
+    el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i><strong>Errore di rete.</strong> Se stai usando GitHub Pages o un dominio custom, il browser potrebbe bloccare la richiesta. Usa il pulsante <strong>"Scarica data.js"</strong> qui sotto come alternativa.</div>';
+    el.innerHTML+='<div style="margin-top:10px"><button class="btn btn-p" onclick="downloadDataJS()"><i data-lucide="download" width="14" height="14"></i>Scarica data.js</button></div>';
+  }
   lucide.createIcons();
 }
+
 async function ghSync(){
-  var tk=document.getElementById('gh-tk').value, repo=document.getElementById('gh-repo').value;
-  var br=document.getElementById('gh-br').value||'main', path=document.getElementById('gh-path').value||'tuttoapricena/assets/js/data.js';
+  var tk=document.getElementById('gh-tk').value.trim();
+  var repo=document.getElementById('gh-repo').value.trim();
+  var br=document.getElementById('gh-br').value.trim()||'main';
+  var path=document.getElementById('gh-path').value.trim()||'tuttoapricena/assets/js/data.js';
   var el=document.getElementById('gh-status');
-  if(!tk||!repo){el.innerHTML='<div class="al al-err">Configura token e repository prima.</div>';return;}
-  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Pubblicazione in corso...</div>';lucide.createIcons();
+  if(!tk||!repo){
+    el.innerHTML='<div class="al al-err">Configura token e repository prima di pubblicare.</div>';
+    return;
+  }
+  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Recupero file attuale da GitHub...</div>';
+  lucide.createIcons();
   try{
-    var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+br,{headers:{'Authorization':'token '+tk}});
-    var sha=fr.ok?(await fr.json()).sha:null;
+    // Step 1: get current file SHA (needed for update)
+    var sha=null;
+    try{
+      var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+br, {
+        method:'GET', mode:'cors', headers: ghHeaders(tk)
+      });
+      if(fr.ok){ var fdata=await fr.json(); sha=fdata.sha; }
+    } catch(e){ /* file might not exist yet, sha stays null */ }
+
+    el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="15" height="15"></i>Caricamento contenuti su GitHub...</div>';
+    lucide.createIcons();
+
+    // Step 2: encode content
     var content=buildDataJS();
     var encoded=btoa(unescape(encodeURIComponent(content)));
-    var body={message:'CMS update: '+new Date().toLocaleString('it-IT'),content:encoded,branch:br};
-    if(sha)body.sha=sha;
-    var pr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+tk,'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(pr.ok){el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i>Pubblicato con successo! Il sito si aggiornerà entro 1-2 minuti.</div>';}
-    else{var err=await pr.json();el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore: '+(err.message||pr.status)+'</div>';}
-  }catch(err){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>'+err.message+'</div>';}
+    var body={
+      message:'CMS TuttoApricena: aggiornamento contenuti '+new Date().toLocaleString('it-IT'),
+      content:encoded,
+      branch:br
+    };
+    if(sha) body.sha=sha;
+
+    // Step 3: push to GitHub
+    var pr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path, {
+      method:'PUT', mode:'cors',
+      headers: ghHeaders(tk),
+      body: JSON.stringify(body)
+    });
+
+    if(pr.ok){
+      el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="15" height="15"></i><strong>Pubblicato con successo!</strong> Il sito si aggiornerà entro 1-2 minuti.<br><small style="opacity:.8">Commit: CMS update — '+new Date().toLocaleString('it-IT')+'</small></div>';
+    } else {
+      var errData=await pr.json();
+      var msg=errData.message||('Errore HTTP '+pr.status);
+      if(pr.status===401) msg='Token non valido o scaduto.';
+      if(pr.status===404) msg='Repository o path non trovato. Verifica la configurazione.';
+      if(pr.status===422) msg='SHA non valido o conflitto. Prova a ricaricare la pagina e riprovare.';
+      el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i>Errore: '+msg+'</div>';
+      el.innerHTML+='<div style="margin-top:10px"><button class="btn btn-p" onclick="downloadDataJS()"><i data-lucide="download" width="14" height="14"></i>Scarica data.js (alternativa manuale)</button></div>';
+    }
+  } catch(err){
+    // Network error fallback: always offer download
+    el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="15" height="15"></i><strong>Impossibile contattare GitHub.</strong><br>Possibili cause: sei offline, il browser blocca la richiesta, oppure sei su una rete con restrizioni.</div>';
+    el.innerHTML+='<div style="margin-top:12px;padding:14px;background:#fff;border-radius:10px;border:1px solid var(--bd)">'+
+      '<strong style="font-size:13px;display:block;margin-bottom:6px">✅ Alternativa manuale (funziona sempre):</strong>'+
+      '<ol style="padding-left:18px;font-size:13px;color:var(--mu);line-height:2">'+
+      '<li>Clicca il pulsante sotto per scaricare <code>data.js</code></li>'+
+      '<li>Vai su <strong>github.com</strong> → tuo repository</li>'+
+      '<li>Naviga in <code>tuttoapricena/assets/js/</code></li>'+
+      '<li>Clicca su <code>data.js</code> → icona matita (Edit)</li>'+
+      '<li>Cancella tutto e incolla il contenuto scaricato</li>'+
+      '<li>Clicca <strong>Commit changes</strong></li>'+
+      '</ol>'+
+      '<button class="btn btn-p" onclick="downloadDataJS()"><i data-lucide="download" width="14" height="14"></i>Scarica data.js aggiornato</button>'+
+    '</div>';
+  }
   lucide.createIcons();
+}
+
+// Download data.js as a file (manual fallback, always works)
+function downloadDataJS(){
+  var content=buildDataJS();
+  var blob=new Blob([content],{type:'application/javascript'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download='data.js'; a.click();
+  URL.revokeObjectURL(url);
+  toast('data.js scaricato! Caricalo su GitHub in: tuttoapricena/assets/js/data.js');
 }
 function buildDataJS(){
   var data={notizie:S.n,categorieNotizie:TA.categorieNotizie,eventi:S.e,farmacie:S.f,servizi:S.sv,categorieServizi:TA.categorieServizi,locali:S.l,tipiLocali:TA.tipiLocali,sponsor:S.sp};
