@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notizia — TuttoApricena</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-notizia-single">
+
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="../../notizie/" class="active">Notizie</a><a href="../../eventi/">Eventi</a><a href="../../farmacie/">Farmacie</a><a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="../../chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="../../contatti/" class="link-btn">Contatti</a>
+    </div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
+      <i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i>
+      <i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i>
+    </button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav">
+      <a href="../../notizie/" class="active">Notizie</a><a href="../../eventi/">Eventi</a><a href="../../farmacie/">Farmacie</a>
+      <a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a>
+    </nav>
+    <a href="../../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+
+<main class="main-content" id="article-main">
+  <div class="not-found" style="padding-top:120px;">
+    <p style="color:var(--color-text-muted)">Caricamento...</p>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+        <p>Il portale informativo indipendente di Apricena.</p>
+      </div>
+      <div class="footer-col"><h4>Sezioni</h4><ul>
+        <li><a href="../../notizie/">Notizie</a></li><li><a href="../../eventi/">Eventi</a></li><li><a href="../../farmacie/">Farmacie</a></li>
+        <li><a href="../../servizi/">Servizi</a></li><li><a href="../../locali/">Locali</a></li><li><a href="../../sponsor/">Sponsor</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Info</h4><ul>
+        <li><a href="../../chi-siamo/">Chi Siamo</a></li><li><a href="../../contatti/">Contatti</a></li>
+        <li><a href="../../privacy/">Privacy Policy</a></li><li><a href="../../cookie/">Cookie Policy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> TuttoApricena</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/js/data.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Get slug from path: /tuttoapricena/notizie/SLUG/
+  const parts = window.location.pathname.replace(/\/$/, '').split('/');
+  const slug = parts[parts.length - 1];
+  const notizia = TA.notizie.find(n => n.slug === slug);
+  const main = document.getElementById('article-main');
+
+  if (!notizia) {
+    main.innerHTML = `
+      <div class="not-found" style="padding-top:80px;">
+        <h2>Notizia non trovata</h2>
+        <p>La notizia che cerchi non è disponibile.</p>
+        <a href="../../notizie/" class="btn-primary" style="margin-top:20px;">Torna alle notizie</a>
+      </div>`;
+  } else {
+    document.title = notizia.titolo + ' — TuttoApricena';
+    const catColor = TA.getCatColor(notizia.categoriaSlug);
+    const testoHtml = notizia.testo.split('\n\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+    main.innerHTML = `
+      <div class="article-header">
+        <div class="article-header-inner">
+          <a href="../../notizie/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutte le notizie</a>
+          <div class="article-meta">
+            <span class="cat-badge" style="background:${catColor}">${notizia.categoria}</span>
+            ${notizia.inEvidenza ? '<span style="background:rgba(232,168,56,0.15);color:var(--color-accent);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:50px;">In evidenza</span>' : ''}
+          </div>
+          <h1 class="article-title">${notizia.titolo}</h1>
+          <p class="article-abstract">${notizia.abstract}</p>
+          <div class="article-info">
+            <span><i data-lucide="calendar" width="13" height="13"></i> ${TA.formatDate(notizia.data)}</span>
+            <span>·</span>
+            <span>Fonte: ${notizia.fonte}</span>
+            ${notizia.tag.map(t => `<span style="background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:50px;font-size:11px;">#${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="article-body">
+        <img class="article-img" src="${notizia.immagine}" alt="${notizia.titolo}" />
+        <div class="prose-content">${testoHtml}</div>
+        <div class="source-box">
+          <i data-lucide="external-link" width="16" height="16" color="var(--color-accent)"></i>
+          <span>Fonte originale: <strong>${notizia.fonte}</strong></span>
+          ${notizia.fonteUrl && notizia.fonteUrl !== '#' ? `<a href="${notizia.fonteUrl}" target="_blank" rel="noopener" style="color:var(--color-accent);margin-left:8px;">Visita</a>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  lucide.createIcons();
+</script>
+</body>
+</html>
