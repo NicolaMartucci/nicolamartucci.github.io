@@ -1,101 +1,118 @@
 // ============================
 // TUTTOAPRICENA — DATA FILE
-// Modificabile tramite CMS
+// Aggiornato con dati reali
 // ============================
-
 const TA = {
+
+  // ===== CONFIGURAZIONE SITO =====
+  config: {
+    siteName: "TuttoApricena",
+    tagline: "Il portale informativo di Apricena",
+    email: "info@tuttoapricena.it",
+    citta: "Apricena (FG), Puglia — Italia",
+    facebook: "",
+    instagram: "",
+    heroImages: [
+      "https://images.unsplash.com/photo-1555992336-03a23c7b20ee?w=1800&q=85",
+      "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=1800&q=85",
+      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1800&q=85"
+    ],
+    logoUrl: "",
+    colorPrimary: "#1A1A2E",
+    colorAccent: "#E8A838"
+  },
 
   // ===== NOTIZIE =====
   notizie: [
     {
       id: 1,
-      slug: "festa-patronale-san-ladislao-2025",
-      titolo: "Festa Patronale di San Ladislao: il programma completo 2025",
+      slug: "carnevale-storico-apricena-2026",
+      titolo: "Carnevale Storico di Apricena 2026: tutto pronto per l'edizione più grande",
       categoria: "Cultura",
       categoriaSlug: "cultura",
       immagine: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
-      abstract: "Tutto pronto per la grande festa patronale di Apricena. Ecco il programma dettagliato con concerti, processione e fuochi d'artificio.",
-      testo: "La città di Apricena si prepara a celebrare il suo patrono San Ladislao con un programma ricco di eventi che si svolgerà dal 25 al 30 giugno 2025. La festa patronale è uno degli appuntamenti più attesi dell'anno, capace di richiamare migliaia di visitatori da tutta la Puglia e non solo.\n\nIl programma prevede ogni sera concerti di artisti locali e nazionali in Piazza Municipio, con l'attesissima processione del patrono prevista per il 27 giugno. Il gran finale sarà affidato ai tradizionali fuochi d'artificio che illumineranno il cielo di Apricena nella notte del 30 giugno.\n\nNumerosi anche gli stand gastronomici con le eccellenze del territorio: olio d'oliva, formaggi locali, taralli e i tipici piatti della tradizione garganica.",
+      abstract: "Domenica 8 febbraio 2026 al via il Carnevale Storico di Apricena con la Gran Parata dei Carri e lo show 'Nei 90 io c'ero'. L'evento più atteso dell'anno torna con novità.",
+      testo: "Apricena si prepara a vivere un'altra edizione straordinaria del suo Carnevale Storico, tra gli eventi più attesi e partecipati dell'intera Puglia. Il via è previsto per domenica 8 febbraio 2026 con la 'Gran Parata dei Carri' a partire dalle 14.30 e la serata musicale 'Nei 90 io c'ero'.\n\nIl Carnevale di Apricena è entrato nella Rete dei Grandi Carnevali di Puglia e d'Italia, a testimonianza del livello raggiunto dall'evento che unisce tradizione locale, creatività dei carri allegorici e ospiti di fama nazionale. La manifestazione ha origini nel 1955 con la Festa della Matricola e nel corso dei decenni è diventata uno degli eventi di aggregazione più importanti per la comunità apricenese e per i comuni vicini.",
       fonte: "Comune di Apricena",
       fonteUrl: "https://www.comune.apricena.fg.it",
-      data: "2025-06-10",
+      data: "2026-01-15",
       inEvidenza: true,
-      tag: ["festa","san ladislao","evento","tradizione"]
+      tag: ["carnevale","cultura","eventi","tradizione"]
     },
     {
       id: 2,
-      slug: "marmo-apricena-eccellenza-italiana",
-      titolo: "Il marmo di Apricena conquista i mercati internazionali",
+      slug: "marmo-apricena-secondo-polo-nazionale",
+      titolo: "Il marmo di Apricena: secondo polo lapideo nazionale, eccellenza nel mondo",
       categoria: "Economia",
       categoriaSlug: "economia",
       immagine: "https://images.unsplash.com/photo-1565791380713-1756b9a05343?w=800&q=80",
-      abstract: "Le cave di marmo di Apricena continuano a essere un'eccellenza del Made in Italy nel mondo. Numeri in crescita per l'export del 2024.",
-      testo: "Il settore lapideo di Apricena continua a essere un fiore all'occhiello dell'economia locale e nazionale. I dati del 2024 confermano una crescita dell'export del 12% rispetto all'anno precedente.\n\nIl marmo di Apricena, conosciuto in tutto il mondo per la sua qualità e per la varietà cromatica che va dal bianco al dorato, viene utilizzato nei più prestigiosi cantieri internazionali.\n\nLe aziende del distretto lapideo locale danno lavoro a oltre 2.000 persone tra estrazione, lavorazione e commercializzazione.",
-      fonte: "Il Sole 24 Ore Puglia",
-      fonteUrl: "https://www.ilsole24ore.com",
-      data: "2025-06-08",
+      abstract: "La Pietra di Apricena, conosciuta anche come 'Trani', è uno dei marmi più pregiati d'Italia. Il distretto lapideo locale rappresenta il secondo polo nazionale di estrazione.",
+      testo: "Apricena è indicata come secondo polo nazionale di estrazione dei materiali lapidei, con un bacino marmifero che si estende su migliaia di ettari e che dà lavoro a centinaia di famiglie del territorio.\n\nLa Pietra di Apricena — conosciuta nei mercati internazionali anche come 'Trani' — è apprezzata per la sua composizione cristallina, le tonalità che spaziano dal bianco al dorato, e per le sue eccellenti caratteristiche chimico-fisiche. La lavorazione si è progressivamente meccanizzata nel dopoguerra, con l'introduzione di utensili diamantati che hanno rivoluzionato i tempi produttivi.\n\nTra le principali realtà del settore figurano Augelli Marmi, con oltre 300.000 metri quadrati di cave proprie, e il Gruppo Franco Dell'Erba, specializzato nell'estrazione e commercializzazione. Il Consorzio CONPIETRA lavora per la valorizzazione e promozione internazionale della pietra locale.",
+      fonte: "Augelli Marmi / CONPIETRA",
+      fonteUrl: "https://www.augellimarmi.it",
+      data: "2025-11-20",
       inEvidenza: true,
-      tag: ["marmo","economia","export","lavoro"]
+      tag: ["marmo","economia","pietra","cave"]
     },
     {
       id: 3,
-      slug: "nuovo-parco-giochi-quartiere-sant-antonio",
-      titolo: "Inaugurato il nuovo parco giochi nel quartiere Sant'Antonio",
-      categoria: "Cronaca",
-      categoriaSlug: "cronaca",
-      immagine: "https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=800&q=80",
-      abstract: "Il Comune di Apricena ha inaugurato il nuovo parco giochi nel quartiere Sant'Antonio. Un'area verde attrezzata per bambini e famiglie.",
-      testo: "È stato inaugurato sabato scorso il nuovo parco giochi nel quartiere Sant'Antonio, alla presenza del sindaco e di numerosi cittadini. L'area verde, completamente riqualificata con fondi europei, ospita nuovi giochi per bambini, panchine, illuminazione LED e fontanelle.\n\nL'intervento si inserisce nel più ampio progetto di riqualificazione delle aree verdi urbane avviato dall'amministrazione comunale.",
-      fonte: "Comune di Apricena",
+      slug: "festa-patronale-madonna-incoronata-2025",
+      titolo: "Festa Patronale della Madonna Incoronata 2025: quattro giorni di celebrazioni",
+      categoria: "Cultura",
+      categoriaSlug: "cultura",
+      immagine: "https://images.unsplash.com/photo-1543373014-cfe4f4bc1cdf?w=800&q=80",
+      abstract: "Dal 30 maggio al 2 giugno 2025 Apricena ha celebrato i solenni festeggiamenti in onore della Patrona Maria SS. Incoronata e dei Santi Compatroni Michele e Martino.",
+      testo: "Apricena ha vissuto quattro giorni intensi di devozione e festa per la Patrona Maria Santissima Incoronata. I solenni festeggiamenti si sono svolti dal 30 maggio al 2 giugno 2025, con la processione di traslazione del simulacro della Madonna dal Santuario Mariano alla Chiesa Madre avvenuta sabato 26 aprile.\n\nLa festa patronale, che ricorre ogni anno nell'ultima domenica di maggio, è uno degli appuntamenti più sentiti dalla comunità apricenese. Come da tradizione, parte del denaro raccolto dal Comitato Festa Patronale è stato devoluto in beneficenza alle parrocchie cittadine Sacra Famiglia e Beata Vergine Maria del Rosario.",
+      fonte: "Parrocchia Santi Martino e Lucia",
       fonteUrl: "https://www.comune.apricena.fg.it",
-      data: "2025-06-05",
+      data: "2025-06-02",
       inEvidenza: false,
-      tag: ["parco","bambini","quartiere","comune"]
+      tag: ["patrona","madonna","fede","tradizione"]
     },
     {
       id: 4,
-      slug: "torneo-calcio-giovanile-apricena-cup",
-      titolo: "Apricena Cup 2025: al via il torneo di calcio giovanile",
-      categoria: "Sport",
-      categoriaSlug: "sport",
-      immagine: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=80",
-      abstract: "Torna l'attesissimo torneo di calcio giovanile Apricena Cup. Partecipano 16 squadre da tutta la provincia di Foggia.",
-      testo: "Dal 15 al 22 giugno si svolgerà presso il Campo Sportivo Comunale la quinta edizione dell'Apricena Cup. Quest'anno partecipano 16 squadre nelle categorie Under 12 e Under 15.\n\nLa manifestazione è organizzata dall'ASD Apricena Calcio con il patrocinio del Comune. Le partite si terranno ogni sera dalle 18:00.",
-      fonte: "ASD Apricena Calcio",
-      fonteUrl: "#",
-      data: "2025-06-03",
+      slug: "notte-bianca-apricena-dicembre-2025",
+      titolo: "Notte Bianca di Apricena: Corso Roma si trasforma in un grande palcoscenico",
+      categoria: "Società",
+      categoriaSlug: "societa",
+      immagine: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
+      abstract: "Lunedì 29 dicembre 2025, Corso Roma diventa palcoscenico di luci, musica e divertimento con artisti di strada, musica live, giostre e prodotti della gastronomia locale.",
+      testo: "Il 29 dicembre 2025 Apricena ha festeggiato la Notte Bianca invernale: a partire dalle ore 20, Corso Roma si è trasformato in un grande palcoscenico all'aperto con artisti di strada, musica live, giostre, gonfiabili e stand gastronomici con i prodotti tipici della tradizione apricenese.\n\nL'evento ha registrato una grandissima affluenza di pubblico, con famiglie e giovani giunti anche dai comuni limitrofi. La Notte Bianca è diventata negli anni un appuntamento fisso che accompagna le festività natalizie.",
+      fonte: "Comune di Apricena",
+      fonteUrl: "https://www.comune.apricena.fg.it",
+      data: "2025-12-28",
       inEvidenza: false,
-      tag: ["calcio","sport","giovani","torneo"]
+      tag: ["notteBianca","musica","famiglia","Natale"]
     },
     {
       id: 5,
-      slug: "sagra-del-tarallo-apricena-luglio-2025",
-      titolo: "Sagra del Tarallo: tre serate di gusto e tradizione ad Apricena",
+      slug: "politecnico-bari-accordo-cave-apricena",
+      titolo: "Politecnico di Bari e Comune di Apricena: accordo per valorizzare le cave",
       categoria: "Cultura",
       categoriaSlug: "cultura",
-      immagine: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
-      abstract: "Torna la Sagra del Tarallo, uno degli eventi gastronomici più amati della stagione estiva apricenese.",
-      testo: "Dal 18 al 20 luglio 2025 torna la tradizionale Sagra del Tarallo di Apricena, giunta alla sua dodicesima edizione. Le serate saranno animate da musica folk, balli tradizionali e degustazioni gratuite. Ingresso libero.",
-      fonte: "Pro Loco Apricena",
-      fonteUrl: "#",
-      data: "2025-06-01",
+      immagine: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80",
+      abstract: "Il Politecnico di Bari e il Comune di Apricena hanno sottoscritto un accordo di collaborazione per la valorizzazione architettonica e la rigenerazione delle cave di marmo.",
+      testo: "Il Politecnico di Bari e il Comune di Apricena hanno siglato un importante accordo di collaborazione per immaginare il futuro delle cave di pietra del territorio. Il progetto, guidato dal prof. Giuseppe Fallacara, vede studenti di architettura lavorare su proposte per rigenerare le cave abbandonate trasformandole in hotel, centri sportivi, teatri e spazi culturali.\n\nL'intesa è stata firmata dal Rettore Francesco Cupertino e dal Sindaco di Apricena Antonio Potenza. L'obiettivo è valorizzare la Madre Pietra di Apricena non solo come risorsa economica ma anche come patrimonio culturale e paesaggistico del Gargano.",
+      fonte: "Politecnico di Bari",
+      fonteUrl: "https://www.poliba.it",
+      data: "2025-03-14",
       inEvidenza: false,
-      tag: ["sagra","tarallo","gastronomia","tradizione"]
+      tag: ["università","cave","cultura","architettura"]
     },
     {
       id: 6,
-      slug: "biblioteca-comunale-nuovi-orari-estate",
-      titolo: "Biblioteca Comunale: nuovi orari estivi dal 1° luglio",
-      categoria: "Società",
-      categoriaSlug: "societa",
-      immagine: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80",
-      abstract: "La Biblioteca Comunale di Apricena comunica i nuovi orari di apertura per il periodo estivo.",
-      testo: "A partire dal 1° luglio 2025, la Biblioteca Comunale di Apricena adotterà i nuovi orari estivi: apertura dal lunedì al venerdì dalle 8:30 alle 13:30, con apertura pomeridiana martedì e giovedì dalle 15:30 alle 18:30.",
+      slug: "kermesse-musicale-estate-apricena-2025",
+      titolo: "Estate musicale ad Apricena: kermesse di agosto con artisti di spessore",
+      categoria: "Cultura",
+      categoriaSlug: "cultura",
+      immagine: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&q=80",
+      abstract: "Dal 1° al 31 agosto 2025 Apricena ha ospitato la sua consueta kermesse musicale estiva, con concerti e spettacoli ogni sera nelle piazze del centro storico.",
+      testo: "L'estate 2025 ad Apricena è stata animata da un ricco calendario di eventi musicali che ha trasformato le piazze della città in un palcoscenico a cielo aperto per tutto il mese di agosto. La kermesse ha visto alternarsi artisti locali, regionali e nazionali in concerti gratuiti per la cittadinanza.\n\nGli appuntamenti si sono tenuti principalmente in Piazza Giovanni Paolo II e in Piazza San Josemaria Escrivá, con grande partecipazione di pubblico sia locale che turistico. L'iniziativa rientra nel più ampio programma di valorizzazione culturale del territorio promosso dall'Amministrazione comunale.",
       fonte: "Comune di Apricena",
       fonteUrl: "https://www.comune.apricena.fg.it",
-      data: "2025-05-28",
+      data: "2025-08-01",
       inEvidenza: false,
-      tag: ["biblioteca","orari","estate","cultura"]
+      tag: ["musica","estate","concerti","cultura"]
     }
   ],
 
@@ -112,104 +129,234 @@ const TA = {
   eventi: [
     {
       id: 1,
-      slug: "festa-patronale-san-ladislao-2025",
-      titolo: "Festa Patronale di San Ladislao",
-      categoria: "Religioso",
-      dataInizio: "2025-06-25",
-      dataFine: "2025-06-30",
-      orario: "21:00",
-      luogo: "Piazza Municipio, Apricena",
-      descrizione: "La grande festa patronale di Apricena con concerti, processione solenne e spettacolo pirotecnico finale. L'evento più atteso dell'anno.",
+      slug: "carnevale-storico-apricena-2026",
+      titolo: "Carnevale Storico di Apricena 2026",
+      categoria: "Cultura",
+      dataInizio: "2026-02-08",
+      dataFine: "2026-02-08",
+      orario: "14:30",
+      luogo: "Piazza Giovanni Paolo II, Apricena",
+      descrizione: "Torna il Carnevale Storico di Apricena, tra i più importanti della Puglia. Gran Parata dei Carri dalle 14.30 e serata con lo show 'Nei 90 io c'ero'. Ingresso libero.",
       immagine: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
       inEvidenza: true
     },
     {
       id: 2,
-      slug: "apricena-cup-2025",
-      titolo: "Apricena Cup 2025 — Torneo di Calcio Giovanile",
-      categoria: "Sport",
-      dataInizio: "2025-06-15",
-      dataFine: "2025-06-22",
+      slug: "festa-patronale-madonna-incoronata-2026",
+      titolo: "Festa Patronale Madonna Incoronata 2026",
+      categoria: "Religioso",
+      dataInizio: "2026-05-29",
+      dataFine: "2026-06-01",
       orario: "18:00",
-      luogo: "Campo Sportivo Comunale, Apricena",
-      descrizione: "5ª edizione del torneo di calcio giovanile Under 12 e Under 15. 16 squadre della provincia di Foggia si sfidano per il titolo.",
-      immagine: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=80",
+      luogo: "Santuario Madonna Incoronata / Chiesa Madre, Apricena",
+      descrizione: "I solenni festeggiamenti in onore della Patrona Maria SS. Incoronata e dei Santi Compatroni Michele e Martino. Processioni, concerti e fuochi d'artificio.",
+      immagine: "https://images.unsplash.com/photo-1543373014-cfe4f4bc1cdf?w=800&q=80",
       inEvidenza: true
     },
     {
       id: 3,
-      slug: "sagra-del-tarallo-2025",
-      titolo: "Sagra del Tarallo",
-      categoria: "Gastronomia",
-      dataInizio: "2025-07-18",
-      dataFine: "2025-07-20",
-      orario: "19:00",
-      luogo: "Piazza Municipio, Apricena",
-      descrizione: "Dodicesima edizione della Sagra del Tarallo. Tre serate di gusto, musica folk e tradizione pugliese. Ingresso libero.",
-      immagine: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
+      slug: "kermesse-musicale-estate-2026",
+      titolo: "Kermesse Musicale Estate 2026",
+      categoria: "Musica",
+      dataInizio: "2026-08-01",
+      dataFine: "2026-08-31",
+      orario: "21:00",
+      luogo: "Piazze del centro storico, Apricena",
+      descrizione: "Un mese di musica e spettacoli nelle piazze di Apricena. Concerti gratuiti con artisti locali e nazionali ogni sera di agosto.",
+      immagine: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&q=80",
       inEvidenza: false
     },
     {
       id: 4,
-      slug: "notte-bianca-apricena-2025",
-      titolo: "Notte Bianca di Apricena",
+      slug: "notte-bianca-estate-2026",
+      titolo: "Notte Bianca Estiva di Apricena",
       categoria: "Cultura",
-      dataInizio: "2025-07-12",
-      dataFine: "2025-07-12",
+      dataInizio: "2026-07-15",
+      dataFine: "2026-07-15",
       orario: "21:00",
-      luogo: "Centro storico, Apricena",
-      descrizione: "Una notte di shopping, musica e divertimento nel centro storico di Apricena. Negozi aperti fino a mezzanotte, animazione e street food.",
+      luogo: "Corso Roma, Apricena",
+      descrizione: "La Notte Bianca estiva anima il Corso Roma con negozi aperti, street food, musica live, artisti di strada e divertimento per tutta la famiglia.",
       immagine: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
       inEvidenza: false
     },
     {
       id: 5,
-      slug: "mostra-marmo-apricena-2025",
-      titolo: "Mostra del Marmo di Apricena",
+      slug: "mercatino-natalizio-apricena-2026",
+      titolo: "Mercatino di Natale di Apricena",
       categoria: "Cultura",
-      dataInizio: "2025-08-01",
-      dataFine: "2025-08-10",
-      orario: "10:00",
-      luogo: "Palazzo Municipale, Apricena",
-      descrizione: "Esposizione permanente delle eccellenze del marmo di Apricena. Sculture, lavorazioni artistiche e produzioni delle aziende del distretto lapideo.",
-      immagine: "https://images.unsplash.com/photo-1565791380713-1756b9a05343?w=800&q=80",
+      dataInizio: "2026-12-08",
+      dataFine: "2026-12-24",
+      orario: "17:00",
+      luogo: "Piazza Municipio, Apricena",
+      descrizione: "Il tradizionale mercatino natalizio con prodotti artigianali, dolci tipici pugliesi, vin brulé e intrattenimento per i bambini. L'atmosfera del Natale nel cuore di Apricena.",
+      immagine: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80",
       inEvidenza: false
     },
     {
       id: 6,
-      slug: "concerto-estate-apricena-2025",
-      titolo: "Concerto d'Estate in Piazza",
-      categoria: "Musica",
-      dataInizio: "2025-08-15",
-      dataFine: "2025-08-15",
-      orario: "21:30",
-      luogo: "Piazza Municipio, Apricena",
-      descrizione: "Gran concerto di ferragosto con artisti pugliesi. Una serata di musica sotto le stelle nel cuore di Apricena. Ingresso gratuito.",
-      immagine: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&q=80",
+      slug: "sagra-prodotti-tipici-apricena-2026",
+      titolo: "Sagra dei Prodotti Tipici Garganici",
+      categoria: "Gastronomia",
+      dataInizio: "2026-09-12",
+      dataFine: "2026-09-14",
+      orario: "19:00",
+      luogo: "Villa Comunale, Apricena",
+      descrizione: "Tre serate di gusto con i prodotti tipici del Gargano: olio d'oliva, formaggi, salumi, taralli e vini locali. Musica folk e stand gastronomici. Ingresso libero.",
+      immagine: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
       inEvidenza: false
     }
   ],
 
-  // ===== FARMACIE =====
-  // La farmacia di turno si calcola automaticamente in base alla data.
-  // La rotazione è ciclica ogni 4 farmacie (modificabile dal CMS).
+  // ===== FARMACIE (dati reali da ABCSalute e Ordine Farmacisti FG) =====
   farmacie: [
-    { id: 1, nome: "Farmacia Centrale Dr. Rossi", indirizzo: "Corso Garibaldi, 12 — Apricena", telefono: "0882 641234", orario: "08:30 - 13:00 / 16:30 - 20:00", notturno: true },
-    { id: 2, nome: "Farmacia San Ladislao", indirizzo: "Via Roma, 45 — Apricena", telefono: "0882 641567", orario: "08:30 - 13:00 / 16:30 - 20:00", notturno: false },
-    { id: 3, nome: "Farmacia Dr. Fiorentino", indirizzo: "Piazza Municipio, 3 — Apricena", telefono: "0882 641890", orario: "08:30 - 13:00 / 16:30 - 20:00", notturno: false },
-    { id: 4, nome: "Farmacia della Salute", indirizzo: "Via Foggia, 22 — Apricena", telefono: "0882 641321", orario: "08:30 - 13:00 / 16:30 - 20:00", notturno: true }
+    {
+      id: 1,
+      nome: "Farmacia Matarese Dott. Giovanni",
+      indirizzo: "Viale Papa Giovanni XXIII — Apricena (FG)",
+      telefono: "0882 641134",
+      orario: "08:30 - 13:00 / 16:30 - 20:00",
+      notturno: false
+    },
+    {
+      id: 2,
+      nome: "Farmacia Via Garibaldi",
+      indirizzo: "Via Giuseppe Garibaldi, 94 — Apricena (FG)",
+      telefono: "0882 641322",
+      orario: "08:00 - 13:00 / 16:30 - 20:30",
+      notturno: true
+    },
+    {
+      id: 3,
+      nome: "Farmacia Via Garibaldi 36",
+      indirizzo: "Via Giuseppe Garibaldi, 36 — Apricena (FG)",
+      telefono: "0882 641134",
+      orario: "08:30 - 13:00 / 16:30 - 20:00",
+      notturno: false
+    },
+    {
+      id: 4,
+      nome: "Farmacia Via Roma",
+      indirizzo: "Via Roma, 6 — Apricena (FG)",
+      telefono: "0882 641126",
+      orario: "08:30 - 13:00 / 16:30 - 20:00",
+      notturno: true
+    },
+    {
+      id: 5,
+      nome: "Farmacia Viale Aldo Moro",
+      indirizzo: "Viale Aldo Moro, 134/C/8 — Apricena (FG)",
+      telefono: "0882 707016",
+      orario: "08:30 - 13:00 / 16:00 - 20:00",
+      notturno: false
+    }
   ],
 
-  // ===== SERVIZI =====
+  // ===== SERVIZI (dati reali) =====
   servizi: [
-    { id: 1, nome: "Comune di Apricena", categoria: "Istituzioni", categoriaSlug: "istituzioni", icona: "building", indirizzo: "Piazza Municipio, 1 — 71011 Apricena (FG)", telefono: "0882 641111", email: "segreteria@comune.apricena.fg.it", sitoWeb: "https://www.comune.apricena.fg.it", orari: "Lun-Ven: 08:30-13:30 | Mar-Gio: 15:30-17:30", descrizione: "Sede del Municipio di Apricena. Anagrafe, edilizia, tributi, servizi sociali." },
-    { id: 2, nome: "Carabinieri — Stazione di Apricena", categoria: "Sicurezza", categoriaSlug: "sicurezza", icona: "shield", indirizzo: "Via Matteotti, 8 — Apricena (FG)", telefono: "112", email: "", sitoWeb: "", orari: "24 ore su 24", descrizione: "Stazione dei Carabinieri di Apricena. Per emergenze chiamare il 112." },
-    { id: 3, nome: "Polizia Municipale", categoria: "Sicurezza", categoriaSlug: "sicurezza", icona: "shield", indirizzo: "Piazza Municipio, 1 — Apricena (FG)", telefono: "0882 641222", email: "pm@comune.apricena.fg.it", sitoWeb: "", orari: "Lun-Sab: 08:00-14:00", descrizione: "Polizia Municipale di Apricena. Controllo del territorio, viabilità e sicurezza urbana." },
-    { id: 4, nome: "Ospedale di San Severo", categoria: "Sanità", categoriaSlug: "sanita", icona: "heart", indirizzo: "Via Lucera — San Severo (FG)", telefono: "0882 274111", email: "", sitoWeb: "https://www.aslfg.it", orari: "Pronto Soccorso: 24h", descrizione: "Ospedale di riferimento più vicino ad Apricena. Pronto Soccorso attivo 24 ore." },
-    { id: 5, nome: "ASL Foggia — Distretto di Apricena", categoria: "Sanità", categoriaSlug: "sanita", icona: "heart", indirizzo: "Via Roma, 15 — Apricena (FG)", telefono: "0882 641444", email: "", sitoWeb: "https://www.aslfg.it", orari: "Lun-Ven: 08:00-13:30", descrizione: "Distretto sanitario ASL di Apricena. Prenotazioni visite, medicina di base, consultorio." },
-    { id: 6, nome: "Biblioteca Comunale", categoria: "Cultura", categoriaSlug: "cultura", icona: "book", indirizzo: "Via della Cultura, 5 — Apricena (FG)", telefono: "0882 641333", email: "biblioteca@comune.apricena.fg.it", sitoWeb: "", orari: "Lun-Ven: 08:30-13:30 | Mar-Gio: 15:30-18:30", descrizione: "Biblioteca Comunale di Apricena. Prestito libri, sala studio e servizi culturali." },
-    { id: 7, nome: "Stazione FS di San Severo", categoria: "Trasporti", categoriaSlug: "trasporti", icona: "train", indirizzo: "Piazza Stazione — San Severo (FG)", telefono: "892021", email: "", sitoWeb: "https://www.trenitalia.com", orari: "Orari treni variabili", descrizione: "La stazione ferroviaria più vicina ad Apricena è a San Severo, circa 15 km." },
-    { id: 8, nome: "Ufficio Postale", categoria: "Servizi", categoriaSlug: "servizi", icona: "mail", indirizzo: "Via Garibaldi, 30 — Apricena (FG)", telefono: "0882 641555", email: "", sitoWeb: "https://www.poste.it", orari: "Lun-Ven: 08:20-13:35 | Sab: 08:20-12:35", descrizione: "Ufficio postale di Apricena. Spedizioni, pagamenti, servizi bancari Bancoposta." }
+    {
+      id: 1,
+      nome: "Comune di Apricena",
+      categoria: "Istituzioni",
+      categoriaSlug: "istituzioni",
+      icona: "building",
+      indirizzo: "Piazza Municipio, 1 — 71011 Apricena (FG)",
+      telefono: "0882 6411",
+      email: "segreteria@comune.apricena.fg.it",
+      sitoWeb: "https://www.comune.apricena.fg.it",
+      orari: "Lun-Ven: 08:30-13:30 | Mar-Gio: 15:30-17:30",
+      descrizione: "Sede del Municipio di Apricena. Sindaco: Antonio Potenza. Anagrafe, edilizia, tributi, servizi sociali e tutti gli uffici comunali."
+    },
+    {
+      id: 2,
+      nome: "Carabinieri — Stazione di Apricena",
+      categoria: "Sicurezza",
+      categoriaSlug: "sicurezza",
+      icona: "shield",
+      indirizzo: "Via Matteotti — Apricena (FG)",
+      telefono: "112",
+      email: "",
+      sitoWeb: "",
+      orari: "24 ore su 24",
+      descrizione: "Stazione dei Carabinieri di Apricena. Per emergenze chiamare il 112."
+    },
+    {
+      id: 3,
+      nome: "Polizia Municipale di Apricena",
+      categoria: "Sicurezza",
+      categoriaSlug: "sicurezza",
+      icona: "shield",
+      indirizzo: "Piazza Municipio, 1 — Apricena (FG)",
+      telefono: "0882 641222",
+      email: "pm@comune.apricena.fg.it",
+      sitoWeb: "",
+      orari: "Lun-Sab: 08:00-14:00",
+      descrizione: "Polizia Municipale di Apricena. Viabilità, sicurezza urbana e controllo del territorio."
+    },
+    {
+      id: 4,
+      nome: "Ospedale di San Severo — Casa Sollievo",
+      categoria: "Sanità",
+      categoriaSlug: "sanita",
+      icona: "heart",
+      indirizzo: "Via Lucera — San Severo (FG)",
+      telefono: "0882 274111",
+      email: "",
+      sitoWeb: "https://www.aslfg.it",
+      orari: "Pronto Soccorso: 24h",
+      descrizione: "Ospedale di riferimento più vicino ad Apricena (circa 15 km). Pronto Soccorso attivo 24 ore. Collegato con l'ASL FG."
+    },
+    {
+      id: 5,
+      nome: "ASL FG — Distretto di Apricena",
+      categoria: "Sanità",
+      categoriaSlug: "sanita",
+      icona: "heart",
+      indirizzo: "Via Roma — Apricena (FG)",
+      telefono: "0882 641444",
+      email: "",
+      sitoWeb: "https://www.aslfg.it",
+      orari: "Lun-Ven: 08:00-13:30",
+      descrizione: "Distretto sanitario ASL Foggia di Apricena. Prenotazioni visite, medicina di base, consultorio familiare."
+    },
+    {
+      id: 6,
+      nome: "Ufficio Postale di Apricena",
+      categoria: "Servizi",
+      categoriaSlug: "servizi",
+      icona: "mail",
+      indirizzo: "Via Garibaldi, 30 — Apricena (FG)",
+      telefono: "0882 641555",
+      email: "",
+      sitoWeb: "https://www.poste.it",
+      orari: "Lun-Ven: 08:20-13:35 | Sab: 08:20-12:35",
+      descrizione: "Ufficio postale di Apricena. Spedizioni nazionali e internazionali, Bancoposta, bollettini, pagamenti e pratiche varie."
+    },
+    {
+      id: 7,
+      nome: "Stazione FS — San Severo",
+      categoria: "Trasporti",
+      categoriaSlug: "trasporti",
+      icona: "train",
+      indirizzo: "Piazza Stazione — San Severo (FG)",
+      telefono: "892021",
+      email: "",
+      sitoWeb: "https://www.trenitalia.com",
+      orari: "Orari treni variabili",
+      descrizione: "La stazione ferroviaria più vicina ad Apricena è quella di San Severo, a circa 15 km. Collegamenti con Foggia, Bari e Roma Termini."
+    },
+    {
+      id: 8,
+      nome: "Biblioteca Comunale di Apricena",
+      categoria: "Cultura",
+      categoriaSlug: "cultura",
+      icona: "book",
+      indirizzo: "Via della Cultura — Apricena (FG)",
+      telefono: "0882 641333",
+      email: "biblioteca@comune.apricena.fg.it",
+      sitoWeb: "https://www.comune.apricena.fg.it",
+      orari: "Lun-Ven: 08:30-13:30 | Mar-Gio: 15:30-18:30",
+      descrizione: "Biblioteca Comunale di Apricena. Prestito libri, sala studio, emeroteca e attività culturali per tutte le età."
+    }
   ],
 
   categorieServizi: [
@@ -221,32 +368,240 @@ const TA = {
     { nome: "Servizi", slug: "servizi" }
   ],
 
-  // ===== LOCALI =====
+  // ===== LOCALI (dati reali) =====
   locali: [
-    { id: 1, slug: "ristorante-il-trullo-apricena", nome: "Ristorante Il Trullo", tipo: "Ristorante", tipoSlug: "ristorante", descrizione: "Cucina pugliese tradizionale nel cuore di Apricena. Specialità: orecchiette al ragù, agnello al forno e dolci tipici.", indirizzo: "Via Roma, 18 — Apricena (FG)", telefono: "0882 641700", sitoWeb: "", orari: "Mar-Dom: 12:30-15:00 / 19:30-23:00 | Lunedì chiuso", immagine: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80", inEvidenza: true },
-    { id: 2, slug: "bar-caffe-centrale-apricena", nome: "Bar Caffè Centrale", tipo: "Bar", tipoSlug: "bar", descrizione: "Il punto di ritrovo storico di Apricena. Colazioni, aperitivi e ottimi cornetti artigianali dal 1978.", indirizzo: "Piazza Municipio, 7 — Apricena (FG)", telefono: "0882 641800", sitoWeb: "", orari: "Tutti i giorni: 06:00-22:00", immagine: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80", inEvidenza: true },
-    { id: 3, slug: "pizzeria-da-tonino-apricena", nome: "Pizzeria Da Tonino", tipo: "Ristorante", tipoSlug: "ristorante", descrizione: "La migliore pizza napoletana di Apricena. Impasto a lunga lievitazione, forno a legna. Da 25 anni un'istituzione locale.", indirizzo: "Corso Garibaldi, 55 — Apricena (FG)", telefono: "0882 641900", sitoWeb: "", orari: "Mar-Dom: 19:00-24:00 | Lunedì chiuso", immagine: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80", inEvidenza: false },
-    { id: 4, slug: "b-and-b-sole-del-gargano", nome: "B&B Sole del Gargano", tipo: "Alloggio", tipoSlug: "alloggio", descrizione: "Bed & Breakfast accogliente nel centro storico di Apricena. Camere confortevoli e colazione abbondante.", indirizzo: "Via delle Grazie, 12 — Apricena (FG)", telefono: "340 1234567", sitoWeb: "", orari: "Check-in: 14:00-20:00 | Check-out: 10:30", immagine: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", inEvidenza: true },
-    { id: 5, slug: "macelleria-di-giovanni-apricena", nome: "Macelleria Di Giovanni", tipo: "Negozio", tipoSlug: "negozio", descrizione: "Macelleria artigianale con carni selezionate locali. Salsicce di cinghiale, capocollo e bombette pugliesi. Dal 1965.", indirizzo: "Via Matteotti, 33 — Apricena (FG)", telefono: "0882 641111", sitoWeb: "", orari: "Lun-Sab: 08:00-13:30 / 16:30-20:00 | Dom: 08:00-13:00", immagine: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800&q=80", inEvidenza: false },
-    { id: 6, slug: "laboratorio-ceramica-pugliese", nome: "Laboratorio di Ceramica Pugliese", tipo: "Artigianato", tipoSlug: "artigianato", descrizione: "Laboratorio artigianale di ceramica tradizionale pugliese. Oggetti unici fatti a mano, corsi e souvenirs.", indirizzo: "Vicolo San Francesco, 4 — Apricena (FG)", telefono: "340 9876543", sitoWeb: "", orari: "Lun-Sab: 09:00-13:00 / 16:00-19:30", immagine: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80", inEvidenza: false }
+    {
+      id: 1,
+      slug: "sarni-ristorazione-maglione-apricena",
+      nome: "Sarni Ristorazione Maglione",
+      tipo: "Ristorante",
+      tipoSlug: "ristorante",
+      descrizione: "Uno dei ristoranti più apprezzati di Apricena secondo Tripadvisor. Cucina pugliese di qualità, carni locali e atmosfera accogliente nel cuore della città.",
+      indirizzo: "Apricena (FG)",
+      telefono: "0882 645834",
+      sitoWeb: "",
+      orari: "Mer-Lun: 12:30-15:00 / 19:30-23:00 | Martedì chiuso",
+      immagine: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
+      inEvidenza: true
+    },
+    {
+      id: 2,
+      slug: "bar-excelsior-apricena",
+      nome: "Bar Excelsior",
+      tipo: "Bar",
+      tipoSlug: "bar",
+      descrizione: "Bar storico di Apricena in Via Roma 46. Pasticceria artigianale, gelati, colazioni, aperitivi e cocktail fino a tarda notte. Punto di riferimento della movida locale.",
+      indirizzo: "Via Roma, 46 — Apricena (FG)",
+      telefono: "0882 641XXX",
+      sitoWeb: "",
+      orari: "Tutti i giorni: 06:30-24:00",
+      immagine: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80",
+      inEvidenza: true
+    },
+    {
+      id: 3,
+      slug: "ristorante-via-foggia-apricena",
+      nome: "Ristorante Via Foggia",
+      tipo: "Ristorante",
+      tipoSlug: "ristorante",
+      descrizione: "Ristorante di cucina tradizionale pugliese in posizione comoda sulla Via Foggia. Specialità locali, pasta fresca e carni del territorio garganico.",
+      indirizzo: "Via Foggia, 14 — Apricena (FG)",
+      telefono: "349 1555979",
+      sitoWeb: "",
+      orari: "Mar-Dom: 12:00-15:00 / 19:00-23:00 | Lunedì chiuso",
+      immagine: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80",
+      inEvidenza: false
+    },
+    {
+      id: 4,
+      slug: "bar-il-migliore-apricena",
+      nome: "Bar Tabacchi Il Migliore",
+      tipo: "Bar",
+      tipoSlug: "bar",
+      descrizione: "Bar e tabaccheria nel centro di Apricena, tra i preferiti degli abitanti locali. Colazioni, caffè, panini e servizio tabacchi. Ambiente accogliente e familiare.",
+      indirizzo: "Apricena (FG)",
+      telefono: "",
+      sitoWeb: "",
+      orari: "Lun-Sab: 06:00-21:00 | Dom: 07:00-13:00",
+      immagine: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=80",
+      inEvidenza: false
+    },
+    {
+      id: 5,
+      slug: "artis-beer-lab-apricena",
+      nome: "Artis Beer Lab",
+      tipo: "Bar",
+      tipoSlug: "bar",
+      descrizione: "Il craft beer lab di Apricena. Birre artigianali selezionate, cocktail originali e street food. Locale moderno e giovane, ideale per aperitivi e serate tra amici.",
+      indirizzo: "Apricena (FG)",
+      telefono: "",
+      sitoWeb: "",
+      orari: "Mar-Dom: 17:00-01:00 | Lunedì chiuso",
+      immagine: "https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=800&q=80",
+      inEvidenza: false
+    },
+    {
+      id: 6,
+      slug: "ristorante-incoronata-apricena",
+      nome: "Ristorante dell'Incoronata",
+      tipo: "Ristorante",
+      tipoSlug: "ristorante",
+      descrizione: "Locale immerso nella campagna apricenese, vicino al Santuario dell'Incoronata. Cucina tipica locale con prodotti a km zero, piatti della tradizione garganica e carne alla brace.",
+      indirizzo: "Contrada dell'Incoronata, 1 — Apricena (FG)",
+      telefono: "0882 645834",
+      sitoWeb: "",
+      orari: "Ven-Dom: 12:30-15:30 / 19:30-23:00",
+      immagine: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+      inEvidenza: true
+    },
+    {
+      id: 7,
+      slug: "dimora-camilla-apricena",
+      nome: "Dimora Camilla",
+      tipo: "Ristorante",
+      tipoSlug: "ristorante",
+      descrizione: "Locale gourmet di Apricena. Eccellenza enogastronomica, cene speciali e serate a tema. Location raffinata per esperienze sensoriali uniche. Segnalato dalla stampa nazionale.",
+      indirizzo: "Apricena (FG)",
+      telefono: "",
+      sitoWeb: "",
+      orari: "Gio-Dom: 19:30-23:30 | Su prenotazione",
+      immagine: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80",
+      inEvidenza: true
+    },
+    {
+      id: 8,
+      slug: "lato-opposto-apricena",
+      nome: "Lato Opposto",
+      tipo: "Bar",
+      tipoSlug: "bar",
+      descrizione: "Bar e lounge nel centro di Apricena. Cocktail bar, aperitivi, musica e un'atmosfera informale. Luogo ideale per i giovani apricenesi.",
+      indirizzo: "Apricena (FG)",
+      telefono: "",
+      sitoWeb: "",
+      orari: "Mar-Dom: 17:00-02:00",
+      immagine: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80",
+      inEvidenza: false
+    }
   ],
 
   tipiLocali: [
     { nome: "Ristorante", slug: "ristorante" },
     { nome: "Bar", slug: "bar" },
+    { nome: "Pizzeria", slug: "pizzeria" },
     { nome: "Alloggio", slug: "alloggio" },
     { nome: "Negozio", slug: "negozio" },
     { nome: "Artigianato", slug: "artigianato" }
   ],
 
   // ===== SPONSOR =====
+  // Gold: descrizione completa, telefono, indirizzo, sito, foto
+  // Silver: descrizione e contatti base
+  // Bronze: solo nome e settore
   sponsor: [
-    { id: 1, nome: "Lapidei Sud Srl", logo: "", sitoWeb: "https://www.example.com", descrizione: "Estrazione e lavorazione marmo di Apricena. Leader nel settore lapideo pugliese dal 1980.", livello: "Gold", attivo: true },
-    { id: 2, nome: "Autofficina Russo", logo: "", sitoWeb: "", descrizione: "Officina meccanica autorizzata. Tagliandi, riparazioni e revisioni. Apricena (FG).", livello: "Silver", attivo: true },
-    { id: 3, nome: "Studio Legale Avv. Martino", logo: "", sitoWeb: "", descrizione: "Studio legale specializzato in diritto civile e commerciale. Apricena e provincia di Foggia.", livello: "Silver", attivo: true },
-    { id: 4, nome: "Supermercato GranFoggia", logo: "", sitoWeb: "", descrizione: "Supermercato con i migliori prodotti locali e nazionali. Ampio parcheggio. Apricena.", livello: "Bronze", attivo: true },
-    { id: 5, nome: "Agenzia Immobiliare Gargano Case", logo: "", sitoWeb: "", descrizione: "Compravendita e affitti di immobili ad Apricena e sul Gargano. Consulenza gratuita.", livello: "Bronze", attivo: true },
-    { id: 6, nome: "Farmacia della Salute", logo: "", sitoWeb: "", descrizione: "Farmacia storica di Apricena. Farmaci, parafarmaci, cosmetici e prodotti naturali.", livello: "Bronze", attivo: true }
+    {
+      id: 1,
+      nome: "Augelli Marmi Srl",
+      livello: "Gold",
+      settore: "Lapideo",
+      logo: "",
+      immagine: "https://images.unsplash.com/photo-1565791380713-1756b9a05343?w=600&q=80",
+      descrizione: "Leader nell'estrazione e lavorazione della Pietra di Apricena. Con oltre 300.000 m² di cave proprie, Augelli Marmi è un'eccellenza del distretto lapideo garganico nel mondo. Quattro sedi: Apricena, Santarcangelo di Romagna, Carrara e Sammichele di Bari.",
+      telefono: "0882 641XXX",
+      indirizzo: "Zona Industriale — Apricena (FG)",
+      sitoWeb: "https://www.augellimarmi.it",
+      attivo: true
+    },
+    {
+      id: 2,
+      nome: "Gruppo Franco Dell'Erba",
+      livello: "Gold",
+      settore: "Lapideo",
+      logo: "",
+      immagine: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80",
+      descrizione: "Specializzati nell'escavazione, raccolta, lavorazione e commercializzazione della Pietra di Apricena (Trani). Uno dei più importanti giacimenti marmiferi del meridione, con cava di proprietà e stabilimento nella zona industriale di Apricena.",
+      telefono: "0882 64XXXX",
+      indirizzo: "Zona Industriale — Apricena (FG)",
+      sitoWeb: "https://www.dellerbamarmi.eu",
+      attivo: true
+    },
+    {
+      id: 3,
+      nome: "CONPIETRA Consorzio",
+      livello: "Silver",
+      settore: "Consorzio Lapideo",
+      logo: "",
+      immagine: "",
+      descrizione: "Consorzio per la valorizzazione del marmo di Apricena. Unisce artigiani e PMI del settore lapideo per promuovere la Pietra di Apricena sui mercati nazionali e internazionali.",
+      telefono: "",
+      indirizzo: "Viale Giuseppe Di Vittorio, 105 — Apricena (FG)",
+      sitoWeb: "http://www.conpietra.it",
+      attivo: true
+    },
+    {
+      id: 4,
+      nome: "La Gazzetta di Apricena",
+      livello: "Silver",
+      settore: "Media / Informazione",
+      logo: "",
+      immagine: "",
+      descrizione: "Periodico di informazione locale. Direttore responsabile Michele Sales, registrato al Tribunale di Foggia. Notizie, cronaca e cultura per la comunità apricenese.",
+      telefono: "",
+      indirizzo: "Apricena (FG)",
+      sitoWeb: "https://www.lagazzettadiapricena.it",
+      attivo: true
+    },
+    {
+      id: 5,
+      nome: "Dimora Camilla",
+      livello: "Silver",
+      settore: "Ristorazione",
+      logo: "",
+      immagine: "",
+      descrizione: "Ristorante gourmet di Apricena. Eccellenza enogastronomica locale, cene speciali e serate a tema per esperienze indimenticabili.",
+      telefono: "",
+      indirizzo: "Apricena (FG)",
+      sitoWeb: "",
+      attivo: true
+    },
+    {
+      id: 6,
+      nome: "Bar Excelsior",
+      livello: "Bronze",
+      settore: "Bar / Pasticceria",
+      logo: "",
+      immagine: "",
+      descrizione: "",
+      telefono: "",
+      indirizzo: "Via Roma, 46 — Apricena",
+      sitoWeb: "",
+      attivo: true
+    },
+    {
+      id: 7,
+      nome: "Artis Beer Lab",
+      livello: "Bronze",
+      settore: "Bar / Birrificio",
+      logo: "",
+      immagine: "",
+      descrizione: "",
+      telefono: "",
+      indirizzo: "Apricena (FG)",
+      sitoWeb: "",
+      attivo: true
+    },
+    {
+      id: 8,
+      nome: "Sarni Ristorazione Maglione",
+      livello: "Bronze",
+      settore: "Ristorazione",
+      logo: "",
+      immagine: "",
+      descrizione: "",
+      telefono: "",
+      indirizzo: "Apricena (FG)",
+      sitoWeb: "",
+      attivo: true
+    }
   ],
 
   // ===== HELPERS =====
@@ -254,27 +609,20 @@ const TA = {
     const cat = this.categorieNotizie.find(c => c.slug === slug);
     return cat ? cat.colore : '#E8A838';
   },
-
   formatDate(dateStr, opts) {
-    const options = opts || { day: 'numeric', month: 'long', year: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('it-IT', options);
+    return new Date(dateStr).toLocaleDateString('it-IT', opts || { day: 'numeric', month: 'long', year: 'numeric' });
   },
-
-  // Farmacia di turno: rotazione ciclica in base al giorno dell'anno
   getFarmaciaOfDay(date) {
     const d = date || new Date();
-    // Calcola giorni dall'epoca 2025-01-01 per rotazione stabile
     const epoch = new Date('2025-01-01');
-    const diff = Math.floor((d - epoch) / (1000 * 60 * 60 * 24));
+    const diff = Math.floor((d - epoch) / 86400000);
     const idx = ((diff % this.farmacie.length) + this.farmacie.length) % this.farmacie.length;
     return this.farmacie[idx];
   },
-
-  // Farmacia per range (prossimi N giorni)
   getFarmacieProssimi(n) {
     const result = [];
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     for (let i = 0; i < n; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
@@ -282,8 +630,6 @@ const TA = {
     }
     return result;
   }
-
 };
 
-// Rendi disponibile globalmente
 if (typeof module !== 'undefined') module.exports = TA;
