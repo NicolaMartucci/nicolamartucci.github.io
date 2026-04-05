@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Caricamento... — TuttoApricena</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="." class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+  </div></div>
+</header>
+<main style="padding-top:72px;min-height:80vh;display:flex;align-items:center;justify-content:center;">
+  <div id="content" style="text-align:center;padding:40px 24px">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pulse-dot 1.5s ease infinite">
+      <i data-lucide="loader" width="22" height="22" color="var(--color-primary)"></i>
+    </div>
+    <p style="color:var(--color-text-muted);font-size:14px">Caricamento...</p>
+  </div>
+</main>
+<script src="assets/js/data.js"></script>
+<script>
+  lucide.createIcons();
+
+  // Detect what kind of page was requested and redirect to right template
+  var path = window.location.pathname;
+  // Remove base /tuttoapricena/ prefix
+  var clean = path.replace(/^\/tuttoapricena\//,'').replace(/\/$/,'');
+  var parts = clean.split('/');
+
+  // e.g. clean = "notizie/carnevale-storico-apricena-2026-successo"
+  var section = parts[0];
+  var slug = parts[1];
+
+  function show404(){
+    document.getElementById('content').innerHTML =
+      '<h1 style="font-family:var(--font-display);font-size:5rem;font-weight:900;color:var(--color-accent);line-height:1;margin-bottom:16px">404</h1>'+
+      '<h2 style="font-family:var(--font-display);font-size:1.8rem;color:var(--color-primary);margin-bottom:12px">Pagina non trovata</h2>'+
+      '<p style="color:var(--color-text-muted);margin-bottom:28px">La pagina che cerchi non esiste o è stata spostata.</p>'+
+      '<a href="." class="btn-primary">Torna alla Home <i data-lucide=\\"arrow-right\\" width=\\"17\\" height=\\"17\\"></i></a>';
+    lucide.createIcons();
+  }
+
+  if(!section || !slug){
+    show404();
+  } else if(section === 'notizie'){
+    var item = TA.notizie.find(function(n){ return n.slug === slug; });
+    if(item){
+      // Redirect to the _slug_ template with correct relative path
+      window.location.replace('/tuttoapricena/notizie/_slug_/?slug='+encodeURIComponent(slug));
+    } else { show404(); }
+  } else if(section === 'eventi'){
+    var item = TA.eventi.find(function(e){ return e.slug === slug; });
+    if(item){
+      window.location.replace('/tuttoapricena/eventi/_slug_/?slug='+encodeURIComponent(slug));
+    } else { show404(); }
+  } else if(section === 'locali'){
+    var item = TA.locali.find(function(l){ return l.slug === slug; });
+    if(item){
+      window.location.replace('/tuttoapricena/locali/_slug_/?slug='+encodeURIComponent(slug));
+    } else { show404(); }
+  } else {
+    show404();
+  }
+</script>
+</body>
+</html>
