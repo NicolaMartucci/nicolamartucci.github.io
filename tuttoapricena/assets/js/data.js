@@ -1,5 +1,5 @@
 // TUTTOAPRICENA — DATA FILE
-// Aggiornato dal CMS il 05/04/2026, 04:31:19
+// Aggiornato dal CMS il 05/04/2026, 04:34:52
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -18,21 +18,6 @@ const TA = {
     "colorAccent": "#E8A838"
   },
   "notizie": [
-    {
-      "id": 1775356264765,
-      "slug": "prova",
-      "titolo": "prova",
-      "categoria": "Cronaca",
-      "categoriaSlug": "cronaca",
-      "immagine": "",
-      "abstract": "aaaaaaaaaaa",
-      "testo": "aaaaaaaaaaaa",
-      "fonte": "",
-      "fonteUrl": "",
-      "data": "2026-04-05",
-      "inEvidenza": false,
-      "tag": []
-    },
     {
       "id": 1,
       "slug": "carnevale-storico-apricena-2026-successo",
