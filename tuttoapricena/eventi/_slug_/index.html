@@ -31,46 +31,38 @@
 <script src="../../assets/js/main.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
   function getSlug(){
     var qs=new URLSearchParams(window.location.search);
     if(qs.get('slug')) return qs.get('slug');
-    var parts=window.location.pathname.replace(/\/$/,'').split('/');
+    var parts=window.location.pathname.replace(/\/$,'').split('/');
     var s=parts[parts.length-1];
     return (s==='_slug_'||!s)?'':s;
   }
-
   var slug=getSlug();
   var evento=slug?TA.eventi.find(function(e){return e.slug===slug;}):null;
   var main=document.getElementById('evento-main');
-
   if(!evento){
-    main.innerHTML='<div class="not-found" style="padding-top:80px"><h2>Evento non trovato</h2><p>L\'evento cercato non è disponibile.</p><a href="../../eventi/" class="btn-primary" style="margin-top:20px">Torna agli eventi</a></div>';
+    main.innerHTML='<div class="not-found" style="padding-top:80px"><h2>Evento non trovato</h2><p>L'evento cercato non è disponibile.</p><a href="../../eventi/" class="btn-primary" style="margin-top:20px">Torna agli eventi</a></div>';
   } else {
     document.title=evento.titolo+' — TuttoApricena';
     var isMultiDay=evento.dataFine!==evento.dataInizio;
     main.innerHTML=
       '<div class="article-header"><div class="article-header-inner">'+
-        '<a href="../../eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>'+
-        '<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">'+evento.categoria+'</span></div>'+
-        '<h1 class="article-title">'+evento.titolo+'</h1>'+
-        '<div class="article-info">'+
-          '<span><i data-lucide="calendar" width="13" height="13"></i> '+TA.formatDate(evento.dataInizio)+(isMultiDay?' — '+TA.formatDate(evento.dataFine):'')+'</span>'+
-          '<span>·</span><span><i data-lucide="clock" width="13" height="13"></i> ore '+evento.orario+'</span>'+
-          '<span>·</span><span><i data-lucide="map-pin" width="13" height="13"></i> '+evento.luogo+'</span>'+
-        '</div>'+
+      '<a href="../../eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>'+
+      '<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">'+evento.categoria+'</span></div>'+
+      '<h1 class="article-title">'+evento.titolo+'</h1>'+
+      '<div class="article-info">'+
+        '<span><i data-lucide="calendar" width="13" height="13"></i> '+TA.formatDate(evento.dataInizio)+(isMultiDay?' – '+TA.formatDate(evento.dataFine):'')+' </span>'+
+        '<span>·</span><span><i data-lucide="clock" width="13" height="13"></i> ore '+evento.orario+'</span>'+
+        '<span>·</span><span><i data-lucide="map-pin" width="13" height="13"></i> '+evento.luogo+'</span>'+
+      '</div>'+
       '</div></div>'+
       '<div class="article-body">'+
-        '<img class="article-img" src="'+evento.immagine+'" alt="'+evento.titolo+'" />'+
+        (evento.immagine?'<img class="article-img" src="'+evento.immagine+'" alt="'+evento.titolo+'" />':'')+
         '<div class="prose-content"><p style="font-size:17px;line-height:1.8">'+evento.descrizione+'</p></div>'+
-        '<div style="background:#fff;border-radius:16px;padding:24px 28px;margin-top:32px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px">'+
-          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Data</span><strong>'+TA.formatDate(evento.dataInizio)+(isMultiDay?' – '+TA.formatDate(evento.dataFine):'')+'</strong></div>'+
-          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orario</span><strong>Ore '+evento.orario+'</strong></div>'+
-          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</span><strong>'+evento.luogo+'</strong></div>'+
-        '</div>'+
       '</div>';
+    lucide.createIcons();
   }
-  lucide.createIcons();
 </script>
 </body>
 </html>
