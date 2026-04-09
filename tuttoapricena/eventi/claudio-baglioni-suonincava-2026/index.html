@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evento — TuttoApricena</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-evento-single">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../../notizie/">Notizie</a><a href="../../eventi/" class="active">Eventi</a><a href="../../farmacie/">Farmacie</a><a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../../chi-siamo/" class="link-plain">Chi siamo</a><a href="../../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../../notizie/">Notizie</a><a href="../../eventi/" class="active">Eventi</a><a href="../../farmacie/">Farmacie</a><a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a></nav>
+    <a href="../../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+<main class="main-content" id="evento-main">
+  <div style="padding-top:80px;text-align:center;color:var(--color-text-muted)">Caricamento...</div>
+</main>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../../notizie/">Notizie</a></li><li><a href="../../eventi/">Eventi</a></li><li><a href="../../farmacie/">Farmacie</a></li><li><a href="../../servizi/">Servizi</a></li><li><a href="../../locali/">Locali</a></li><li><a href="../../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../../chi-siamo/">Chi Siamo</a></li><li><a href="../../contatti/">Contatti</a></li><li><a href="../../privacy/">Privacy Policy</a></li><li><a href="../../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../../assets/js/data.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
 
+  function getSlug(){
+    var qs=new URLSearchParams(window.location.search);
+    if(qs.get('slug')) return qs.get('slug');
+    var parts=window.location.pathname.replace(/\/$/,'').split('/');
+    var s=parts[parts.length-1];
+    return (s==='_slug_'||!s)?'':s;
+  }
+
+  var slug=getSlug();
+  var evento=slug?TA.eventi.find(function(e){return e.slug===slug;}):null;
+  var main=document.getElementById('evento-main');
+
+  if(!evento){
+    main.innerHTML='<div class="not-found" style="padding-top:80px"><h2>Evento non trovato</h2><p>L\'evento cercato non è disponibile.</p><a href="../../eventi/" class="btn-primary" style="margin-top:20px">Torna agli eventi</a></div>';
+  } else {
+    document.title=evento.titolo+' — TuttoApricena';
+    var isMultiDay=evento.dataFine!==evento.dataInizio;
+    main.innerHTML=
+      '<div class="article-header"><div class="article-header-inner">'+
+        '<a href="../../eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>'+
+        '<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">'+evento.categoria+'</span></div>'+
+        '<h1 class="article-title">'+evento.titolo+'</h1>'+
+        '<div class="article-info">'+
+          '<span><i data-lucide="calendar" width="13" height="13"></i> '+TA.formatDate(evento.dataInizio)+(isMultiDay?' — '+TA.formatDate(evento.dataFine):'')+'</span>'+
+          '<span>·</span><span><i data-lucide="clock" width="13" height="13"></i> ore '+evento.orario+'</span>'+
+          '<span>·</span><span><i data-lucide="map-pin" width="13" height="13"></i> '+evento.luogo+'</span>'+
+        '</div>'+
+      '</div></div>'+
+      '<div class="article-body">'+
+        '<img class="article-img" src="'+evento.immagine+'" alt="'+evento.titolo+'" />'+
+        '<div class="prose-content"><p style="font-size:17px;line-height:1.8">'+evento.descrizione+'</p></div>'+
+        '<div style="background:#fff;border-radius:16px;padding:24px 28px;margin-top:32px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px">'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Data</span><strong>'+TA.formatDate(evento.dataInizio)+(isMultiDay?' – '+TA.formatDate(evento.dataFine):'')+'</strong></div>'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orario</span><strong>Ore '+evento.orario+'</strong></div>'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</span><strong>'+evento.luogo+'</strong></div>'+
+        '</div>'+
+      '</div>';
+  }
+  lucide.createIcons();
+</script>
+</body>
+</html>
