@@ -1,155 +1,75 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eventi — TuttoApricena</title>
-  <meta name="description" content="Tutti gli eventi e il calendario di Apricena." />
-  <link rel="stylesheet" href="../assets/css/style.css" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evento — TuttoApricena</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
-<body class="page-eventi">
-
+<body class="page-evento-single">
 <header id="navbar">
   <div class="navbar-inner"><div class="navbar-row">
-    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
-    <nav class="navbar-links">
-      <a href="../notizie/">Notizie</a><a href="../eventi/" class="active">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a>
-    </nav>
-    <div class="navbar-actions">
-      <a href="../chi-siamo/" class="link-plain">Chi siamo</a>
-      <a href="../contatti/" class="link-btn">Contatti</a>
-    </div>
-    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
-      <i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i>
-      <i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i>
-    </button>
+    <a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../../notizie/">Notizie</a><a href="../../eventi/" class="active">Eventi</a><a href="../../farmacie/">Farmacie</a><a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../../chi-siamo/" class="link-plain">Chi siamo</a><a href="../../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
   </div></div>
   <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
-    <nav class="mobile-nav">
-      <a href="../notizie/">Notizie</a><a href="../eventi/" class="active">Eventi</a><a href="../farmacie/">Farmacie</a>
-      <a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a>
-    </nav>
-    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+    <nav class="mobile-nav"><a href="../../notizie/">Notizie</a><a href="../../eventi/" class="active">Eventi</a><a href="../../farmacie/">Farmacie</a><a href="../../servizi/">Servizi</a><a href="../../locali/">Locali</a><a href="../../sponsor/">Sponsor</a></nav>
+    <a href="../../contatti/" class="mobile-cta">Contattaci</a>
   </div></div>
 </header>
-
-<main class="main-content">
-  <div class="page-header">
-    <div class="page-header-inner">
-      <em>Calendario</em>
-      <h1>Eventi</h1>
-      <p>Tutti gli appuntamenti e le manifestazioni ad Apricena</p>
-    </div>
-  </div>
-
-  <div class="container content-section">
-    <div class="filter-bar">
-      <div class="filter-search">
-        <i data-lucide="search" width="16" height="16"></i>
-        <input type="text" placeholder="Cerca eventi..." id="search-input" />
-      </div>
-      <div class="filter-pills" id="cat-filters">
-        <button class="filter-pill active" data-filter="tutti">Tutti</button>
-        <button class="filter-pill" data-filter="Religioso">Religioso</button>
-        <button class="filter-pill" data-filter="Sport">Sport</button>
-        <button class="filter-pill" data-filter="Gastronomia">Gastronomia</button>
-        <button class="filter-pill" data-filter="Cultura">Cultura</button>
-        <button class="filter-pill" data-filter="Musica">Musica</button>
-      </div>
-    </div>
-
-    <div class="cards-grid-3" data-filter-grid id="eventi-grid"></div>
-    <div class="empty-state" id="empty-state" style="display:none;">
-      <h3>Nessun evento trovato</h3>
-      <p>Prova a modificare i filtri di ricerca.</p>
-    </div>
-  </div>
+<main class="main-content" id="evento-main">
+  <div style="padding-top:80px;text-align:center;color:var(--color-text-muted)">Caricamento...</div>
 </main>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
-        <p>Il portale informativo indipendente di Apricena.</p>
-      </div>
-      <div class="footer-col"><h4>Sezioni</h4><ul>
-        <li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li>
-        <li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li>
-      </ul></div>
-      <div class="footer-col"><h4>Info</h4><ul>
-        <li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li>
-        <li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li>
-      </ul></div>
-    </div>
-    <div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div>
-  </div>
-</footer>
-
-<script src="../assets/js/data.js"></script>
-<script src="../assets/js/main.js"></script>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../../notizie/">Notizie</a></li><li><a href="../../eventi/">Eventi</a></li><li><a href="../../farmacie/">Farmacie</a></li><li><a href="../../servizi/">Servizi</a></li><li><a href="../../locali/">Locali</a></li><li><a href="../../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../../chi-siamo/">Chi Siamo</a></li><li><a href="../../contatti/">Contatti</a></li><li><a href="../../privacy/">Privacy Policy</a></li><li><a href="../../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../../assets/js/data.js"></script>
+<script src="../../assets/js/main.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  const grid = document.getElementById('eventi-grid');
-  function renderEventi(list) {
-    grid.innerHTML = list.map(e => `
-      <a href="../eventi/${e.slug}/" class="card" data-category="${e.categoria}" data-searchable="${e.titolo} ${e.descrizione} ${e.luogo}">
-        <div class="card-img">
-          <img src="${e.immagine}" alt="${e.titolo}" loading="lazy" />
-          <span class="evento-card-badge" style="position:absolute;top:12px;left:12px;">${e.categoria}</span>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <i data-lucide="calendar" width="11" height="11"></i>
-            ${TA.formatDate(e.dataInizio, {day:'numeric',month:'long',year:'numeric'})}
-            ${e.dataFine !== e.dataInizio ? ' – ' + TA.formatDate(e.dataFine, {day:'numeric',month:'long'}) : ''}
-            <span style="margin:0 4px">·</span>
-            <i data-lucide="clock" width="11" height="11"></i> ${e.orario}
-          </div>
-          <div class="card-title">${e.titolo}</div>
-          <p class="card-desc">${e.descrizione}</p>
-          <div class="card-meta" style="margin-top:8px;">
-            <i data-lucide="map-pin" width="11" height="11" color="var(--color-accent)"></i>
-            ${e.luogo}
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="card-cta">Dettagli <i data-lucide="arrow-right" width="13" height="13"></i></span>
-          ${e.inEvidenza ? '<span style="background:rgba(232,168,56,0.12);color:var(--color-accent);font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;">In evidenza</span>' : ''}
-        </div>
-      </a>
-    `).join('');
-    document.getElementById('empty-state').style.display = list.length ? 'none' : 'block';
-    lucide.createIcons();
-  }
-  renderEventi(TA.eventi);
-
-  let currentCat = 'tutti';
-  let currentSearch = '';
-  function applyFilters() {
-    const filtered = TA.eventi.filter(e => {
-      const matchCat = currentCat === 'tutti' || e.categoria === currentCat;
-      const matchSearch = !currentSearch || e.titolo.toLowerCase().includes(currentSearch) || e.descrizione.toLowerCase().includes(currentSearch);
-      return matchCat && matchSearch;
-    });
-    renderEventi(filtered);
+  function getSlug(){
+    var qs=new URLSearchParams(window.location.search);
+    if(qs.get('slug')) return qs.get('slug');
+    var parts=window.location.pathname.replace(/\/$/,'').split('/');
+    var s=parts[parts.length-1];
+    return (s==='_slug_'||!s)?'':s;
   }
 
-  document.getElementById('cat-filters').addEventListener('click', function(e) {
-    const pill = e.target.closest('.filter-pill');
-    if (!pill) return;
-    document.querySelectorAll('#cat-filters .filter-pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
-    currentCat = pill.getAttribute('data-filter');
-    applyFilters();
-  });
-  document.getElementById('search-input').addEventListener('input', function() {
-    currentSearch = this.value.toLowerCase().trim();
-    applyFilters();
-  });
+  var slug=getSlug();
+  var evento=slug?TA.eventi.find(function(e){return e.slug===slug;}):null;
+  var main=document.getElementById('evento-main');
 
+  if(!evento){
+    main.innerHTML='<div class="not-found" style="padding-top:80px"><h2>Evento non trovato</h2><p>L\'evento cercato non è disponibile.</p><a href="../../eventi/" class="btn-primary" style="margin-top:20px">Torna agli eventi</a></div>';
+  } else {
+    document.title=evento.titolo+' — TuttoApricena';
+    var isMultiDay=evento.dataFine!==evento.dataInizio;
+    main.innerHTML=
+      '<div class="article-header"><div class="article-header-inner">'+
+        '<a href="../../eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>'+
+        '<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">'+evento.categoria+'</span></div>'+
+        '<h1 class="article-title">'+evento.titolo+'</h1>'+
+        '<div class="article-info">'+
+          '<span><i data-lucide="calendar" width="13" height="13"></i> '+TA.formatDate(evento.dataInizio)+(isMultiDay?' — '+TA.formatDate(evento.dataFine):'')+'</span>'+
+          '<span>·</span><span><i data-lucide="clock" width="13" height="13"></i> ore '+evento.orario+'</span>'+
+          '<span>·</span><span><i data-lucide="map-pin" width="13" height="13"></i> '+evento.luogo+'</span>'+
+        '</div>'+
+      '</div></div>'+
+      '<div class="article-body">'+
+        '<img class="article-img" src="'+evento.immagine+'" alt="'+evento.titolo+'" />'+
+        '<div class="prose-content"><p style="font-size:17px;line-height:1.8">'+evento.descrizione+'</p></div>'+
+        '<div style="background:#fff;border-radius:16px;padding:24px 28px;margin-top:32px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px">'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Data</span><strong>'+TA.formatDate(evento.dataInizio)+(isMultiDay?' – '+TA.formatDate(evento.dataFine):'')+'</strong></div>'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orario</span><strong>Ore '+evento.orario+'</strong></div>'+
+          '<div><span style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</span><strong>'+evento.luogo+'</strong></div>'+
+        '</div>'+
+      '</div>';
+  }
   lucide.createIcons();
 </script>
 </body>
