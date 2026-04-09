@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locali & Attività — TuttoApricena</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-locali">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/" class="active">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../chi-siamo/" class="link-plain">Chi siamo</a><a href="../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/" class="active">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+<main class="main-content">
+  <div class="page-header"><div class="page-header-inner"><em>Scopri</em><h1>Locali & Attività</h1><p>Ristoranti, bar, negozi e attività di Apricena</p></div></div>
+  <div class="container content-section">
+    <div class="filter-bar">
+      <div class="filter-search"><i data-lucide="search" width="16" height="16"></i><input type="text" placeholder="Cerca locali..." id="search-input" /></div>
+      <div class="filter-pills" id="tipo-filters">
+        <button class="filter-pill active" data-filter="tutti">Tutti</button>
+      </div>
+    </div>
+    <div class="cards-grid-3" data-filter-grid id="locali-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none;"><h3>Nessun locale trovato</h3><p>Prova a modificare i filtri.</p></div>
+  </div>
+</main>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li><li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../assets/js/data.js"></script><script src="../assets/js/main.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+var filtersEl = document.getElementById('tipo-filters');
+TA.tipiLocali.forEach(function(t) {
+  var btn = document.createElement('button'); btn.className = 'filter-pill'; btn.setAttribute('data-filter', t.slug); btn.textContent = t.nome; filtersEl.appendChild(btn);
+});
+var grid = document.getElementById('locali-grid');
+function renderLocali(list) {
+  grid.innerHTML = list.map(function(l) {
+    return '<a href="../locali/' + l.slug + '/" class="card" data-category="' + l.tipoSlug + '" data-searchable="' + (l.nome+' '+l.tipo+' '+l.descrizione).replace(/"/g,'') + '">' +
+      '<div class="card-img" style="position:relative"><img src="' + l.immagine + '" alt="' + l.nome.replace(/"/g,'') + '" loading="lazy" />' +
+      '<span style="position:absolute;top:12px;left:12px;background:var(--color-primary);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px">' + l.tipo + '</span></div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">' + l.nome + '</div>' +
+        '<p class="card-desc">' + l.descrizione + '</p>' +
+        '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-muted);margin-top:8px"><i data-lucide="map-pin" width="11" height="11" color="var(--color-accent)"></i>' + l.indirizzo + '</div>' +
+        '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-muted);margin-top:4px"><i data-lucide="clock" width="11" height="11" color="var(--color-accent)"></i>' + l.orari + '</div>' +
+      '</div>' +
+      '<div class="card-footer"><span class="card-cta">Dettagli <i data-lucide="arrow-right" width="13" height="13"></i></span></div>' +
+    '</a>';
+  }).join('');
+  document.getElementById('empty-state').style.display = list.length ? 'none' : 'block';
+  lucide.createIcons();
+}
+renderLocali(TA.locali);
+var currentTipo = 'tutti', currentSearch = '';
+function applyFilters() {
+  var filtered = TA.locali.filter(function(l) {
+    return (currentTipo === 'tutti' || l.tipoSlug === currentTipo) &&
+           (!currentSearch || (l.nome + ' ' + l.tipo + ' ' + l.descrizione).toLowerCase().includes(currentSearch));
+  });
+  renderLocali(filtered);
+}
+document.getElementById('tipo-filters').addEventListener('click', function(e) {
+  var pill = e.target.closest('.filter-pill'); if (!pill) return;
+  document.querySelectorAll('#tipo-filters .filter-pill').forEach(function(p){p.classList.remove('active');});
+  pill.classList.add('active'); currentTipo = pill.getAttribute('data-filter'); applyFilters();
+});
+document.getElementById('search-input').addEventListener('input', function() { currentSearch = this.value.toLowerCase().trim(); applyFilters(); });
+lucide.createIcons();
+</script>
+</body></html>
