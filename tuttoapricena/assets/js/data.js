@@ -1,5 +1,5 @@
 // TUTTOAPRICENA — DATA FILE
-// CMS Update: 10/04/2026, 18:33:53
+// CMS Update: 10/04/2026, 18:39:34
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -15,7 +15,23 @@ const TA = {
     ],
     "logoUrl": "",
     "colorPrimary": "#1A1A2E",
-    "colorAccent": "#E8A838"
+    "colorAccent": "#E8A838",
+    "header": {
+      "eyebrow": "Apricena (FG) — Puglia",
+      "title1": "La Città del",
+      "title2": "Marmo e della Pietra",
+      "subtitle": "Notizie, eventi, farmacie di turno, servizi e locali. Il tuo portale quotidiano su Apricena — secondo polo marmifero d'Italia.",
+      "s1n": "",
+      "s1l": "",
+      "s2n": "",
+      "s2l": "",
+      "s3n": "",
+      "s3l": "",
+      "b1t": "",
+      "b1u": "",
+      "b2t": "",
+      "b2u": ""
+    }
   },
   "notizie": [
     {
