@@ -250,9 +250,16 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11px;font-fa
 
    <!-- NOTIZIE -->
    <div class="sec" id="s-notizie">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
      <div style="font-size:1.35rem;font-weight:900;font-family:Georgia,serif">Notizie</div>
      <div class="live-badge"><div class="live-dot"></div>Auto-aggiornamento ogni ora</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+     <span style="font-size:11px;color:var(--mu);font-weight:600">Ordina per:</span>
+     <button class="btn btn-o btn-sm" onclick="sortItems('n','date')">Più recenti</button>
+     <button class="btn btn-o btn-sm" onclick="sortItems('n','ordine')">Ordine manuale</button>
+     <button class="btn btn-o btn-sm" onclick="sortItems('n','evidenza')">Evidenza prima</button>
+     <button class="btn btn-o btn-sm" onclick="sortItems('n','az')">A→Z</button>
     </div>
     <div class="al al-inf" style="margin-bottom:12px"><i data-lucide="info" width="13" height="13"></i><span>Le notizie vengono aggiornate automaticamente ogni ora tramite il widget notizie live. Puoi aggiungere notizie manuali dal pulsante "Nuova notizia".</span></div>
     <div class="card"><div class="card-h">
@@ -670,7 +677,8 @@ function openM(type,idx){
       '<div class="fg"><label>Testo completo</label><textarea id="f-tx" rows="4">'+esc(it.testo||'')+'</textarea></div>'+
       imgRow('f-img','img-pn',it.immagine)+
       '<div class="fr2"><div class="fg"><label>Fonte</label><input id="f-ft" value="'+esc(it.fonte||'')+'" placeholder="Es: La Gazzetta di Apricena"></div><div class="fg"><label>URL Fonte</label><input id="f-fu" value="'+esc(it.fonteUrl||'')+'" placeholder="https://..."></div></div>'+
-      '<div class="fg"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="f-ev" '+(it.inEvidenza?'checked':'')+' style="width:auto;accent-color:var(--a)"> In evidenza</label></div>';
+      '<div class="fg"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="f-ev" '+(it.inEvidenza?'checked':'')+' style="width:auto;accent-color:var(--a)"> In evidenza (mostrata in homepage)</label></div>'+
+      '<div class="fg"><label>Ordine di visualizzazione <span style="color:var(--mu);font-size:10px">(numero basso = appare prima; default 0)</span></label><input type="number" id="f-ord" value="'+(it.ordine||0)+'" min="0" style="width:80px"></div>';
   }else if(type==='e'){
     T.textContent=idx!==undefined?'Modifica Evento':'Nuovo Evento';
     B.innerHTML='<div class="fg"><label>Titolo *</label><input id="f-t" value="'+esc(it.titolo||'')+'"></div>'+
@@ -678,7 +686,13 @@ function openM(type,idx){
       '<div class="fr2"><div class="fg"><label>Categoria</label><input id="f-cat" value="'+esc(it.categoria||'')+'" placeholder="Cultura..."></div><div class="fg"><label>Luogo</label><input id="f-lu" value="'+esc(it.luogo||'')+'"></div></div>'+
       '<div class="fg"><label>Descrizione</label><textarea id="f-de" rows="2">'+esc(it.descrizione||'')+'</textarea></div>'+
       imgRow('f-img','img-pe',it.immagine)+
-      '<div class="fg"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="f-ev" '+(it.inEvidenza?'checked':'')+' style="width:auto;accent-color:var(--a)"> In evidenza</label></div>';
+      '<div class="fg"><label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="f-ev" '+(it.inEvidenza?'checked':'')+' style="width:auto;accent-color:var(--a)"> In evidenza (mostrata in homepage)</label></div>'+
+      '<div class="fg"><label>URL Biglietti <span style="color:var(--mu);font-size:10px">(opzionale — se presente mostra il pulsante "Acquista biglietti")</span></label><input id="f-ticket" value="'+esc(it.ticketUrl||'')+'" placeholder="https://www.eventbrite.it/..."></div>'+
+      '<div class="fg"><label>Ordine di visualizzazione <span style="color:var(--mu);font-size:10px">(0 = primo, 1 = secondo... oppure usa Cronologico)</span></label>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-top:4px">'+
+        '<input type="number" id="f-ord" value="'+(it.ordine||0)+'" min="0" style="width:80px">'+
+        '<span style="font-size:11px;color:var(--mu)">oppure imposta -1 per ordine cronologico automatico</span>'+
+      '</div></div>';
   }else if(type==='f'){
     T.textContent=idx!==undefined?'Modifica Farmacia':'Nuova Farmacia';
     B.innerHTML='<div class="fg"><label>Nome farmacia *</label><input id="f-t" value="'+esc(it.nome||'')+'"></div>'+
@@ -739,11 +753,11 @@ function saveIt(){
   if(t==='n'){
     if(!g('f-t')){toast('Titolo obbligatorio','err');return;}
     var cat=TA.categorieNotizie.find(function(c){return c.slug===g('f-cat');})||TA.categorieNotizie[0];
-    ob={id:i>=0?S.n[i].id:Date.now(),slug:slugify(g('f-t')),titolo:g('f-t'),categoria:cat.nome,categoriaSlug:cat.slug,immagine:g('f-img'),abstract:g('f-ab'),testo:g('f-tx'),fonte:g('f-ft'),fonteUrl:g('f-fu'),data:g('f-d'),inEvidenza:gc('f-ev'),tag:[]};
+    ob={id:i>=0?S.n[i].id:Date.now(),slug:slugify(g('f-t')),titolo:g('f-t'),categoria:cat.nome,categoriaSlug:cat.slug,immagine:g('f-img'),abstract:g('f-ab'),testo:g('f-tx'),fonte:g('f-ft'),fonteUrl:g('f-fu'),data:g('f-d'),inEvidenza:gc('f-ev'),ordine:parseInt(document.getElementById('f-ord')?document.getElementById('f-ord').value:0)||0,tag:[]};
     if(i>=0)S.n[i]=ob;else S.n.unshift(ob);
   }else if(t==='e'){
     if(!g('f-t')){toast('Titolo obbligatorio','err');return;}
-    ob={id:i>=0?S.e[i].id:Date.now(),slug:slugify(g('f-t')),titolo:g('f-t'),categoria:g('f-cat'),dataInizio:g('f-di'),dataFine:g('f-df')||g('f-di'),orario:g('f-ora'),luogo:g('f-lu'),descrizione:g('f-de'),immagine:g('f-img'),inEvidenza:gc('f-ev')};
+    ob={id:i>=0?S.e[i].id:Date.now(),slug:slugify(g('f-t')),titolo:g('f-t'),categoria:g('f-cat'),dataInizio:g('f-di'),dataFine:g('f-df')||g('f-di'),orario:g('f-ora'),luogo:g('f-lu'),descrizione:g('f-de'),immagine:g('f-img'),inEvidenza:gc('f-ev'),ticketUrl:g('f-ticket')||'',ordine:parseInt(document.getElementById('f-ord')?document.getElementById('f-ord').value:0)||0};
     if(i>=0)S.e[i]=ob;else S.e.unshift(ob);
   }else if(t==='f'){
     if(!g('f-t')){toast('Nome obbligatorio','err');return;}
@@ -879,37 +893,237 @@ async function ghTest(){
   }catch(e){el.innerHTML='<div class="al al-warn">Errore di rete. Usa "Scarica data.js" come alternativa.</div>';}
   lucide.createIcons();
 }
-async function tryPush(tk,repo,br,path,sha,retry){
-  var content=buildDataJS();
-  var encoded=btoa(unescape(encodeURIComponent(content)));
-  var body={message:'TuttoApricena CMS: aggiornamento '+new Date().toLocaleString('it-IT'),content:encoded,branch:br};
+// ======= GITHUB PUBLISH (auto-creates folders) =======
+
+// Push a single file to GitHub with SHA conflict retry
+async function ghPutFile(tk,repo,br,filePath,fileContent,msg,retry){
+  retry=retry||0;
+  var encoded=btoa(unescape(encodeURIComponent(fileContent)));
+  // Get current SHA if exists
+  var sha=null;
+  try{
+    var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filePath+'?ref='+br+'&_='+Date.now(),{headers:ghHdr(tk)});
+    if(fr.ok){var fd=await fr.json();sha=fd.sha;}
+  }catch(e){}
+  var body={message:msg,content:encoded,branch:br};
   if(sha)body.sha=sha;
-  var r=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path,{method:'PUT',headers:ghHdr(tk),body:JSON.stringify(body)});
+  var r=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filePath,{method:'PUT',headers:ghHdr(tk),body:JSON.stringify(body)});
   if(r.ok)return{ok:true};
   var d={};try{d=await r.json();}catch(e){}
-  if(r.status===422&&retry<3){
-    var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+br+'&_='+Date.now(),{headers:ghHdr(tk)});
-    var newSha=null;if(fr.ok){var fd=await fr.json();newSha=fd.sha;}
-    return tryPush(tk,repo,br,path,newSha,retry+1);
+  if(r.status===422&&retry<2){
+    // SHA stale - fetch fresh and retry
+    try{var fr2=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filePath+'?ref='+br+'&_='+Date.now(),{headers:ghHdr(tk)});if(fr2.ok){var fd2=await fr2.json();sha=fd2.sha;}}catch(e){}
+    var body2={message:msg,content:encoded,branch:br};
+    if(sha)body2.sha=sha;
+    var r2=await fetch('https://api.github.com/repos/'+repo+'/contents/'+filePath,{method:'PUT',headers:ghHdr(tk),body:JSON.stringify(body2)});
+    if(r2.ok)return{ok:true};
   }
-  return{ok:false,msg:(r.status===401?'Token non valido':(r.status===404?'Repository/path non trovato':(d.message||'Errore '+r.status)))};
+  return{ok:false,msg:(r.status===401?'Token non valido':(r.status===404?'Path non trovato: '+filePath:(d.message||'HTTP '+r.status)))};
 }
-async function ghSync(){
-  var tk=S.gh.tk,repo=S.gh.repo,br=S.gh.br||'main',path=S.gh.path||'tuttoapricena/assets/js/data.js';
-  var el=document.getElementById('gh-status');
-  if(!tk||!repo){el.innerHTML='<div class="al al-err">Configura token e repository.</div>';return;}
-  el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="12" height="12"></i>Recupero SHA...</div>';lucide.createIcons();
-  try{
-    var sha=null;
-    try{var fr=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+br+'&_='+Date.now(),{headers:ghHdr(tk)});if(fr.ok){var fd=await fr.json();sha=fd.sha;}}catch(e){}
-    el.innerHTML='<div class="al al-inf"><i data-lucide="loader" width="12" height="12"></i>Pubblicazione...</div>';lucide.createIcons();
-    var res=await tryPush(tk,repo,br,path,sha,0);
-    if(res.ok){el.innerHTML='<div class="al al-ok"><i data-lucide="check-circle" width="12" height="12"></i><strong>Pubblicato!</strong> Il sito si aggiorna in 1-2 minuti.</div>';document.getElementById('sync-lbl').textContent='Pubblicato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});}
-    else{el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="12" height="12"></i>Errore: '+res.msg+'</div><div style="margin-top:8px"><button class="btn btn-ok" onclick="dlDataJS()"><i data-lucide="download" width="11" height="11"></i>Scarica data.js</button></div>';}
-  }catch(err){
-    el.innerHTML='<div class="al al-warn"><i data-lucide="alert-triangle" width="12" height="12"></i>Errore di rete.</div><div style="margin-top:8px"><button class="btn btn-ok btn-sm" onclick="dlDataJS()"><i data-lucide="download" width="11" height="11"></i>Scarica data.js</button></div>';
+
+// Build the HTML template for notizia/evento/locale pages
+function buildSlugHTML(section){
+  var up='../../'; // SLUG is 2 levels deep from root
+  var nav='<header id="navbar"><div class="navbar-inner"><div class="navbar-row">'+
+    '<a href="'+up+'" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>'+
+    '<nav class="navbar-links">'+
+    '<a href="'+up+'notizie/"'+(section==='notizie'?' class="active"':'')+'>Notizie</a>'+
+    '<a href="'+up+'eventi/"'+(section==='eventi'?' class="active"':'')+'>Eventi</a>'+
+    '<a href="'+up+'farmacie/">Farmacie</a><a href="'+up+'servizi/">Servizi</a>'+
+    '<a href="'+up+'locali/"'+(section==='locali'?' class="active"':'')+'>Locali</a>'+
+    '<a href="'+up+'sponsor/">Sponsor</a></nav>'+
+    '<div class="navbar-actions"><a href="'+up+'chi-siamo/" class="link-plain">Chi siamo</a><a href="'+up+'contatti/" class="link-btn">Contatti</a></div>'+
+    '<button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" width="24" height="24"></i></button>'+
+    '</div></div></header>';
+
+  var footer='<footer><div class="footer-inner"><div class="footer-grid">'+
+    '<div class="footer-brand"><a href="'+up+'" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a></div>'+
+    '<div class="footer-col"><h4>Sezioni</h4><ul><li><a href="'+up+'notizie/">Notizie</a></li><li><a href="'+up+'eventi/">Eventi</a></li><li><a href="'+up+'locali/">Locali</a></li></ul></div>'+
+    '</div><div class="footer-bottom"><p>© TuttoApricena</p></div></div></footer>';
+
+  var scripts='<script src="'+up+'assets/js/data.js"><\/script><script src="'+up+'assets/js/main.js"><\/script>';
+
+  var jsBase=[
+    'var parts=window.location.pathname.replace(/\\/$/,"").split("/");',
+    'var slug=parts[parts.length-1];',
+    'var qs=new URLSearchParams(window.location.search);',
+    'if(qs.get("slug"))slug=qs.get("slug");',
+    'var cc=function(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");};',
+    'var fmt=function(d){try{return new Date(d).toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"});}catch(e){return d||"";}};',
+    'var main=document.getElementById("pg-main");',
+    // Load session storage items too (unpublished CMS items)
+    'try{var sk={notizie:"ta_n",eventi:"ta_e",locali:"ta_l"};',
+    'Object.keys(sk).forEach(function(k){try{var raw=sessionStorage.getItem(sk[k]);if(raw){var items=JSON.parse(raw);if(Array.isArray(items)){var slugs=(TA[k]||[]).map(function(x){return x.slug;});items.forEach(function(it){var i=slugs.indexOf(it.slug);if(i>=0){TA[k][i]=it;}else{TA[k]=(TA[k]||[]).concat([it]);slugs.push(it.slug);}});}}}catch(e){}});}catch(e){}'
+  ].join('\n');
+
+  var jsSection='';
+  if(section==='notizie'){
+    jsSection=[
+      'var item=(TA.notizie||[]).find(function(x){return x.slug===slug;});',
+      'if(!item){main.innerHTML=\'<div style="padding:80px 24px;text-align:center"><h2>Notizia non trovata</h2><p>Questa notizia non è disponibile o non è stata ancora pubblicata.</p><a href="'+up+'notizie/" class="btn-primary" style="margin-top:16px">← Tutte le notizie</a></div>\';lucide.createIcons();}',
+      'else{',
+      '  document.title=item.titolo+" — TuttoApricena";',
+      '  var cat=TA.getCatColor?TA.getCatColor(item.categoriaSlug):"#E8A838";',
+      '  var testo=(item.testo||item.abstract||"").split("\\n\\n").map(function(p){return p.trim()?"<p>"+cc(p)+"</p>":"";}).join("");',
+      '  if(!testo)testo="<p>"+cc(item.abstract||"")+"</p>";',
+      '  main.innerHTML=',
+      '    \'<div class="article-header"><div class="article-header-inner">\'+',
+      '    \'<a href="'+up+'notizie/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutte le notizie</a>\'+',
+      '    \'<div class="article-meta"><span class="cat-badge" style="background:\'+cat+\'">\'+cc(item.categoria||"Notizia")+\'</span>\'+',
+      '    (item.inEvidenza?\'<span style="background:rgba(232,168,56,.15);color:var(--color-accent);font-size:10px;font-weight:700;padding:3px 10px;border-radius:50px">In evidenza</span>\':"")+"</div>"+',
+      '    \'<h1 class="article-title">\'+cc(item.titolo)+\'</h1>\'+',
+      '    \'<p class="article-abstract">\'+cc(item.abstract||"")+\'</p>\'+',
+      '    \'<div class="article-info"><i data-lucide="calendar" width="13" height="13"></i> \'+fmt(item.data)+(item.fonte?\" · "+cc(item.fonte):"")+\'</div>\'+',
+      '    \'</div></div>\'+',
+      '    \'<div class="article-body">\'+',
+      '    (item.immagine?\'<img class="article-img" src="\'+item.immagine+\'" alt="\'+cc(item.titolo)+\'" onerror="this.style.display=\\\'none\\\'">\':"")+"<div class=\"prose-content\">"+testo+"</div>"+',
+      '    (item.fonteUrl&&item.fonteUrl!=="#"?\'<div class="source-box"><i data-lucide="external-link" width="16" height="16" color="var(--color-accent)"></i><span>Fonte: <strong>\'+cc(item.fonte||"")+\'</strong></span><a href="\'+item.fonteUrl+\'" target="_blank" rel="noopener" style="color:var(--color-accent);margin-left:8px">Leggi →</a></div>\':"")+"</div>";',
+      '  lucide.createIcons();',
+      '}'
+    ].join('\n');
+  } else if(section==='eventi'){
+    jsSection=[
+      'var item=(TA.eventi||[]).find(function(x){return x.slug===slug;});',
+      'if(!item){main.innerHTML=\'<div style="padding:80px 24px;text-align:center"><h2>Evento non trovato</h2><p>Questo evento non è disponibile.</p><a href="'+up+'eventi/" class="btn-primary" style="margin-top:16px">← Tutti gli eventi</a></div>\';lucide.createIcons();}',
+      'else{',
+      '  document.title=item.titolo+" — TuttoApricena";',
+      '  var multi=item.dataFine&&item.dataFine!==item.dataInizio;',
+      '  var ticketBtn=item.ticketUrl',
+      '    ?\'<a href="\'+item.ticketUrl+\'" target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:15px;padding:13px 28px"><i data-lucide=\"ticket\" width=\"18\" height=\"18\"></i> Acquista biglietti</a>\'',
+      '    :"";',
+      '  main.innerHTML=',
+      '    \'<div class="article-header"><div class="article-header-inner">\'+',
+      '    \'<a href="'+up+'eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>\'+',
+      '    \'<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">\'+cc(item.categoria||"Evento")+\'</span></div>\'+',
+      '    \'<h1 class="article-title">\'+cc(item.titolo)+\'</h1>\'+',
+      '    \'<div class="article-info">\'+',
+      '    \'<i data-lucide="calendar" width="13" height="13"></i> \'+fmt(item.dataInizio)+(multi?" — "+fmt(item.dataFine):"")+',
+      '    \' &nbsp;·&nbsp; <i data-lucide="clock" width="13" height="13"></i> \'+cc(item.orario||"")+',
+      '    \' &nbsp;·&nbsp; <i data-lucide="map-pin" width="13" height="13"></i> \'+cc(item.luogo||"")+',
+      '    \'</div></div></div>\'+',
+      '    \'<div class="article-body">\'+',
+      '    (item.immagine?\'<img class="article-img" src="\'+item.immagine+\'" alt="\'+cc(item.titolo)+\'" onerror="this.style.display=\\\'none\\\'">\':"")+"<div class=\"prose-content\"><p style=\"font-size:17px;line-height:1.8\">"+cc(item.descrizione||"")+"</p></div>"+',
+      '    \'<div style="background:#fff;border-radius:16px;padding:24px;margin-top:28px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px">\'+',
+      '    \'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Data</div><strong>\'+fmt(item.dataInizio)+(multi?" – "+fmt(item.dataFine):"")+\'</strong></div>\'+',
+      '    \'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orario</div><strong>\'+cc(item.orario||"Da definire")+\'</strong></div>\'+',
+      '    \'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</div><strong>\'+cc(item.luogo||"Da definire")+\'</strong></div>\'+',
+      '    \'</div>\'+ticketBtn+"</div>";',
+      '  lucide.createIcons();',
+      '}'
+    ].join('\n');
+  } else if(section==='locali'){
+    jsSection=[
+      'var item=(TA.locali||[]).find(function(x){return x.slug===slug;});',
+      'if(!item){main.innerHTML=\'<div style="padding:80px 24px;text-align:center"><h2>Locale non trovato</h2><a href="'+up+'locali/" class="btn-primary" style="margin-top:16px">← Tutti i locali</a></div>\';lucide.createIcons();}',
+      'else{',
+      '  document.title=item.nome+" — TuttoApricena";',
+      '  main.innerHTML=',
+      '    \'<div class="article-header"><div class="article-header-inner">\'+',
+      '    \'<a href="'+up+'locali/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti i locali</a>\'+',
+      '    \'<div class="article-meta"><span class="cat-badge" style="background:var(--color-primary)">\'+cc(item.tipo||"Locale")+\'</span></div>\'+',
+      '    \'<h1 class="article-title">\'+cc(item.nome)+\'</h1>\'+',
+      '    \'<div class="article-info"><i data-lucide="map-pin" width="13" height="13"></i> \'+cc(item.indirizzo||"")+',
+      '    (item.telefono?\' &nbsp;·&nbsp; <a href="tel:\'+item.telefono+\'" style="color:var(--color-accent)">\'+cc(item.telefono)+\'</a>\':"")+"</div></div></div>"+',
+      '    \'<div class="article-body">\'+',
+      '    (item.immagine?\'<img class="article-img" src="\'+item.immagine+\'" alt="\'+cc(item.nome)+\'" onerror="this.style.display=\\\'none\\\'">\':"")+"<div class=\"prose-content\"><p style=\"font-size:17px;line-height:1.8\">"+cc(item.descrizione||"")+"</p></div>"+',
+      '    \'<div style="background:#fff;border-radius:16px;padding:24px;margin-top:28px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px">\'+',
+      '    \'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Indirizzo</div><strong>\'+cc(item.indirizzo||"–")+\'</strong></div>\'+',
+      '    \'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orari</div><strong>\'+cc(item.orari||"–")+\'</strong></div>\'+',
+      '    (item.telefono?\'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Telefono</div><a href="tel:\'+item.telefono+\'" style="color:var(--color-accent);font-weight:700">\'+cc(item.telefono)+\'</a></div>\':"")+"</div></div>";',
+      '  lucide.createIcons();',
+      '}'
+    ].join('\n');
   }
-  lucide.createIcons();
+
+  return '<!DOCTYPE html>\n<html lang="it">\n<head>\n<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>\n<title>TuttoApricena</title>\n<link rel="stylesheet" href="'+up+'assets/css/style.css"/>\n<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"><\/script>\n</head>\n<body>\n'+nav+'\n<main id="pg-main" style="padding-top:72px;min-height:80vh"></main>\n'+footer+'\n'+scripts+'\n<script>\n'+jsBase+'\n'+jsSection+'\n<\/script>\n</body>\n</html>';
+}
+
+// Find slugs that need new folders (don't exist on GitHub yet)
+async function getExistingSlugs(tk,repo,br,section){
+  try{
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/tuttoapricena/'+section+'?ref='+br,{headers:ghHdr(tk)});
+    if(!r.ok)return new Set();
+    var items=await r.json();
+    var slugs=new Set();
+    if(Array.isArray(items)){items.forEach(function(i){if(i.type==='dir')slugs.add(i.name);});}
+    return slugs;
+  }catch(e){return new Set();}
+}
+
+async function ghSync(){
+  var tk=S.gh.tk,repo=S.gh.repo,br=S.gh.br||'main',dataPath=S.gh.path||'tuttoapricena/assets/js/data.js';
+  var el=document.getElementById('gh-status');
+  if(!tk||!repo){el.innerHTML='<div class="al al-err"><i data-lucide="x-circle" width="12" height="12"></i>Configura token e repository prima di pubblicare.</div>';lucide.createIcons();return;}
+
+  var msg='TuttoApricena CMS: '+new Date().toLocaleString('it-IT');
+
+  function setStatus(txt,type){
+    el.innerHTML='<div class="al al-'+(type||'inf')+'"><i data-lucide="'+(type==='ok'?'check-circle':type==='err'?'x-circle':'loader')+'" width="12" height="12"></i>'+txt+'</div>';
+    lucide.createIcons();
+  }
+
+  try{
+    // Step 1: Find new slugs that need folders
+    setStatus('Controllo cartelle esistenti...');
+    var sections=[
+      {key:'notizie', items:S.n},
+      {key:'eventi',  items:S.e},
+      {key:'locali',  items:S.l}
+    ];
+
+    var newFolders=[];
+    for(var si=0;si<sections.length;si++){
+      var sec=sections[si];
+      var existing=await getExistingSlugs(tk,repo,br,sec.key);
+      sec.items.forEach(function(item){
+        var slug=item.slug;
+        if(slug&&slug!=='_slug_'&&!existing.has(slug)){
+          newFolders.push({section:sec.key,slug:slug});
+        }
+      });
+    }
+
+    var total=newFolders.length+1; // +1 for data.js
+    var done=0;
+
+    // Step 2: Create new folders in parallel batches
+    if(newFolders.length>0){
+      setStatus('Creo '+newFolders.length+' nuova/e cartella/e...');
+      var batchSize=3; // GitHub API: avoid rate limits
+      for(var bi=0;bi<newFolders.length;bi+=batchSize){
+        var batch=newFolders.slice(bi,Math.min(bi+batchSize,newFolders.length));
+        var promises=batch.map(function(f){
+          var html=buildSlugHTML(f.section);
+          var path='tuttoapricena/'+f.section+'/'+f.slug+'/index.html';
+          return ghPutFile(tk,repo,br,path,html,msg+' [crea '+f.section+'/'+f.slug+']');
+        });
+        var results=await Promise.all(promises);
+        done+=batch.length;
+        var failed=results.filter(function(r){return!r.ok;});
+        if(failed.length){
+          setStatus('Errore creazione cartella: '+failed[0].msg,'err');
+          return;
+        }
+        setStatus('Cartelle: '+done+'/'+newFolders.length+'...');
+      }
+    }
+
+    // Step 3: Update data.js
+    setStatus('Pubblico data.js...');
+    var dataResult=await ghPutFile(tk,repo,br,dataPath,buildDataJS(),msg);
+    if(!dataResult.ok){
+      setStatus('Errore data.js: '+dataResult.msg,'err');
+      return;
+    }
+
+    var folderMsg=newFolders.length>0?' (+'+newFolders.length+' nuove cartelle create)':'';
+    setStatus('<strong>✅ Pubblicato!</strong> Il sito si aggiorna in 1-2 minuti.'+folderMsg,'ok');
+    document.getElementById('sync-lbl').textContent='Pubblicato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+
+  }catch(err){
+    el.innerHTML='<div class="al al-warn"><i data-lucide="alert-triangle" width="12" height="12"></i>Errore di rete: '+err.message+'</div><div style="margin-top:8px"><button class="btn btn-ok btn-sm" onclick="dlDataJS()"><i data-lucide="download" width="11" height="11"></i>Scarica data.js</button></div>';
+    lucide.createIcons();
+  }
 }
 function dlDataJS(){var c=buildDataJS();var b=new Blob([c],{type:'application/javascript'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='data.js';a.click();URL.revokeObjectURL(u);toast('Scaricato! Carica in: tuttoapricena/assets/js/data.js');}
 

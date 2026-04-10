@@ -78,10 +78,22 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 var currentFilter = '';
 
+function sortItems(arr) {
+  return arr.slice().sort(function(a, b) {
+    var oa = a.ordine || 0, ob = b.ordine || 0;
+    if (oa > 0 && ob > 0) return ob - oa;
+    if (oa > 0) return -1;
+    if (ob > 0) return 1;
+    var da = a.data || '2000-01-01', db = b.data || '2000-01-01';
+    return new Date(db) - new Date(da);
+  });
+}
+
 function renderNewsGrid(notizie, filter) {
   var grid = document.getElementById('news-grid');
   var noNews = document.getElementById('no-news');
-  var filtered = filter ? notizie.filter(function(n){ return n.categoriaSlug === filter; }) : notizie;
+  var sorted = sortItems(notizie);
+  var filtered = filter ? sorted.filter(function(n){ return n.categoriaSlug === filter; }) : sorted;
   if(!filtered.length){ grid.innerHTML=''; noNews.style.display='block'; return; }
   noNews.style.display='none';
   grid.innerHTML = filtered.map(function(n){

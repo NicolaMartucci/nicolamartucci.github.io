@@ -92,6 +92,17 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  function sortItems(arr) {
+    return arr.slice().sort(function(a, b) {
+      var oa = a.ordine || 0, ob = b.ordine || 0;
+      if (oa > 0 && ob > 0) return ob - oa;
+      if (oa > 0) return -1;
+      if (ob > 0) return 1;
+      var da = a.dataInizio || '2000-01-01', db = b.dataInizio || '2000-01-01';
+      return new Date(da) - new Date(db); // eventi: cronologico ascendente (prossimi prima)
+    });
+  }
+
   const grid = document.getElementById('eventi-grid');
   function renderEventi(list) {
     grid.innerHTML = list.map(e => `
@@ -124,7 +135,7 @@
     document.getElementById('empty-state').style.display = list.length ? 'none' : 'block';
     lucide.createIcons();
   }
-  renderEventi(TA.eventi);
+  renderEventi(sortItems(TA.eventi));
 
   let currentCat = 'tutti';
   let currentSearch = '';

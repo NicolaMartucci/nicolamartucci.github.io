@@ -187,6 +187,7 @@ function renderEvento(e) {
         '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</div>'+
         '<strong>'+cc(e.luogo||'Da definire')+'</strong></div>'+
       '</div>'+
+      (e.ticketUrl?'<a href="'+e.ticketUrl+'" target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:15px;padding:13px 28px"><i data-lucide="ticket" width="18" height="18"></i> Acquista biglietti</a>':'')+
     '</div>';
   showFoot(); lucide.createIcons();
 }

@@ -138,13 +138,13 @@
 <!-- ===== HERO ===== -->
 <section class="hero-section">
   <div class="hero-slide active">
-    <img src="images/santuario.png" alt="Cave di Pietra di Apricena" loading="eager" />
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=85" alt="Cave di Pietra di Apricena" loading="eager" />
   </div>
   <div class="hero-slide">
-    <img src="images/cava.png" alt="Gargano e campagna pugliese" loading="lazy" />
+    <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=1800&q=85" alt="Gargano e campagna pugliese" loading="lazy" />
   </div>
   <div class="hero-slide">
-    <img src="images/caste.png" alt="Centro storico di Apricena" loading="lazy" />
+    <img src="https://images.unsplash.com/photo-1571406252241-db0280bd36cd?w=1800&q=85" alt="Centro storico di Apricena" loading="lazy" />
   </div>
   <div class="hero-overlay-1"></div>
   <div class="hero-overlay-2"></div>
@@ -392,10 +392,27 @@ document.getElementById('farmacia-tel').textContent = f.telefono;
 document.getElementById('farmacia-tel-link').href = 'tel:'+f.telefono;
 if(f.notturno) document.getElementById('farmacia-notturno').style.display='flex';
 
+// ===== SORT BY ORDINE (0=default/cronologico, >0=priorità alta, -1=auto-cronologico) =====
+function sortItems(arr) {
+  return arr.slice().sort(function(a, b) {
+    var oa = a.ordine || 0, ob = b.ordine || 0;
+    // ordine > 0: numero più alto = prima
+    // ordine = 0 or -1: cronologico per data
+    if (oa > 0 && ob > 0) return ob - oa;
+    if (oa > 0) return -1;  // a ha priorità, viene prima
+    if (ob > 0) return 1;   // b ha priorità, viene prima
+    // Entrambi 0/-1: ordine cronologico decrescente per data
+    var da = a.data || a.dataInizio || '2000-01-01';
+    var db = b.data || b.dataInizio || '2000-01-01';
+    return new Date(db) - new Date(da);
+  });
+}
+
 // ===== NOTIZIE — NUOVO LAYOUT =====
-const featured = TA.notizie.find(n=>n.inEvidenza) || TA.notizie[0];
-const stack = TA.notizie.filter(n=>n.id!==featured.id).slice(0,3);
-const bottom = TA.notizie.filter(n=>n.id!==featured.id).slice(3,6);
+var _sortedNotizie = sortItems(TA.notizie);
+const featured = _sortedNotizie.find(n=>n.inEvidenza) || _sortedNotizie[0];
+const stack = _sortedNotizie.filter(n=>n.id!==featured.id).slice(0,3);
+const bottom = _sortedNotizie.filter(n=>n.id!==featured.id).slice(3,6);
 
 const topEl = document.getElementById('news-top');
 topEl.innerHTML =
@@ -481,7 +498,7 @@ document.getElementById('home-eventi-grid').innerHTML = TA.eventi.slice(0,3).map
   '</a>').join('');
 
 // ===== LOCALI =====
-document.getElementById('home-locali-grid').innerHTML = TA.locali.filter(l=>l.inEvidenza).slice(0,3).map(l=>
+document.getElementById('home-locali-grid').innerHTML = sortItems(TA.locali).filter(l=>l.inEvidenza).slice(0,3).map(l=>
   '<a href="locali/'+l.slug+'/" class="locale-card card-hover">'+
     '<div class="locale-card-img"><img src="'+l.immagine+'" alt="'+l.nome+'" loading="lazy" /><span class="locale-tipo-badge">'+l.tipo+'</span></div>'+
     '<div class="locale-card-body">'+
