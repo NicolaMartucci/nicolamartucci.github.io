@@ -109,23 +109,24 @@
   const grid = document.getElementById('eventi-grid');
   function renderEventi(list) {
     grid.innerHTML = list.map(function(ev) {
-      var ticketBtn = ev.ticketUrl
-        ? '<a href="'+ev.ticketUrl+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" '+
-          'style="display:inline-flex;align-items:center;gap:6px;background:var(--color-accent);color:var(--color-primary);'+
-          'font-size:12px;font-weight:700;padding:7px 14px;border-radius:50px;margin-top:10px;text-decoration:none">'+
-          '<i data-lucide="ticket" width="13" height="13"></i> Acquista biglietti</a>'
-        : '';
-      return '<a href="../eventi/'+ev.slug+'/" class="card" data-category="'+ev.categoria+'" data-searchable="'+ev.titolo+' '+ev.descrizione+' '+ev.luogo+'">'+
+      return '<a href="../eventi/'+ev.slug+'/" class="card" '+
+        'data-category="'+ev.categoria+'" '+
+        'data-searchable="'+(ev.titolo+' '+ev.descrizione+' '+ev.luogo).replace(/"/g,'')+'">'+ 
         '<div class="card-img" style="position:relative">'+
-          '<img src="'+ev.immagine+'" alt="'+ev.titolo+'" loading="lazy" onerror="this.style.display='none'"/>'+
+          '<img src="'+ev.immagine+'" alt="'+ev.titolo.replace(/"/g,'')+'" loading="lazy" '+
+          'onerror="this.style.display='none'"/>'+
           '<span class="evento-card-badge" style="position:absolute;top:12px;left:12px">'+ev.categoria+'</span>'+
+          (ev.ticketUrl
+            ? '<span style="position:absolute;top:12px;right:12px;background:#16A34A;color:#fff;'+
+              'font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px">🎟 Biglietti</span>'
+            : '')+
         '</div>'+
         '<div class="card-body">'+
           '<div class="card-meta">'+
             '<i data-lucide="calendar" width="11" height="11"></i> '+
             TA.formatDate(ev.dataInizio,{day:'numeric',month:'long',year:'numeric'})+
-            (ev.dataFine&&ev.dataFine!==ev.dataInizio?' – '+TA.formatDate(ev.dataFine,{day:'numeric',month:'long'}):'')+" "+
-            '<span style="margin:0 4px">·</span> '+
+            (ev.dataFine&&ev.dataFine!==ev.dataInizio?' – '+TA.formatDate(ev.dataFine,{day:'numeric',month:'long'}):'')+''+
+            ' <span style="margin:0 4px">·</span> '+
             '<i data-lucide="clock" width="11" height="11"></i> '+(ev.orario||'')+
           '</div>'+
           '<div class="card-title">'+ev.titolo+'</div>'+
@@ -133,10 +134,12 @@
           '<div class="card-meta" style="margin-top:8px">'+
             '<i data-lucide="map-pin" width="11" height="11" color="var(--color-accent)"></i> '+(ev.luogo||'')+
           '</div>'+
-          ticketBtn+
         '</div>'+
         '<div class="card-footer">'+
           '<span class="card-cta">Dettagli <i data-lucide="arrow-right" width="13" height="13"></i></span>'+
+          (ev.ticketUrl
+            ? '<span style="color:#16A34A;font-size:11px;font-weight:700">Biglietti disponibili</span>'
+            : '')+
         '</div>'+
       '</a>';
     }).join('');
