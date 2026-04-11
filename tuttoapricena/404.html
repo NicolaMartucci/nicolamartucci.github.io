@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TuttoApricena</title>
+<script>
+// Detect the base path dynamically (works at any deployment path)
+// e.g. /tuttoapricena/notizie/slug/ → base = /tuttoapricena/
+(function(){
+  var path = window.location.pathname;
+  // Find the site root by looking for known section names
+  var sections = ['notizie','eventi','locali','farmacie','servizi','sponsor','admin','chi-siamo','contatti','privacy','cookie'];
+  var base = '/';
+  for(var i=0;i<sections.length;i++){
+    var idx = path.indexOf('/'+sections[i]+'/');
+    if(idx >= 0){ base = path.slice(0, idx+1); break; }
+    idx = path.indexOf('/'+sections[i]);
+    if(idx >= 0 && path.length <= idx+sections[i].length+2){ base = path.slice(0,idx+1); break; }
+  }
+  // Inject <base> tag before any other resource loads
+  document.write('<base href="'+base+'">');
+  window._TA_BASE = base;
+})();
+</script>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+<header id="navbar" style="background:rgba(26,26,46,.97);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,.2)">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="notizie/">Notizie</a><a href="eventi/">Eventi</a><a href="farmacie/">Farmacie</a>
+      <a href="servizi/">Servizi</a><a href="locali/">Locali</a><a href="sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="contatti/" class="link-btn">Contatti</a>
+    </div>
+  </div></div>
+</header>
+
+<main id="page-main" style="padding-top:72px;min-height:90vh;display:flex;align-items:center;justify-content:center">
+  <div style="text-align:center;padding:40px 24px">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:spin 1s linear infinite">
+      <i data-lucide="loader" width="22" height="22" color="var(--color-primary)"></i>
+    </div>
+    <p style="color:var(--color-text-muted)">Caricamento...</p>
+  </div>
+</main>
+
+<footer id="page-footer" style="display:none">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+        <p>Il portale informativo indipendente di Apricena.</p>
+      </div>
+      <div class="footer-col"><h4>Sezioni</h4><ul>
+        <li><a href="notizie/">Notizie</a></li><li><a href="eventi/">Eventi</a></li>
+        <li><a href="farmacie/">Farmacie</a></li><li><a href="servizi/">Servizi</a></li>
+        <li><a href="locali/">Locali</a></li><li><a href="sponsor/">Sponsor</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Info</h4><ul>
+        <li><a href="chi-siamo/">Chi Siamo</a></li><li><a href="contatti/">Contatti</a></li>
+        <li><a href="privacy/">Privacy Policy</a></li><li><a href="cookie/">Cookie Policy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© <span id="yr"></span> TuttoApricena</p></div>
+  </div>
+</footer>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+<script src="assets/js/data.js"></script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+lucide.createIcons();
+
+// Parse the current URL to find section and slug
+var path = window.location.pathname;
+var base = window._TA_BASE || '/';
+// Remove base, get the rest: "notizie/my-slug" or "eventi/my-slug"
+var rel = path.slice(base.length).replace(/\/$/, '');
+var parts = rel.split('/');
+var section = parts[0] || '';
+var slug    = parts[1] || '';
+
+// Load CMS session data (items saved by CMS but not yet published to GitHub)
+// This lets the 404 router find items created by CMS before publishing
+function loadSessionData() {
+  var keys = { notizie:'ta_n', eventi:'ta_e', locali:'ta_l', farmacie:'ta_f', servizi:'ta_sv', sponsor:'ta_sp' };
+  Object.keys(keys).forEach(function(k) {
+    try {
+      var raw = sessionStorage.getItem(keys[k]);
+      if (raw) {
+        var items = JSON.parse(raw);
+        if (Array.isArray(items) && items.length) {
+          // Merge: session items override/add to TA items
+          var existingSlugs = (TA[k]||[]).map(function(x){ return x.slug; });
+          items.forEach(function(item) {
+            var idx = existingSlugs.indexOf(item.slug);
+            if (idx >= 0) { TA[k][idx] = item; }  // update existing
+            else { TA[k] = (TA[k]||[]).concat([item]); existingSlugs.push(item.slug); } // add new
+          });
+        }
+      }
+    } catch(e) {}
+  });
+}
+loadSessionData();
+
+// Helpers
+function cc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(d,opts){ 
+  try { return new Date(d).toLocaleDateString('it-IT', opts||{day:'numeric',month:'long',year:'numeric'}); }
+  catch(e){ return d||''; }
+}
+function showFoot(){ document.getElementById('page-footer').style.display='block'; }
+
+function show404(msg) {
+  document.getElementById('page-main').innerHTML =
+    '<div style="text-align:center;padding:60px 24px">'+
+    '<div style="font-family:var(--font-display);font-size:5rem;font-weight:900;color:var(--color-accent);line-height:1">404</div>'+
+    '<h2 style="font-family:var(--font-display);font-size:1.8rem;color:var(--color-primary);margin:12px 0">Pagina non trovata</h2>'+
+    '<p style="color:var(--color-text-muted);margin-bottom:24px">'+(msg||'La pagina che cerchi non esiste o è stata spostata.')+'</p>'+
+    '<a href="./" class="btn-primary">← Torna alla Home</a>'+
+    '</div>';
+  lucide.createIcons();
+}
+
+function renderNotizia(n) {
+  document.title = n.titolo + ' — TuttoApricena';
+  var catColor = TA.getCatColor ? TA.getCatColor(n.categoriaSlug) : '#E8A838';
+  var testo = (n.testo||n.abstract||'').split('\n\n')
+    .map(function(p){ return p.trim()?'<p>'+cc(p)+'</p>':''; }).join('');
+  if (!testo) testo = '<p>'+cc(n.abstract||'')+'</p>';
+  document.getElementById('page-main').innerHTML =
+    '<div class="article-header"><div class="article-header-inner">'+
+      '<a href="notizie/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutte le notizie</a>'+
+      '<div class="article-meta">'+
+        '<span class="cat-badge" style="background:'+catColor+'">'+cc(n.categoria||'Notizia')+'</span>'+
+        (n.inEvidenza?'<span style="background:rgba(232,168,56,.15);color:var(--color-accent);font-size:10px;font-weight:700;padding:3px 10px;border-radius:50px">In evidenza</span>':'')+
+      '</div>'+
+      '<h1 class="article-title">'+cc(n.titolo)+'</h1>'+
+      '<p class="article-abstract">'+cc(n.abstract||'')+'</p>'+
+      '<div class="article-info">'+
+        '<span><i data-lucide="calendar" width="13" height="13"></i> '+fmt(n.data)+'</span>'+
+        (n.fonte?'<span style="margin:0 6px">·</span><span>'+cc(n.fonte)+'</span>':'')+
+      '</div>'+
+    '</div></div>'+
+    '<div class="article-body">'+
+      (n.immagine?'<img class="article-img" src="'+n.immagine+'" alt="'+cc(n.titolo)+'" onerror="this.style.display=\'none\'"/>':'')+
+      '<div class="prose-content">'+testo+'</div>'+
+      (n.fonteUrl&&n.fonteUrl!=='#'?
+        '<div class="source-box"><i data-lucide="external-link" width="16" height="16" color="var(--color-accent)"></i>'+
+        '<span>Fonte originale: <strong>'+cc(n.fonte)+'</strong></span>'+
+        '<a href="'+n.fonteUrl+'" target="_blank" rel="noopener" style="color:var(--color-accent);margin-left:8px">Leggi →</a></div>':'')+
+    '</div>';
+  showFoot(); lucide.createIcons();
+}
+
+function renderEvento(e) {
+  document.title = e.titolo + ' — TuttoApricena';
+  var isMulti = e.dataFine && e.dataFine !== e.dataInizio;
+  document.getElementById('page-main').innerHTML =
+    '<div class="article-header"><div class="article-header-inner">'+
+      '<a href="eventi/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti gli eventi</a>'+
+      '<div class="article-meta"><span class="cat-badge" style="background:var(--color-accent);color:var(--color-primary)">'+cc(e.categoria||'Evento')+'</span></div>'+
+      '<h1 class="article-title">'+cc(e.titolo)+'</h1>'+
+      '<div class="article-info">'+
+        '<span><i data-lucide="calendar" width="13" height="13"></i> '+fmt(e.dataInizio)+(isMulti?' — '+fmt(e.dataFine):'')+'</span>'+
+        '<span style="margin:0 6px">·</span><span><i data-lucide="clock" width="13" height="13"></i> '+cc(e.orario||'')+'</span>'+
+        '<span style="margin:0 6px">·</span><span><i data-lucide="map-pin" width="13" height="13"></i> '+cc(e.luogo||'')+'</span>'+
+      '</div>'+
+    '</div></div>'+
+    '<div class="article-body">'+
+      (e.immagine?'<img class="article-img" src="'+e.immagine+'" alt="'+cc(e.titolo)+'" onerror="this.style.display=\'none\'"/>':'')+
+      '<div class="prose-content"><p style="font-size:17px;line-height:1.8">'+cc(e.descrizione||'')+'</p></div>'+
+      '<div style="background:#fff;border-radius:16px;padding:24px;margin-top:28px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px">'+
+        '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Data</div>'+
+        '<strong>'+fmt(e.dataInizio)+(isMulti?' – '+fmt(e.dataFine):'')+'</strong></div>'+
+        '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orario</div>'+
+        '<strong>'+cc(e.orario||'Da definire')+'</strong></div>'+
+        '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Luogo</div>'+
+        '<strong>'+cc(e.luogo||'Da definire')+'</strong></div>'+
+      '</div>'+
+      (e.ticketUrl?'<a href="'+e.ticketUrl+'" target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:15px;padding:13px 28px"><i data-lucide="ticket" width="18" height="18"></i> Acquista biglietti</a>':'')+
+    '</div>';
+  showFoot(); lucide.createIcons();
+}
+
+function renderLocale(l) {
+  document.title = l.nome + ' — TuttoApricena';
+  document.getElementById('page-main').innerHTML =
+    '<div class="article-header"><div class="article-header-inner">'+
+      '<a href="locali/" class="back-link"><i data-lucide="arrow-left" width="16" height="16"></i> Tutti i locali</a>'+
+      '<div class="article-meta"><span class="cat-badge" style="background:var(--color-primary)">'+cc(l.tipo||'Locale')+'</span></div>'+
+      '<h1 class="article-title">'+cc(l.nome)+'</h1>'+
+      '<div class="article-info">'+
+        '<span><i data-lucide="map-pin" width="13" height="13"></i> '+cc(l.indirizzo||'')+'</span>'+
+        (l.telefono?'<span style="margin:0 6px">·</span><span><a href="tel:'+l.telefono+'" style="color:var(--color-accent)">'+cc(l.telefono)+'</a></span>':'')+
+      '</div>'+
+    '</div></div>'+
+    '<div class="article-body">'+
+      (l.immagine?'<img class="article-img" src="'+l.immagine+'" alt="'+cc(l.nome)+'" onerror="this.style.display=\'none\'"/>':'')+
+      '<div class="prose-content"><p style="font-size:17px;line-height:1.8">'+cc(l.descrizione||'')+'</p></div>'+
+      '<div style="background:#fff;border-radius:16px;padding:24px;margin-top:28px;box-shadow:0 4px 20px rgba(26,26,46,.07);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px">'+
+        '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Indirizzo</div><strong>'+cc(l.indirizzo||'–')+'</strong></div>'+
+        '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Orari</div><strong>'+cc(l.orari||'–')+'</strong></div>'+
+        (l.telefono?'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Telefono</div><a href="tel:'+l.telefono+'" style="color:var(--color-accent);font-weight:700">'+cc(l.telefono)+'</a></div>':'')+
+        (l.sitoWeb?'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:4px">Sito web</div><a href="'+l.sitoWeb+'" target="_blank" style="color:var(--color-accent);font-weight:700">Visita →</a></div>':'')+
+      '</div>'+
+    '</div>';
+  showFoot(); lucide.createIcons();
+}
+
+// Route
+if (!section || !slug) {
+  show404();
+} else if (section === 'notizie') {
+  var item = (TA.notizie||[]).find(function(x){ return x.slug === slug; });
+  item ? renderNotizia(item) : show404('Notizia non trovata. Potrebbe non essere ancora stata pubblicata.');
+} else if (section === 'eventi') {
+  var item = (TA.eventi||[]).find(function(x){ return x.slug === slug; });
+  item ? renderEvento(item) : show404('Evento non trovato.');
+} else if (section === 'locali') {
+  var item = (TA.locali||[]).find(function(x){ return x.slug === slug; });
+  item ? renderLocale(item) : show404('Locale non trovato.');
+} else {
+  show404();
+}
+</script>
+</body>
+</html>
