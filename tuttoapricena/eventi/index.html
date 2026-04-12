@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Eventi di Apricena — TuttoApricena</title>
+  <meta name="description" content="Tutti gli eventi di Apricena (FG): festival, concerti, sagre, feste patronali e manifestazioni culturali."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="page-eventi">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="../notizie/">Notizie</a>
+      <a href="../eventi/" class="active">Eventi</a>
+      <a href="../farmacie/">Farmacie</a>
+      <a href="../servizi/">Servizi</a>
+      <a href="../locali/">Locali</a>
+      <a href="../sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="../chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="../contatti/" class="link-btn">Contatti</a>
+    </div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
+      <i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i>
+      <i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i>
+    </button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav">
+      <a href="../notizie/">Notizie</a><a href="../eventi/" class="active">Eventi</a>
+      <a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a>
+      <a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a>
+    </nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+
+<main class="main-content">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <em>Calendario</em>
+      <h1>Prossimi Eventi</h1>
+      <p>Sagre, festival, concerti e manifestazioni di Apricena</p>
+    </div>
+  </div>
+  <div class="container content-section">
+    <div class="filter-bar">
+      <div class="filter-search">
+        <i data-lucide="search" width="16" height="16"></i>
+        <input type="text" placeholder="Cerca eventi..." id="search-input"/>
+      </div>
+      <div class="filter-pills" id="cat-filters">
+        <button class="filter-pill active" data-filter="tutti">Tutti</button>
+      </div>
+    </div>
+    <div class="cards-grid-3" id="eventi-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none">
+      <h3>Nessun evento trovato</h3>
+      <p>Prova a modificare i filtri di ricerca.</p>
+    </div>
+  </div>
+</main>
+
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li><li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>&copy; <span id="year"></span> TuttoApricena</p></div></div></footer>
+
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/main.js"></script>
+<script>
+(function(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Sort helper
+  function sortItems(arr) {
+    if (!Array.isArray(arr)) return [];
+    return arr.slice().sort(function(a, b) {
+      var oa = a.ordine || 0, ob = b.ordine || 0;
+      if (oa > 0 && ob > 0) return ob - oa;
+      if (oa > 0) return -1;
+      if (ob > 0) return 1;
+      return new Date(a.dataInizio||'2000-01-01') - new Date(b.dataInizio||'2000-01-01');
+    });
+  }
+
+  function fmt(d, opts) {
+    try { return new Date(d).toLocaleDateString('it-IT', opts || {day:'numeric',month:'long',year:'numeric'}); }
+    catch(e) { return d || ''; }
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Build category filters
+  var cats = [];
+  (TA.eventi || []).forEach(function(e) {
+    if (e.categoria && cats.indexOf(e.categoria) < 0) cats.push(e.categoria);
+  });
+  var filtersEl = document.getElementById('cat-filters');
+  cats.forEach(function(cat) {
+    var btn = document.createElement('button');
+    btn.className = 'filter-pill';
+    btn.setAttribute('data-filter', cat);
+    btn.textContent = cat;
+    filtersEl.appendChild(btn);
+  });
+
+  var grid = document.getElementById('eventi-grid');
+  var emptyEl = document.getElementById('empty-state');
+
+  function renderCard(ev) {
+    var hasBiglietti = ev.ticketUrl && ev.ticketUrl.length > 0;
+    var dateStr = fmt(ev.dataInizio, {day:'numeric',month:'long',year:'numeric'});
+    if (ev.dataFine && ev.dataFine !== ev.dataInizio) {
+      dateStr += ' &ndash; ' + fmt(ev.dataFine, {day:'numeric',month:'long'});
+    }
+
+    var card = document.createElement('a');
+    card.href = '../eventi/' + ev.slug + '/';
+    card.className = 'card';
+    card.setAttribute('data-category', ev.categoria || '');
+    card.setAttribute('data-searchable', (ev.titolo + ' ' + (ev.descrizione||'') + ' ' + (ev.luogo||'')).toLowerCase());
+
+    card.innerHTML =
+      '<div class="card-img" style="position:relative">' +
+        '<img src="' + esc(ev.immagine) + '" alt="' + esc(ev.titolo) + '" loading="lazy"/>' +
+        '<span class="evento-card-badge" style="position:absolute;top:12px;left:12px">' + esc(ev.categoria) + '</span>' +
+        (hasBiglietti
+          ? '<span style="position:absolute;top:12px;right:12px;background:#16A34A;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px">\uD83C\uDF9F Biglietti</span>'
+          : '') +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-meta">' +
+          '<i data-lucide="calendar" width="11" height="11"></i> ' + dateStr +
+          ' <span style="margin:0 4px">&middot;</span> ' +
+          '<i data-lucide="clock" width="11" height="11"></i> ' + esc(ev.orario || '') +
+        '</div>' +
+        '<div class="card-title">' + esc(ev.titolo) + '</div>' +
+        '<p class="card-desc">' + esc(ev.descrizione || '') + '</p>' +
+        '<div class="card-meta" style="margin-top:8px">' +
+          '<i data-lucide="map-pin" width="11" height="11" color="var(--color-accent)"></i> ' + esc(ev.luogo || '') +
+        '</div>' +
+      '</div>' +
+      '<div class="card-footer">' +
+        '<span class="card-cta">Dettagli <i data-lucide="arrow-right" width="13" height="13"></i></span>' +
+        (hasBiglietti ? '<span style="color:#16A34A;font-size:11px;font-weight:700">Biglietti disponibili</span>' : '') +
+      '</div>';
+
+    return card;
+  }
+
+  function renderEventi(list) {
+    grid.innerHTML = '';
+    list.forEach(function(ev) { grid.appendChild(renderCard(ev)); });
+    emptyEl.style.display = list.length ? 'none' : 'block';
+    lucide.createIcons();
+  }
+
+  var currentCat = 'tutti';
+  var currentSearch = '';
+
+  function applyFilters() {
+    var filtered = sortItems(TA.eventi || []).filter(function(e) {
+      var matchCat = currentCat === 'tutti' || e.categoria === currentCat;
+      var matchSearch = !currentSearch ||
+        (e.titolo + ' ' + (e.descrizione||'') + ' ' + (e.luogo||'')).toLowerCase().includes(currentSearch);
+      return matchCat && matchSearch;
+    });
+    renderEventi(filtered);
+  }
+
+  filtersEl.addEventListener('click', function(e) {
+    var pill = e.target.closest('.filter-pill');
+    if (!pill) return;
+    filtersEl.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
+    pill.classList.add('active');
+    currentCat = pill.getAttribute('data-filter');
+    applyFilters();
+  });
+
+  document.getElementById('search-input').addEventListener('input', function() {
+    currentSearch = this.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  applyFilters();
+})();
+</script>
+</body>
+</html>

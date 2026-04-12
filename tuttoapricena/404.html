@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TuttoApricena</title>
+<script>
+// Detect base path dynamically
+(function(){
+  var path = window.location.pathname;
+  var sections = ['notizie','eventi','locali','farmacie','servizi','sponsor','admin','chi-siamo','contatti','privacy','cookie'];
+  var base = '/';
+  for(var i=0;i<sections.length;i++){
+    var idx = path.indexOf('/'+sections[i]+'/');
+    if(idx >= 0){ base = path.slice(0, idx+1); break; }
+  }
+  document.write('<base href="'+base+'">');
+  window._TA_BASE = base;
+})();
+</script>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+<header id="navbar" style="background:rgba(26,26,46,.97);backdrop-filter:blur(12px)">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="notizie/">Notizie</a><a href="eventi/">Eventi</a>
+      <a href="farmacie/">Farmacie</a><a href="servizi/">Servizi</a>
+      <a href="locali/">Locali</a><a href="sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="contatti/" class="link-btn">Contatti</a>
+    </div>
+  </div></div>
+</header>
+<main id="pg-main" style="padding-top:72px;min-height:90vh;display:flex;align-items:center;justify-content:center">
+  <div style="text-align:center;padding:40px 24px">
+    <i data-lucide="loader" width="40" height="40" color="var(--color-accent)"></i>
+    <p style="color:var(--color-text-muted);margin-top:14px">Caricamento...</p>
+  </div>
+</main>
+<footer id="ft" style="display:none">
+  <div class="footer-inner"><div class="footer-grid">
+    <div class="footer-brand"><a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a></div>
+    <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="notizie/">Notizie</a></li><li><a href="eventi/">Eventi</a></li><li><a href="locali/">Locali</a></li></ul></div>
+  </div><div class="footer-bottom"><p>&copy; <span id="yr"></span> TuttoApricena</p></div></div>
+</footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/slug-renderer.js"></script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+lucide.createIcons();
+
+var path = window.location.pathname;
+var base = window._TA_BASE || '/';
+var rel  = path.slice(base.length).replace(/\/$/, '');
+var parts = rel.split('/');
+var section = parts[0] || '';
+var slug    = parts[1] || '';
+
+if(!section || !slug){
+  document.getElementById('pg-main').innerHTML =
+    '<div style="text-align:center;padding:60px 24px">' +
+    '<div style="font-family:var(--font-display);font-size:5rem;font-weight:900;color:var(--color-accent)">404</div>' +
+    '<h2 style="font-family:var(--font-display);font-size:1.8rem;color:var(--color-primary);margin:12px 0">Pagina non trovata</h2>' +
+    '<p style="color:var(--color-text-muted);margin-bottom:24px">La pagina che cerchi non esiste o &egrave; stata spostata.</p>' +
+    '<a href="./" class="btn-primary">Torna alla Home</a>' +
+    '</div>';
+  lucide.createIcons();
+} else if(['notizie','eventi','locali'].indexOf(section) >= 0){
+  // Use the renderer - it will look up the item and render
+  // Set pg-main to non-centered layout for article rendering
+  document.getElementById('pg-main').style = 'padding-top:72px;min-height:90vh';
+  document.getElementById('ft').style.display = 'block';
+  TARenderer.render(section);
+} else {
+  document.getElementById('pg-main').innerHTML =
+    '<div style="text-align:center;padding:60px 24px">' +
+    '<div style="font-family:var(--font-display);font-size:5rem;font-weight:900;color:var(--color-accent)">404</div>' +
+    '<h2 style="font-family:var(--font-display);font-size:1.8rem;color:var(--color-primary);margin:12px 0">Pagina non trovata</h2>' +
+    '<a href="./" class="btn-primary">Torna alla Home</a>' +
+    '</div>';
+  lucide.createIcons();
+}
+</script>
+</body>
+</html>
