@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 11:41:42
+// CMS Update: 13/04/2026, 11:50:03
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -185,7 +185,7 @@ const TA = {
       "orario": "",
       "luogo": "Cava Dell'Erba, Apricena",
       "descrizione": "Apricena si prepara ad accogliere uno dei protagonisti più amati del panorama teatrale e comico italiano. Il prossimo 21 agosto, nella straordinaria cornice della Cava dell’Erba, andrà in scena Enrico Brignano con il suo spettacolo “Bello di mamma”, uno degli eventi più attesi dell’estate inserito nel cartellone di Suonincava.\n\nSarà una serata all’insegna del divertimento, dell’ironia e delle emozioni, in un luogo che negli ultimi anni è diventato un punto di riferimento per i grandi appuntamenti dal vivo. La Cava dell’Erba, con il suo fascino naturale e la sua atmosfera unica, si conferma ancora una volta palcoscenico ideale per ospitare artisti di primo piano e spettacoli capaci di richiamare pubblico da tutto il territorio.\n\nCon il suo stile inconfondibile, Enrico Brignano porterà sul palco un nuovo show fatto di comicità, osservazioni sulla vita quotidiana e momenti di riflessione, alternando risate e spunti capaci di coinvolgere spettatori di ogni età. “Bello di mamma” promette infatti di essere un appuntamento imperdibile per chi ama il teatro comico di qualità e la grande capacità narrativa di uno degli artisti più apprezzati dal pubblico italiano.",
-      "immagine": "",
+      "immagine": "https://www.ticketone.it/obj/media/IT-eventim/teaser/evo/artwork/2026/brignano-biglietti.jpg",
       "inEvidenza": true,
       "ticketUrl": "https://www.ticketone.it/event/enrico-brignano-bello-di-mamma-2026-cava-dellerba-21491060/",
       "ordine": 1
@@ -200,7 +200,7 @@ const TA = {
       "orario": "",
       "luogo": "Apricena",
       "descrizione": "Sarà il cantautore e rapper milanese Mirko Manuele Martorana, conosciuto dal pubblico come Rkomi, la grande star della Festa Patronale di Apricena, dedicata a Maria Ss. Incoronata. L'artista salirà sul palco il 30 maggio in viale Aldo Moro.\n\nA dare la notizia è stato il Comitato Festa Patronale, guidato da Massimiliano Pasqua. Dopo il successo al Festival di Sanremo con il brano 'Il ritmo delle cose' e il recente duetto con Emma nel singolo 'Vacci Piano', Rkomi è pronto a tornare dal vivo con 'Mirko in Estate', il ciclo di concerti en plein air che segue la tournée invernale 'Mirko nei teatri'.\n\nL'artista si prepara a conquistare palcoscenici, arene e piazze in tutta la penisola, e Apricena rappresenta, al momento, la prima tappa in assoluto del tour annunciato solo pochi giorni fa.\n\nCresciuto nel capoluogo lombardo, Rkomi si è imposto nel panorama musicale italiano come una delle voci più originali e seguite degli ultimi anni, grazie a un sound unico che fonde rap, pop e sonorità indie.",
-      "immagine": "",
+      "immagine": "https://www.friendsandpartners.it/res/images/tours/20260407_115230_wHIgDBKSYP19on2gTp2VypjT9CFC04gvBS1S2ZSV.jpg",
       "inEvidenza": true,
       "ticketUrl": "",
       "ordine": 0
