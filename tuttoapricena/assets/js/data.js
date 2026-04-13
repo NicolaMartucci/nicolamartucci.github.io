@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 01:08:58
+// CMS Update: 13/04/2026, 11:26:42
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -175,6 +175,21 @@ const TA = {
     }
   ],
   "eventi": [
+    {
+      "id": 1776072394081,
+      "slug": "rkomi",
+      "titolo": "Rkomi",
+      "categoria": "Concerti",
+      "dataInizio": "2026-05-30",
+      "dataFine": "2026-05-30",
+      "orario": "",
+      "luogo": "Apricena",
+      "descrizione": "Sarà il cantautore e rapper milanese Mirko Manuele Martorana, conosciuto dal pubblico come Rkomi, la grande star della Festa Patronale di Apricena, dedicata a Maria Ss. Incoronata. L'artista salirà sul palco il 30 maggio in viale Aldo Moro.\n\nA dare la notizia è stato il Comitato Festa Patronale, guidato da Massimiliano Pasqua. Dopo il successo al Festival di Sanremo con il brano 'Il ritmo delle cose' e il recente duetto con Emma nel singolo 'Vacci Piano', Rkomi è pronto a tornare dal vivo con 'Mirko in Estate', il ciclo di concerti en plein air che segue la tournée invernale 'Mirko nei teatri'.\n\nL'artista si prepara a conquistare palcoscenici, arene e piazze in tutta la penisola, e Apricena rappresenta, al momento, la prima tappa in assoluto del tour annunciato solo pochi giorni fa.\n\nCresciuto nel capoluogo lombardo, Rkomi si è imposto nel panorama musicale italiano come una delle voci più originali e seguite degli ultimi anni, grazie a un sound unico che fonde rap, pop e sonorità indie.",
+      "immagine": "",
+      "inEvidenza": true,
+      "ticketUrl": "",
+      "ordine": 0
+    },
     {
       "id": 1,
       "slug": "festa-patronale-madonna-incoronata-2026",
