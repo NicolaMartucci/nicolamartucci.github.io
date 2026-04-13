@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 11:28:20
+// CMS Update: 13/04/2026, 11:30:46
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -175,6 +175,21 @@ const TA = {
     }
   ],
   "eventi": [
+    {
+      "id": 1776072641411,
+      "slug": "enrico-brignano-suonincava",
+      "titolo": "Enrico Brignano Suonincava",
+      "categoria": "Spettacoli",
+      "dataInizio": "2026-08-21",
+      "dataFine": "2026-08-21",
+      "orario": "",
+      "luogo": "Cava Dell'Erba, Apricena",
+      "descrizione": "Apricena si prepara ad accogliere uno dei protagonisti più amati del panorama teatrale e comico italiano. Il prossimo 21 agosto, nella straordinaria cornice della Cava dell’Erba, andrà in scena Enrico Brignano con il suo spettacolo “Bello di mamma”, uno degli eventi più attesi dell’estate inserito nel cartellone di Suonincava.\n\nSarà una serata all’insegna del divertimento, dell’ironia e delle emozioni, in un luogo che negli ultimi anni è diventato un punto di riferimento per i grandi appuntamenti dal vivo. La Cava dell’Erba, con il suo fascino naturale e la sua atmosfera unica, si conferma ancora una volta palcoscenico ideale per ospitare artisti di primo piano e spettacoli capaci di richiamare pubblico da tutto il territorio.\n\nCon il suo stile inconfondibile, Enrico Brignano porterà sul palco un nuovo show fatto di comicità, osservazioni sulla vita quotidiana e momenti di riflessione, alternando risate e spunti capaci di coinvolgere spettatori di ogni età. “Bello di mamma” promette infatti di essere un appuntamento imperdibile per chi ama il teatro comico di qualità e la grande capacità narrativa di uno degli artisti più apprezzati dal pubblico italiano.",
+      "immagine": "",
+      "inEvidenza": true,
+      "ticketUrl": "https://www.ticketone.it/event/enrico-brignano-bello-di-mamma-2026-cava-dellerba-21491060/",
+      "ordine": 1
+    },
     {
       "id": 1776072394081,
       "slug": "rkomi",
