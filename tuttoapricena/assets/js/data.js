@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 12:53:28
+// CMS Update: 13/04/2026, 15:41:51
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -176,22 +176,7 @@ const TA = {
   ],
   "eventi": [
     {
-      "id": 1776072641411,
-      "slug": "enrico-brignano-suonincava",
-      "titolo": "Enrico Brignano Suonincava",
-      "categoria": "Spettacoli",
-      "dataInizio": "2026-08-21",
-      "dataFine": "2026-08-21",
-      "orario": "",
-      "luogo": "Cava Dell'Erba, Apricena",
-      "descrizione": "Apricena si prepara ad accogliere uno dei protagonisti più amati del panorama teatrale e comico italiano. Il prossimo 21 agosto, nella straordinaria cornice della Cava dell’Erba, andrà in scena Enrico Brignano con il suo spettacolo “Bello di mamma”, uno degli eventi più attesi dell’estate inserito nel cartellone di Suonincava.\n\nSarà una serata all’insegna del divertimento, dell’ironia e delle emozioni, in un luogo che negli ultimi anni è diventato un punto di riferimento per i grandi appuntamenti dal vivo. La Cava dell’Erba, con il suo fascino naturale e la sua atmosfera unica, si conferma ancora una volta palcoscenico ideale per ospitare artisti di primo piano e spettacoli capaci di richiamare pubblico da tutto il territorio.\n\nCon il suo stile inconfondibile, Enrico Brignano porterà sul palco un nuovo show fatto di comicità, osservazioni sulla vita quotidiana e momenti di riflessione, alternando risate e spunti capaci di coinvolgere spettatori di ogni età. “Bello di mamma” promette infatti di essere un appuntamento imperdibile per chi ama il teatro comico di qualità e la grande capacità narrativa di uno degli artisti più apprezzati dal pubblico italiano.",
-      "immagine": "https://www.ticketone.it/obj/media/IT-eventim/teaser/evo/artwork/2026/brignano-biglietti.jpg",
-      "inEvidenza": true,
-      "ticketUrl": "https://www.ticketone.it/event/enrico-brignano-bello-di-mamma-2026-cava-dellerba-21491060/",
-      "ordine": 2
-    },
-    {
-      "id": 1776072394081,
+      "id": 1776087694877,
       "slug": "rkomi",
       "titolo": "Rkomi",
       "categoria": "Concerti",
@@ -203,6 +188,66 @@ const TA = {
       "immagine": "https://www.friendsandpartners.it/res/images/tours/20260407_115230_wHIgDBKSYP19on2gTp2VypjT9CFC04gvBS1S2ZSV.jpg",
       "inEvidenza": true,
       "ticketUrl": "",
+      "ordine": 0
+    },
+    {
+      "id": 1776087635515,
+      "slug": "pooh-suonincava",
+      "titolo": "Pooh Suonincava",
+      "categoria": "Concerti",
+      "dataInizio": "2026-08-19",
+      "dataFine": "2026-08-19",
+      "orario": "",
+      "luogo": "Cava Dell'Erba, Apricena",
+      "descrizione": "Apricena si prepara ancora una volta a regalare al pubblico una serata speciale nel segno della grande musica italiana. Il 19 agosto, nello straordinario scenario della Cava dell’Erba, arriveranno i Pooh, protagonisti assoluti della storia del pop-rock italiano, per una delle tappe più attese del loro tour estivo.\n\nPiù che un semplice live, sarà un vero e proprio viaggio emozionale. La Cava dell’Erba, con le sue imponenti pareti rocciose che creano un naturale effetto anfiteatro, saprà offrire un’atmosfera suggestiva e una resa sonora davvero particolare.\n\nSul palco saliranno Roby Facchinetti, Dodi Battaglia, Red Canzian e Riccardo Fogli, pronti a ripercorrere i brani che hanno segnato intere generazioni: da ‘Piccola Katy’ a ‘Uomini Soli’, passando per tante altre canzoni simbolo della loro straordinaria carriera",
+      "immagine": "https://www.concerti-italia.it/wp-content/uploads/2026/01/Pooh-in-concerto-Date-info-e-biglietti-La-nostra-storia-ESTATE-2026.webp",
+      "inEvidenza": false,
+      "ticketUrl": "https://www.ticketone.it/event/pooh60-la-nostra-storia-estate-cava-dellerba-21234965/",
+      "ordine": 0
+    },
+    {
+      "id": 1776087575759,
+      "slug": "enrico-brignano-suonincava",
+      "titolo": "Enrico Brignano Suonincava",
+      "categoria": "Spettacoli",
+      "dataInizio": "2026-08-21",
+      "dataFine": "2026-08-21",
+      "orario": "",
+      "luogo": "Cava Dell'Erba, Apricena",
+      "descrizione": "Apricena si prepara ad accogliere uno dei protagonisti più amati del panorama teatrale e comico italiano. Il prossimo 21 agosto, nella straordinaria cornice della Cava dell’Erba, andrà in scena Enrico Brignano con il suo spettacolo “Bello di mamma”, uno degli eventi più attesi dell’estate inserito nel cartellone di Suonincava.\n\nSarà una serata all’insegna del divertimento, dell’ironia e delle emozioni, in un luogo che negli ultimi anni è diventato un punto di riferimento per i grandi appuntamenti dal vivo. La Cava dell’Erba, con il suo fascino naturale e la sua atmosfera unica, si conferma ancora una volta palcoscenico ideale per ospitare artisti di primo piano e spettacoli capaci di richiamare pubblico da tutto il territorio.\n\nCon il suo stile inconfondibile, Enrico Brignano porterà sul palco un nuovo show fatto di comicità, osservazioni sulla vita quotidiana e momenti di riflessione, alternando risate e spunti capaci di coinvolgere spettatori di ogni età. “Bello di mamma” promette infatti di essere un appuntamento imperdibile per chi ama il teatro comico di qualità e la grande capacità narrativa di uno degli artisti più apprezzati dal pubblico italiano.",
+      "immagine": "https://www.ticketone.it/obj/media/IT-eventim/teaser/evo/artwork/2026/brignano-biglietti.jpg",
+      "inEvidenza": true,
+      "ticketUrl": "https://www.ticketone.it/event/enrico-brignano-bello-di-mamma-2026-cava-dellerba-21491060/",
+      "ordine": 0
+    },
+    {
+      "id": 1776087508781,
+      "slug": "claudio-baglioni-suonincava",
+      "titolo": "Claudio Baglioni Suonincava",
+      "categoria": "Concerti",
+      "dataInizio": "2026-08-22",
+      "dataFine": "2026-08-22",
+      "orario": "",
+      "luogo": "Cava Dell'Erba, Apricena",
+      "descrizione": "Il \"GrandTour LA VITA È ADESSO\" arriva in una delle cornici più affascinanti della penisola: la Cava dell'Erba, uno spazio straordinario dove melodie, arte e paesaggio si fondono in perfetta armonia. \n\nUn evento imperdibile per festeggiare i 40 anni de \"La vita è adesso\", l'album che detiene il record di vendite nella storia discografica italiana, e che segna il ritorno di Claudio Baglioni nelle location open air più suggestive del nostro Paese",
+      "immagine": "https://www.concerti-italia.it/wp-content/uploads/2025/10/Claudio-Baglioni-in-concerto-con-La-Vita-e-adesso-Gran-Tour-Date-info-e-biglietti.webp",
+      "inEvidenza": true,
+      "ticketUrl": "https://www.ticketone.it/event/claudio-baglioni-grandtour-la-vita-e-adesso-cava-dellerba-20727231/",
+      "ordine": 0
+    },
+    {
+      "id": 1776087419747,
+      "slug": "giorgio-panariello-suonincava",
+      "titolo": "Giorgio Panariello Suonincava",
+      "categoria": "Spettacoli",
+      "dataInizio": "2026-08-28",
+      "dataFine": "2026-04-13",
+      "orario": "",
+      "luogo": "Cava Dell'Erba, Apricena",
+      "descrizione": "Dopo il grande successo della tranche autunnale nei teatri, il comico toscano riparte con le date estive nelle arene all’aperto, e Apricena sarà una delle tappe più attese del Sud Italia.\n\n“E se domani…” è un viaggio ironico e futuristico nel nostro presente. Panariello, con la sua comicità intelligente e mai banale, prova a immaginare come saremo tra qualche anno: tra intelligenza artificiale che parla al posto nostro, influencer di 10 anni, auto che si guidano da sole, boomer spaesati e figli iperconnessi.\n\nE lo fa partendo da sé, ironizzando per primo sul suo essere “boomer” a tutti gli effetti: uno che manda ancora i vocali lunghissimi, che stampa le mail e che lotta ogni giorno con password, QR code e tutorial su YouTube.\n\nUno show in cui ritroveremo il Panariello di sempre – racconto, imitazioni, personaggi storici e nuove maschere – ma con uno sguardo decisamente proiettato in avanti.",
+      "immagine": "https://www.ticketone.it/obj/media/IT-eventim/teaser/evo/artwork/2026/panariello-estate-biglietti.jpg",
+      "inEvidenza": false,
+      "ticketUrl": "https://www.ticketone.it/event/giorgio-panariello-e-se-domani-estate-2026-cava-dellerba-21548567/",
       "ordine": 0
     }
   ],
