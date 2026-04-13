@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 11:53:55
+// CMS Update: 13/04/2026, 12:48:31
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -188,7 +188,7 @@ const TA = {
       "immagine": "https://www.ticketone.it/obj/media/IT-eventim/teaser/evo/artwork/2026/brignano-biglietti.jpg",
       "inEvidenza": true,
       "ticketUrl": "https://www.ticketone.it/event/enrico-brignano-bello-di-mamma-2026-cava-dellerba-21491060/",
-      "ordine": 2
+      "ordine": -1
     },
     {
       "id": 1776072394081,
@@ -203,7 +203,7 @@ const TA = {
       "immagine": "https://www.friendsandpartners.it/res/images/tours/20260407_115230_wHIgDBKSYP19on2gTp2VypjT9CFC04gvBS1S2ZSV.jpg",
       "inEvidenza": true,
       "ticketUrl": "",
-      "ordine": 0
+      "ordine": -1
     }
   ],
   "farmacie": [
