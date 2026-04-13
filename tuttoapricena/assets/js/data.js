@@ -1,5 +1,5 @@
 // TUTTOAPRICENA - DATA FILE
-// CMS Update: 13/04/2026, 11:27:04
+// CMS Update: 13/04/2026, 11:28:20
 const TA = {
   "config": {
     "siteName": "TuttoApricena",
@@ -189,84 +189,6 @@ const TA = {
       "inEvidenza": true,
       "ticketUrl": "",
       "ordine": 0
-    },
-    {
-      "id": 1,
-      "slug": "festa-patronale-madonna-incoronata-2026",
-      "titolo": "Festa Patronale Madonna SS. Incoronata 2026",
-      "categoria": "Religioso",
-      "dataInizio": "2026-05-29",
-      "dataFine": "2026-06-01",
-      "orario": "18:00",
-      "luogo": "Santuario Madonna Incoronata — Chiesa Madre, Apricena",
-      "descrizione": "Solenni festeggiamenti in onore della Patrona Maria SS. Incoronata con la tradizionale Corsa dei Fujenti, processione solenne, luminarie, concerti e fuochi d'artificio.",
-      "immagine": "https://images.unsplash.com/photo-1543373014-cfe4f4bc1cdf?w=800&q=80",
-      "inEvidenza": true
-    },
-    {
-      "id": 2,
-      "slug": "festival-artistico-apricena-2026",
-      "titolo": "Festival Artistico di Apricena 2026",
-      "categoria": "Cultura",
-      "dataInizio": "2026-04-10",
-      "dataFine": "2026-04-20",
-      "orario": "19:00",
-      "luogo": "Centro storico, Apricena",
-      "descrizione": "Il Festival Artistico di Apricena torna con spettacoli, performance, mostre e concerti. I piccoli della 'Sirenetta' hanno aperto l'edizione con un emozionante messaggio di pace.",
-      "immagine": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&q=80",
-      "inEvidenza": true
-    },
-    {
-      "id": 3,
-      "slug": "suoni-in-cava-apricena-2026",
-      "titolo": "Suoni in Cava — Festival Jazz 2026",
-      "categoria": "Musica",
-      "dataInizio": "2026-08-15",
-      "dataFine": "2026-08-15",
-      "orario": "21:00",
-      "luogo": "Cava Tortorelli, Apricena",
-      "descrizione": "Il festival jazz nella scenografica Cava Tortorelli. La musica risuona tra le pareti di pietra calcarea delle cave in uno degli scenari più unici del Gargano.",
-      "immagine": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",
-      "inEvidenza": false
-    },
-    {
-      "id": 4,
-      "slug": "kermesse-musicale-estate-apricena-2026",
-      "titolo": "Kermesse Musicale Estate 2026",
-      "categoria": "Musica",
-      "dataInizio": "2026-08-01",
-      "dataFine": "2026-08-31",
-      "orario": "21:00",
-      "luogo": "Piazze del centro storico, Apricena",
-      "descrizione": "Un mese di concerti gratuiti ogni sera nelle piazze di Apricena con artisti locali, regionali e nazionali.",
-      "immagine": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
-      "inEvidenza": false
-    },
-    {
-      "id": 5,
-      "slug": "notte-bianca-estate-apricena-2026",
-      "titolo": "Notte Bianca Estiva di Apricena 2026",
-      "categoria": "Cultura",
-      "dataInizio": "2026-07-18",
-      "dataFine": "2026-07-18",
-      "orario": "21:00",
-      "luogo": "Corso Roma, Apricena",
-      "descrizione": "La Notte Bianca anima Corso Roma con negozi aperti, street food, musica live e artisti di strada per tutta la famiglia.",
-      "immagine": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
-      "inEvidenza": false
-    },
-    {
-      "id": 6,
-      "slug": "visita-cave-pietra-apricena-2026",
-      "titolo": "Visite guidate alle Cave di Pietra — Estate 2026",
-      "categoria": "Turismo",
-      "dataInizio": "2026-04-01",
-      "dataFine": "2026-10-31",
-      "orario": "09:00",
-      "luogo": "Cave di Pietra, zona industriale Apricena",
-      "descrizione": "Tour guidati alle cave di estrazione della Pietra di Apricena, secondo polo marmifero d'Italia. Un'esperienza unica per scoprire come viene estratto il pregiato marmo.",
-      "immagine": "https://images.unsplash.com/photo-1565791380713-1756b9a05343?w=800&q=80",
-      "inEvidenza": false
     }
   ],
   "farmacie": [
