@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/icon-96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#E8A838" />
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/></noscript>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Locali &amp; Attività ad Apricena — Ristoranti, Bar, Pizzerie | TuttoApricena</title>
+<meta name="description" content="Scopri i migliori locali di Apricena (FG): ristoranti, bar, pizzerie, alloggi e negozi. Orari, telefoni e come raggiungerli."/>
+<meta name="keywords" content="locali Apricena, ristoranti Apricena, bar Apricena, pizzerie Apricena, dove mangiare Apricena, alloggi Apricena, negozi Apricena, attività Apricena, Apricena FG"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://www.tuttoapricena.it/locali/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Locali &amp; Attività ad Apricena — TuttoApricena"/>
+<meta property="og:description" content="Scopri i migliori locali di Apricena: ristoranti, bar, pizzerie, alloggi e negozi."/>
+<meta property="og:url" content="https://www.tuttoapricena.it/locali/"/>
+<meta property="og:image" content="https://www.tuttoapricena.it/images/santuario.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"Locali e Attività di Apricena","url":"https://www.tuttoapricena.it/locali/"}</script>
+<link rel="stylesheet" href="../assets/css/style.css"/>
+<style>
+/* ===== TAB BAR — solo testo, zero icone ===== */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #E5E7EB;
+  margin-bottom: 32px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 13px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tab-btn:hover { color: var(--color-primary); }
+.tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-accent); }
+.tab-count {
+  background: #F1EDE5;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 50px;
+  line-height: 1.4;
+}
+.tab-btn.active .tab-count { background: rgba(232,168,56,.15); color: var(--color-accent); }
+
+/* ===== SEZIONE DIVIDER ===== */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 40px 0 20px;
+}
+.section-divider h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+.section-divider::after { content: ''; flex: 1; height: 1px; background: #E5E7EB; }
+
+/* ===== CARD LOCALE — identica struttura alle card eventi ===== */
+/* Usa la classe .card già definita nel CSS globale + override */
+.card.locale-card-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(26,26,46,.06);
+  transition: transform .25s, box-shadow .25s;
+}
+.card.locale-card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(26,26,46,.12);
+}
+
+/* Immagine in alto */
+.card.locale-card-item .card-img {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: #f0ede6;
+  flex-shrink: 0;
+}
+.card.locale-card-item .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s;
+}
+.card.locale-card-item:hover .card-img img { transform: scale(1.05); }
+
+/* Badge tipo sopra immagine */
+.locale-tipo-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 50px;
+  color: #fff;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Corpo card */
+.card.locale-card-item .card-body {
+  padding: 16px 18px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card.locale-card-item .card-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  line-height: 1.25;
+  /* Non troncare il nome */
+}
+.card.locale-card-item .card-desc {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Info box con sfondo — indirizzo, telefono, orari */
+.lc-info-box {
+  background: #F8F5EF;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.lc-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 11px;
+  font-size: 12.5px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+.lc-info-row + .lc-info-row { border-top: 1px solid #EDE9E2; }
+.lc-info-row svg { flex-shrink: 0; margin-top: 2px; color: var(--color-accent); }
+.lc-info-row a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+.lc-info-row a:hover { text-decoration: underline; }
+
+/* Footer card — Chiama + Mappa */
+.card.locale-card-item .card-footer {
+  padding: 10px 18px 14px;
+  border-top: 1px solid #f3f2ef;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.lc-btn-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.lc-btn-call:hover { background: #c8881a; color: #fff; }
+.lc-btn-map {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #F1EDE5;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 13px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.lc-btn-map:hover { background: #E5DFD4; }
+
+/* Search */
+.locali-search-wrap { position: relative; max-width: 440px; margin-bottom: 28px; }
+.locali-search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none; }
+.locali-search-wrap input { width: 100%; padding: 12px 16px 12px 42px; border: 1.5px solid #E5E7EB; border-radius: 50px; font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s; background: #fff; }
+.locali-search-wrap input:focus { border-color: var(--color-accent); }
+
+/* No results */
+.no-results { text-align: center; padding: 60px 24px; color: var(--color-text-muted); }
+.no-results h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--color-primary); margin-bottom: 6px; }
+
+/* Mobile */
+@media(max-width: 640px) {
+  .tab-btn { padding: 11px 14px; font-size: 13px; }
+}
+</style>
+</head>
+<body class="page-locali">
+
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a>
+      <a href="../servizi/">Servizi</a><a href="../locali/" class="active">Locali</a><a href="../sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="../chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="../contatti/" class="link-btn">Contatti</a>
+    </div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
+      <i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i>
+      <i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i>
+    </button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav">
+      <a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a>
+      <a href="../servizi/">Servizi</a><a href="../locali/" class="active">Locali</a><a href="../sponsor/">Sponsor</a>
+    </nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+
+<main class="main-content">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <em>Scopri Apricena</em>
+      <h1>Locali &amp; Attività</h1>
+      <p>Ristoranti, bar, pizzerie e attività in città</p>
+    </div>
+  </div>
+
+  <div class="container content-section">
+
+    <!-- Ricerca -->
+    <div class="locali-search-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" placeholder="Cerca per nome, tipo, indirizzo…" autocomplete="off"/>
+    </div>
+
+    <!-- Tab — solo testo, zero icone -->
+    <div class="tab-nav" id="tab-nav">
+      <button class="tab-btn active" data-tab="tutti">Tutti <span class="tab-count" id="cnt-tutti">0</span></button>
+      <button class="tab-btn" data-tab="ristorante">Ristoranti <span class="tab-count" id="cnt-ristorante">0</span></button>
+      <button class="tab-btn" data-tab="bar">Bar &amp; Locali <span class="tab-count" id="cnt-bar">0</span></button>
+      <button class="tab-btn" data-tab="pizzeria">Pizzerie <span class="tab-count" id="cnt-pizzeria">0</span></button>
+      <button class="tab-btn" data-tab="negozio">Negozi <span class="tab-count" id="cnt-negozio">0</span></button>
+      <button class="tab-btn" data-tab="alloggio">Alloggi <span class="tab-count" id="cnt-alloggio">0</span></button>
+      <button class="tab-btn" data-tab="pub">Pub &amp; Birrerie <span class="tab-count" id="cnt-pub">0</span></button>
+    </div>
+
+    <div id="locali-output"></div>
+    <div class="no-results" id="no-results" style="display:none">
+      <h3>Nessun locale trovato</h3>
+      <p>Prova a modificare i filtri o la ricerca.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <p>Il portale informativo di Apricena.</p>
+  </div>
+  <div class="footer-col"><h4>Sezioni</h4><ul>
+    <li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li>
+    <li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li>
+    <li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li>
+  </ul></div>
+  <div class="footer-col"><h4>Info</h4><ul>
+    <li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li>
+    <li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li>
+  </ul></div>
+</div><div class="footer-bottom"><p>&copy; <span id="year"></span> TuttoApricena</p></div></div></footer>
+
+<script src="../assets/js/lucide-mini.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/main.js"></script>
+<script>
+(function(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var currentTab = 'tutti';
+  var currentSearch = '';
+
+  // Colori badge per tipo
+  var TIPO_COLORS = {
+    ristorante: '#7C3AED',
+    bar:        '#0284C7',
+    pizzeria:   '#DC2626',
+    alloggio:   '#16A34A',
+    negozio:    '#EA580C',
+    artigianato:'#E8A838',
+    pub:        '#7C2D12'
+  };
+
+  // Coordinate GPS precise per mappa
+  var COORDS = {
+    'sarni-ristorazione-apricena':          { lat: 41.7852, lng: 15.4512 },
+    'sarni-ristorazione-maglione-apricena': { lat: 41.7852, lng: 15.4512 },
+    'bar-excelsior-apricena':               { lat: 41.7861, lng: 15.4519 },
+    'ristorante-da-antonio-apricena':       { lat: 41.7855, lng: 15.4505 },
+    'bar-il-migliore-apricena':             { lat: 41.7858, lng: 15.4508 },
+    'artis-beer-lab-apricena':              { lat: 41.7866, lng: 15.4522 },
+    'ristorante-incoronata-apricena':       { lat: 41.8012, lng: 15.4401 },
+    'lato-opposto-apricena':                { lat: 41.7863, lng: 15.4515 },
+    'bar-caffe-centrale-apricena':          { lat: 41.7860, lng: 15.4518 },
+    'pizzeria-da-tonino-apricena':          { lat: 41.7854, lng: 15.4510 },
+    'ristorante-il-trullo-apricena':        { lat: 41.7849, lng: 15.4503 },
+    'ristorante-via-foggia-apricena':       { lat: 41.7840, lng: 15.4495 },
+    'macelleria-di-giovanni-apricena':      { lat: 41.7856, lng: 15.4514 },
+    'laboratorio-ceramica-pugliese':        { lat: 41.7869, lng: 15.4526 },
+    'b-and-b-sole-del-gargano':             { lat: 41.7875, lng: 15.4530 }
+  };
+
+  function mapUrl(l) {
+    var c = COORDS[l.slug];
+    if (c) return 'https://maps.google.com/?q=' + c.lat + ',' + c.lng + '&ll=' + c.lat + ',' + c.lng + '&z=18';
+    return 'https://maps.google.com/?q=' + encodeURIComponent((l.indirizzo || l.nome) + ', Apricena FG');
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // SVG inline (lightweight, no dipendenza lucide per le card)
+  var IC = {
+    pin:   '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    phone: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    clock: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    globe: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    nav:   '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>',
+    call:  '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
+  };
+
+  function renderCard(l) {
+    var color = TIPO_COLORS[l.tipoSlug] || '#1A1A2E';
+    var pageUrl = '../locali/' + l.slug + '/';
+
+    // Immagine
+    var imgHtml = l.immagine
+      ? '<img src="' + esc(l.immagine) + '" alt="' + esc(l.nome) + '" loading="lazy" onerror="this.style.display=\'none\'">'
+      : '';
+
+    // Righe info con sfondo
+    var rows = '';
+    if (l.indirizzo) {
+      rows += '<div class="lc-info-row">' + IC.pin + '<span>' + esc(l.indirizzo) + '</span></div>';
+    }
+    if (l.telefono) {
+      rows += '<div class="lc-info-row">' + IC.phone +
+        '<span><a href="tel:' + esc(l.telefono) + '" onclick="event.stopPropagation()">' + esc(l.telefono) + '</a></span></div>';
+    }
+    if (l.sitoWeb) {
+      rows += '<div class="lc-info-row">' + IC.globe +
+        '<span><a href="' + esc(l.sitoWeb) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sito web</a></span></div>';
+    }
+
+    // Bottoni azione
+    var callBtn = l.telefono
+      ? '<a href="tel:' + esc(l.telefono) + '" class="lc-btn-call" onclick="event.stopPropagation()">' + IC.call + ' Chiama</a>'
+      : '';
+    var mapBtn = '<a href="' + mapUrl(l) + '" target="_blank" rel="noopener" class="lc-btn-map" onclick="event.stopPropagation()">' + IC.nav + ' Mappa</a>';
+
+    // Card costruita con <a> — identica struttura .card degli eventi
+    var a = document.createElement('a');
+    a.href = pageUrl;
+    a.className = 'card locale-card-item';
+    a.setAttribute('data-searchable', (l.nome + ' ' + l.tipo + ' ' + (l.descrizione||'') + ' ' + (l.indirizzo||'')).toLowerCase());
+
+    a.innerHTML =
+      '<div class="card-img" style="position:relative">' +
+        imgHtml +
+        '<span class="locale-tipo-pill" style="background:' + color + '">' + esc(l.tipo) + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">' + esc(l.nome) + '</div>' +
+        (l.descrizione ? '<p class="card-desc">' + esc(l.descrizione) + '</p>' : '') +
+        (rows ? '<div class="lc-info-box">' + rows + '</div>' : '') +
+      '</div>' +
+      '<div class="card-footer">' +
+        callBtn + mapBtn +
+      '</div>';
+
+    return a;
+  }
+
+  var SECTION_ORDER  = ['ristorante','pizzeria','bar','pub','alloggio','negozio','artigianato'];
+  var SECTION_LABELS = {
+    ristorante: 'Ristoranti',
+    pizzeria:   'Pizzerie',
+    bar:        'Bar & Locali',
+    alloggio:   'Alloggi',
+    negozio:    'Negozi',
+    artigianato:'Artigianato',
+    pub:        'Pub &amp; Birrerie'
+  };
+
+  function renderOutput(list) {
+    var out   = document.getElementById('locali-output');
+    var noRes = document.getElementById('no-results');
+
+    if (!list.length) {
+      out.innerHTML = '';
+      noRes.style.display = 'block';
+      return;
+    }
+    noRes.style.display = 'none';
+    out.innerHTML = '';
+
+    if (currentTab === 'tutti' && !currentSearch) {
+      // Raggruppati per categoria con divider
+      SECTION_ORDER.forEach(function(tipo) {
+        var group = list.filter(function(l){ return l.tipoSlug === tipo; });
+        if (!group.length) return;
+
+        var div = document.createElement('div');
+        div.className = 'section-divider';
+        div.innerHTML = '<h2>' + SECTION_LABELS[tipo] + '</h2>';
+        out.appendChild(div);
+
+        var grid = document.createElement('div');
+        grid.className = 'cards-grid-3';          // <-- stessa classe degli eventi
+        group.forEach(function(l){ grid.appendChild(renderCard(l)); });
+        out.appendChild(grid);
+      });
+
+      // Tipi extra non in SECTION_ORDER
+      var handled = new Set(SECTION_ORDER);
+      var rest = list.filter(function(l){ return !handled.has(l.tipoSlug); });
+      if (rest.length) {
+        var divR = document.createElement('div');
+        divR.className = 'section-divider';
+        divR.innerHTML = '<h2>Altro</h2>';
+        out.appendChild(divR);
+        var gridR = document.createElement('div');
+        gridR.className = 'cards-grid-3';
+        rest.forEach(function(l){ gridR.appendChild(renderCard(l)); });
+        out.appendChild(gridR);
+      }
+    } else {
+      // Griglia piatta per tab singola o ricerca
+      var grid = document.createElement('div');
+      grid.className = 'cards-grid-3';
+      list.forEach(function(l){ grid.appendChild(renderCard(l)); });
+      out.appendChild(grid);
+    }
+
+    // Reinizializza le icone lucide nella navbar ecc.
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
+  function getFiltered() {
+    return (TA.locali || []).filter(function(l) {
+      var matchTab    = (currentTab === 'tutti') || (l.tipoSlug === currentTab);
+      var matchSearch = !currentSearch ||
+        (l.nome + ' ' + l.tipo + ' ' + (l.descrizione||'') + ' ' + (l.indirizzo||'')).toLowerCase().indexOf(currentSearch) >= 0;
+      return matchTab && matchSearch;
+    });
+  }
+
+  function updateCounts() {
+    var all = TA.locali || [];
+    document.getElementById('cnt-tutti').textContent = all.length;
+    ['ristorante','bar','pizzeria','negozio','alloggio','pub'].forEach(function(t) {
+      var el = document.getElementById('cnt-' + t);
+      if (el) el.textContent = all.filter(function(l){ return l.tipoSlug === t; }).length;
+    });
+  }
+
+  function render() { renderOutput(getFiltered()); }
+
+  // Switching tab
+  document.getElementById('tab-nav').addEventListener('click', function(e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentTab = btn.getAttribute('data-tab');
+    render();
+  });
+
+  // Ricerca
+  document.getElementById('search-input').addEventListener('input', function() {
+    currentSearch = this.value.toLowerCase().trim();
+    if (currentSearch) {
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelector('.tab-btn[data-tab="tutti"]').classList.add('active');
+      currentTab = 'tutti';
+    }
+    render();
+  });
+
+  updateCounts();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,1 +1,495 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/icon-96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#E8A838" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="dns-prefetch" href="https://api.open-meteo.com" />
+  <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/></noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuttoApricena — Il portale informativo di Apricena (FG)</title>
+  <meta name="description" content="Notizie, eventi, farmacie di turno, servizi e tutto quello che accade ad Apricena (FG), Puglia — la Città della Pietra e del Marmo." />
+  <meta name="keywords" content="Apricena, Apricena notizie, Apricena eventi, Apricena locali, Apricena farmacie, Apricena ristoranti, Apricena bar, Apricena servizi, Apricena Puglia, Apricena Foggia, cosa fare Apricena, Apricena oggi, portale Apricena, TuttoApricena" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="TuttoApricena" />
+  <meta name="geo.region" content="IT-FG" />
+  <meta name="geo.placename" content="Apricena" />
+  <meta name="geo.position" content="41.7853;15.4517" />
+  <meta name="ICBM" content="41.7853, 15.4517" />
+  <link rel="canonical" href="https://www.tuttoapricena.it/" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:site_name" content="TuttoApricena" />
+  <meta property="og:title" content="TuttoApricena — Il portale informativo di Apricena (FG)" />
+  <meta property="og:description" content="Notizie, eventi, farmacie di turno, servizi e tutto quello che accade ad Apricena (FG), Puglia — la Città della Pietra e del Marmo." />
+  <meta property="og:url" content="https://www.tuttoapricena.it/" />
+  <meta property="og:image" content="https://www.tuttoapricena.it/images/og/citta-apricena.jpg" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TuttoApricena — Apricena (FG)" />
+  <meta name="twitter:description" content="Notizie, eventi, farmacie di turno e tutto quello che accade ad Apricena (FG)." />
+  <meta name="twitter:image" content="https://www.tuttoapricena.it/images/og/citta-apricena.jpg" />
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "TuttoApricena",
+    "alternateName": "Tutto Apricena",
+    "url": "https://www.tuttoapricena.it/",
+    "description": "Il portale informativo di Apricena (FG), Puglia. Notizie, eventi, farmacie, locali e servizi.",
+    "inLanguage": "it",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.tuttoapricena.it/notizie/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "TuttoApricena",
+    "url": "https://www.tuttoapricena.it/",
+    "logo": "https://www.tuttoapricena.it/images/icon-512.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "info@tuttoapricena.it",
+      "contactType": "customer support",
+      "areaServed": "IT",
+      "availableLanguage": "Italian"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Apricena",
+      "addressRegion": "FG",
+      "postalCode": "71011",
+      "addressCountry": "IT"
+    },
+    "sameAs": [
+      "https://www.facebook.com/tuttoapricena",
+      "https://www.instagram.com/tuttoapricena"
+    ]
+  }
+  </script>
+  <link rel="preload" href="assets/css/style.css" as="style" />
+  <link rel="preload" href="images/santuario.webp" as="image" fetchpriority="high" />
+  <link rel="preload" href="assets/js/lucide-mini.js" as="script" />
+  <link rel="preload" href="assets/js/data.js" as="script" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>.meteo-bar{background:linear-gradient(135deg,#0f3460 0,#16213e 100%);padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)}.meteo-bar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}.meteo-left{display:flex;align-items:center;gap:12px;flex-shrink:0}.meteo-icon{width:48px;height:48px;border-radius:12px;background:rgba(232,168,56,.18);display:flex;align-items:center;justify-content:center}.meteo-label em{display:block;color:var(--color-accent);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-style:normal}.meteo-label strong{display:block;color:#fff;font-size:15px;font-weight:600}.meteo-sep{height:40px;width:1px;background:rgba(255,255,255,.1);flex-shrink:0}.meteo-main{display:flex;align-items:baseline;gap:8px;flex-shrink:0}.meteo-temp{font-family:var(--font-display);font-size:2.2rem;font-weight:900;color:#fff;line-height:1}.meteo-feels{color:rgba(255,255,255,.5);font-size:12px}.meteo-details{display:flex;flex-wrap:wrap;gap:14px;flex:1}.meteo-detail{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.65);font-size:13px}.meteo-detail svg{color:var(--color-accent);flex-shrink:0}.meteo-forecast{display:flex;gap:10px;margin-left:auto}.meteo-fc-day{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;min-width:66px}.meteo-fc-name{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em}.meteo-fc-icon{font-size:1.1rem;line-height:1}.meteo-fc-temp{font-size:12px;font-weight:700;color:#fff}.meteo-fc-range{font-size:10px;color:rgba(255,255,255,.4)}@media(max-width:900px){.meteo-fc-day:nth-child(3){display:none}}@media(max-width:768px){  .meteo-bar{padding:0}  .meteo-bar-inner{    padding:0;    display:grid;    grid-template-columns:1fr 1fr;    grid-template-rows:auto auto;    gap:0;    flex-wrap:nowrap;    align-items:stretch  }  /* Cella 1: oggi — icona + label + temp */  .meteo-left{    grid-column:1;grid-row:1;    display:flex;align-items:center;gap:10px;    padding:12px 14px;    border-right:1px solid rgba(255,255,255,.07)  }  .meteo-icon{width:42px;height:42px;border-radius:10px;flex-shrink:0}  .meteo-label em{font-size:8px;letter-spacing:.12em}  .meteo-label strong{font-size:13px}  .meteo-sep{display:none}  /* Cella 2: temperatura grande + dettagli */  .meteo-main{    grid-column:2;grid-row:1;    display:flex;align-items:center;justify-content:flex-end;    padding:12px 14px;gap:10px  }  .meteo-temp{font-size:2rem}  .meteo-feels{display:none}  /* Dettagli inline accanto alla temp */  .meteo-details{    grid-column:1/-1;grid-row:2;    display:flex;flex-direction:row;flex-wrap:nowrap;    gap:0;    border-top:1px solid rgba(255,255,255,.07)  }  .meteo-detail{    flex:1;justify-content:center;    flex-direction:column;align-items:center;text-align:center;    font-size:10px;gap:2px;    padding:7px 6px;    border-right:1px solid rgba(255,255,255,.06)  }  .meteo-detail:last-child{border-right:none}  .meteo-detail svg{color:var(--color-accent);width:12px;height:12px}  #meteo-minmax{display:none}  /* Previsioni: full-width riga 3 */  .meteo-forecast{    grid-column:1/-1;grid-row:3;    display:flex;gap:0;margin-left:0;    border-top:1px solid rgba(255,255,255,.07)  }  .meteo-fc-day{    flex:1;flex-direction:row;align-items:center;    border-radius:0;min-width:0;    padding:9px 12px;gap:8px;    border-right:1px solid rgba(255,255,255,.06);    background:transparent  }  .meteo-fc-day:last-child{border-right:none}  .meteo-fc-name{font-size:11px;min-width:28px;font-weight:700;color:rgba(255,255,255,.55)}  .meteo-fc-icon{font-size:1.4rem;line-height:1}  .meteo-fc-cond{font-size:9px;color:rgba(255,255,255,.4);flex:1;text-align:left;line-height:1.2;max-width:70px;display:block}  .meteo-fc-temp{font-size:13px;font-weight:800;color:#fff;margin-left:auto}  .meteo-fc-range{font-size:10px;color:rgba(255,255,255,.4)}  .meteo-fc-day:nth-child(3){display:none}}@media(max-width:380px){  .meteo-left{padding:10px 12px}  .meteo-icon{width:36px;height:36px}  .meteo-label{display:none}  .meteo-main{padding:10px 12px}  .meteo-temp{font-size:1.8rem}  .meteo-detail{font-size:9px;padding:6px 4px}  .meteo-fc-day{padding:8px 10px}  .meteo-fc-cond{display:none}}.news-modal-overlay{position:fixed;inset:0;background:rgba(10,10,25,.75);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}.news-modal-overlay.open{opacity:1;pointer-events:all}.news-modal{background:#fff;border-radius:20px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);transform:translateY(24px);transition:transform .3s}.news-modal-overlay.open .news-modal{transform:translateY(0)}.news-modal-img{position:relative;height:260px;overflow:hidden;border-radius:20px 20px 0 0;background:var(--color-primary)}.news-modal-img img{width:100%;height:100%;object-fit:cover}.news-modal-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,26,46,.7) 0,transparent 60%)}.news-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.45);border:0;cursor:pointer;color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:2}.news-modal-close:hover{background:rgba(0,0,0,.7)}.news-modal-body{padding:24px 28px 28px}.news-modal-cat{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:50px;color:#fff;margin-bottom:12px}.news-modal-title{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,1.7rem);font-weight:900;color:var(--color-primary);line-height:1.2;margin-bottom:10px}.news-modal-meta{display:flex;align-items:center;gap:10px;color:var(--color-text-muted);font-size:12px;margin-bottom:16px;flex-wrap:wrap}.news-modal-abstract{color:var(--color-text-muted);font-size:15px;line-height:1.75;margin-bottom:20px}.news-modal-actions{display:flex;gap:10px;flex-wrap:wrap}.news-modal-btn-read{display:inline-flex;align-items:center;gap:8px;background:var(--color-primary);color:#fff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s}.news-modal-btn-read:hover{background:var(--color-accent);color:var(--color-primary)}.news-modal-btn-source{display:inline-flex;align-items:center;gap:7px;background:var(--color-surface-dark);color:var(--color-primary);font-size:13px;font-weight:600;padding:12px 20px;border-radius:50px;text-decoration:none;transition:background .2s}.news-modal-btn-source:hover{background:#e5dfd4}.news-ext-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:2px 7px;border-radius:50px;margin-left:6px;vertical-align:middle}.news-section{padding:80px 0;background:var(--color-surface)}.news-featured-wrap{display:grid;grid-template-columns:3fr 2fr;gap:24px;margin-bottom:24px}.news-featured-card{position:relative;border-radius:20px;overflow:hidden;min-height:460px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 8px 32px rgba(26,26,46,.14)}.news-featured-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.news-featured-card:hover img{transform:scale(1.04)}.news-featured-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,26,46,.95) 0,rgba(26,26,46,.4) 55%,transparent 100%)}.news-featured-card-body{position:relative;z-index:2;padding:28px 32px}.news-featured-card-title{font-family:var(--font-display);font-size:clamp(1.3rem,2.5vw,1.9rem);font-weight:900;color:#fff;margin:10px 0 10px;line-height:1.2}.news-featured-card-abstract{color:rgba(255,255,255,.72);font-size:14px;line-height:1.65;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.news-featured-card-meta{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.45);font-size:12px;flex-wrap:wrap}.news-stack{display:flex;flex-direction:column;gap:12px}.news-stack-card{display:flex;gap:14px;background:#fff;border-radius:14px;padding:14px 16px;transition:all .25s;align-items:flex-start;box-shadow:0 2px 10px rgba(26,26,46,.06)}.news-stack-card:hover{transform:translateX(4px);box-shadow:0 6px 20px rgba(26,26,46,.1)}.news-stack-img{width:88px;height:88px;border-radius:10px;object-fit:cover;flex-shrink:0}.news-stack-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.news-stack-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--color-primary);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.news-stack-meta{display:flex;align-items:center;gap:5px;color:var(--color-text-muted);font-size:11px;margin-top:auto}.news-bottom-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.news-mini-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(26,26,46,.06);transition:all .25s;display:flex;flex-direction:column}.news-mini-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(26,26,46,.1)}.news-mini-img{height:130px;overflow:hidden}.news-mini-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.news-mini-card:hover .news-mini-img img{transform:scale(1.06)}.news-mini-body{padding:14px 16px;flex:1;display:flex;flex-direction:column}.news-mini-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--color-primary);line-height:1.3;margin:6px 0 8px;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.news-mini-meta{font-size:11px;color:var(--color-text-muted);display:flex;align-items:center;gap:4px}@media(max-width:1023px){.news-featured-wrap{grid-template-columns:1fr}.news-bottom-row{grid-template-columns:1fr 1fr}}@media(max-width:639px){.news-bottom-row{grid-template-columns:1fr}}.citta-section{padding:80px 0;background:var(--color-primary)}.citta-section-inner{max-width:1280px;margin:0 auto;padding:0 24px}.citta-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-bottom:64px}.citta-img-wrap{position:relative;border-radius:20px;overflow:hidden;height:420px}.citta-img-wrap img{width:100%;height:100%;object-fit:cover}.citta-img-badge{position:absolute;bottom:20px;left:20px;background:var(--color-accent);color:var(--color-primary);font-family:var(--font-display);font-size:13px;font-weight:800;padding:8px 16px;border-radius:50px}.citta-text h2{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:16px}.citta-text h2 em{color:var(--color-accent);font-style:normal}.citta-text p{color:rgba(255,255,255,.68);font-size:15px;line-height:1.8;margin-bottom:14px}.citta-text p strong{color:rgba(255,255,255,.9)}.citta-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.citta-tab{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px 18px;text-align:center;transition:all .25s;cursor:default}.citta-tab:hover{background:rgba(255,255,255,.09);border-color:rgba(232,168,56,.3)}.citta-tab-val{font-family:var(--font-display);font-size:1.8rem;font-weight:900;color:var(--color-accent);line-height:1;display:block;margin-bottom:6px}.citta-tab-title{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px}.citta-tab-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5}@media(max-width:1023px){.citta-grid{grid-template-columns:1fr}.citta-img-wrap{height:280px}}@media(max-width:767px){.citta-tabs{grid-template-columns:1fr 1fr}}@media(max-width:479px){.citta-tabs{grid-template-columns:1fr}}.sponsor-section{padding:80px 0;background:#f0ede6}.sponsor-section-inner{max-width:1280px;margin:0 auto;padding:0 24px}.sponsor-section .section-title{color:var(--color-primary)}.sponsor-section .section-eyebrow{color:var(--color-accent)}.sp-tier-divider{display:flex;align-items:center;gap:16px;margin:36px 0 20px}.sp-tier-divider:first-of-type{margin-top:0}.sp-tier-line{flex:1;height:1px}.sp-tier-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;white-space:nowrap;display:flex;align-items:center;gap:7px}.sp-tier-gold .sp-tier-line{background:linear-gradient(to right,transparent,#e8a838,transparent)}.sp-tier-gold .sp-tier-label{color:#92600a}.sp-tier-silver .sp-tier-line{background:linear-gradient(to right,transparent,#94a3b8,transparent)}.sp-tier-silver .sp-tier-label{color:#475569}.sp-tier-bronze .sp-tier-line{background:linear-gradient(to right,transparent,#cd7f32,transparent)}.sp-tier-bronze .sp-tier-label{color:#78350f}.sp-gold-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}@media(max-width:900px){.sp-gold-grid{grid-template-columns:1fr 1fr}}@media(max-width:580px){.sp-gold-grid{grid-template-columns:1fr}}.sp-gold-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px rgba(26,26,46,.1);border:2px solid rgba(232,168,56,.25);cursor:pointer;transition:all .28s;text-decoration:none;display:block}.sp-gold-card:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(26,26,46,.16);border-color:rgba(232,168,56,.6)}.sp-gold-img{height:170px;overflow:hidden;position:relative;background:linear-gradient(135deg,#f8f0d8,#edd898)}.sp-gold-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.sp-gold-card:hover .sp-gold-img img{transform:scale(1.05)}.sp-gold-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:3rem;font-weight:900;color:#92600a}.sp-gold-ribbon{position:absolute;top:12px;left:12px;background:var(--color-accent);color:var(--color-primary);font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;padding:3px 10px;border-radius:50px}.sp-gold-body{padding:16px 18px 18px;text-align:center}.sp-gold-name{font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--color-primary);line-height:1.25}.sp-gold-settore{font-size:11px;color:var(--color-text-muted);margin-top:4px}.sp-silver-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}@media(max-width:900px){.sp-silver-grid{grid-template-columns:1fr 1fr}}@media(max-width:580px){.sp-silver-grid{grid-template-columns:1fr}}.sp-silver-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(26,26,46,.07);border-left:3px solid #94a3b8;cursor:pointer;transition:all .25s;text-decoration:none;display:flex;align-items:center;gap:14px;padding:14px 16px}.sp-silver-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(26,26,46,.12)}.sp-silver-img{width:56px;height:56px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);flex-shrink:0;display:flex;align-items:center;justify-content:center}.sp-silver-img img{width:100%;height:100%;object-fit:cover}.sp-silver-initials{font-family:var(--font-display);font-size:1.2rem;font-weight:900;color:#475569}.sp-silver-info{flex:1;min-width:0}.sp-silver-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#64748b;background:rgba(148,163,184,.15);padding:2px 7px;border-radius:50px;display:inline-block;margin-bottom:3px}.sp-silver-name{font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--color-primary)}.sp-silver-settore{font-size:11px;color:var(--color-text-muted)}.sp-bronze-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.sp-bronze-chip{background:#fff;border:1.5px solid rgba(205,127,50,.35);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:700;color:#78350f;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:7px}.sp-bronze-chip:hover{background:rgba(205,127,50,.1);border-color:#cd7f32;box-shadow:0 3px 10px rgba(205,127,50,.2)}.sp-bronze-chip-dot{width:7px;height:7px;border-radius:50%;background:#cd7f32;flex-shrink:0}.sponsor-become-cta{background:var(--color-primary);border-radius:20px;padding:48px 52px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-top:40px}.sponsor-cta-left{flex:1;min-width:280px}.sponsor-cta-right{display:flex;flex-direction:column;align-items:center;flex-shrink:0}@media(max-width:768px){.sponsor-become-cta{padding:32px 24px;flex-direction:column}.sponsor-cta-right{width:100%;align-items:flex-start}}.sp-modal-overlay{position:fixed;inset:0;background:rgba(10,10,25,.7);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}.sp-modal-overlay.open{opacity:1;pointer-events:all}.sp-modal{background:#fff;border-radius:24px;max-width:540px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);transform:translateY(20px);transition:transform .3s}.sp-modal-overlay.open .sp-modal{transform:translateY(0)}.sp-modal-img{height:220px;overflow:hidden;position:relative;background:linear-gradient(135deg,#f8f0d8,#edd898);border-radius:24px 24px 0 0}.sp-modal-img img{width:100%;height:100%;object-fit:cover}.sp-modal-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:4rem;font-weight:900;color:#92600a}.sp-modal-tier-badge{position:absolute;top:16px;left:16px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;padding:4px 12px;border-radius:50px}.sp-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;color:var(--color-primary);font-weight:700;transition:background .2s}.sp-modal-close:hover{background:#fff}.sp-modal-body{padding:24px 28px 32px}.sp-modal-name{font-family:var(--font-display);font-size:1.6rem;font-weight:900;color:var(--color-primary);margin-bottom:6px;line-height:1.2}.sp-modal-settore{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:14px}.sp-modal-desc{color:var(--color-text-muted);font-size:14px;line-height:1.75;margin-bottom:20px}.sp-modal-contacts{display:flex;flex-wrap:wrap;gap:10px}.sp-modal-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding:10px 20px;border-radius:50px;text-decoration:none;transition:all .2s}.sp-modal-btn-primary{background:var(--color-primary);color:#fff}.sp-modal-btn-primary:hover{background:var(--color-accent);color:var(--color-primary)}.sp-modal-btn-secondary{background:var(--color-surface-dark);color:var(--color-primary)}.sp-modal-btn-secondary:hover{background:#e5dfd4}</style>
+  <noscript>
+  <noscript>
+  <noscript>
+  <noscript></noscript></noscript></noscript></noscript>
 
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="assets/css/responsive.css" />
+  <noscript><link rel="stylesheet" href="assets/css/responsive.css" /></noscript>
+</head>
+<body class="page-home">
+
+<!-- ===== NAVBAR ===== -->
+<header id="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-row">
+      <a href="." class="navbar-logo">
+        <div class="navbar-logo-icon"><span>TA</span></div>
+        <span class="navbar-logo-text">Tutto<em>Apricena</em></span>
+      </a>
+      <nav class="navbar-links">
+        <a href="notizie/">Notizie</a>
+        <a href="eventi/">Eventi</a>
+        <a href="farmacie/">Farmacie</a>
+        <a href="servizi/">Servizi</a>
+        <a href="locali/">Locali</a>
+        <a href="sponsor/">Sponsor</a>
+      </nav>
+      <div class="navbar-actions">
+        <a href="chi-siamo/" class="link-plain">Chi siamo</a>
+        <a href="contatti/" class="link-btn">Contatti</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
+        <i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i>
+        <i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="mobile-menu-inner">
+      <nav class="mobile-nav">
+        <a href="notizie/">Notizie</a><a href="eventi/">Eventi</a><a href="farmacie/">Farmacie</a>
+        <a href="servizi/">Servizi</a><a href="locali/">Locali</a><a href="sponsor/">Sponsor</a>
+        <a href="chi-siamo/" style="color:rgba(255,255,255,.6)">Chi siamo</a>
+      </nav>
+      <a href="contatti/" class="mobile-cta">Contattaci</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero-section">
+  <div class="hero-slide active">
+    <picture>
+      <source srcset="images/santuario.webp" type="image/webp" />
+      <img src="images/santuario.webp" alt="Santuario Madonna Incoronata di Apricena" loading="eager" fetchpriority="high" width="1466" height="720" />
+    </picture>
+  </div>
+  <div class="hero-slide">
+    <picture>
+      <source srcset="images/cava.webp" type="image/webp" />
+      <img src="images/cava.webp" alt="Cava di pietra di Apricena, Puglia" loading="lazy" />
+    </picture>
+  </div>
+  <div class="hero-slide">
+    <picture>
+      <source srcset="images/caste.webp" type="image/webp" />
+      <img src="images/caste.webp" alt="Centro storico di Apricena" loading="lazy" />
+    </picture>
+  </div>
+  <div class="hero-overlay-1"></div>
+  <div class="hero-overlay-2"></div>
+  <div class="hero-accent-bar"></div>
+  <div class="hero-dots" id="hero-dot-grid"></div>
+  <div class="hero-content">
+    <div class="hero-inner" style="opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Apricena (FG) &mdash; Puglia</span>
+      </div>
+      <h1 class="hero-title">
+        La Città del
+        <em>Marmo e della Pietra</em>
+      </h1>
+      <p class="hero-subtitle">Notizie, eventi, farmacie di turno, servizi e locali. Il tuo portale quotidiano su Apricena — secondo polo marmifero d'Italia.</p>
+      <div class="hero-ctas">
+        <a href="notizie/" class="btn-primary" aria-label="Vai alle ultime notizie di Apricena">Ultime notizie <i data-lucide="arrow-right" width="17" height="17"></i></a>
+        <a href="eventi/" class="btn-outline">Scopri gli eventi</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="hero-stat-num">12.486</span><span class="hero-stat-label">Abitanti</span></div>
+        <div><span class="hero-stat-num">2°</span><span class="hero-stat-label">Polo marmifero Italia</span></div>
+        <div><span class="hero-stat-num">73 m</span><span class="hero-stat-label">Sul livello del mare</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-indicators">
+    <button class="hero-dot-btn active" aria-label="Slide 1"></button>
+    <button class="hero-dot-btn" aria-label="Slide 2"></button>
+    <button class="hero-dot-btn" aria-label="Slide 3"></button>
+  </div>
+  <div class="hero-scroll"><span>Scorri</span><i data-lucide="chevron-down" width="18" height="18" class="animate-pulse-dot"></i></div>
+</section>
+
+<!-- ===== FARMACIA DI TURNO ===== -->
+<section class="farmacia-bar">
+  <div class="farmacia-bar-inner">
+
+    <!-- Icona + etichetta -->
+    <div class="farmacia-left">
+      <div class="farmacia-icon-wrap">
+        <div class="farmacia-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <span class="farmacia-pulse"></span>
+      </div>
+      <div class="farmacia-label">
+        <em>Tutte le farmacie sono aperte di giorno</em>
+        <strong>Di turno (sera e weekend)</strong>
+      </div>
+    </div>
+
+    <div class="farmacia-sep"></div>
+
+    <!-- Dati farmacia -->
+    <div class="farmacia-info">
+      <h3 id="farmacia-nome">Caricamento...</h3>
+      <p id="farmacia-indirizzo"></p>
+    </div>
+
+    <!-- Meta: orario + telefono -->
+    <div class="farmacia-meta-block">
+      <div class="farmacia-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="farmacia-orario">--</span>
+      </div>
+      <a id="farmacia-tel-link" href="#" class="farmacia-tel-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span id="farmacia-tel">--</span>
+      </a>
+      <span class="farmacia-notturno" id="farmacia-notturno" style="display:none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Anche notturna
+      </span>
+    </div>
+
+    <a href="farmacie/" class="farmacia-cta">
+      Tutte le farmacie
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+
+  </div>
+</section>
+
+<!-- ===== METEO APRICENA ===== -->
+<section class="meteo-bar" id="meteo-bar">
+  <div class="meteo-bar-inner">
+    <div class="meteo-left">
+      <div class="meteo-icon-wrap">
+        <div class="meteo-icon" id="meteo-icon">
+          <svg id="meteo-icon-svg" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </div>
+      </div>
+      <div class="meteo-label">
+        <em>Apricena</em>
+        <strong id="meteo-desc">Caricamento...</strong>
+      </div>
+    </div>
+    <div class="meteo-sep"></div>
+    <div class="meteo-main">
+      <span class="meteo-temp" id="meteo-temp">--</span>
+      <span class="meteo-feels" id="meteo-feels"></span>
+    </div>
+    <div class="meteo-details">
+      <span class="meteo-detail" id="meteo-humidity">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> --%
+      </span>
+      <span class="meteo-detail" id="meteo-wind">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg> --
+      </span>
+      <span class="meteo-detail" id="meteo-minmax">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> --
+      </span>
+    </div>
+    <div class="meteo-forecast" id="meteo-forecast"></div>
+  </div>
+</section>
+
+<!-- ===== NOTIZIE ===== -->
+<section class="news-section" id="section-notizie">
+  <div style="max-width:1280px;margin:0 auto;padding:0 24px">
+    <div class="section-header">
+      <div>
+        <span class="section-eyebrow">Aggiornamenti</span>
+        <h2 class="section-title">Ultime Notizie</h2>
+      </div>
+      <a href="notizie/" class="section-link">Tutte le notizie <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+    <!-- Featured + stack -->
+    <div class="news-featured-wrap" id="news-top"></div>
+    <!-- Bottom row 3 cards -->
+    <div class="news-bottom-row" id="news-bottom"></div>
+    <div class="section-mobile-cta" style="margin-top:20px">
+      <a href="notizie/" style="display:inline-flex;align-items:center;gap:8px;background:var(--color-primary);color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:50px">Tutte le notizie <i data-lucide="arrow-right" width="15" height="15"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CITTÀ DI APRICENA ===== -->
+<section class="citta-section" id="section-territorio">
+  <div class="citta-section-inner">
+    <div style="margin-bottom:40px">
+      <span class="section-eyebrow">Il territorio</span>
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,2.8rem);font-weight:900;color:#fff;line-height:1.15">
+        Apricena — <em style="color:var(--color-accent);font-style:normal">La Città della Pietra</em>
+      </h2>
+    </div>
+    <div class="citta-grid" id="citta-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div class="citta-tabs" id="citta-tabs">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== EVENTI ===== -->
+<section class="eventi-section" id="section-eventi">
+  <div class="eventi-section-inner">
+    <div class="section-header">
+      <div>
+        <span class="section-eyebrow">Calendario</span>
+        <h2 class="section-title">Prossimi Eventi</h2>
+      </div>
+      <a href="eventi/" class="section-link">Tutti gli eventi <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+    <div class="eventi-grid" id="home-eventi-grid"></div>
+  </div>
+</section>
+
+<!-- ===== LOCALI ===== -->
+<section class="locali-section" id="section-locali">
+  <div class="locali-section-inner">
+    <div class="section-header">
+      <div><span class="section-eyebrow">Scopri</span><h2 class="section-title">Locali & Attività</h2></div>
+      <a href="locali/" class="section-link">Tutti i locali <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+    <div class="locali-grid" id="home-locali-grid"></div>
+  </div>
+</section>
+
+<!-- ===== SERVIZI ===== -->
+<section class="servizi-widget" id="section-servizi">
+  <div class="servizi-widget-inner">
+    <div class="section-header">
+      <div><span class="section-eyebrow">Utile</span><h2 class="section-title">Servizi Utili</h2></div>
+      <a href="servizi/" class="section-link">Tutti i servizi <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+    <div class="servizi-grid" id="home-servizi-grid"></div>
+  </div>
+</section>
+
+<!-- ===== SPONSOR ===== -->
+<section class="sponsor-section" id="section-sponsor">
+  <div class="sponsor-section-inner">
+    <div class="section-header">
+      <div><span class="section-eyebrow">Partner</span><h2 class="section-title">I nostri Sponsor</h2></div>
+      <a href="sponsor/" class="section-link">Vedi tutti <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+    <div id="sp-home-content"></div>
+    <div class="sponsor-become-cta" id="sp-cta-block">
+      <div class="sponsor-cta-left">
+        <span class="section-eyebrow" style="color:var(--color-accent)">Vuoi crescere?</span>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2rem);font-weight:900;color:#fff;line-height:1.2;margin-top:6px;margin-bottom:10px">Il tuo spazio pubblicitario qui</h2>
+        <p style="color:rgba(255,255,255,.65);font-size:14px;line-height:1.7;max-width:460px">Raggiungi tutta la comunità di Apricena. Visibilità mirata, prezzi accessibili, tre livelli: Gold, Silver e Bronze.</p>
+      </div>
+      <div class="sponsor-cta-right">
+        <a href="contatti/" class="btn-primary" style="font-size:15px;padding:13px 28px">Contattaci <i data-lucide="arrow-right" width="17" height="17"></i></a>
+        <a href="sponsor/" style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.6);font-size:13px;font-weight:600;margin-top:10px">Vedi i pacchetti <i data-lucide="arrow-right" width="13" height="13"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR MODAL -->
+<div class="sp-modal-overlay" id="sp-modal" onclick="if(event.target===this)spModalClose()">
+  <div class="sp-modal">
+    <div class="sp-modal-img" id="sp-modal-img">
+      <div class="sp-modal-img-placeholder" id="sp-modal-placeholder"></div>
+      <span class="sp-modal-tier-badge" id="sp-modal-badge"></span>
+      <button class="sp-modal-close" onclick="spModalClose()" aria-label="Chiudi">✕</button>
+    </div>
+    <div class="sp-modal-body">
+      <div class="sp-modal-name" id="sp-modal-name"></div>
+      <div class="sp-modal-settore" id="sp-modal-settore"></div>
+      <div class="sp-modal-desc" id="sp-modal-desc"></div><div id="sp-modal-orario" style="display:none;align-items:center;gap:7px;font-size:13px;color:var(--color-text-muted);margin-bottom:16px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="sp-modal-contacts" id="sp-modal-contacts"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- NEWS PREVIEW MODAL -->
+<div class="news-modal-overlay" id="news-modal" onclick="if(event.target===this)newsModalClose()">
+  <div class="news-modal">
+    <div class="news-modal-img" id="nm-img">
+      <img id="nm-photo" src="" alt="Foto della notizia" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="news-modal-img-overlay"></div>
+      <button class="news-modal-close" onclick="newsModalClose()" aria-label="Chiudi">✕</button>
+    </div>
+    <div class="news-modal-body">
+      <span class="news-modal-cat" id="nm-cat"></span>
+      <div class="news-modal-title" id="nm-title"></div>
+      <div class="news-modal-meta" id="nm-meta"></div>
+      <div class="news-modal-abstract" id="nm-abstract"></div>
+      <div class="news-modal-actions" id="nm-actions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="." class="navbar-logo" style="margin-bottom:0">
+          <div class="navbar-logo-icon"><span>TA</span></div>
+          <span class="navbar-logo-text">Tutto<em>Apricena</em></span>
+        </a>
+        <p>Il portale informativo indipendente di Apricena (FG), Puglia. Notizie, eventi, servizi e tutto quello che accade nella nostra città.</p>
+        <div class="footer-location"><i data-lucide="map-pin" width="13" height="13" color="var(--color-accent)"></i>Apricena (FG), 71011 — Puglia, Italia</div>
+        <div class="footer-social" id="footer-social">
+          <a href="https://www.facebook.com/profile.php?id=61578750476699" aria-label="Facebook" id="footer-fb" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="mailto:info@tuttoapricena.it" aria-label="Email info@tuttoapricena.it"><i data-lucide="mail" width="15" height="15"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Sezioni</h4><ul>
+        <li><a href="notizie/">Notizie</a></li><li><a href="eventi/">Eventi</a></li><li><a href="farmacie/">Farmacie di turno</a></li>
+        <li><a href="servizi/">Servizi utili</a></li><li><a href="locali/">Locali & Attività</a></li><li><a href="sponsor/">Sponsor</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Info</h4><ul>
+        <li><a href="chi-siamo/">Chi Siamo</a></li><li><a href="contatti/">Contatti</a></li>
+        <li><a href="privacy/">Privacy Policy</a></li><li><a href="cookie/">Cookie Policy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> TuttoApricena — Portale informativo indipendente. Non rappresenta organo istituzionale.</p>
+      <p>Le notizie provengono da fonti terze citate nei singoli articoli.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/lucide-mini.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+  <!-- live-news.js disabilitato: le notizie si aggiornano solo manualmente dal CMS -->
+<script>document.getElementById('year').textContent=new Date().getFullYear();const dg=document.getElementById('hero-dot-grid');for(let i=0;i<25;i++){const d=document.createElement('div');d.className='hero-dot';dg.appendChild(d);}
+(function(){var logoUrl=(TA.config&&TA.config.logoUrl)?TA.config.logoUrl:'';if(logoUrl){document.querySelectorAll('.navbar-logo-icon').forEach(function(el){el.innerHTML='<img loading="lazy" src="'+logoUrl+'" alt="TuttoApricena logo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;padding:2px;">';el.style.overflow='hidden';});}
+var hi=(TA.config&&TA.config.heroImages)?TA.config.heroImages:null;if(hi){var slides=document.querySelectorAll('.hero-slide img');slides.forEach(function(img,i){if(hi[i])img.src=hi[i];});}
+var hd=(TA.config&&TA.config.header)||{};function sel(q,val){var el=document.querySelector(q);if(el&&val)el.textContent=val;}
+if(hd.eyebrow)sel('.hero-eyebrow span',hd.eyebrow);if(hd.title1||hd.title2){var t=document.querySelector('.hero-title');if(t)t.innerHTML=(hd.title1||'La Città della')+'\n<em>'+(hd.title2||'Pietra e del Marmo')+'</em>';}
+if(hd.subtitle)sel('.hero-subtitle',hd.subtitle);var nums=document.querySelectorAll('.hero-stat-num');var lbls=document.querySelectorAll('.hero-stat-label');if(nums[0]&&hd.s1n)nums[0].textContent=hd.s1n;if(lbls[0]&&hd.s1l)lbls[0].textContent=hd.s1l;if(nums[1]&&hd.s2n)nums[1].textContent=hd.s2n;if(lbls[1]&&hd.s2l)lbls[1].textContent=hd.s2l;if(nums[2]&&hd.s3n)nums[2].textContent=hd.s3n;if(lbls[2]&&hd.s3l)lbls[2].textContent=hd.s3l;var btns=document.querySelectorAll('.hero-ctas a');if(btns[0]&&hd.b1t){btns[0].childNodes[0].textContent=hd.b1t+' ';}
+if(btns[0]&&hd.b1u)btns[0].href=hd.b1u;if(btns[1]&&hd.b2t)btns[1].textContent=hd.b2t;if(btns[1]&&hd.b2u)btns[1].href=hd.b2u;})();var f=TA.getFarmaciaOfDay();document.getElementById('farmacia-nome').textContent=f.nome;document.getElementById('farmacia-indirizzo').textContent=f.indirizzo;document.getElementById('farmacia-orario').textContent=f.orario;document.getElementById('farmacia-tel').textContent=f.telefono;document.getElementById('farmacia-tel-link').href='tel:'+f.telefono;if(f.notturno)document.getElementById('farmacia-notturno').style.display='flex';window.newsModalClose=function(){document.getElementById('news-modal').classList.remove('open');document.body.style.overflow='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')newsModalClose();});window.newsModalOpen=function(slug){var n=TA.notizie.find(function(x){return x.slug===slug;});if(!n)return;if(n.externalLink||n.fonteUrl){window.open(n.externalLink||n.fonteUrl,'_blank','noopener');return;}
+var photo=document.getElementById('nm-photo');if(n.immagine){photo.src=n.immagine;photo.style.display='';}
+else{photo.style.display='none';}
+var catEl=document.getElementById('nm-cat');catEl.textContent=n.categoria||'Notizia';catEl.style.background=TA.getCatColor?TA.getCatColor(n.categoriaSlug):'#E8A838';document.getElementById('nm-title').textContent=n.titolo||'';document.getElementById('nm-meta').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> '+
+TA.formatDate(n.data)+
+(n.fonte?' · <span style="font-weight:600;color:var(--color-primary)">'+n.fonte+'</span>':'');document.getElementById('nm-abstract').textContent=n.abstract||'';var actionsEl=document.getElementById('nm-actions');actionsEl.innerHTML='<a href="notizie/'+n.slug+'/" class="news-modal-btn-read">'+'<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>'+'Leggi notizia completa'+'</a>';document.getElementById('news-modal').classList.add('open');document.body.style.overflow='hidden';};function mkNewsHref(n){if(n.externalLink||n.fonteUrl){return'href="'+(n.externalLink||n.fonteUrl)+'" target="_blank" rel="noopener"';}
+return'href="notizie/'+n.slug+'/" onclick="event.preventDefault();newsModalOpen(\''+n.slug+'\')"';}
+function mkExtBadge(n){return(n.externalLink||n.fonteUrl)?'<span class="news-ext-badge"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> sito esterno</span>':'';}
+var featured=TA.notizie.find(function(n){return n.inEvidenza;})||TA.notizie[0];var stack=TA.notizie.filter(function(n){return n.id!==featured.id;}).slice(0,3);var bottom=TA.notizie.filter(function(n){return n.id!==featured.id;}).slice(3,6);var topEl=document.getElementById('news-top');topEl.innerHTML='<a '+mkNewsHref(featured)+' class="news-featured-card">'+'<img loading="eager" src="'+featured.immagine+'" alt="'+featured.titolo+'" />'+'<div class="news-featured-card-overlay"></div>'+'<div class="news-featured-card-body">'+'<span class="cat-badge" style="background:'+TA.getCatColor(featured.categoriaSlug)+'">'+featured.categoria+'</span>'+
+mkExtBadge(featured)+'<h3 class="news-featured-card-title">'+featured.titolo+'</h3>'+'<p class="news-featured-card-abstract">'+featured.abstract+'</p>'+'<div class="news-featured-card-meta"><i data-lucide="calendar" width="11" height="11"></i>'+TA.formatDate(featured.data)+'<span style="margin:0 4px">·</span>'+featured.fonte+'</div>'+'</div>'+'</a>'+'<div class="news-stack">'+
+stack.map(function(n){return'<a '+mkNewsHref(n)+' class="news-stack-card">'+'<img class="news-stack-img" src="'+n.immagine+'" alt="'+n.titolo+'" loading="lazy" />'+'<div class="news-stack-body">'+'<span class="cat-badge" style="background:'+TA.getCatColor(n.categoriaSlug)+'">'+n.categoria+'</span>'+
+mkExtBadge(n)+'<div class="news-stack-title">'+n.titolo+'</div>'+'<div class="news-stack-meta"><i data-lucide="calendar" width="10" height="10"></i>'+TA.formatDate(n.data)+'</div>'+'</div>'+'</a>';}).join('')+'</div>';if(bottom.length){document.getElementById('news-bottom').innerHTML=bottom.map(function(n){return'<a '+mkNewsHref(n)+' class="news-mini-card">'+'<div class="news-mini-img"><img src="'+n.immagine+'" alt="'+n.titolo+'" loading="lazy" /></div>'+'<div class="news-mini-body">'+'<span class="cat-badge" style="background:'+TA.getCatColor(n.categoriaSlug)+'">'+n.categoria+'</span>'+
+mkExtBadge(n)+'<div class="news-mini-title">'+n.titolo+'</div>'+'<div class="news-mini-meta"><i data-lucide="calendar" width="10" height="10"></i>'+TA.formatDate(n.data)+'</div>'+'</div>'+'</a>';}).join('');}
+var c=TA.citta||{immagine:'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?w=1200&q=85',immagineAlt:'Cave di pietra di Apricena',soprannome:'La Città della Pietra e del Marmo',descrizione:'Apricena è un comune della provincia di Foggia, incastonato tra il Tavoliere delle Puglie e il Gargano. Fa parte del Parco Nazionale del Gargano ed è universalmente nota per le sue preziose cave di pietra calcarea.',storia:"Il nome deriva dalla leggenda dell'imperatore Federico II che banchettò con carne di cinghiale nelle foreste locali. Il devastante terremoto del 1627 rase al suolo la città. Del centro storico sopravvivono il Palazzo Baronale (1658) e la Torre dell'Orologio.",curiosita:[{valore:'2°',titolo:'Polo marmifero Italia',descrizione:"Secondo bacino estrattivo d'Italia dopo Carrara. La Pietra di Apricena veste la chiesa di Padre Pio (arch. Renzo Piano) e l'aeroporto di Singapore."},{valore:'12.486',titolo:'Abitanti',descrizione:'Il comune si estende su 172,51 km² a 73 metri s.l.m. Fa parte del Parco Nazionale del Gargano.'},{valore:'1,3 mln',titolo:'Anni — Pirro Nord',descrizione:'Nella cava di Pirro Nord fossili da 1,3–1,7 milioni di anni fa: tra le più antiche testimonianze umane in Europa.'},{valore:'Dal 1955',titolo:'Carnevale Storico',descrizione:"Riconosciuto dalla Regione Puglia come Carnevale Tradizionale. La mascotte Prucinella guida la sfilata ogni anno."}]};document.getElementById('citta-grid').innerHTML='<div class="citta-img-wrap">'+'<img src="'+(c.immagine||'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?w=1200&q=85')+'" alt="'+(c.immagineAlt||'Apricena')+'" loading="lazy" />'+'<div class="citta-img-badge">'+(c.soprannome||'La Città della Pietra')+'</div>'+'</div>'+'<div class="citta-text">'+'<h2>Apricena: <em>radici antiche</em>, pietra nel mondo</h2>'+'<p>'+c.descrizione+'</p>'+'<p>'+c.storia+'</p>'+'<</div>';document.getElementById('citta-tabs').innerHTML=(c.curiosita||[]).map(function(tab){return'<div class="citta-tab">'+'<span class="citta-tab-val">'+tab.valore+'</span>'+'<span class="citta-tab-title">'+tab.titolo+'</span>'+'<span class="citta-tab-desc">'+tab.descrizione+'</span>'+'</div>';}).join('');document.getElementById('home-eventi-grid').innerHTML=TA.eventi.slice(0,3).map(e=>'<a href="eventi/'+e.slug+'/" class="evento-card">'+'<div class="evento-card-img"><img src="'+e.immagine+'" alt="'+e.titolo+'" loading="lazy" /><span class="evento-card-badge">'+e.categoria+'</span></div>'+'<div class="evento-card-body">'+'<div class="evento-card-date"><i data-lucide="calendar" width="12" height="12"></i>'+
+TA.formatDate(e.dataInizio,{day:'numeric',month:'long'})+
+(e.dataFine!==e.dataInizio?' – '+TA.formatDate(e.dataFine,{day:'numeric',month:'long'}):'')+'</div>'+'<div class="evento-card-title">'+e.titolo+'</div>'+'<p class="evento-card-desc">'+e.descrizione+'</p>'+'<div class="evento-card-location"><i data-lucide="map-pin" width="11" height="11"></i>'+e.luogo+'</div>'+'</div>'+'</a>').join('');document.getElementById('home-locali-grid').innerHTML=TA.locali.filter(l=>l.inEvidenza).slice(0,3).map(l=>'<a href="locali/'+l.slug+'/" class="locale-card card-hover">'+'<div class="locale-card-img"><img src="'+l.immagine+'" alt="'+l.nome+'" loading="lazy" /><span class="locale-tipo-badge">'+l.tipo+'</span></div>'+'<div class="locale-card-body">'+'<div class="locale-card-name">'+l.nome+'</div>'+'<p class="locale-card-desc">'+l.descrizione+'</p>'+'<div class="locale-card-info"><i data-lucide="map-pin" width="12" height="12" color="var(--color-accent)"></i>'+l.indirizzo+'</div>'+'</div>'+'</a>').join('');const icoMap={building:'building-2',shield:'shield',heart:'heart-pulse',train:'train',book:'book-open',mail:'mail',bus:'bus'};document.getElementById('home-servizi-grid').innerHTML=TA.servizi.slice(0,8).map(s=>'<a href="servizi/#'+s.id+'" class="servizio-card">'+'<div class="servizio-icon"><i data-lucide="'+(icoMap[s.icona]||'info')+'" width="22" height="22"></i></div>'+'<div class="servizio-nome">'+s.nome+'</div>'+'<div class="servizio-cat">'+s.categoria+'</div>'+'<div class="servizio-tel"><i data-lucide="phone" width="13" height="13"></i>'+s.telefono+'</div>'+'</a>').join('');lucide.createIcons();(function(){var cfg=(TA.config&&TA.config.sezioniVisibili)?TA.config.sezioniVisibili:{};var sezioni={'notizie':'#section-notizie','territorio':'#section-territorio','eventi':'#section-eventi','locali':'#section-locali','servizi':'#section-servizi','sponsor':'#section-sponsor','cta':'#sp-cta-block'};Object.keys(sezioni).forEach(function(k){if(cfg[k]===false){var el=document.querySelector(sezioni[k]);if(el)el.style.display='none';}});function ini(n){if(!n)return'?';return n.split(' ').slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+var gold=(TA.sponsor||[]).filter(function(s){return s.attivo&&s.livello==='Gold';});var silver=(TA.sponsor||[]).filter(function(s){return s.attivo&&s.livello==='Silver';});var bronze=(TA.sponsor||[]).filter(function(s){return s.attivo&&s.livello==='Bronze';});var container=document.getElementById('sp-home-content');if(!container)return;if(!gold.length&&!silver.length&&!bronze.length){container.innerHTML='';return;}
+var html='';if(gold.length){html+='<div class="sp-tier-divider sp-tier-gold"><div class="sp-tier-line"></div><div class="sp-tier-label">★ Gold Partner</div><div class="sp-tier-line"></div></div>';html+='<div class="sp-gold-grid">';gold.slice(0,3).forEach(function(s,i){var imgHtml=s.foto?'<img loading="lazy" src="'+esc(s.foto)+'" alt="'+esc(s.nome)+'" onerror="this.style.display=\'none\'">':'<div class="sp-gold-placeholder">'+ini(s.nome)+'</div>';html+='<div class="sp-gold-card" onclick="spModalOpen(\''+i+'\',\'Gold\')" tabindex="0" role="button" aria-label="'+esc(s.nome)+'">'+'<div class="sp-gold-img">'+imgHtml+'<span class="sp-gold-ribbon">★ Gold</span></div>'+'<div class="sp-gold-body">'+'<div class="sp-gold-name">'+esc(s.nome)+'</div>'+
+''+'</div>'+'</div>';});html+='</div>';}
+if(silver.length){html+='<div class="sp-tier-divider sp-tier-silver"><div class="sp-tier-line"></div><div class="sp-tier-label">◆ Silver Partner</div><div class="sp-tier-line"></div></div>';html+='<div class="sp-silver-grid">';silver.slice(0,3).forEach(function(s,i){var imgHtml=s.foto?'<img loading="lazy" src="'+esc(s.foto)+'" alt="'+esc(s.nome)+'">':'<div class="sp-silver-initials">'+ini(s.nome)+'</div>';html+='<div class="sp-silver-card" onclick="spModalOpen(\''+i+'\',\'Silver\')" tabindex="0" role="button" aria-label="'+esc(s.nome)+'">'+'<div class="sp-silver-img">'+imgHtml+'</div>'+'<div class="sp-silver-info">'+'<span class="sp-silver-badge">Silver</span>'+'<div class="sp-silver-name">'+esc(s.nome)+'</div>'+
+''+'</div>'+'</div>';});html+='</div>';}
+if(bronze.length){html+='<div class="sp-tier-divider sp-tier-bronze"><div class="sp-tier-line"></div><div class="sp-tier-label">● Bronze Partner</div><div class="sp-tier-line"></div></div>';html+='<div class="sp-bronze-row">';bronze.slice(0,6).forEach(function(s,i){html+='<div class="sp-bronze-chip" onclick="spModalOpen(\''+i+'\',\'Bronze\')" tabindex="0" role="button">'+'<span class="sp-bronze-chip-dot"></span>'+esc(s.nome)+'</div>';});html+='</div>';}
+container.innerHTML=html;window.spModalOpen=function(idx,tier){var arr=tier==='Gold'?gold:tier==='Silver'?silver:bronze;var s=arr[parseInt(idx)];if(!s)return;var isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||window.innerWidth<=900;if(isMobile){var anchor=s.nome.replace(/[^a-z0-9]/gi,'').toLowerCase();window.location.href='sponsor/#'+anchor;return;}var TIER_STYLES={Gold:{bg:'var(--color-accent)',color:'var(--color-primary)',label:'★ Gold Partner'},Silver:{bg:'#94A3B8',color:'#fff',label:'◆ Silver Partner'},Bronze:{bg:'#CD7F32',color:'#fff',label:'● Bronze Partner'}};var ts=TIER_STYLES[tier]||TIER_STYLES.Gold;var imgEl=document.getElementById('sp-modal-img');var ph=document.getElementById('sp-modal-placeholder');var oldImg=imgEl.querySelector('img');if(oldImg)oldImg.remove();if(s.foto){var img=document.createElement('img');img.src=s.foto;img.alt=s.nome;img.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';imgEl.insertBefore(img,ph);ph.style.display='none';}else{ph.style.display='flex';ph.textContent=ini(s.nome);if(tier==='Gold'){ph.style.color='#92600a';imgEl.style.background='linear-gradient(135deg,#F8F0D8,#EDD898)';}
+else if(tier==='Silver'){ph.style.color='#475569';imgEl.style.background='linear-gradient(135deg,#E2E8F0,#CBD5E1)';}
+else{ph.style.color='#78350f';imgEl.style.background='linear-gradient(135deg,#FEF3C7,#FDE68A)';}}
+var badge=document.getElementById('sp-modal-badge');badge.textContent=ts.label;badge.style.background=ts.bg;badge.style.color=ts.color;document.getElementById('sp-modal-name').textContent=s.nome||'';document.getElementById('sp-modal-settore').style.display='none';document.getElementById('sp-modal-desc').style.display='none';var orarioEl=document.getElementById('sp-modal-orario');if(orarioEl){if(s.orario){orarioEl.textContent=s.orario;orarioEl.style.display='flex';}else{orarioEl.style.display='none';}}var contacts='';if(s.telefono)contacts+='<a href="tel:'+esc(s.telefono)+'" class="sp-modal-btn sp-modal-btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> '+esc(s.telefono)+'</a>';if(s.sitoWeb||s.sito_web)contacts+='<a href="'+(s.sitoWeb||s.sito_web)+'" target="_blank" rel="noopener" class="sp-modal-btn sp-modal-btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Sito web</a>';if(s.indirizzo)contacts+='<a href="https://www.google.com/maps/search/'+encodeURIComponent(s.indirizzo+', Apricena FG')+'" target="_blank" rel="noopener" class="sp-modal-btn sp-modal-btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Mappa</a>';document.getElementById('sp-modal-contacts').innerHTML=contacts;document.getElementById('sp-modal').classList.add('open');document.body.style.overflow='hidden';};window.spModalClose=function(){document.getElementById('sp-modal').classList.remove('open');document.body.style.overflow='';};document.addEventListener('keydown',function(e){if(e.key==='Escape')spModalClose();});lucide.createIcons();})();window.addEventListener('ta:newsUpdated',function(){var featured2=TA.notizie.find(function(n){return n.inEvidenza;})||TA.notizie[0];var stack2=TA.notizie.filter(function(n){return n.id!==featured2.id;}).slice(0,3);var topEl2=document.getElementById('news-top');if(topEl2&&featured2){topEl2.innerHTML='<a '+mkNewsHref(featured2)+' class="news-featured-card">'+'<img loading="lazy" src="'+featured2.immagine+'" alt="'+featured2.titolo+'" />'+'<div class="news-featured-card-overlay"></div>'+'<div class="news-featured-card-body">'+'<span class="cat-badge" style="background:'+TA.getCatColor(featured2.categoriaSlug)+'">'+featured2.categoria+'</span>'+
+mkExtBadge(featured2)+
+(featured2.isLive?'<span style="background:rgba(220,38,38,.15);color:#dc2626;font-size:9px;font-weight:800;padding:2px 8px;border-radius:50px;margin-left:6px">🔴 Live</span>':'')+'<h3 class="news-featured-card-title">'+featured2.titolo+'</h3>'+'<p class="news-featured-card-abstract">'+featured2.abstract+'</p>'+'<div class="news-featured-card-meta"><i data-lucide="calendar" width="11" height="11"></i>'+TA.formatDate(featured2.data)+'</div>'+'</div>'+'</a>'+'<div class="news-stack">'+
+stack2.map(function(n){return'<a '+mkNewsHref(n)+' class="news-stack-card">'+'<img class="news-stack-img" src="'+n.immagine+'" alt="'+n.titolo+'" loading="lazy" />'+'<div class="news-stack-body">'+'<span class="cat-badge" style="background:'+TA.getCatColor(n.categoriaSlug)+'">'+n.categoria+'</span>'+
+mkExtBadge(n)+
+(n.isLive?'<span style="color:#dc2626;font-size:9px;font-weight:800"> 🔴</span>':'')+'<div class="news-stack-title">'+n.titolo+'</div>'+'<div class="news-stack-meta"><i data-lucide="calendar" width="10" height="10"></i>'+TA.formatDate(n.data)+'</div>'+'</div>'+'</a>';}).join('')+'</div>';lucide.createIcons();}});(function(){var LAT=41.7853,LON=15.4517;var CACHE_KEY='ta_meteo_v3';var CACHE_TTL=10*60*1000;var WMO_MAP={0:{icon:'☀️',label:'Soleggiato',bg:'#FEF9C3'},1:{icon:'🌤️',label:'Poco nuvoloso',bg:'#FEF9C3'},2:{icon:'⛅',label:'Parzialmente nuvoloso',bg:'#E0F2FE'},3:{icon:'☁️',label:'Coperto',bg:'#E2E8F0'},45:{icon:'🌫️',label:'Nebbia',bg:'#E2E8F0'},48:{icon:'🌫️',label:'Nebbia gelata',bg:'#E2E8F0'},51:{icon:'🌦️',label:'Pioggerella',bg:'#DBEAFE'},53:{icon:'🌦️',label:'Pioggerella',bg:'#DBEAFE'},55:{icon:'🌧️',label:'Pioggia debole',bg:'#DBEAFE'},61:{icon:'🌧️',label:'Pioggia',bg:'#DBEAFE'},63:{icon:'🌧️',label:'Pioggia moderata',bg:'#DBEAFE'},65:{icon:'🌧️',label:'Pioggia intensa',bg:'#DBEAFE'},71:{icon:'🌨️',label:'Neve',bg:'#F0F9FF'},73:{icon:'🌨️',label:'Neve moderata',bg:'#F0F9FF'},75:{icon:'❄️',label:'Neve intensa',bg:'#F0F9FF'},80:{icon:'🌦️',label:'Rovesci',bg:'#DBEAFE'},81:{icon:'🌧️',label:'Rovesci moderati',bg:'#DBEAFE'},82:{icon:'⛈️',label:'Rovesci violenti',bg:'#E0E7FF'},95:{icon:'⛈️',label:'Temporale',bg:'#E0E7FF'},96:{icon:'⛈️',label:'Temporale',bg:'#E0E7FF'},99:{icon:'⛈️',label:'Temporale con grandine',bg:'#E0E7FF'}};var GIORNI=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];function getWmo(code){return WMO_MAP[code]||{icon:'🌡️',label:'N/D',bg:'#E2E8F0'};}
+function render(d){var cur=d.current,dal=d.daily;if(!cur)return;var wmo=getWmo(cur.weather_code);var iconEl=document.getElementById('meteo-icon');if(iconEl)iconEl.innerHTML='<span style="font-size:2.2rem;line-height:1">'+wmo.icon+'</span>';var descEl=document.getElementById('meteo-desc');if(descEl)descEl.textContent=wmo.label;var tempEl=document.getElementById('meteo-temp');if(tempEl)tempEl.textContent=Math.round(cur.temperature_2m)+'°C';var feelsEl=document.getElementById('meteo-feels');if(feelsEl)feelsEl.textContent='Percepita '+Math.round(cur.apparent_temperature)+'°';var humEl=document.getElementById('meteo-humidity');if(humEl)humEl.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>'+' '+Math.round(cur.relative_humidity_2m)+'% umidità';var windEl=document.getElementById('meteo-wind');if(windEl)windEl.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>'+' '+Math.round(cur.wind_speed_10m)+' km/h vento';var mmEl=document.getElementById('meteo-minmax');if(mmEl&&dal)mmEl.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>'+' '+Math.round(dal.temperature_2m_min[0])+'° / '+Math.round(dal.temperature_2m_max[0])+'°';var fcEl=document.getElementById('meteo-forecast');if(fcEl&&dal&&dal.time&&dal.time.length>1){var html='';for(var i=1;i<=Math.min(3,dal.time.length-1);i++){var dt=new Date(dal.time[i]+'T12:00:00');var fw=getWmo(dal.weather_code[i]);var tmax=Math.round(dal.temperature_2m_max[i]);var tmin=Math.round(dal.temperature_2m_min[i]);html+='<div class="meteo-fc-day" title="'+fw.label+'">'+'<div class="meteo-fc-name">'+GIORNI[dt.getDay()]+'</div>'+'<div class="meteo-fc-icon" style="font-size:1.6rem;line-height:1.2">'+fw.icon+'</div>'+'<div class="meteo-fc-cond" style="font-size:9px;color:rgba(255,255,255,.55);text-align:center;line-height:1.2;margin-top:2px;max-width:60px">'+fw.label+'</div>'+'<div class="meteo-fc-temp" style="margin-top:4px">'+tmax+'°</div>'+'<div class="meteo-fc-range">'+tmin+'°</div>'+'</div>';}
+fcEl.innerHTML=html;}}
+function load(){try{var cached=localStorage.getItem(CACHE_KEY);if(cached){var obj=JSON.parse(cached);if(Date.now()-obj.ts<CACHE_TTL){render(obj.data);return;}}}catch(e){}
+var url='https://api.open-meteo.com/v1/forecast'+'?latitude='+LAT+'&longitude='+LON+'&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code'+'&daily=temperature_2m_max,temperature_2m_min,weather_code'+'&timezone=Europe%2FRome&forecast_days=4';fetch(url).then(function(r){return r.ok?r.json():Promise.reject(r.status);}).then(function(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),data:data}));}catch(e){}
+render(data);}).catch(function(err){try{localStorage.removeItem(CACHE_KEY);}catch(e){}
+var el=document.getElementById('meteo-desc');if(el)el.textContent='Dati non disponibili';console.warn('Meteo error:',err);});}
+load();setInterval(load,CACHE_TTL);})();</script>
+
+</body>
+</html>

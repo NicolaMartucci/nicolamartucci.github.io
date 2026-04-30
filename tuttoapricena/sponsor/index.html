@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/icon-96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#E8A838" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/></noscript>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sponsor e Partner — TuttoApricena | Apricena (FG)</title>
+  <meta name="description" content="Scopri gli sponsor e i partner di TuttoApricena: le attività e le aziende che sostengono il portale informativo di Apricena (FG), Puglia."/>
+  <meta name="keywords" content="sponsor Apricena, partner TuttoApricena, aziende Apricena, attività commerciali Apricena, pubblicità Apricena"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="author" content="TuttoApricena"/>
+  <link rel="canonical" href="https://www.tuttoapricena.it/sponsor/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="it_IT"/>
+  <meta property="og:site_name" content="TuttoApricena"/>
+  <meta property="og:title" content="Sponsor e Partner — TuttoApricena | Apricena (FG)"/>
+  <meta property="og:description" content="Le attività e le aziende che sostengono TuttoApricena, il portale informativo di Apricena (FG)."/>
+  <meta property="og:url" content="https://www.tuttoapricena.it/sponsor/"/>
+  <meta property="og:image" content="https://www.tuttoapricena.it/images/og/citta-apricena.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Sponsor — TuttoApricena"/>
+  <meta name="twitter:description" content="Le attività e le aziende partner di TuttoApricena, il portale di Apricena (FG)."/>
+  <meta name="twitter:image" content="https://www.tuttoapricena.it/images/og/citta-apricena.jpg"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+    <style>
+/* ── PAGE ─────────────────────────────────────────── */
+.sp-page { padding-top: 72px; min-height: 100vh; background: var(--color-surface); }
+
+/* ── TAB BAR — stessa struttura locali/eventi ─────── */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #E5E7EB;
+  margin-bottom: 36px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 13px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.tab-btn:hover { color: var(--color-primary); }
+.tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-accent); }
+.tab-count {
+  background: #F1EDE5;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 50px;
+}
+.tab-btn.active .tab-count { background: rgba(232,168,56,.15); color: var(--color-accent); }
+
+/* ── TIER DIVIDER ─────────────────────────────────── */
+.tier-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 44px 0 24px;
+}
+.tier-divider:first-child { margin-top: 0; }
+.tier-line { flex: 1; height: 1px; }
+.tier-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tier-line-gold  { background: linear-gradient(to right, transparent, var(--color-accent), transparent); }
+.tier-label-gold { color: var(--color-accent); }
+.tier-line-silver  { background: linear-gradient(to right, transparent, #94a3b8, transparent); }
+.tier-label-silver { color: #64748b; }
+.tier-line-bronze  { background: linear-gradient(to right, transparent, #cd7f32, transparent); }
+.tier-label-bronze { color: #92400e; }
+
+/* ══════════════════════════════════════════════════════
+   GOLD — card grandi, layout verticale con foto, stile locali
+   ══════════════════════════════════════════════════════ */
+.gold-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1023px) { .gold-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 639px)  { .gold-grid { grid-template-columns: 1fr; } }
+
+.gold-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(26,26,46,.08);
+  border: 1px solid rgba(232,168,56,.18);
+  display: flex;
+  flex-direction: column;
+  transition: transform .28s ease, box-shadow .28s ease;
+  text-decoration: none;
+  color: inherit;
+}
+.gold-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 44px rgba(26,26,46,.14);
+}
+
+/* Foto */
+.gold-card-img {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: #f0ede6;
+  flex-shrink: 0;
+}
+.gold-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .55s ease;
+}
+.gold-card:hover .gold-card-img img { transform: scale(1.05); }
+.gold-card-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #F8F0D8, #EDD898);
+}
+.gold-badge-overlay {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  padding: 4px 12px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Body */
+.gold-card-body {
+  padding: 18px 18px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.gold-card-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.gold-card-desc {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.gold-card-desc.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sp-leggi-tutto {
+  display: inline-block;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-accent);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Info box — telefono, sito, indirizzo */
+.sp-info-box {
+  background: #F8F5EF;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.sp-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 11px;
+  font-size: 12.5px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+.sp-info-row + .sp-info-row { border-top: 1px solid #EDE9E2; }
+.sp-info-row svg { flex-shrink: 0; margin-top: 1px; color: var(--color-accent); }
+.sp-info-row a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+.sp-info-row a:hover { text-decoration: underline; }
+
+/* Footer card — Chiama + Mappa */
+.gold-card-footer {
+  padding: 10px 18px 14px;
+  border-top: 1px solid #f3f2ef;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sp-btn-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.sp-btn-call:hover { background: #c8881a; color: #fff; }
+.sp-btn-map {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1EDE5;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.sp-btn-map:hover { background: #E5DFD4; }
+.sp-btn-web {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F1EDE5;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 15px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .2s;
+  white-space: nowrap;
+  margin-left: auto;
+}
+.sp-btn-web:hover { background: var(--color-primary); color: #fff; }
+
+/* ══════════════════════════════════════════════════════
+   SILVER — card più piccole, immagine quadrata a sinistra
+   ══════════════════════════════════════════════════════ */
+.silver-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 767px) { .silver-grid { grid-template-columns: 1fr; } }
+
+.silver-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(26,26,46,.06);
+  border-left: 4px solid #94a3b8;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  transition: transform .25s, box-shadow .25s;
+}
+.silver-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(26,26,46,.11);
+}
+.silver-card-img {
+  width: 100px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #f0ede6;
+  position: relative;
+}
+.silver-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .45s;
+}
+.silver-card:hover .silver-card-img img { transform: scale(1.06); }
+.silver-card-img-placeholder {
+  width: 100%; height: 100%;
+  min-height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #e8e4dc, #d8d0c4);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: #64748b;
+}
+.silver-card-body {
+  padding: 14px 16px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.silver-card-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.silver-card-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.silver-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  background: #F1EDE5;
+  padding: 5px 11px;
+  border-radius: 50px;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.silver-contact-item:hover { background: var(--color-accent); color: var(--color-primary); }
+.silver-contact-item svg { flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════
+   BRONZE — solo nome, pill compatta
+   ══════════════════════════════════════════════════════ */
+.bronze-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.bronze-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-radius: 50px;
+  padding: 9px 18px 9px 12px;
+  box-shadow: 0 1px 6px rgba(26,26,46,.05);
+  transition: border-color .2s, box-shadow .2s;
+}
+.bronze-pill:hover { border-color: #cd7f32; box-shadow: 0 4px 14px rgba(26,26,46,.08); }
+.bronze-pill-ico {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fef3c7;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.bronze-pill-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--color-primary);
+}
+
+/* ── CTA DIVENTA SPONSOR ─────────────────────────── */
+.sp-cta {
+  background: linear-gradient(135deg, var(--color-primary), #2a2a5e);
+  border-radius: 20px;
+  padding: 36px 40px;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.sp-cta h2 { font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-bottom: 7px; }
+.sp-cta p  { color: rgba(255,255,255,.62); font-size: 14px; max-width: 480px; }
+
+/* ── EMPTY STATE ─────────────────────────────────── */
+.sp-empty { text-align: center; padding: 48px 24px; color: var(--color-text-muted); }
+.sp-empty h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--color-primary); margin-bottom: 8px; }
+  </style>
+
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="../assets/css/responsive.css" />
+  <noscript><link rel="stylesheet" href="../assets/css/responsive.css" /></noscript>
+</head>
+<body class="page-sponsor">
+
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/" class="active">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../chi-siamo/" class="link-plain">Chi siamo</a><a href="../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/" class="active">Sponsor</a></nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+
+<main class="sp-page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <em>Partner</em>
+      <h1>I nostri Sponsor</h1>
+      <p>Le aziende e le attività che sostengono TuttoApricena e la comunità di Apricena</p>
+    </div>
+  </div>
+
+  <div class="container content-section">
+
+    <!-- CTA Diventa sponsor -->
+    <div class="sp-cta">
+      <div>
+        <h2>Vuoi sponsorizzare TuttoApricena?</h2>
+        <p>Raggiungi tutta la comunità di Apricena. Visibilità sul portale più letto della città, con piani personalizzati per ogni esigenza e budget.</p>
+      </div>
+      <a href="../contatti/" class="btn-primary">Contattaci <i data-lucide="arrow-right" width="17" height="17"></i></a>
+    </div>
+
+    <!-- TAB FILTRO — identico a locali/eventi -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tier="tutti" onclick="spFilter('tutti',this)">
+        Tutti <span class="tab-count" id="sp-cnt-tutti">0</span>
+      </button>
+      <button class="tab-btn" data-tier="Gold" onclick="spFilter('Gold',this)">
+        <span style="color:#92600a">★</span> Gold <span class="tab-count" id="sp-cnt-gold">0</span>
+      </button>
+      <button class="tab-btn" data-tier="Silver" onclick="spFilter('Silver',this)">
+        <span style="color:#64748B">◆</span> Silver <span class="tab-count" id="sp-cnt-silver">0</span>
+      </button>
+      <button class="tab-btn" data-tier="Bronze" onclick="spFilter('Bronze',this)">
+        <span style="color:#92400e">●</span> Bronze <span class="tab-count" id="sp-cnt-bronze">0</span>
+      </button>
+    </div>
+
+    <div id="sp-content"></div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+        <p>Il portale informativo indipendente di Apricena (FG), Puglia.</p>
+        <div class="footer-location"><i data-lucide="map-pin" width="13" height="13" color="var(--color-accent)"></i>Apricena (FG), Puglia — Italia</div>
+      </div>
+      <div class="footer-col"><h4>Sezioni</h4><ul>
+        <li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li>
+        <li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Info</h4><ul>
+        <li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li>
+        <li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena — Portale informativo indipendente</p><div class="footer-social"><a href="https://www.facebook.com/profile.php?id=61578750476699" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="mailto:info@tuttoapricena.it" aria-label="Email info@tuttoapricena.it"><i data-lucide="mail" width="15" height="15"></i></a></div></div>
+  </div>
+</footer>
+
+<script src="../assets/js/lucide-mini.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/main.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ── Helpers ─────────────────────────────────── */
+function ini(n) {
+  return (n||'?').split(' ').slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function mapsUrl(s) {
+  var addr = s.indirizzo ? (s.indirizzo + ', Apricena FG') : ('Apricena FG');
+  return 'https://www.google.com/maps/search/' + encodeURIComponent(addr);
+}
+function siteUrl(s) { return s.sito_web || s.sitoWeb || ''; }
+
+/* ── SVG icons inline ──────────────────────────── */
+var IC = {
+  phone: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  map:   '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>',
+  web:   '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+  clock: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+};
+
+/* ── Data ─────────────────────────────────────── */
+var spAll    = (TA.sponsor||[]).filter(function(s){return s.attivo;});
+var spGold   = spAll.filter(function(s){return s.livello==='Gold';});
+var spSilver = spAll.filter(function(s){return s.livello==='Silver';});
+var spBronze = spAll.filter(function(s){return s.livello==='Bronze';});
+
+document.getElementById('sp-cnt-tutti').textContent  = spAll.length;
+document.getElementById('sp-cnt-gold').textContent   = spGold.length;
+document.getElementById('sp-cnt-silver').textContent = spSilver.length;
+document.getElementById('sp-cnt-bronze').textContent = spBronze.length;
+
+/* ── Render GOLD ─────────────────────────────── */
+function renderGold(list) {
+  if (!list.length) return '<div class="sp-empty"><h3>Nessuno sponsor Gold</h3><p><a href="../contatti/" style="color:var(--color-accent);font-weight:700">Contattaci per diventarlo!</a></p></div>';
+  return '<div class="gold-grid">' + list.map(function(s) {
+    var imgHtml = s.foto
+      ? '<img src="'+esc(s.foto)+'" alt="'+esc(s.nome)+'" loading="lazy"/>'
+      : '<div class="gold-card-img-placeholder"><span style="font-family:var(--font-display);font-size:2.5rem;font-weight:900;color:#92600a">'+ini(s.nome)+'</span></div>';
+
+    var infoRows = '';
+    if (siteUrl(s))
+      infoRows += '<div class="sp-info-row">'+IC.web+'<a href="'+esc(siteUrl(s))+'" target="_blank" rel="noopener">'+esc(siteUrl(s).replace(/^https?:\/\//,''))+'</a></div>';
+    if (s.indirizzo)
+      infoRows += '<div class="sp-info-row">'+IC.map+'<a href="'+esc(mapsUrl(s))+'" target="_blank" rel="noopener">'+esc(s.indirizzo)+'</a></div>';
+    if (s.orario)
+      infoRows += '<div class="sp-info-row">'+IC.clock+'<span>'+esc(s.orario)+'</span></div>';
+
+    var footer = '';
+    if (s.telefono)
+      footer += '<a href="tel:'+esc(s.telefono)+'" class="sp-btn-call">'+IC.phone+' Chiama</a>';
+    if (s.indirizzo)
+      footer += '<a href="'+esc(mapsUrl(s))+'" target="_blank" rel="noopener" class="sp-btn-map">'+IC.map+' Mappa</a>';
+    if (siteUrl(s))
+      footer += '<a href="'+esc(siteUrl(s))+'" target="_blank" rel="noopener" class="sp-btn-web">'+IC.web+' Sito web</a>';
+
+    var anchor = s.nome.replace(/[^a-z0-9]/gi,'').toLowerCase();
+    return '<div class="gold-card" id="'+anchor+'">'
+      + '<div class="gold-card-img">'+imgHtml+'<span class="gold-badge-overlay">★ Gold Partner</span></div>'
+      + '<div class="gold-card-body">'
+      +   '<div class="gold-card-name">'+esc(s.nome)+'</div>'
+      +   (s.descrizione ? (function(d, id){
+        var long = d.length > 120;
+        return '<p class="gold-card-desc'+(long?' collapsed':'')+'" id="desc-'+id+'">'+esc(d)+'</p>'
+          + (long ? '<button class="sp-leggi-tutto" onclick="toggleDesc(event,\'desc-'+id+'\',this)">Leggi tutto ▾</button>' : '');
+      })(s.descrizione, s.nome.replace(/[^a-z0-9]/gi,'').toLowerCase()) : '')
+      +   (infoRows ? '<div class="sp-info-box">'+infoRows+'</div>' : '')
+      + '</div>'
+      + (footer ? '<div class="gold-card-footer">'+footer+'</div>' : '')
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+/* ── Render SILVER ───────────────────────────── */
+function renderSilver(list) {
+  if (!list.length) return '<div class="sp-empty"><h3>Nessuno sponsor Silver</h3></div>';
+  return '<div class="silver-grid">' + list.map(function(s) {
+    var imgHtml = s.foto
+      ? '<img src="'+esc(s.foto)+'" alt="'+esc(s.nome)+'" loading="lazy"/>'
+      : '<div class="silver-card-img-placeholder">'+ini(s.nome)+'</div>';
+
+    var contacts = '';
+    if (s.telefono)
+      contacts += '<a href="tel:'+esc(s.telefono)+'" class="silver-contact-item">'+IC.phone+' Chiama</a>';
+    if (siteUrl(s))
+      contacts += '<a href="'+esc(siteUrl(s))+'" target="_blank" rel="noopener" class="silver-contact-item">'+IC.web+' Sito web</a>';
+    if (s.indirizzo)
+      contacts += '<a href="'+esc(mapsUrl(s))+'" target="_blank" rel="noopener" class="silver-contact-item">'+IC.map+' Mappa</a>';
+    if (s.orario)
+      contacts += '<div class="silver-contact-item" style="cursor:default;">'+IC.clock+' '+esc(s.orario)+'</div>';
+
+    var anchorS = s.nome.replace(/[^a-z0-9]/gi,'').toLowerCase();
+    return '<div class="silver-card" id="'+anchorS+'">'
+      + '<div class="silver-card-img">'+imgHtml+'</div>'
+      + '<div class="silver-card-body">'
+      +   '<div class="silver-card-name">'+esc(s.nome)+'</div>'
+      +   (contacts ? '<div class="silver-card-contacts">'+contacts+'</div>' : '')
+      + '</div>'
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+/* ── Render BRONZE ───────────────────────────── */
+function renderBronze(list) {
+  if (!list.length) return '<div class="sp-empty"><h3>Nessuno sponsor Bronze</h3></div>';
+  return '<div class="bronze-grid">' + list.map(function(s) {
+    return '<div class="bronze-pill">'
+      + '<div class="bronze-pill-ico">●</div>'
+      + '<span class="bronze-pill-name">'+esc(s.nome)+'</span>'
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+/* ── Tier section builder ────────────────────── */
+function tierBlock(lineClass, labelClass, labelHtml, contentHtml) {
+  return '<div class="tier-divider">'
+    + '<div class="tier-line '+lineClass+'"></div>'
+    + '<div class="tier-label '+labelClass+'">'+labelHtml+'</div>'
+    + '<div class="tier-line '+lineClass+'"></div>'
+    + '</div>' + contentHtml;
+}
+
+/* ── Main render ─────────────────────────────── */
+function toggleDesc(e, id, btn) {
+  e.stopPropagation();
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (el.classList.contains('collapsed')) {
+    el.classList.remove('collapsed');
+    btn.textContent = 'Mostra meno ▴';
+  } else {
+    el.classList.add('collapsed');
+    btn.textContent = 'Leggi tutto ▾';
+  }
+}
+var currentTier = 'tutti';
+function spRender(tier) {
+  var html = '';
+  if (tier === 'tutti' || tier === 'Gold')
+    html += tierBlock('tier-line-gold','tier-label-gold','★ Gold Partners', renderGold(spGold));
+  if (tier === 'tutti' || tier === 'Silver')
+    html += tierBlock('tier-line-silver','tier-label-silver','◆ Silver Partners', renderSilver(spSilver));
+  if (tier === 'tutti' || tier === 'Bronze')
+    html += tierBlock('tier-line-bronze','tier-label-bronze','● Bronze Partners', renderBronze(spBronze));
+  if (!html)
+    html = '<div class="sp-empty"><h3>Nessuno sponsor</h3><p>Contattaci per entrare a far parte dei nostri partner.</p></div>';
+  document.getElementById('sp-content').innerHTML = html;
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+window.spFilter = function(tier, btn) {
+  currentTier = tier;
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  spRender(tier);
+};
+
+spRender('tutti');
+// Scroll to anchor if coming from homepage
+if (window.location.hash) {
+  setTimeout(function() {
+    var el = document.getElementById(window.location.hash.substring(1));
+    if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.style.outline='3px solid var(--color-accent)'; el.style.borderRadius='18px'; setTimeout(function(){el.style.outline='';},2000); }
+  }, 300);
+}
+</script>
+<script src="../assets/js/protect.js"></script>
+</body>
+</html>

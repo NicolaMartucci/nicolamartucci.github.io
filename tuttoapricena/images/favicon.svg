@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Sfondo circolare giallo -->
+  <circle cx="256" cy="256" r="256" fill="#E8A838"/>
+  <!-- Lettera T -->
+  <rect x="100" y="140" width="312" height="68" rx="14" fill="#1A1A2E"/>
+  <rect x="220" y="140" width="72" height="232" rx="14" fill="#1A1A2E"/>
+  <!-- Lettera A -->
+  <polygon points="330,372 280,148 380,148 430,372" fill="#1A1A2E"/>
+  <!-- barra orizzontale della A -->
+  <rect x="280" y="272" width="130" height="52" rx="10" fill="#1A1A2E"/>
+  <!-- Scavo interno A -->
+  <polygon points="344,180 310,340 378,340" fill="#E8A838"/>
+</svg>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/icon-96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#E8A838" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/></noscript>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pagina non trovata (404) — TuttoApricena</title>
+  <meta name="description" content="La pagina che cerchi non esiste o è stata spostata. Torna alla home di TuttoApricena, il portale informativo di Apricena (FG)." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://www.tuttoapricena.it/" />
+<script>(function(){var path=window.location.pathname;var sections=['notizie','eventi','locali','farmacie','servizi','sponsor','admin','chi-siamo','contatti','privacy','cookie'];var base='/';for(var i=0;i<sections.length;i++){var idx=path.indexOf('/'+sections[i]+'/');if(idx>=0){base=path.slice(0,idx+1);break;}}
+document.write('<base href="'+base+'">');window._TA_BASE=base;})();</script>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<script src="assets/js/lucide-mini.js"></script>
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+<header id="navbar" style="background:rgba(26,26,46,.97);backdrop-filter:blur(12px)">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links">
+      <a href="notizie/">Notizie</a><a href="eventi/">Eventi</a>
+      <a href="farmacie/">Farmacie</a><a href="servizi/">Servizi</a>
+      <a href="locali/">Locali</a><a href="sponsor/">Sponsor</a>
+    </nav>
+    <div class="navbar-actions">
+      <a href="chi-siamo/" class="link-plain">Chi siamo</a>
+      <a href="contatti/" class="link-btn">Contatti</a>
+    </div>
+  </div></div>
+</header>
+<main id="pg-main" style="padding-top:72px;min-height:90vh;display:flex;align-items:center;justify-content:center">
+  <!-- contenuto iniettato dallo script inline — nessun flash di caricamento -->
+</main>
+<footer id="ft" style="display:none">
+  <div class="footer-inner"><div class="footer-grid">
+    <div class="footer-brand"><a href="./" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a></div>
+    <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="notizie/">Notizie</a></li><li><a href="eventi/">Eventi</a></li><li><a href="locali/">Locali</a></li></ul></div>
+  </div><div class="footer-bottom"><p>&copy; <span id="yr"></span> TuttoApricena</p></div></div>
+</footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/slug-renderer.js"></script>
+<script>
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  lucide.createIcons();
+  var path = window.location.pathname;
+  var base = window._TA_BASE || '/';
+  var rel  = path.slice(base.length).replace(/\/$/, '');
+  var parts   = rel.split('/');
+  var section = parts[0] || '';
+  var slug    = parts[1] || '';
+
+  function show404(msg){
+    document.getElementById('pg-main').innerHTML =
+      '<div style="text-align:center;padding:60px 24px">' +
+      '<div style="font-family:var(--font-display);font-size:5rem;font-weight:900;color:var(--color-accent)">404</div>' +
+      '<h2 style="font-family:var(--font-display);font-size:1.8rem;color:var(--color-primary);margin:12px 0">Pagina non trovata</h2>' +
+      '<p style="color:var(--color-text-muted);margin-bottom:24px">' + (msg || 'La pagina che cerchi non esiste o &egrave; stata spostata.') + '</p>' +
+      '<a href="./" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--color-primary);color:#fff;border-radius:50px;text-decoration:none;font-weight:700">&#8592; Torna alla Home</a>' +
+      '</div>';
+    lucide.createIcons();
+  }
+
+  if (!section || !slug) {
+    // URL senza sezione/slug: vera 404
+    show404('La pagina che cerchi non esiste o &egrave; stata spostata.');
+  } else if (['notizie','eventi','locali'].indexOf(section) >= 0) {
+    // Pagina articolo: renderer si occupa di mostrare o 404
+    document.getElementById('pg-main').style.cssText = 'padding-top:72px;min-height:90vh';
+    document.getElementById('ft').style.display = 'block';
+    TARenderer.render(section);
+  } else {
+    show404('La sezione <strong>' + section + '</strong> non esiste.');
+  }
+})();
+</script>
+</body>
+</html>

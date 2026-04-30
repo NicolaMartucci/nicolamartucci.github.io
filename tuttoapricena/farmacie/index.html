@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/icon-96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#E8A838" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmacie di turno ad Apricena (FG) | TuttoApricena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Inter:wght@400;600;700;800&display=swap"/></noscript>
+<meta name="description" content="Farmacia di turno questo weekend ad Apricena (FG). Orari settimanali lun-ven e rotazione sabato/domenica delle 4 farmacie di Apricena." />
+<meta name="keywords" content="farmacia turno Apricena, farmacie Apricena, farmacia aperta sabato domenica Apricena" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.tuttoapricena.it/farmacie/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Farmacie di turno ad Apricena (FG) | TuttoApricena" />
+<meta property="og:description" content="Farmacia di turno oggi ad Apricena (FG). Orari, telefoni e rotazione settimanale delle farmacie di Apricena." />
+<meta property="og:url" content="https://www.tuttoapricena.it/farmacie/" />
+<meta property="og:image" content="https://www.tuttoapricena.it/images/og/citta-apricena.jpg" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <noscript>
+  <noscript></noscript></noscript>
+
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="../assets/css/responsive.css" />
+  <noscript><link rel="stylesheet" href="../assets/css/responsive.css" /></noscript>
+</head>
+<body class="page-farmacie">
+<header id="navbar">
+  <div class="navbar-inner"><div class="navbar-row">
+    <a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a>
+    <nav class="navbar-links"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/" class="active">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <div class="navbar-actions"><a href="../chi-siamo/" class="link-plain">Chi siamo</a><a href="../contatti/" class="link-btn">Contatti</a></div>
+    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu"><i data-lucide="menu" class="icon-hamburger" width="24" height="24"></i><i data-lucide="x" class="icon-x" width="24" height="24" style="display:none"></i></button>
+  </div></div>
+  <div id="mobile-menu" class="mobile-menu"><div class="mobile-menu-inner">
+    <nav class="mobile-nav"><a href="../notizie/">Notizie</a><a href="../eventi/">Eventi</a><a href="../farmacie/" class="active">Farmacie</a><a href="../servizi/">Servizi</a><a href="../locali/">Locali</a><a href="../sponsor/">Sponsor</a></nav>
+    <a href="../contatti/" class="mobile-cta">Contattaci</a>
+  </div></div>
+</header>
+<main class="main-content">
+  <div class="page-header"><div class="page-header-inner"><em>Salute</em><h1>Farmacie di Turno</h1><p>Orari lun-ven e farmacia di turno sabato e domenica ad Apricena</p></div></div>
+  <div class="container-narrow content-section">
+
+    <!-- CARD WEEKEND DI TURNO -->
+    <div class="farmacia-today-card" id="today-card">
+      <div class="farmacia-today-accent"></div>
+      <div class="farmacia-today-head">
+        <div class="farmacia-today-icon"><i data-lucide="plus" width="30" height="30" color="#fff" stroke-width="3"></i></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
+            <span class="badge-aperta" id="badge-stato">⏳ Caricamento...</span>
+          </div>
+          <h2 class="farmacia-today-name" id="today-nome">Caricamento...</h2>
+        </div>
+      </div>
+      <div class="farmacia-details">
+        <div class="farmacia-detail-item"><i data-lucide="map-pin" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Indirizzo</span><span class="farmacia-detail-value" id="today-indirizzo"></span></div></div>
+        <div class="farmacia-detail-item"><i data-lucide="calendar" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Turno festivo</span><span class="farmacia-detail-value" id="today-weekend"></span></div></div>
+        <div class="farmacia-detail-item"><i data-lucide="clock" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Orario feriale</span><span class="farmacia-detail-value" id="today-orario"></span></div></div>
+        <div class="farmacia-detail-item"><i data-lucide="phone" width="16" height="16" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i><div><span class="farmacia-detail-label">Telefono</span><a class="farmacia-detail-value" id="today-tel" href="#" style="color:var(--color-accent);text-decoration:none;font-weight:700;"></a></div></div>
+      </div>
+    </div>
+
+    <!-- CALENDARIO ROTAZIONE PROSSIME SETTIMANE -->
+    <h3 class="farmacia-rota-title" style="margin-top:36px;">Calendario turni festivi</h3>
+    <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:16px;margin-top:-8px;">Sabato e domenica di ogni settimana è aperta una farmacia diversa a rotazione.</p>
+    <div id="rota-grid" style="display:grid;gap:10px;"></div>
+
+    <!-- INFO -->
+    <div style="background:#fff;border-radius:14px;padding:20px 24px;margin-top:28px;box-shadow:0 2px 12px rgba(26,26,46,0.06);border-left:4px solid var(--color-accent);">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <i data-lucide="info" width="18" height="18" color="var(--color-accent)" style="flex-shrink:0;margin-top:2px;"></i>
+        <div>
+          <strong style="color:var(--color-primary);font-size:14px;">Informazioni utili</strong>
+          <p style="color:var(--color-text-muted);font-size:13px;margin-top:4px;line-height:1.6;">
+            Tutte le farmacie sono aperte <strong>lunedì–venerdì</strong> con orario continuato mattina e pomeriggio.
+            Il <strong>sabato e la domenica</strong> fa servizio una farmacia a rotazione settimanale.
+            Per urgenze chiamare il <strong>118</strong> o recarsi al Pronto Soccorso di San Severo.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TUTTE LE FARMACIE -->
+    <h3 class="farmacia-rota-title" style="margin-top:40px;">Tutte le farmacie di Apricena</h3>
+    <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:16px;margin-top:-8px;">Orari feriali lun-ven. Sabato e domenica: vedi il calendario turni sopra.</p>
+    <div id="all-farmacie-grid" style="display:grid;gap:16px;"></div>
+
+  </div>
+</main>
+<footer><div class="footer-inner"><div class="footer-grid">
+  <div class="footer-brand"><a href="../" class="navbar-logo"><div class="navbar-logo-icon"><span>TA</span></div><span class="navbar-logo-text">Tutto<em>Apricena</em></span></a><p>Il portale informativo indipendente di Apricena.</p><div class="footer-social"><a href="https://www.facebook.com/profile.php?id=61578750476699" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="mailto:info@tuttoapricena.it" aria-label="Email info@tuttoapricena.it"><i data-lucide="mail" width="15" height="15"></i></a></div></div>
+  <div class="footer-col"><h4>Sezioni</h4><ul><li><a href="../notizie/">Notizie</a></li><li><a href="../eventi/">Eventi</a></li><li><a href="../farmacie/">Farmacie</a></li><li><a href="../servizi/">Servizi</a></li><li><a href="../locali/">Locali</a></li><li><a href="../sponsor/">Sponsor</a></li></ul></div>
+  <div class="footer-col"><h4>Info</h4><ul><li><a href="../chi-siamo/">Chi Siamo</a></li><li><a href="../contatti/">Contatti</a></li><li><a href="../privacy/">Privacy Policy</a></li><li><a href="../cookie/">Cookie Policy</a></li></ul></div>
+</div><div class="footer-bottom"><p>© <span id="year"></span> TuttoApricena</p></div></div></footer>
+<script src="../assets/js/lucide-mini.js"></script>
+<script src="../assets/js/data.js"></script><script src="../assets/js/main.js"></script>
+<script>
+// Funzioni rotazione farmacie — inline per garantire disponibilità
+if (!TA.getSettimanaFestiva) {
+  TA.getSettimanaFestiva = function(date) {
+    if (!TA.farmacie || !TA.farmacie.length) return null;
+    var d = date ? new Date(date) : new Date();
+    d.setHours(0,0,0,0);
+    var dow = d.getDay();
+    var diffToMon = (dow === 0) ? -6 : 1 - dow;
+    var lun = new Date(d); lun.setDate(d.getDate() + diffToMon);
+    var epoch = new Date('2026-01-05T00:00:00');
+    var weekNum = Math.round((lun - epoch) / (7 * 86400000));
+    var idx = ((weekNum % TA.farmacie.length) + TA.farmacie.length) % TA.farmacie.length;
+    var sab = new Date(lun); sab.setDate(lun.getDate() + 5);
+    var dom = new Date(lun); dom.setDate(lun.getDate() + 6);
+    return { farmacia: TA.farmacie[idx], sabato: sab, domenica: dom, settimana: weekNum };
+  };
+}
+if (!TA.getTurniProssimeSettimane) {
+  TA.getTurniProssimeSettimane = function(n) {
+    var risultati = [];
+    var oggi = new Date(); oggi.setHours(0,0,0,0);
+    var seen = {};
+    for (var i = 0; i < (n || 8); i++) {
+      var ref = new Date(oggi); ref.setDate(oggi.getDate() + i * 7);
+      // Porta al sabato della settimana corrente/futura
+      var dow = ref.getDay();
+      var toSab = (dow === 0) ? 6 : (6 - dow);
+      var sabRef = new Date(ref); sabRef.setDate(ref.getDate() + toSab);
+      var r = TA.getSettimanaFestiva(sabRef);
+      if (r && !seen[r.settimana]) { seen[r.settimana] = true; risultati.push(r); }
+    }
+    return risultati;
+  };
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+var oggi = new Date(); oggi.setHours(0,0,0,0);
+var dow = oggi.getDay();
+var isWeekend = (dow === 0 || dow === 6);
+
+var settimana = TA.getSettimanaFestiva();
+var f = settimana ? settimana.farmacia : null;
+
+function fmtData(d) {
+  return d.toLocaleDateString('it-IT', { weekday:'long', day:'numeric', month:'long' });
+}
+
+if (f) {
+  document.getElementById('today-nome').textContent = f.nome;
+  document.getElementById('today-indirizzo').textContent = f.indirizzo;
+  document.getElementById('today-orario').textContent = f.orario + ' (lun-ven)';
+  document.getElementById('today-tel').textContent = f.telefono;
+  document.getElementById('today-tel').href = 'tel:' + f.telefono;
+  document.getElementById('today-weekend').textContent =
+    fmtData(settimana.sabato) + ' e ' + fmtData(settimana.domenica);
+
+  var badgeEl = document.getElementById('badge-stato');
+  if (isWeekend) {
+    badgeEl.innerHTML = '<i data-lucide="check-circle" width="11" height="11"></i>&nbsp;Di turno oggi';
+    badgeEl.style.background = 'rgba(22,163,74,0.15)';
+    badgeEl.style.color = '#16A34A';
+  } else {
+    badgeEl.innerHTML = '📅 Di turno questo weekend';
+  }
+}
+
+var turni = TA.getTurniProssimeSettimane(8);
+var rotaGrid = document.getElementById('rota-grid');
+rotaGrid.innerHTML = turni.map(function(t) {
+  if (!t) return '';
+  var sabStr = t.sabato.toLocaleDateString('it-IT', { day:'numeric', month:'short' });
+  var domStr = t.domenica.toLocaleDateString('it-IT', { day:'numeric', month:'short' });
+  var isCurrent = (settimana && t.settimana === settimana.settimana);
+  return '<div style="display:flex;align-items:center;gap:14px;background:'+(isCurrent?'rgba(232,168,56,.10)':'#fff')+';border:1px solid '+(isCurrent?'var(--color-accent)':'#e8e4dc')+';border-radius:12px;padding:14px 18px;box-shadow:0 2px 8px rgba(26,26,46,.05);">'
+    +'<div style="text-align:center;min-width:72px;">'
+      +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-muted);">Sab '+sabStr+'</div>'
+      +'<div style="font-size:10px;color:var(--color-text-muted);">Dom '+domStr+'</div>'
+    +'</div>'
+    +'<div style="width:1px;height:36px;background:#e8e4dc;flex-shrink:0;"></div>'
+    +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-weight:700;font-size:14px;color:var(--color-primary);">'+t.farmacia.nome
+        +(isCurrent?' <span style="font-size:9px;font-weight:800;background:var(--color-accent);color:#1a1a2e;border-radius:3px;padding:1px 7px;vertical-align:middle;margin-left:4px;">QUESTA SETTIMANA</span>':'')
+      +'</div>'
+      +'<div style="font-size:12px;color:var(--color-text-muted);margin-top:2px;">'+t.farmacia.indirizzo+'</div>'
+    +'</div>'
+    +'<a href="tel:'+t.farmacia.telefono+'" style="display:flex;align-items:center;gap:5px;color:var(--color-accent);font-weight:700;font-size:13px;white-space:nowrap;flex-shrink:0;">'
+      +'<i data-lucide="phone" width="13" height="13"></i>'+t.farmacia.telefono
+    +'</a>'
+  +'</div>';
+}).join('');
+
+var allGrid = document.getElementById('all-farmacie-grid');
+allGrid.innerHTML = TA.farmacie.map(function(f) {
+  return '<div style="background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 2px 12px rgba(26,26,46,0.06);display:flex;align-items:center;gap:20px;flex-wrap:wrap;">'
+    +'<div style="width:48px;height:48px;border-radius:12px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+      +'<i data-lucide="plus" width="22" height="22" color="#fff" stroke-width="3"></i>'
+    +'</div>'
+    +'<div style="flex:1;min-width:200px;">'
+      +'<strong style="font-family:var(--font-display);font-size:16px;color:var(--color-primary);">'+f.nome+'</strong>'
+      +'<div style="color:var(--color-text-muted);font-size:13px;margin-top:2px;">'+f.indirizzo+'</div>'
+      +'<div style="color:var(--color-text-muted);font-size:13px;margin-top:1px;">'+f.orario+'</div>'
+    +'</div>'
+    +'<a href="tel:'+f.telefono+'" style="display:flex;align-items:center;gap:6px;color:var(--color-accent);font-weight:600;font-size:14px;">'
+      +'<i data-lucide="phone" width="13" height="13"></i>'+f.telefono
+    +'</a>'
+  +'</div>';
+}).join('');
+
+lucide.createIcons();
+</script>
+<script src="../assets/js/protect.js"></script>
+</body></html>
