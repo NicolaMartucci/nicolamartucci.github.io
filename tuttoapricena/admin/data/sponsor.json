@@ -1,0 +1,38 @@
+[
+    {
+        "id": "69ecb848429d32.54175504",
+        "nome": "Gargano Olii S.n.c.",
+        "livello": "Gold",
+        "descrizione": "Raccolta e stoccaggio olii vegetali esausti",
+        "indirizzo": "",
+        "sito_web": "",
+        "telefono": "349 7469397",
+        "orario": "",
+        "foto": "\/admin\/uploads\/sponsor\/69ef43a0069d9.png",
+        "evidenza": true
+    },
+    {
+        "id": "69ef3809aae975.44243249",
+        "nome": "Vodafone Multiservizi",
+        "livello": "Gold",
+        "descrizione": "Vodafone Multiservice Apricena, il tuo punto di riferimento per telefonia, internet e servizi digitali. Offriamo consulenza personalizzata per privati e aziende, aiutandoti a scegliere le migliori soluzioni Vodafone per le tue esigenze di comunicazione. Oltre ad offrirvi una vasta gamma di prodotti, elettrodomestici, telefonia, accessori, ecc..",
+        "indirizzo": "Via Principessa Maria Josè 13, 71011 Apricena (FG)",
+        "sito_web": "",
+        "telefono": "0882 644192",
+        "orario": "Lun-Sab 08:00-13:00, 16:00-21:00",
+        "foto": "\/admin\/uploads\/sponsor\/69ef3809aa929.webp",
+        "evidenza": true
+    },
+    {
+        "id": "69ef3a5d425590.80765052",
+        "nome": "Arti Grafiche Malatesta",
+        "livello": "Gold",
+        "descrizione": "Affidati ad Arti Grafiche Malatesta per stampe di alta qualità, rapide e su misura. Dalla stampa digitale per piccole tirature e lavori urgenti, alla stampa offset ideale per grandi volumi: soluzioni professionali per ogni esigenza. Precisione, colori brillanti e massima cura dei dettagli, con tecnologie all’avanguardia e un’esperienza decennale al tuo servizio.",
+        "indirizzo": "Via Leonardo da Vinci, 10, 71011 Apricena FG",
+        "sito_web": "https:\/\/www.grafichemalatesta.com\/",
+        "telefono": "0882 646565",
+        "orario": "Lun-Ven 09:00-13:00, 15:30-19:00",
+        "foto": "\/admin\/uploads\/sponsor\/69ef3a5d41e44.webp",
+        "evidenza": true
+    }
+]

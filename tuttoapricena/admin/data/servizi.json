@@ -1,0 +1,99 @@
+[
+    {
+        "id": "69e38a75d14711.95666782",
+        "nome": "Comune di Apricena",
+        "categoria": "Istituzioni",
+        "descrizione": "Municipio di Apricena. Sindaco: Antonio Potenza. Anagrafe, edilizia, tributi, servizi sociali.",
+        "indirizzo": "Corso Gen. Torelli, 59 — 71011 Apricena (FG)",
+        "telefono": "0882 646736",
+        "sito_web": "https:\/\/www.comune.apricena.fg.it",
+        "orario": "Lun-Ven: 08:30-13:30 | Mar-Gio: 15:30-17:30",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d147a5.36083863",
+        "nome": "Carabinieri — Stazione Apricena",
+        "categoria": "Sicurezza",
+        "descrizione": "Stazione Carabinieri di Apricena. Emergenze: 112.",
+        "indirizzo": "Via Avola, 20, 71011 Apricena FG",
+        "telefono": "0882 646262",
+        "sito_web": "",
+        "orario": "Lun-Dom: 09:00 - 15:00",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d147f7.86324963",
+        "nome": "Polizia Municipale Apricena",
+        "categoria": "Sicurezza",
+        "descrizione": "Viabilità e sicurezza urbana.",
+        "indirizzo": "Via Spartaco Lavagnini, 25 71011 Apricena (FG)",
+        "telefono": "0882 646171",
+        "sito_web": "",
+        "orario": "",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d14835.17362221",
+        "nome": "Ospedale San Severo — Pronto Soccorso",
+        "categoria": "Sanità",
+        "descrizione": "Ospedale di riferimento più vicino (15 km). Pronto Soccorso 24h.",
+        "indirizzo": "Viale due Giugno, 71016 San Severo FG",
+        "telefono": "0882 200454",
+        "sito_web": "https:\/\/www.aslfg.it",
+        "orario": "PS: 24h",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d14877.75040005",
+        "nome": "ASL Foggia — Distretto Apricena",
+        "categoria": "Sanità",
+        "descrizione": "Prenotazioni visite, medicina di base, continuità assistenziale.",
+        "indirizzo": "Via 2 Giugno, 1, 71011, Apricena (FG)",
+        "telefono": "0882 200789",
+        "sito_web": "https:\/\/www.aslfg.it",
+        "orario": "Lun-Ven: 08:00-14:00 | Lun-Mer: 15:00-18:00",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d148a1.02943170",
+        "nome": "Ufficio Postale Apricena",
+        "categoria": "Servizi",
+        "descrizione": "Spedizioni, Bancoposta, bollettini e pagamenti.",
+        "indirizzo": "Via Spartaco Lavagnini 19 — 71011 Apricena (FG)",
+        "telefono": "0882 646849",
+        "sito_web": "https:\/\/www.poste.it",
+        "orario": "Lun-Ven: 08:20-19:05 | Sab: 08:20-12:35",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "69e38a75d148e5.40222366",
+        "nome": "Stazione Ferroviaria Apricena Città",
+        "categoria": "Trasporti",
+        "descrizione": "Ferrovie del Gargano. Linea Foggia–San Severo–Apricena–Peschici.",
+        "indirizzo": "Stazione Ferroviaria — 71011 Apricena (FG)",
+        "telefono": "0881 725188",
+        "sito_web": "https:\/\/www.trenitalia.com",
+        "orario": "Variabile",
+        "foto": "",
+        "evidenza": false
+    },
+    {
+        "id": "acapt_autobus_001",
+        "nome": "ACAPT — Autobus Extraurbani",
+        "categoria": "Trasporti",
+        "descrizione": "Servizio di trasporto pubblico extraurbano che collega Apricena con Foggia, San Severo e le principali città della Provincia. Consulta gli orari aggiornati sul sito ufficiale ACAPT.",
+        "indirizzo": "QC5F+5Q San Sabino, Provincia di Foggia",
+        "lat": "",
+        "lng": "",
+        "telefono": "0882 643813",
+        "sito_web": "https:\/\/www.acapt.it",
+        "orario": "Consulta gli orari sul sito ufficiale",
+        "foto": "",
+        "evidenza": true
+    }
+]

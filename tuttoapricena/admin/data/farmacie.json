@@ -1,0 +1,34 @@
+[
+    {
+        "id": "69e38a75d10205.33191431",
+        "nome": "Farmacia Florio",
+        "indirizzo": "Corso Garibaldi, 94 — 71011 Apricena (FG)",
+        "telefono": "0882 641322",
+        "orario": "Lun-Ven: 08:00-13:30 / 16:00-20:30",
+        "notturna": false
+    },
+    {
+        "id": "69e38a75d10290.42182025",
+        "nome": "Farmacia Matarese",
+        "indirizzo": "Viale Papa Giovanni XXIII, 33/A — 71011 Apricena (FG)",
+        "telefono": "0882 641134",
+        "orario": "Lun-Ven: 08:00-13:00 / 16:30-20:30",
+        "notturna": false
+    },
+    {
+        "id": "69e38a75d102d7.41665250",
+        "nome": "Farmacia dell'Incoronata",
+        "indirizzo": "Via Roma, 6 — 71011 Apricena (FG)",
+        "telefono": "0882 641126",
+        "orario": "Lun-Ven: 08:00-13:00 / 16:30-20:30",
+        "notturna": false
+    },
+    {
+        "id": "69e38a75d10316.34323883",
+        "nome": "Farmacia della Luna",
+        "indirizzo": "Viale Aldo Moro, 134/C/8 — 71011 Apricena (FG)",
+        "telefono": "0882 643574",
+        "orario": "Lun-Ven: 08:30-13:00 / 16:30-20:30",
+        "notturna": false
+    }
+]

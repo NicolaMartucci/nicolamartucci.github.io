@@ -1,0 +1,126 @@
+[
+    {
+        "id": "69f1e3f9aa27d3.55906027",
+        "slug": "da-nonna-peppina",
+        "nome": "Da Nonna Peppina",
+        "tipo": "Ristorante",
+        "descrizione": "Benvenuti in un luogo dove la cucina non è solo un mestiere, ma un'arte tramandata da generazione in generazione\r\nSiamo Mariagrazia e Michele, madre e figlio, e Da Nonna Peppina è la nostra idea di donarvi un’esperienza.\r\nCrediamo nei sapori che raccontano storie, nei dettagli che sorprendono.\r\nOgni piatto nasce da un ricordo, pensato per farvi vivere un’emozione autentica, unica e indimenticabile, come quella che vivevamo noi a tavola con Nonna Peppina.",
+        "indirizzo": "Corso Generale Torelli, 90, 71011 Apricena FG",
+        "lat": "",
+        "lng": "",
+        "telefono": "348 4095984",
+        "sito_web": "https:\/\/www.danonnapeppina.it\/",
+        "orario": "Lun: 12:45-14:30 | Mar: Chiuso | Mer: 12:45-14:45, 20:00-21:15 | Gio: 12:45-14:30, 20:00-21:15 | Ven: 12:45-14:30, 20:00-21:45 | Sab: 12:45-14:45, 20:00-22:00 | Dom: 12:30-15:00",
+        "orario_nota": "",
+        "orari_strutturati": {
+            "lun": {
+                "ap1": "12:45",
+                "ch1": "14:30"
+            },
+            "mar": {
+                "chiuso": true
+            },
+            "mer": {
+                "ap1": "12:45",
+                "ch1": "14:45",
+                "ap2": "20:00",
+                "ch2": "21:15"
+            },
+            "gio": {
+                "ap1": "12:45",
+                "ch1": "14:30",
+                "ap2": "20:00",
+                "ch2": "21:15"
+            },
+            "ven": {
+                "ap1": "12:45",
+                "ch1": "14:30",
+                "ap2": "20:00",
+                "ch2": "21:45"
+            },
+            "sab": {
+                "ap1": "12:45",
+                "ch1": "14:45",
+                "ap2": "20:00",
+                "ch2": "22:00"
+            },
+            "dom": {
+                "ap1": "12:30",
+                "ch1": "15:00"
+            }
+        },
+        "foto": "\/admin\/uploads\/locali\/69f1e3f9a7de1.webp",
+        "gallery": [
+            "\/admin\/uploads\/locali\/69f1e3f9a8822.webp",
+            "\/admin\/uploads\/locali\/69f1e3f9a9049.webp",
+            "\/admin\/uploads\/locali\/69f1e3f9a9c11.webp"
+        ],
+        "evidenza": true
+    },
+    {
+        "id": "69e38a75d19784.13302085",
+        "slug": "lato-opposto",
+        "nome": "Lato Opposto",
+        "tipo": "Bar",
+        "descrizione": "Il Lato Opposto è un luogo dove la passione per la mixology incontra l’arte dell’accoglienza. Ogni dettaglio, dall’atmosfera intima e rilassata alla qualità dei nostri ingredienti, è curato per offrire un’esperienza unica. Che sia per una pausa veloce o per un momento di relax, il nostro staff è pronto a farti sentire a casa.",
+        "indirizzo": "Via Guido Rossa, 3, 71011 Apricena FG",
+        "lat": "",
+        "lng": "",
+        "telefono": "349 112 0289",
+        "sito_web": "",
+        "orario": "Lun: 05:30-00:00 | Mar: 05:30-00:00 | Mer: Chiuso | Gio: 05:30-00:00 | Ven: 05:30-00:00 | Sab: 05:30-00:00 | Dom: 05:30-00:00",
+        "orario_nota": "",
+        "orari_strutturati": {
+            "lun": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            },
+            "mar": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            },
+            "mer": {
+                "chiuso": true
+            },
+            "gio": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            },
+            "ven": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            },
+            "sab": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            },
+            "dom": {
+                "ap1": "05:30",
+                "ch1": "00:00"
+            }
+        },
+        "foto": "\/admin\/uploads\/locali\/69ecc2f846b77.png",
+        "gallery": [
+            "\/admin\/uploads\/locali\/69f07a27db056.webp",
+            "\/admin\/uploads\/locali\/69f07a27dbdb4.webp",
+            "\/admin\/uploads\/locali\/69f07a8c90daf.webp"
+        ],
+        "evidenza": true
+    },
+    {
+        "id": "69ecb8e36303f0.24640883",
+        "slug": "il-porto-nascosto",
+        "nome": "Il Porto nascosto",
+        "tipo": "Pub",
+        "descrizione": "Un pub situato nel centro di Apricena, dove è possibile godersi un aperitivo, oppure cenare con ottimi taglieri, hamburger, piadine, ecc.. Con una selezione di birre, vini, e tant' altro.\r\nL' accoglienza e il calore rendono il pub un' atmosfera accogliente per passare dei momenti piacevoli e staccare dalla solita routine",
+        "indirizzo": "Viale Aldo Moro, 9, 71011 Apricena FG",
+        "lat": "",
+        "lng": "",
+        "telefono": "346 0832737",
+        "sito_web": "",
+        "orario": "",
+        "foto": "\/admin\/uploads\/locali\/69f1e03e2b7e9.webp",
+        "gallery": [],
+        "evidenza": true
+    }
+]

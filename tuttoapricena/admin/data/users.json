@@ -1,0 +1,12 @@
+{
+    "admin": {
+        "username": "admin",
+        "password": "$2y$10$nOZcAfVxwsz6GpAFV2R1meu2eOBu0AwXEVxSRvrwN9PA07ODkXqAu",
+        "role": "admin",
+        "name": "Amministratore",
+        "email": "",
+        "permissions": [
+            "all"
+        ]
+    }
+}
