@@ -30,17 +30,13 @@
             font-family: 'Lora', serif;
             background: var(--crema);
             color: var(--testo-scuro);
-            cursor: none;
+            cursor: auto;
             overflow-x: hidden;
         }
 
-        /* ========== CUSTOM CURSOR ========== */
+        /* ========== CUSTOM CURSOR (disabilitato) ========== */
         #cursor-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 100000;
+            display: none;
         }
 
         /* ========== LOADING SCREEN ========== */
@@ -1502,12 +1498,12 @@
     <div class="hero-overlay"></div>
     <div class="hero-vignette"></div>
     <div class="hero-content">
-        <div class="hero-top-text" id="heroTop">Tradizione Italiana dal 2013</div>
+        <div class="hero-top-text" id="heroTop">La Tradizione che Sorprende · dal 2013</div>
         <h1 class="hero-title" id="heroTitle">Da Nonna<br><em>Peppina</em></h1>
         <div class="hero-divider" id="heroDivider"></div>
         <p class="hero-subtitle" id="heroSub">
-            Dove ogni piatto racconta una storia di famiglia,<br>
-            e ogni ospite diventa parte della nostra.
+            Un luogo dove la cucina non è solo un mestiere,<br>
+            ma un'arte tramandata di generazione in generazione.
         </p>
         <div class="hero-cta" id="heroCta">
             <a href="#prenota">Prenota il tuo tavolo</a>
@@ -1541,10 +1537,9 @@
                 Ogni piatto nasce da un ricordo, pensato per farvi vivere un'emozione autentica, unica e indimenticabile, come quella che vivevamo noi a tavola con Nonna Peppina.
             </p>
             <p class="benvenuto-text">
-                Nonna Peppina credeva che il cibo migliore nascesse dalla semplicità
-                e dalla cura dei dettagli. Oggi, come allora, portiamo avanti la sua
-                filosofia: materie prime selezionate, pasta fatta a mano ogni giorno
-                e quel tocco di amore che rende ogni piatto indimenticabile.
+                I piatti di Mariagrazia nascono dalla memoria, ma si vestono di creatività. Ingredienti genuini
+                e un tocco di eleganza per un'esperienza che profuma di casa… e di futuro.
+                Michele vi guiderà in un viaggio tra profumi e sapori, abbinando ogni calice ai piatti del cuore.
             </p>
             <div class="benvenuto-signature">Mariagrazia e Michele</div>
         </div>
@@ -1603,35 +1598,43 @@
             <h3>Antipasti</h3>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Bruschetta della Nonna</div>
-                    <div class="menu-item-desc">Pomodorini San Marzano, basilico fresco, olio extravergine</div>
+                    <div class="menu-item-name">Parmigiana di Campo</div>
+                    <div class="menu-item-desc">Borragine in pastella</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">8 €</div>
+                <div class="menu-item-price">15 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Tagliere di Salumi e Formaggi</div>
-                    <div class="menu-item-desc">Selezione artigianale con mieli e confetture</div>
+                    <div class="menu-item-name">Opera</div>
+                    <div class="menu-item-desc">Bietola, pomodoro secco, crema di patate</div>
                 </div>
                 <div class="menu-dots"></div>
                 <div class="menu-item-price">16 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Polpettine al Sugo</div>
-                    <div class="menu-item-desc">La ricetta segreta di Nonna Peppina</div>
+                    <div class="menu-item-name">Caldaria</div>
+                    <div class="menu-item-desc">Caciocavallo fuso in crepe</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">12 €</div>
+                <div class="menu-item-price">13 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Burrata Pugliese</div>
-                    <div class="menu-item-desc">Con pomodori datterini e pesto di rucola</div>
+                    <div class="menu-item-name">Bacio di Primavera</div>
+                    <div class="menu-item-desc">Medaglione fritto di asparagi, riso e patate</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">14 €</div>
+                <div class="menu-item-price">15 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Pancotto di Stagione</div>
+                    <div class="menu-item-desc">Zuppa di verdure dell'orto e pane raffermo</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">15 €</div>
             </div>
         </div>
 
@@ -1639,35 +1642,51 @@
             <h3>Primi Piatti</h3>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Tagliatelle al Ragù</div>
-                    <div class="menu-item-desc">Pasta fresca, ragù cotto per otto ore</div>
-                </div>
-                <div class="menu-dots"></div>
-                <div class="menu-item-price">16 €</div>
-            </div>
-            <div class="menu-item">
-                <div>
-                    <div class="menu-item-name">Ravioli Ricotta e Spinaci</div>
-                    <div class="menu-item-desc">Burro fuso, salvia e Parmigiano 36 mesi</div>
-                </div>
-                <div class="menu-dots"></div>
-                <div class="menu-item-price">18 €</div>
-            </div>
-            <div class="menu-item">
-                <div>
-                    <div class="menu-item-name">Risotto allo Zafferano</div>
-                    <div class="menu-item-desc">Zafferano di Navelli, mantecato al burro</div>
+                    <div class="menu-item-name">Polpo Smeraldo</div>
+                    <div class="menu-item-desc">Orecchiette al polpo, pesto di pistacchio, pomodoro secco</div>
                 </div>
                 <div class="menu-dots"></div>
                 <div class="menu-item-price">17 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Pappardelle ai Funghi Porcini</div>
-                    <div class="menu-item-desc">Porcini freschi di stagione, tartufo nero</div>
+                    <div class="menu-item-name">Terra che Sussurra al Mare</div>
+                    <div class="menu-item-desc">Troccoli agli asparagi, seppia e pera</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">20 €</div>
+                <div class="menu-item-price">17 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Giallo Velvet</div>
+                    <div class="menu-item-desc">Mezze maniche in salsa di datterino giallo, carciofo, pancetta, sfritto di pane al pecorino</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">16 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">La Sorpresa di un Abbraccio</div>
+                    <div class="menu-item-desc">Raviolo al cacio e pepe al sugo di scampo</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">18 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Radici d'Autore</div>
+                    <div class="menu-item-desc">Fusillo fresco, salsa di pomodoro e peperone, Musciska, pecorino croccante</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">16 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Sentiero di Puglia</div>
+                    <div class="menu-item-desc">Orecchiette alle cime di rape, funghi cardoncelli, salsiccia e caciocavallo podolico</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">17 €</div>
             </div>
         </div>
 
@@ -1675,27 +1694,43 @@
             <h3>Secondi Piatti</h3>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Ossobuco alla Milanese</div>
-                    <div class="menu-item-desc">Cottura lenta con gremolata tradizionale</div>
+                    <div class="menu-item-name">Filetto Disonesto</div>
+                    <div class="menu-item-desc">Filetto al Gin e conserva di frutti di bosco</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">24 €</div>
+                <div class="menu-item-price">23 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Branzino al Forno</div>
-                    <div class="menu-item-desc">Patate, olive taggiasche e capperi di Pantelleria</div>
+                    <div class="menu-item-name">La Crosta</div>
+                    <div class="menu-item-desc">Maialino in crosta di miele e guanciale croccante</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">18 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Insieme</div>
+                    <div class="menu-item-desc">Costata di Kobieta e chips di patate — 500 gr, min. 2 persone</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">40 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Le Bombette</div>
+                    <div class="menu-item-desc">Bombette pugliesi e verdure in pastella</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">18 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">L'Agnello della Nonna</div>
+                    <div class="menu-item-desc">Agnello al forno, patate e funghi cardoncelli</div>
                 </div>
                 <div class="menu-dots"></div>
                 <div class="menu-item-price">22 €</div>
-            </div>
-            <div class="menu-item">
-                <div>
-                    <div class="menu-item-name">Scaloppine al Limone</div>
-                    <div class="menu-item-desc">Vitello, limone di Amalfi, contorno di stagione</div>
-                </div>
-                <div class="menu-dots"></div>
-                <div class="menu-item-price">19 €</div>
             </div>
         </div>
 
@@ -1703,27 +1738,43 @@
             <h3>Dolci della Casa</h3>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Tiramisù di Nonna Peppina</div>
-                    <div class="menu-item-desc">La ricetta originale, rigorosamente senza fretta</div>
+                    <div class="menu-item-name">La Crostata di Mariagrazia</div>
+                    <div class="menu-item-desc">Crostata alla ricotta e marmellata di fichi</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">5 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">Sole d'Inverno</div>
+                    <div class="menu-item-desc">Crostata al cioccolato fondente e marmellata d'arancia</div>
+                </div>
+                <div class="menu-dots"></div>
+                <div class="menu-item-price">6 €</div>
+            </div>
+            <div class="menu-item">
+                <div>
+                    <div class="menu-item-name">La Dolce Vela</div>
+                    <div class="menu-item-desc">Mousse di fondente, caramello salato, biscotto croccante</div>
                 </div>
                 <div class="menu-dots"></div>
                 <div class="menu-item-price">9 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Panna Cotta ai Frutti di Bosco</div>
-                    <div class="menu-item-desc">Vaniglia del Madagascar, coulis di lamponi</div>
+                    <div class="menu-item-name">TiramiSud</div>
+                    <div class="menu-item-desc">Croccante alle mandorle, fondente fuso, mascarpone</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">8 €</div>
+                <div class="menu-item-price">6 €</div>
             </div>
             <div class="menu-item">
                 <div>
-                    <div class="menu-item-name">Torta della Nonna</div>
-                    <div class="menu-item-desc">Crema pasticcera, pinoli tostati e zucchero a velo</div>
+                    <div class="menu-item-name">La Mia Quasi Cheesecake</div>
+                    <div class="menu-item-desc">Tartella di grano saraceno, crema cheesecake al pistacchio, gelè al caffè</div>
                 </div>
                 <div class="menu-dots"></div>
-                <div class="menu-item-price">8 €</div>
+                <div class="menu-item-price">6 €</div>
             </div>
         </div>
     </div>
@@ -1767,22 +1818,22 @@
                 <div class="filosofia-value reveal-left">
                     <div class="filosofia-value-num">I</div>
                     <div>
-                        <h4>Ingredienti del Cuore</h4>
-                        <p>Selezioniamo ogni giorno materie prime dai migliori produttori locali. Freschezza e genuinità non sono mai un compromesso.</p>
+                        <h4>La Cucina di Mariagrazia</h4>
+                        <p>I piatti nascono dalla memoria, ma si vestono di creatività. Ingredienti genuini e un tocco di eleganza per un'esperienza che profuma di casa… e di futuro.</p>
                     </div>
                 </div>
                 <div class="filosofia-value reveal-left">
                     <div class="filosofia-value-num">II</div>
                     <div>
-                        <h4>Tradizione Viva</h4>
-                        <p>Le ricette di Nonna Peppina vivono in ogni piatto. Custodiamo la tradizione evolvendola con rispetto e creatività.</p>
+                        <h4>Selezione Vini di Michele</h4>
+                        <p>Una carta dei vini dove ogni etichetta racconta una storia. Michele vi guiderà in un viaggio tra profumi e sapori, abbinando ogni calice ai piatti del cuore.</p>
                     </div>
                 </div>
                 <div class="filosofia-value reveal-left">
                     <div class="filosofia-value-num">III</div>
                     <div>
-                        <h4>Accoglienza Autentica</h4>
-                        <p>Ogni ospite che varca la nostra soglia diventa parte della famiglia. Il calore dell'accoglienza è la nostra firma.</p>
+                        <h4>Piccoli Eventi & Business Meeting</h4>
+                        <p>Dalle piccole ricorrenze ai compleanni, fino ai business meeting con menu dedicati. Atmosfera intima e cura per ogni dettaglio.</p>
                     </div>
                 </div>
             </div>
@@ -1812,7 +1863,8 @@
                 <h3>Orari di Apertura</h3>
                 <div class="info-row"><span>Lunedì</span><span>12:45 - 14:30</span></div>
                 <div class="info-row"><span>Martedì</span><span>Chiuso</span></div>
-                <div class="info-row"><span>Mercoledì al Sabato</span><span>12:45 - 14:30 / 20:00 - 22:00</span></div>
+                <div class="info-row"><span>Mercoledì - Venerdì</span><span>12:45 - 14:30 / 20:00 - 21:30</span></div>
+                <div class="info-row"><span>Sabato</span><span>12:45 - 14:30 / 20:00 - 22:00</span></div>
                 <div class="info-row"><span>Domenica</span><span>12:30 - 14:45</span></div>
             </div>
             <div class="info-block reveal" style="margin-top: 40px;">
@@ -1826,8 +1878,16 @@
                     <div class="info-contact-value"><a href="tel:+393484095984">+39 348 4095984</a></div>
                 </div>
                 <div class="info-contact-item">
-                    <div class="info-contact-label">Prenotazioni</div>
+                    <div class="info-contact-label">Prenotazioni Online</div>
+                    <div class="info-contact-value"><a href="https://danonnapeppinalatradizionechesorprende.plateform.app/welcome" target="_blank">Prenota dal sito</a></div>
+                </div>
+                <div class="info-contact-item">
+                    <div class="info-contact-label">Prenotazioni Telefoniche</div>
                     <div class="info-contact-value">Si consiglia la prenotazione, soprattutto nei weekend</div>
+                </div>
+                <div class="info-contact-item">
+                    <div class="info-contact-label">Allergie & Intolleranze</div>
+                    <div class="info-contact-value">Disponibili opzioni vegetariane, vegane e per celiaci. Per allergia al nichel contattarci telefonicamente.</div>
                 </div>
             </div>
         </div>
@@ -1858,6 +1918,8 @@
             Per garantirvi la migliore esperienza, vi invitiamo a prenotare
             il vostro tavolo. Saremo lieti di accogliervi.
         </p>
+        <a href="https://danonnapeppinalatradizionechesorprende.plateform.app/welcome" target="_blank" class="prenota-phone" style="font-size: clamp(1.2rem, 2.5vw, 1.8rem); letter-spacing: 2px; padding: 0 10px;">Prenota Online</a>
+        <br><br>
         <a href="tel:+393484095984" class="prenota-phone">+39 348 4095984</a>
     </div>
 </section>
@@ -1867,7 +1929,7 @@
     <div class="footer-inner">
         <div class="footer-col">
             <h4>Da Nonna Peppina</h4>
-            <p>Un ristorante di famiglia dove la tradizione italiana incontra il calore dell'accoglienza. Dal 2013, nel cuore di Apricena.</p>
+            <p>La Tradizione che Sorprende. Un ristorante di famiglia dove la cucina è un'arte tramandata di generazione in generazione. Dal 2013, nel cuore di Apricena.</p>
         </div>
         <div class="footer-col">
             <h4>Navigazione</h4>
@@ -1882,11 +1944,12 @@
             <p>Corso Generale Torelli, 90</p>
             <p>71011 Apricena (FG)</p>
             <a href="tel:+393484095984">+39 348 4095984</a>
+            <a href="https://danonnapeppinalatradizionechesorprende.plateform.app/welcome" target="_blank" style="margin-top: 8px;">Prenota Online</a>
         </div>
     </div>
     <div class="footer-bottom">
         <div class="footer-logo-text">Da Nonna Peppina</div>
-        <div class="footer-copy">Tutti i diritti riservati</div>
+        <div class="footer-copy">© 2013 - 2026 · Tutti i diritti riservati</div>
     </div>
 </footer>
 
