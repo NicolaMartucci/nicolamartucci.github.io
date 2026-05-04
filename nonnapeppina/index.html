@@ -34,11 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* ========== CUSTOM CURSOR (disabilitato) ========== */
-        #cursor-canvas {
-            display: none;
-        }
-
         /* ========== LOADING SCREEN ========== */
         #loader {
             position: fixed;
@@ -1352,16 +1347,12 @@
                 box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
             }
 
-            /* Annulla l'effetto scrolled su mobile (già ha lo sfondo fisso) */
             nav.scrolled {
                 padding: 12px 20px;
                 background: rgba(90, 16, 24, 0.97);
             }
 
-            /* Compensa l'altezza della nav fissa */
-            #hero {
-                padding-top: 60px;
-            }
+            #hero { padding-top: 60px; }
 
             .nav-links { display: none; }
             .nav-hamburger { display: flex; }
@@ -1403,23 +1394,9 @@
                 padding-right: 12px;
             }
 
-            .menu-item-name {
-                font-size: 1.05rem;
-                line-height: 1.4;
-            }
-
-            .menu-item-desc {
-                margin-top: 6px;
-                width: 100%;
-            }
-
-            .menu-item-price {
-                font-size: 1.15rem;
-                margin-left: 0;
-                flex-shrink: 0;
-                align-self: flex-start;
-                padding-top: 2px;
-            }
+            .menu-item-name { font-size: 1.05rem; line-height: 1.4; }
+            .menu-item-desc { margin-top: 6px; width: 100%; }
+            .menu-item-price { font-size: 1.15rem; margin-left: 0; flex-shrink: 0; align-self: flex-start; padding-top: 2px; }
 
             .filosofia-layout { grid-template-columns: 1fr; gap: 40px; }
             .filosofia-img-side { height: 400px; }
@@ -1432,14 +1409,132 @@
             .prenota-phone { font-size: 1.8rem; }
 
             body { cursor: auto; overflow-x: hidden; }
-            #cursor-canvas { display: none; }
+
+            .parallax-band { height: 280px; }
+            .parallax-band-content blockquote { font-size: clamp(1.1rem, 4vw, 1.6rem); padding: 0 20px; }
         }
+
+        @media (max-width: 480px) {
+            section { padding: 60px 18px; }
+            nav { padding: 10px 16px; }
+            .benvenuto-images { height: 320px; }
+            .atmosfera-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 220px);
+            }
+            .atmosfera-item:nth-child(1),
+            .atmosfera-item:nth-child(5) { grid-column: span 1; }
+            .hero-cta a { min-width: unset; width: 100%; max-width: 320px; }
+            .info-map { height: 260px; }
+            .prenota-phone { font-size: 1.4rem; }
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 2, 2, 0.95);
+            z-index: 99000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            animation: lbFadeIn 0.3s ease;
+        }
+
+        .lightbox-overlay.open { display: flex; }
+
+        @keyframes lbFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-inner {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lightbox-inner img {
+            max-width: 90vw;
+            max-height: 80vh;
+            object-fit: contain;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+            animation: lbZoomIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes lbZoomIn {
+            from { transform: scale(0.88); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-caption {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--oro);
+            margin-top: 18px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(201, 169, 110, 0.7);
+            background: none;
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--oro);
+            border-color: var(--oro);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(201, 169, 110, 0.15);
+            border: 1px solid rgba(201, 169, 110, 0.3);
+            color: var(--oro);
+            font-size: 1.4rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .lightbox-nav:hover { background: rgba(201, 169, 110, 0.3); border-color: var(--oro); }
+        .lightbox-nav.prev { left: -60px; }
+        .lightbox-nav.next { right: -60px; }
+
+        @media (max-width: 600px) {
+            .lightbox-nav.prev { left: -40px; }
+            .lightbox-nav.next { right: -40px; }
+            .lightbox-nav { width: 36px; height: 36px; font-size: 1.1rem; }
+        }
+
+        .atmosfera-item { cursor: pointer; }
+
     </style>
 </head>
 <body>
-
-<!-- Cursor Canvas -->
-<canvas id="cursor-canvas"></canvas>
 
 <!-- Loading Screen -->
 <div id="loader">
@@ -1554,27 +1649,27 @@
         <div class="section-divider" style="margin: 30px auto; background: var(--oro);"></div>
     </div>
     <div class="atmosfera-grid">
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/adorn.jpg" data-caption="Spaghetti con">
             <img src="img/adorn.jpg" alt="Spaghetti">
             <div class="overlay-text">Spaghetti con</div>
         </div>
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/fusilli.jpeg" data-caption="Fusilli">
             <img src="img/fusilli.jpeg" alt="Dettaglio tavola">
             <div class="overlay-text">Fusilli</div>
         </div>
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/gran.jpg" data-caption="Pane e pomodoro in granita">
             <img src="img/gran.jpg" alt="Cantina vini">
             <div class="overlay-text">Pane e pomodoro in granita</div>
         </div>
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/orecc.jpg" data-caption="Orecchiette con polipetti">
             <img src="img/orecc.jpg" alt="Cucina">
             <div class="overlay-text">Orecchiette con polipetti</div>
         </div>
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/pan cotto.jpg" data-caption="Pancotto tradizionale">
             <img src="img/pan cotto.jpg" alt="Tavola apparecchiata">
             <div class="overlay-text">Pancotto tradizionale</div>
         </div>
-        <div class="atmosfera-item reveal">
+        <div class="atmosfera-item reveal" data-src="img/seppie.jpg" data-caption="Seppie e coriandoli">
             <img src="img/seppie.jpg" alt="Piatto speciale">
             <div class="overlay-text">Seppie e coriandoli</div>
         </div>
@@ -1924,6 +2019,17 @@
     </div>
 </section>
 
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true">
+    <div class="lightbox-inner">
+        <button class="lightbox-close" id="lbClose" aria-label="Chiudi">✕ Chiudi</button>
+        <button class="lightbox-nav prev" id="lbPrev" aria-label="Precedente">&#8592;</button>
+        <img src="" alt="" id="lbImg">
+        <button class="lightbox-nav next" id="lbNext" aria-label="Successiva">&#8594;</button>
+        <div class="lightbox-caption" id="lbCaption"></div>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer>
     <div class="footer-inner">
@@ -2006,183 +2112,6 @@
         }, 900);
     }
 
-    // ========== CURSOR ==========
-    const canvas = document.getElementById('cursor-canvas');
-    const ctx = canvas.getContext('2d');
-    let w, h;
-
-    function resizeCanvas() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    let mouse = { x: w / 2, y: h / 2 };
-    let smoothMouse = { x: w / 2, y: h / 2 };
-    let isHovering = false;
-    let isClicking = false;
-    let clickTime = 0;
-    const drops = [];
-    const maxDrops = 60;
-    let frameCount = 0;
-
-    class InkDrop {
-        constructor(x, y, vx, vy, size, burst) {
-            this.x = x; this.y = y;
-            this.vx = vx; this.vy = vy;
-            this.size = size;
-            this.maxLife = burst ? 40 : 60;
-            this.life = this.maxLife;
-            this.burst = burst;
-            this.gravity = burst ? 0.04 : 0.01;
-            this.friction = burst ? 0.97 : 0.95;
-        }
-        update() {
-            this.vy += this.gravity;
-            this.vx *= this.friction;
-            this.vy *= this.friction;
-            this.x += this.vx;
-            this.y += this.vy;
-            this.life--;
-        }
-        draw(ctx) {
-            const t = this.life / this.maxLife;
-            const alpha = t * 0.7;
-            const r = this.size * (0.5 + t * 0.5);
-            const hue = 20 + (1 - t) * 20;
-            const sat = 70 + (1 - t) * 20;
-            const light = 45 + (1 - t) * 15;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${alpha})`;
-            ctx.fill();
-            if (r > 1) {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, r * 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, ${alpha * 0.15})`;
-                ctx.fill();
-            }
-        }
-    }
-
-    document.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    document.addEventListener('mousedown', () => {
-        isClicking = true;
-        clickTime = frameCount;
-        for (let i = 0; i < 12; i++) {
-            const angle = (Math.PI * 2 / 12) * i + Math.random() * 0.3;
-            const speed = 2 + Math.random() * 4;
-            drops.push(new InkDrop(
-                mouse.x, mouse.y,
-                Math.cos(angle) * speed,
-                Math.sin(angle) * speed,
-                2 + Math.random() * 3, true
-            ));
-        }
-    });
-
-    document.addEventListener('mouseup', () => { isClicking = false; });
-
-    const interactiveEls = 'a, button, .menu-item, .filosofia-value, .nav-hamburger, .atmosfera-item, .menu-img-card, .info-map';
-    document.querySelectorAll(interactiveEls).forEach(el => {
-        el.addEventListener('mouseenter', () => { isHovering = true; });
-        el.addEventListener('mouseleave', () => { isHovering = false; });
-    });
-
-    let lastDrop = 0;
-
-    function drawCursor() {
-        ctx.clearRect(0, 0, w, h);
-        frameCount++;
-
-        smoothMouse.x += (mouse.x - smoothMouse.x) * 0.15;
-        smoothMouse.y += (mouse.y - smoothMouse.y) * 0.15;
-
-        const dx = mouse.x - smoothMouse.x;
-        const dy = mouse.y - smoothMouse.y;
-        const speed = Math.sqrt(dx * dx + dy * dy);
-
-        if (speed > 1.5 && frameCount - lastDrop > 2) {
-            drops.push(new InkDrop(
-                smoothMouse.x + (Math.random() - 0.5) * 4,
-                smoothMouse.y + (Math.random() - 0.5) * 4,
-                (Math.random() - 0.5) * 0.5,
-                (Math.random() - 0.5) * 0.5,
-                1.5 + Math.min(speed * 0.15, 3), false
-            ));
-            lastDrop = frameCount;
-        }
-
-        for (let i = drops.length - 1; i >= 0; i--) {
-            drops[i].update();
-            drops[i].draw(ctx);
-            if (drops[i].life <= 0) drops.splice(i, 1);
-        }
-
-        while (drops.length > maxDrops) drops.shift();
-
-        const cx = mouse.x;
-        const cy = mouse.y;
-        const cSize = isHovering ? 18 : 12;
-        const cAlpha = 0.9;
-        const rotation = frameCount * 0.008;
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(rotation);
-        ctx.strokeStyle = `rgba(201, 169, 110, ${cAlpha})`;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(-cSize, 0);
-        ctx.lineTo(cSize, 0);
-        ctx.moveTo(0, -cSize);
-        ctx.lineTo(0, cSize);
-        ctx.stroke();
-        const dSize = isHovering ? 4 : 2.5;
-        ctx.rotate(Math.PI / 4);
-        ctx.fillStyle = `rgba(201, 169, 110, ${cAlpha})`;
-        ctx.fillRect(-dSize, -dSize, dSize * 2, dSize * 2);
-        ctx.restore();
-
-        const ringSize = isHovering ? 32 : 22;
-        ctx.beginPath();
-        ctx.arc(smoothMouse.x, smoothMouse.y, ringSize, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(201, 169, 110, ${isHovering ? 0.5 : 0.25})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        const orbitCount = 4;
-        const orbitRadius = isHovering ? 28 : 18;
-        const orbitSpeed = isHovering ? 0.025 : 0.015;
-        for (let i = 0; i < orbitCount; i++) {
-            const angle = (Math.PI * 2 / orbitCount) * i + frameCount * orbitSpeed;
-            const ox = smoothMouse.x + Math.cos(angle) * orbitRadius;
-            const oy = smoothMouse.y + Math.sin(angle) * orbitRadius;
-            const dotSize = isHovering ? 2.5 : 1.5;
-            ctx.beginPath();
-            ctx.arc(ox, oy, dotSize, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(201, 169, 110, 0.6)`;
-            ctx.fill();
-        }
-
-        const glowSize = isHovering ? 45 : 30;
-        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize);
-        gradient.addColorStop(0, `rgba(201, 169, 110, 0.08)`);
-        gradient.addColorStop(1, `rgba(201, 169, 110, 0)`);
-        ctx.beginPath();
-        ctx.arc(cx, cy, glowSize, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        requestAnimationFrame(drawCursor);
-    }
-    drawCursor();
-
     // ========== NAVIGATION SCROLL (solo desktop) ==========
     const nav = document.getElementById('mainNav');
     window.addEventListener('scroll', () => {
@@ -2262,6 +2191,74 @@
             ctaLink.style.transform = 'translate(0, 0)';
         });
     }
+
+    // ========== LIGHTBOX ==========
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+
+    const atmosItems = Array.from(document.querySelectorAll('.atmosfera-item[data-src]'));
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+        currentIndex = index;
+        const item = atmosItems[index];
+        lbImg.src = item.dataset.src;
+        lbImg.alt = item.dataset.caption || '';
+        lbCaption.textContent = item.dataset.caption || '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + atmosItems.length) % atmosItems.length;
+        const item = atmosItems[currentIndex];
+        lbImg.src = item.dataset.src;
+        lbCaption.textContent = item.dataset.caption || '';
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % atmosItems.length;
+        const item = atmosItems[currentIndex];
+        lbImg.src = item.dataset.src;
+        lbCaption.textContent = item.dataset.caption || '';
+    }
+
+    atmosItems.forEach((item, i) => {
+        item.addEventListener('click', () => openLightbox(i));
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    lbNext.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    lightbox.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) diff > 0 ? showNext() : showPrev();
+    });
 </script>
 
 </body>
