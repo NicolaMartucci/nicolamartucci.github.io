@@ -6,7 +6,42 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Nicola Martucci | WordPress Developer & Graphic Designer</title>
+
+    <!-- ===== SEO PRIMARIO ===== -->
+    <title>Creazione Siti Web con Intelligenza Artificiale | Nicola Martucci – Foggia, Puglia, Molise, Abruzzo</title>
+    <meta name="description" content="Creo siti web professionali con l'ausilio dell'intelligenza artificiale: veloci, moderni e ottimizzati per Google. Sviluppo WordPress e siti custom in tutta Italia, con particolare attenzione a Foggia, Puglia, Molise e Abruzzo. Preventivo gratuito.">
+    <meta name="keywords" content="creazione siti web, siti web con intelligenza artificiale, sviluppo siti internet, web designer Foggia, creazione siti web Puglia, sviluppo siti Molise, siti web Abruzzo, sviluppatore WordPress Apricena, grafico pubblicitario Foggia">
+    <meta name="author" content="Nicola Martucci">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://nicolamartucci.com/">
+    <meta name="language" content="Italian">
+
+    <!-- ===== GEO TARGETING LOCALE (Foggia, Puglia, Molise, Abruzzo) ===== -->
+    <meta name="geo.region" content="IT-FG">
+    <meta name="geo.placename" content="Apricena, Foggia, Puglia">
+    <meta name="geo.position" content="41.7906;15.4499">
+    <meta name="ICBM" content="41.7906, 15.4499">
+
+    <!-- ===== OPEN GRAPH (Facebook, LinkedIn, WhatsApp) ===== -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:site_name" content="Nicola Martucci – Creazione Siti Web">
+    <meta property="og:title" content="Creazione Siti Web con Intelligenza Artificiale | Nicola Martucci">
+    <meta property="og:description" content="Sviluppo siti web professionali con l'ausilio dell'IA: WordPress, design su misura e SEO. Opero in tutta Italia, con focus su Foggia, Puglia, Molise e Abruzzo.">
+    <meta property="og:url" content="https://nicolamartucci.com/">
+    <meta property="og:image" content="https://nicolamartucci.com/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- ===== TWITTER CARD ===== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Creazione Siti Web con Intelligenza Artificiale | Nicola Martucci">
+    <meta name="twitter:description" content="Siti web professionali creati con l'ausilio dell'IA. WordPress, design e SEO per attività in tutta Italia, con focus su Puglia, Molise e Abruzzo.">
+    <meta name="twitter:image" content="https://nicolamartucci.com/assets/og-image.jpg">
+
+    <!-- ===== FAVICON ===== -->
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Righteous&display=swap');
@@ -237,6 +272,13 @@
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
+        .hero-subtitle {
+            font-size: clamp(14px, 1.8vw, 18px);
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin: 0 auto 35px;
+            line-height: 1.6;
+        }
         .cta-group {
             display: flex;
             gap: 20px;
@@ -314,9 +356,9 @@
         .services { padding: 120px 60px; }
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 40px;
-            max-width: 1000px;
+            max-width: 1300px;
             margin: 0 auto;
         }
         .service-card {
@@ -388,6 +430,72 @@
             left: 0;
             color: var(--accent-1);
             font-weight: bold;
+        }
+        /* ===== AREE SERVITE ===== */
+        .aree-servite {
+            padding: 120px 60px;
+            text-align: center;
+        }
+        .aree-intro {
+            max-width: 720px;
+            margin: 0 auto 50px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        .aree-intro strong { color: var(--text-primary); }
+        .aree-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto 45px;
+        }
+        .area-card {
+            background: rgba(22,22,22,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 35px 22px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+            text-align: left;
+        }
+        .area-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-1);
+            box-shadow: 0 15px 40px rgba(20,184,166,0.2);
+        }
+        .area-icon {
+            font-size: 32px;
+            color: var(--accent-1);
+            margin-bottom: 16px;
+            display: block;
+        }
+        .area-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .area-card p {
+            color: var(--text-secondary);
+            font-size: 13.5px;
+            line-height: 1.7;
+        }
+        .aree-nazionale {
+            color: var(--text-secondary);
+            font-size: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .aree-nazionale strong { color: var(--accent-2); }
+        @media (max-width: 1100px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); max-width: 800px; }
+        }
+        @media (max-width: 900px) {
+            .aree-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .aree-servite { padding: 70px 20px; }
+            .aree-grid { grid-template-columns: 1fr; }
         }
         /* ===== PORTFOLIO ===== */
         .portfolio {
@@ -590,6 +698,53 @@
             flex-wrap: wrap;
         }
         .project-card-tags .tag { font-size: 11px; }
+        /* ===== FAQ ===== */
+        .faq {
+            padding: 100px 60px;
+            background: rgba(22,22,22,0.5);
+        }
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .faq-item {
+            background: rgba(22,22,22,0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px 26px;
+        }
+        .faq-item summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            list-style: none;
+            position: relative;
+            padding-right: 30px;
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after {
+            content: '+';
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 22px;
+            color: var(--accent-1);
+            transition: transform 0.3s ease;
+        }
+        .faq-item[open] summary::after { transform: rotate(45deg); }
+        .faq-item p {
+            color: var(--text-secondary);
+            margin-top: 14px;
+            line-height: 1.7;
+            font-size: 14.5px;
+        }
+        @media (max-width: 600px) {
+            .faq { padding: 70px 20px; }
+            .faq-item { padding: 16px 18px; }
+        }
         /* ===== CONTACT ===== */
         .contact {
             padding: 120px 60px;
@@ -930,6 +1085,116 @@
             .hero h1 { font-size: clamp(28px, 9vw, 40px); }
         }
     </style>
+
+    <!-- ===== DATI STRUTTURATI SCHEMA.ORG ===== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Nicola Martucci - Creazione Siti Web",
+      "image": "https://nicolamartucci.com/assets/og-image.jpg",
+      "url": "https://nicolamartucci.com/",
+      "email": "martucci.nicola87@gmail.com",
+      "description": "Creazione di siti web professionali con l'ausilio dell'intelligenza artificiale, sviluppo WordPress e graphic design. Servizi disponibili in tutta Italia con particolare attenzione a Puglia, Molise e Abruzzo.",
+      "priceRange": "€€",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Apricena",
+        "addressRegion": "Puglia",
+        "addressCountry": "IT"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "41.7906",
+        "longitude": "15.4499"
+      },
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Puglia" },
+        { "@type": "AdministrativeArea", "name": "Molise" },
+        { "@type": "AdministrativeArea", "name": "Abruzzo" },
+        { "@type": "City", "name": "Foggia" },
+        { "@type": "City", "name": "Apricena" },
+        { "@type": "City", "name": "Bari" },
+        { "@type": "City", "name": "Lecce" },
+        { "@type": "City", "name": "Campobasso" },
+        { "@type": "City", "name": "Pescara" },
+        { "@type": "Country", "name": "Italia" }
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Nicola Martucci",
+        "jobTitle": "Web Developer & Graphic Designer",
+        "url": "https://nicolamartucci.com/"
+      },
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Creazione siti web con intelligenza artificiale",
+            "description": "Progettazione e sviluppo di siti web moderni, veloci e ottimizzati SEO, realizzati anche con l'ausilio di strumenti di intelligenza artificiale."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Sviluppo WordPress",
+            "description": "Siti WordPress personalizzati, temi custom, landing page e ottimizzazione SEO."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Graphic Design",
+            "description": "Brand identity, loghi, brochure, grafica social e materiale pubblicitario."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Realizzi siti web anche fuori dalla Puglia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sì, lavoro da remoto con clienti in tutta Italia. Do particolare attenzione al territorio di Foggia, Puglia, Molise e Abruzzo, ma seguo progetti anche a livello nazionale."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Cosa significa creare siti web con l'ausilio dell'intelligenza artificiale?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Utilizzo strumenti di intelligenza artificiale per velocizzare la scrittura dei contenuti, l'ottimizzazione SEO, la generazione di elementi grafici e il testing del sito, mantenendo sempre un controllo umano e professionale sul risultato finale."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quanto costa la creazione di un sito web professionale?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Il costo varia in base alla complessità del progetto: una landing page ha costi contenuti, mentre un sito WordPress completo con e-commerce o funzionalità avanzate richiede un investimento maggiore. Richiedi un preventivo gratuito e personalizzato."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "I siti che realizzi sono ottimizzati per la SEO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sì, ogni sito viene strutturato seguendo le linee guida SEO di Google: velocità di caricamento, meta tag, dati strutturati, mobile responsive e contenuti ottimizzati per il posizionamento organico."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="progress-bar" id="progressBar"></div>
@@ -944,9 +1209,11 @@
         <ul class="nav-menu" id="navMenu">
             <li><a href="#home" onclick="closeMenu()">Home</a></li>
             <li><a href="#servizi" onclick="closeMenu()">Servizi</a></li>
+            <li><a href="#aree-servite" onclick="closeMenu()">Aree Servite</a></li>
             <li><a href="#portfolio" onclick="closeMenu()">Portfolio</a></li>
             <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
             <li><a href="#progetti" onclick="closeMenu()">Progetti</a></li>
+            <li><a href="#faq" onclick="closeMenu()">FAQ</a></li>
             <li><a href="#contatti" onclick="closeMenu()">Contatti</a></li>
         </ul>
     </nav>
@@ -955,22 +1222,23 @@
     <section class="hero" id="home">
         <div class="hero-slider" id="heroSlider">
             <div class="hero-slide active">
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80" alt="Coding">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80" alt="Creazione siti web professionali con intelligenza artificiale">
             </div>
             <div class="hero-slide">
-                <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1920&q=80" alt="Design">
+                <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1920&q=80" alt="Web design e grafica per siti internet in Puglia">
             </div>
             <div class="hero-slide">
-                <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1920&q=80" alt="WordPress">
+                <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1920&q=80" alt="Sviluppo siti WordPress a Foggia e provincia">
             </div>
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1><span class="name-first">NICOLA</span> <span class="name-last">MARTUCCI</span></h1>
-            <h2>WordPress Developer & Graphic Designer</h2>
+            <h2>Creazione siti web con l'ausilio dell'Intelligenza Artificiale</h2>
             <div class="typing-text" id="typingText"></div>
+            <p class="hero-subtitle">Sviluppo siti web professionali in tutta Italia, con particolare attenzione a Foggia, Puglia, Molise e Abruzzo. Sede operativa ad Apricena (FG).</p>
             <div class="cta-group">
-                <a href="#contatti" class="btn btn-primary"><span>Inizia un progetto</span></a>
+                <a href="#contatti" class="btn btn-primary"><span>Richiedi un preventivo</span></a>
                 <a href="#portfolio" class="btn btn-secondary">Vedi il portfolio</a>
             </div>
         </div>
@@ -980,6 +1248,17 @@
     <section class="services" id="servizi">
         <h2 class="section-title">Cosa posso fare per te</h2>
         <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-robot service-icon"></i>
+                <h3>Creazione Siti Web con IA</h3>
+                <p>Progetto siti web moderni, veloci e ottimizzati SEO, utilizzando l'intelligenza artificiale per velocizzare contenuti, grafica e testing.</p>
+                <ul class="service-features">
+                    <li>Siti su misura e responsive</li>
+                    <li>SEO tecnica e contenuti ottimizzati</li>
+                    <li>Velocità e performance elevate</li>
+                    <li>Assistenza continua post-lancio</li>
+                </ul>
+            </div>
             <div class="service-card">
                 <i class="fab fa-wordpress service-icon"></i>
                 <h3>Sviluppo WordPress</h3>
@@ -1005,6 +1284,35 @@
                 </ul>
             </div>
         </div>
+    </section>
+
+    <!-- AREE SERVITE -->
+    <section class="aree-servite" id="aree-servite">
+        <h2 class="section-title">Creazione siti web: dove opero</h2>
+        <p class="aree-intro">Progetto e sviluppo siti web da remoto per clienti in tutta Italia, unendo competenza tecnica e intelligenza artificiale per ridurre i tempi e migliorare la qualità del risultato. Conosco a fondo il tessuto imprenditoriale del territorio di <strong>Apricena</strong> e opero con particolare attenzione a:</p>
+        <div class="aree-grid">
+            <div class="area-card">
+                <i class="fas fa-map-marked-alt area-icon"></i>
+                <h3>Provincia di Foggia</h3>
+                <p>Apricena, Foggia, San Severo, Manfredonia, Cerignola, Lucera e tutto il Tavoliere delle Puglie.</p>
+            </div>
+            <div class="area-card">
+                <i class="fas fa-map-marked-alt area-icon"></i>
+                <h3>Puglia</h3>
+                <p>Bari, Lecce, Taranto, Brindisi, Barletta-Andria-Trani: siti web per attività, professionisti e aziende pugliesi.</p>
+            </div>
+            <div class="area-card">
+                <i class="fas fa-map-marked-alt area-icon"></i>
+                <h3>Molise</h3>
+                <p>Campobasso, Isernia e i comuni limitrofi: sviluppo siti web su misura per il territorio molisano.</p>
+            </div>
+            <div class="area-card">
+                <i class="fas fa-map-marked-alt area-icon"></i>
+                <h3>Abruzzo</h3>
+                <p>Pescara, Chieti, L'Aquila, Teramo: presenza online professionale per il mercato abruzzese.</p>
+            </div>
+        </div>
+        <p class="aree-nazionale"><i class="fas fa-globe-europe" aria-hidden="true"></i> Lavoro anche con clienti in <strong>tutta Italia</strong>: grazie a strumenti digitali e IA, gestisco ogni fase del progetto interamente da remoto.</p>
     </section>
 
     <!-- PORTFOLIO -->
@@ -1092,7 +1400,7 @@
     <section class="progetti" id="progetti">
         <h2 class="section-title">Le mie idee</h2>
         <div class="progetti-grid">
-            <a class="project-card" href="https://nicolamartucci.github.io/progetti/agriturismo/" target="_blank" rel="noopener noreferrer">
+            <a class="project-card" href="https://nicolamartucci.com/progetti/agriturismo/" target="_blank" rel="noopener noreferrer">
                 <div class="project-card-img-wrap">
                     <img class="project-card-img" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80" alt="Agriturismo" loading="lazy">
                 </div>
@@ -1106,7 +1414,7 @@
                     </div>
                 </div>
             </a>
-            <a class="project-card" href="https://nicolamartucci.github.io/progetti/barbiere/" target="_blank" rel="noopener noreferrer">
+            <a class="project-card" href="https://nicolamartucci.com/progetti/barbiere/" target="_blank" rel="noopener noreferrer">
                 <div class="project-card-img-wrap">
                     <img class="project-card-img" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80" alt="Barbiere" loading="lazy">
                 </div>
@@ -1120,7 +1428,7 @@
                     </div>
                 </div>
             </a>
-            <a class="project-card" href="https://nicolamartucci.github.io/progetti/fotografo/" target="_blank" rel="noopener noreferrer">
+            <a class="project-card" href="https://nicolamartucci.com/progetti/fotografo/" target="_blank" rel="noopener noreferrer">
                 <div class="project-card-img-wrap">
                     <img class="project-card-img" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80" alt="Fotografo" loading="lazy">
                 </div>
@@ -1134,7 +1442,7 @@
                     </div>
                 </div>
             </a>
-            <a class="project-card" href="https://nicolamartucci.github.io/progetti/palestra/" target="_blank" rel="noopener noreferrer">
+            <a class="project-card" href="https://nicolamartucci.com/progetti/palestra/" target="_blank" rel="noopener noreferrer">
                 <div class="project-card-img-wrap">
                     <img class="project-card-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" alt="Palestra" loading="lazy">
                 </div>
@@ -1148,6 +1456,29 @@
                     </div>
                 </div>
             </a>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <h2 class="section-title">Domande frequenti</h2>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>Realizzi siti web anche fuori dalla Puglia?</summary>
+                <p>Sì, lavoro da remoto con clienti in tutta Italia. Do particolare attenzione al territorio di Foggia, Puglia, Molise e Abruzzo, ma seguo progetti anche a livello nazionale.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Cosa significa creare siti web con l'ausilio dell'intelligenza artificiale?</summary>
+                <p>Utilizzo strumenti di intelligenza artificiale per velocizzare la scrittura dei contenuti, l'ottimizzazione SEO, la generazione di elementi grafici e il testing del sito, mantenendo sempre un controllo umano e professionale sul risultato finale.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Quanto costa la creazione di un sito web professionale?</summary>
+                <p>Il costo varia in base alla complessità del progetto: una landing page ha costi contenuti, mentre un sito WordPress completo con e-commerce o funzionalità avanzate richiede un investimento maggiore. Richiedi un preventivo gratuito e personalizzato.</p>
+            </details>
+            <details class="faq-item">
+                <summary>I siti che realizzi sono ottimizzati per la SEO?</summary>
+                <p>Sì, ogni sito viene strutturato seguendo le linee guida SEO di Google: velocità di caricamento, meta tag, dati strutturati, mobile responsive e contenuti ottimizzati per il posizionamento organico.</p>
+            </details>
         </div>
     </section>
 
@@ -1165,7 +1496,7 @@
                     </a>
                     <div class="contact-method">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Italia</span>
+                        <span>Apricena (FG), Puglia — disponibile in tutta Italia</span>
                     </div>
                 </div>
             </div>
