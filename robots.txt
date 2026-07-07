@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /privacy.html
+Disallow: /cookie-policy.html
 
 Sitemap: https://nicolamartucci.com/sitemap.xml

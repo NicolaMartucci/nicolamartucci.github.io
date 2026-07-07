@@ -8,6 +8,7 @@
 <meta name="keywords" content="siti web Apricena, creazione siti web Foggia, siti web Puglia, siti vetrina WordPress, sviluppatore web Foggia, web designer Puglia">
 <meta name="author" content="Nicola Martucci">
 <link rel="canonical" href="https://nicolamartucci.com/">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <link rel="preload" as="image" href="https://images.unsplash.com/photo-1759661881353-5b9cc55e1cf4?auto=format&fit=crop&w=1600&q=68" fetchpriority="high">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2308080c'/%3E%3Ccircle cx='12' cy='12' r='5' fill='%2333e0e0'/%3E%3C/svg%3E">
 
@@ -524,6 +525,38 @@
     .term-line{ animation:none; opacity:1; }
     .cursor{ animation:none; }
   }
+
+  /* ---------- COOKIE BANNER ---------- */
+  #cookieBanner{
+    position: fixed; left: 20px; right: 20px; bottom: 20px; z-index: 200;
+    max-width: 620px; margin: 0 auto;
+    background: rgba(15,15,22,0.96);
+    backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.85);
+    display:flex; flex-direction:column; gap:16px;
+    transform: translateY(20px); opacity:0; pointer-events:none;
+    transition: transform .35s ease, opacity .35s ease;
+  }
+  #cookieBanner.show{ transform: translateY(0); opacity:1; pointer-events:auto; }
+  #cookieBanner p{ font-size: 13.5px; color: var(--text-dim); line-height:1.6; }
+  #cookieBanner a{ color: var(--cyan); text-decoration: underline; }
+  .cookie-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-cookie-accept{
+    font-family: var(--font-mono); font-size: 13px; font-weight:500;
+    padding: 10px 20px; border-radius: 8px; cursor:pointer; border:none;
+    background: var(--gradient); color:#08080c;
+  }
+  .btn-cookie-reject{
+    font-family: var(--font-mono); font-size: 13px; cursor:pointer;
+    padding: 10px 18px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: transparent; color: var(--text);
+  }
+  @media (max-width: 500px){
+    #cookieBanner{ left:12px; right:12px; bottom:12px; padding: 18px; }
+  }
 </style>
 </head>
 <body>
@@ -807,9 +840,22 @@
 <footer>
   <div class="wrap footer-row">
     <span>© <span id="year"></span> Nicola Martucci — Apricena, Puglia</span>
-    <a href="#top">Torna su ↑</a>
+    <span style="display:flex; gap:18px; flex-wrap:wrap;">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="cookie-policy.html">Cookie Policy</a>
+      <a href="#top">Torna su ↑</a>
+    </span>
   </div>
 </footer>
+
+<!-- COOKIE BANNER -->
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Informativa cookie">
+  <p>Questo sito utilizza cookie tecnici necessari al funzionamento e, tramite Google Fonts, un servizio esterno che può comportare la trasmissione del tuo indirizzo IP a Google. Non usiamo cookie di profilazione o marketing. Per saperne di più leggi la <a href="cookie-policy.html">Cookie Policy</a> e la <a href="privacy.html">Privacy Policy</a>.</p>
+  <div class="cookie-actions">
+    <button type="button" class="btn-cookie-accept" id="cookieAccept">Accetta e continua</button>
+    <button type="button" class="btn-cookie-reject" id="cookieReject">Solo cookie necessari</button>
+  </div>
+</div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -896,6 +942,32 @@
     div.style.animationDelay = line.delay + 'ms';
     container.appendChild(div);
   });
+
+  // Cookie banner
+  (function(){
+    const banner = document.getElementById('cookieBanner');
+    const acceptBtn = document.getElementById('cookieAccept');
+    const rejectBtn = document.getElementById('cookieReject');
+    const consent = localStorage.getItem('cookieConsent');
+
+    if (!consent) {
+      setTimeout(() => banner.classList.add('show'), 600);
+    }
+
+    function hideBanner(){
+      banner.classList.remove('show');
+    }
+
+    acceptBtn.addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'accepted');
+      hideBanner();
+    });
+
+    rejectBtn.addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'necessary-only');
+      hideBanner();
+    });
+  })();
 </script>
 
 </body>
