@@ -180,7 +180,7 @@
   }
   nav.wrap{
     display:flex; align-items:center; justify-content:space-between;
-    height: 72px;
+    height: 72px; gap: 14px;
   }
   .logo{
     font-family: var(--font-mono);
@@ -201,6 +201,7 @@
     transition: all .2s ease;
   }
   .nav-cta:hover{ border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(51,224,224,0.12); }
+  .cta-short{ display: none; }
   .burger{
     display:none; background:none; border:none; cursor:pointer;
     width: 36px; height: 36px; padding: 8px; flex-shrink:0;
@@ -497,6 +498,8 @@
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
+    nav.wrap{ gap: 10px; }
+    .logo{ font-size: 15px; flex-shrink: 0; white-space: nowrap; }
     .navlinks{
       display:flex; flex-direction:column; gap:0;
       position:absolute; top:100%; left:0; right:0;
@@ -507,8 +510,11 @@
     }
     .navlinks.open{ max-height: 320px; opacity:1; }
     .navlinks a{ padding: 16px 28px; border-top: 1px solid var(--border); font-size:15px; }
-    .nav-cta{ font-size: 12.5px; padding: 8px 14px; }
-    .burger{ display:flex; }
+    .nav-cta{
+      font-size: 12px; padding: 8px 14px; flex-shrink: 0; white-space: nowrap;
+      margin-left: auto;
+    }
+    .burger{ display:flex; flex-shrink: 0; }
     .hero-grid{ grid-template-columns: 1fr; }
     .hero{ padding-top: 130px; }
     .services{ grid-template-columns: 1fr; }
@@ -518,6 +524,16 @@
     .about{ grid-template-columns: 1fr; }
     .portrait{ max-width: 260px; }
     .contact-panel{ grid-template-columns: 1fr; padding: 32px 24px; }
+  }
+
+  @media (max-width: 430px){
+    nav.wrap{ gap: 8px; padding: 0 18px; }
+    .logo{ font-size: 13.5px; }
+    .logo .dot{ width:6px; height:6px; }
+    .nav-cta{ font-size: 10.5px; padding: 7px 11px; letter-spacing: -0.01em; }
+    .burger{ width: 30px; height: 30px; padding: 6px; }
+    .cta-full{ display:none; }
+    .cta-short{ display:inline; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -571,7 +587,10 @@
       <a href="#chi-sono">Chi sono</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a href="#contatti" class="nav-cta">Parliamo del tuo sito</a>
+    <a href="#contatti" class="nav-cta">
+      <span class="cta-full">Parliamo del tuo sito</span>
+      <span class="cta-short">Contattami</span>
+    </a>
     <button class="burger" id="burgerBtn" aria-label="Apri il menu" aria-expanded="false" aria-controls="navlinks">
       <span></span><span></span><span></span>
     </button>
