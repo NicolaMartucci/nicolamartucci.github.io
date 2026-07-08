@@ -97,7 +97,7 @@
         position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden;
       }
       #hero .bg{
-        position:absolute;inset:0;background-image:url('images/bg-hero.jpg');
+        position:absolute;inset:0;background-image:url('images/bg-hero.webp');
         background-size:cover;background-position:center;
       }
       #hero .overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);}
@@ -244,7 +244,7 @@
 
       /* ===== FOOTER ===== */
       footer{position:relative;width:100%;overflow:hidden;}
-      footer .bg{position:absolute;inset:0;background-image:url('images/bg-footer.jpg');background-size:cover;background-position:center;}
+      footer .bg{position:absolute;inset:0;background-image:url('images/bg-footer.webp');background-size:cover;background-position:center;}
       footer .overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);}
       footer .top-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(245,158,11,.5),transparent);}
       .footer-content{position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:90px 24px 50px;}
@@ -252,12 +252,13 @@
       @media(min-width:900px){.footer-grid{grid-template-columns:1.15fr 1fr 1.15fr;gap:56px;}}
       .footer-col-brand img{height:120px;width:auto;margin-bottom:18px;}
       .footer-col-brand p{color:rgba(255,255,255,.45);font-size:.9rem;line-height:1.7;font-weight:300;max-width:320px;margin-bottom:20px;}
-      .social-row{display:flex;gap:12px;}
+      .social-row{display:flex;gap:14px;}
       .social-row a{
-        width:38px;height:38px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;
-        color:rgba(255,255,255,.45);transition:all .3s;
+        width:44px;height:44px;border:1px solid rgba(245,158,11,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;
+        color:rgba(255,255,255,.85);background:rgba(255,255,255,.04);transition:all .3s;
       }
-      .social-row a:hover{color:var(--amber-light);border-color:rgba(245,158,11,.5);}
+      .social-row a svg{width:19px;height:19px;}
+      .social-row a:hover{color:#000;background:var(--amber-light);border-color:var(--amber-light);transform:translateY(-2px);}
       .footer-col h3{color:var(--amber-light);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;font-weight:500;margin-bottom:26px;}
 
       /* orari accordion */
@@ -317,7 +318,7 @@
     <nav id="mainNav">
       <div class="nav-inner">
         <div class="nav-logo" onclick="goTo('hero')">
-          <img src="images/logo.png" alt="Il Picasso della Carne" />
+          <img src="images/logo.webp" alt="Il Picasso della Carne" />
         </div>
         <div class="nav-links">
           <button onclick="goTo('benvenuto')">Chi Siamo</button>
@@ -347,7 +348,7 @@
       <div class="overlay"></div>
       <div class="hero-content">
         <div class="hero-top">
-          <img class="hero-logo" src="images/logo.png" alt="Il Picasso della Carne" />
+          <img class="hero-logo" src="images/logo.webp" alt="Il Picasso della Carne" />
           <h1>Il Picasso della Carne</h1>
           <p class="subtitle">Braceria</p>
           <div class="divider-dot"><div class="line"></div><div class="dot"></div><div class="line"></div></div>
@@ -384,7 +385,7 @@
 
     <!-- LA NOSTRA ARTE -->
     <section id="arte" class="split-section right">
-      <div class="split-bg" style="background-image:url('images/bg-arte.jpg');"></div>
+      <div class="split-bg" style="background-image:url('images/bg-arte.webp');"></div>
       <div class="split-blur"></div>
       <div class="split-content">
         <div class="split-inner fade-in">
@@ -422,7 +423,7 @@
 
     <!-- DALLA TERRA ALLA TAVOLA -->
     <section id="qualita" class="split-section left">
-      <div class="split-bg" style="background-image:url('images/bg-qualita.jpg');background-position:center 78%;"></div>
+      <div class="split-bg" style="background-image:url('images/bg-qualita.webp');background-position:center 78%;"></div>
       <div class="split-blur"></div>
       <div class="split-content">
         <div class="split-inner fade-in">
@@ -460,7 +461,7 @@
 
     <!-- IL NOSTRO LOCALE -->
     <section class="split-section left">
-      <div class="split-bg" style="background-image:url('images/bg-locale.jpg');"></div>
+      <div class="split-bg" style="background-image:url('images/bg-locale.webp');"></div>
       <div class="split-blur"></div>
       <div class="split-content">
         <div class="split-inner fade-in">
@@ -524,10 +525,10 @@
       <div class="footer-content">
         <div class="footer-grid">
           <div class="footer-col-brand">
-            <img src="images/logo.png" alt="Il Picasso della Carne" />
+            <img src="images/logo.webp" alt="Il Picasso della Carne" />
             <p>Braceria ad Apricena. Tagli pregiati selezionati al banco, arrosticini e torcinelli alla brace, cucinati con passione da Fabrizio e dal suo team.</p>
             <div class="social-row">
-              <a href="https://www.instagram.com/il.picasso.della.carne" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/il.picasso.della.carne/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
               </a>
               <a href="https://www.facebook.com/fabiolombardi78/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
@@ -613,14 +614,14 @@
 
       // ---------- GALLERY ----------
       const galleryImages = [
-        {url:'images/gallery-1-banco.jpg', alt:'Banco carni Il Picasso della Carne'},
-        {url:'images/gallery-2-bistecca-griglia.jpg', alt:'Bistecca sulla griglia'},
-        {url:'images/gallery-3-torcinelli.jpg', alt:'Torcinelli su bruschetta'},
-        {url:'images/gallery-4-burger.jpg', alt:'Hamburger gourmet con patate'},
-        {url:'images/gallery-6-spiedini.jpg', alt:'Spiedini di carne pronti per la brace'},
-        {url:'images/gallery-9-carpaccio.jpg', alt:'Carpaccio con rucola e grana'},
-        {url:'images/gallery-10-fiamma.jpg', alt:'Fiammata in padella'},
-        {url:'images/gallery-12-formaggio.jpg', alt:'Selezione di formaggi'}
+        {url:'images/gallery-1-banco.webp', alt:'Banco carni Il Picasso della Carne'},
+        {url:'images/gallery-2-bistecca-griglia.webp', alt:'Bistecca sulla griglia'},
+        {url:'images/gallery-3-torcinelli.webp', alt:'Torcinelli su bruschetta'},
+        {url:'images/gallery-4-burger.webp', alt:'Hamburger gourmet con patate'},
+        {url:'images/gallery-6-spiedini.webp', alt:'Spiedini di carne pronti per la brace'},
+        {url:'images/gallery-9-carpaccio.webp', alt:'Carpaccio con rucola e grana'},
+        {url:'images/gallery-10-fiamma.webp', alt:'Fiammata in padella'},
+        {url:'images/gallery-12-formaggio.webp', alt:'Selezione di formaggi'}
       ];
       const grid = document.getElementById('galleryGrid');
       galleryImages.forEach((img, i) => {
