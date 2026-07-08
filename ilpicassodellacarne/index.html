@@ -1,1 +1,725 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Il Picasso della Carne | Braceria ad Apricena</title>
+    <meta name="description" content="Il Picasso della Carne, braceria ad Apricena (FG). Tagli pregiati selezionati al banco, cottura su brace viva, arrosticini e torcinelli fatti in casa." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --amber:#f59e0b;
+        --amber-light:#fbbf24;
+        --black:#0a0a0a;
+        --black-2:#111111;
+        --black-3:#0d0d0d;
+      }
+      *{box-sizing:border-box;margin:0;padding:0;}
+      html{scroll-behavior:smooth;}
+      body{
+        background:var(--black);
+        color:#fff;
+        font-family:'Montserrat',sans-serif;
+        font-weight:300;
+        overflow-x:hidden;
+      }
+      h1,h2,h3{font-family:'Playfair Display',serif;}
+      a{color:inherit;text-decoration:none;}
+      img{display:block;max-width:100%;}
+      .eyebrow{
+        color:var(--amber);
+        font-size:.72rem;
+        letter-spacing:.4em;
+        text-transform:uppercase;
+        font-weight:300;
+        margin-bottom:1.1rem;
+      }
+      .italic-amber{color:var(--amber-light);font-style:italic;}
+      .fade-in{opacity:0;transform:translateY(30px);transition:opacity .9s ease, transform .9s ease;}
+      .fade-in.visible{opacity:1;transform:translateY(0);}
 
+      /* ===== NAV ===== */
+      nav{
+        position:fixed;top:0;left:0;right:0;z-index:50;
+        transition:all .4s ease;
+        background:transparent;
+        padding:18px 0;
+      }
+      nav.scrolled{
+        background:rgba(0,0,0,.92);
+        backdrop-filter:blur(10px);
+        box-shadow:0 4px 20px rgba(0,0,0,.4);
+        padding:10px 0;
+      }
+      .nav-inner{
+        max-width:1280px;margin:0 auto;padding:0 24px;
+        display:flex;align-items:center;justify-content:space-between;
+      }
+      .nav-logo{cursor:pointer;display:flex;align-items:center;}
+      .nav-logo img{height:96px;width:auto;transition:height .3s ease;}
+      nav.scrolled .nav-logo img{height:72px;}
+      .nav-links{display:none;align-items:center;gap:38px;}
+      .nav-links button{
+        background:none;border:none;color:rgba(255,255,255,.8);
+        font-family:'Montserrat',sans-serif;font-size:.85rem;letter-spacing:.2em;
+        text-transform:uppercase;font-weight:300;cursor:pointer;transition:color .3s;
+      }
+      .nav-links button:hover{color:var(--amber-light);}
+      .nav-book{
+        border:1px solid var(--amber);color:var(--amber-light);
+        padding:9px 22px;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;
+        background:none;cursor:pointer;transition:all .3s;
+      }
+      .nav-book:hover{background:var(--amber);color:#000;}
+      .nav-toggle{display:flex;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+      .nav-toggle span{display:block;width:24px;height:2px;background:#fff;transition:all .3s;}
+      .nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+      .nav-toggle.open span:nth-child(2){opacity:0;}
+      .nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+      .mobile-menu{
+        display:none;background:rgba(0,0,0,.97);backdrop-filter:blur(10px);
+        border-top:1px solid rgba(255,255,255,.1);padding:24px;flex-direction:column;gap:20px;
+      }
+      .mobile-menu.open{display:flex;}
+      .mobile-menu button{
+        background:none;border:none;color:rgba(255,255,255,.8);text-align:left;
+        font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
+      }
+      @media(min-width:900px){
+        .nav-links{display:flex;}
+        .nav-toggle{display:none;}
+      }
+
+      /* ===== HERO ===== */
+      #hero{
+        position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden;
+      }
+      #hero .bg{
+        position:absolute;inset:0;background-image:url('images/bg-hero.jpg');
+        background-size:cover;background-position:center;
+      }
+      #hero .overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);}
+      .hero-content{
+        position:relative;z-index:10;height:100%;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;gap:2rem;padding:0 24px;text-align:center;
+      }
+      .hero-top{display:flex;flex-direction:column;align-items:center;gap:.8rem;}
+      .hero-logo{width:260px;height:260px;object-fit:contain;filter:drop-shadow(0 10px 25px rgba(0,0,0,.5));}
+      .hero-content h1{
+        color:#fff;font-size:clamp(2.2rem,6vw,4.4rem);font-weight:700;letter-spacing:.02em;
+        text-shadow:0 6px 20px rgba(0,0,0,.6);
+      }
+      .hero-content .subtitle{
+        color:rgba(251,191,36,.9);font-size:.95rem;letter-spacing:.35em;text-transform:uppercase;
+      }
+      .divider-dot{display:flex;align-items:center;gap:16px;margin-top:4px;}
+      .divider-dot .line{width:64px;height:1px;background:rgba(245,158,11,.5);}
+      .divider-dot .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+      .hero-buttons{display:flex;flex-direction:column;gap:16px;margin-top:.5rem;width:100%;max-width:320px;}
+      .btn{
+        display:flex;align-items:center;justify-content:center;gap:12px;
+        font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+        font-size:.85rem;padding:16px 32px;transition:all .3s;cursor:pointer;
+      }
+      .btn-solid{background:var(--amber);color:#000;box-shadow:0 8px 20px rgba(245,158,11,.15);}
+      .btn-solid:hover{background:var(--amber-light);box-shadow:0 10px 26px rgba(245,158,11,.3);}
+      .btn-outline{border:1px solid rgba(255,255,255,.6);color:#fff;background:transparent;}
+      .btn-outline:hover{border-color:var(--amber);color:var(--amber-light);background:rgba(255,255,255,.05);}
+      .scroll-cue{
+        position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+        display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;z-index:10;
+      }
+      .scroll-cue span{color:rgba(255,255,255,.4);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;}
+      .scroll-mouse{width:20px;height:32px;border:1px solid rgba(255,255,255,.3);border-radius:12px;display:flex;justify-content:center;padding-top:6px;}
+      .scroll-mouse .wheel{width:4px;height:8px;background:rgba(255,255,255,.5);border-radius:2px;animation:bounce 1.6s infinite;}
+      @keyframes bounce{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(6px);opacity:.4;}}
+
+      /* ===== BENVENUTO ===== */
+      #benvenuto{
+        padding:110px 24px;
+        background:linear-gradient(135deg,#0a0a0a 0%,#111111 50%,#0d0d0d 100%);
+        text-align:center;position:relative;
+      }
+      #benvenuto .top-line{position:absolute;top:0;left:50%;transform:translateX(-50%);width:380px;height:1px;background:linear-gradient(to right,transparent,rgba(245,158,11,.4),transparent);}
+      #benvenuto .wrap{max-width:820px;margin:0 auto;}
+      #benvenuto h2{color:#fff;font-size:clamp(1.9rem,4.5vw,3.4rem);font-weight:700;margin-bottom:1.8rem;line-height:1.2;}
+      #benvenuto p{color:rgba(255,255,255,.62);font-size:1.05rem;line-height:1.8;margin-bottom:1.4rem;font-weight:300;}
+      #benvenuto p strong{color:#fff;font-weight:600;}
+
+      /* ===== SPLIT SECTIONS (arte / qualità / locale) ===== */
+      .split-section{position:relative;width:100%;min-height:100vh;overflow:hidden;display:flex;}
+      .split-section .split-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+      .split-section .split-blur{position:absolute;top:0;bottom:0;width:100%;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
+      .split-section.right .split-blur{right:0;background:linear-gradient(to left, rgba(0,0,0,.94) 0%, rgba(0,0,0,.88) 55%, rgba(0,0,0,.35) 100%);}
+      .split-section.left .split-blur{left:0;background:linear-gradient(to right, rgba(0,0,0,.94) 0%, rgba(0,0,0,.88) 55%, rgba(0,0,0,.35) 100%);}
+      @media(min-width:900px){
+        .split-section.right .split-blur{width:52%;}
+        .split-section.left .split-blur{width:52%;}
+      }
+      .split-content{position:relative;z-index:5;display:flex;align-items:center;width:100%;padding:70px 60px;}
+      .split-section.right .split-content{justify-content:flex-end;padding-right:8vw;}
+      .split-section.left .split-content{justify-content:flex-start;padding-left:8vw;}
+      .split-inner{max-width:480px;}
+      .split-inner h2{color:#fff;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;margin-bottom:1.5rem;line-height:1.15;}
+      .split-inner p{color:rgba(255,255,255,.75);font-size:1rem;line-height:1.8;margin-bottom:1.1rem;font-weight:300;}
+      .mini-divider{display:flex;align-items:center;gap:12px;margin-bottom:2rem;}
+      .mini-divider .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);}
+      .mini-divider .line{width:48px;height:1px;background:var(--amber);}
+      .tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:2rem;}
+      .tags span{border:1px solid rgba(245,158,11,.5);color:rgba(251,191,36,.8);font-size:.72rem;padding:6px 16px;letter-spacing:.2em;text-transform:uppercase;}
+      .bullet-list{margin-top:2rem;display:flex;flex-direction:column;gap:1rem;}
+      .bullet-list .item{display:flex;align-items:flex-start;gap:14px;}
+      .bullet-list .item .b{width:6px;height:6px;border-radius:50%;background:var(--amber);margin-top:8px;flex-shrink:0;}
+      .bullet-list .item p{color:rgba(255,255,255,.65);font-size:.9rem;line-height:1.6;margin:0;}
+      .icon-list{margin-top:1.5rem;display:flex;flex-direction:column;gap:1.1rem;}
+      .icon-list .item{display:flex;align-items:flex-start;gap:14px;}
+      .icon-list svg{flex-shrink:0;margin-top:2px;color:var(--amber-light);}
+      .icon-list p{color:rgba(255,255,255,.65);font-size:.9rem;line-height:1.6;margin:0;white-space:pre-line;}
+      @media(max-width:900px){
+        .split-section{flex-direction:column;min-height:auto;}
+        .split-section .split-bg{position:relative;height:42vh;min-height:320px;}
+        .split-section .split-blur{display:none;}
+        .split-content{background:#0a0a0a;padding:50px 24px;justify-content:flex-start !important;}
+        .split-inner{max-width:600px;}
+      }
+
+      /* ===== GALLERIA ===== */
+      #galleria{padding:100px 24px;background:#0a0a0a;}
+      .section-head{text-align:center;margin-bottom:64px;}
+      .section-head h2{color:#fff;font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:700;}
+      .gallery-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+      @media(min-width:700px){.gallery-grid{grid-template-columns:repeat(3,1fr);}}
+      @media(min-width:1100px){.gallery-grid{grid-template-columns:repeat(4,1fr);}}
+      .gallery-grid button{
+        position:relative;overflow:hidden;aspect-ratio:1/1;border:none;padding:0;cursor:pointer;background:none;
+      }
+      .gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+      .gallery-grid button:hover img{transform:scale(1.08);}
+      .gallery-grid button::after{content:'';position:absolute;inset:0;border:1px solid transparent;transition:border-color .4s;}
+      .gallery-grid button:hover::after{border-color:rgba(245,158,11,.4);}
+      .lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.96);display:none;align-items:center;justify-content:center;padding:16px;}
+      .lightbox.open{display:flex;}
+      .lightbox img{max-height:85vh;max-width:90vw;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+      .lightbox .close-btn{position:absolute;top:24px;right:24px;background:none;border:none;color:rgba(255,255,255,.7);font-size:2.2rem;cursor:pointer;line-height:1;}
+      .lightbox .close-btn:hover{color:var(--amber-light);}
+      .lightbox .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.6);font-size:2.8rem;cursor:pointer;padding:8px 16px;}
+      .lightbox .nav-btn:hover{color:var(--amber-light);}
+      .lightbox .prev-btn{left:8px;}
+      .lightbox .next-btn{right:8px;}
+
+      /* ===== RECENSIONI ===== */
+      #recensioni{padding:100px 24px;background:linear-gradient(135deg,#0d0d0d 0%,#111111 50%,#0a0a0a 100%);position:relative;}
+      .stars{display:flex;gap:3px;}
+      .stars svg{width:16px;height:16px;color:var(--amber-light);}
+      #recensioni .section-head .stars{justify-content:center;margin-top:1.2rem;}
+      .rating-line{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:1rem;letter-spacing:.03em;}
+      .reviews-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:24px;}
+      @media(min-width:700px){.reviews-grid{grid-template-columns:1fr 1fr;}}
+      @media(min-width:1100px){.reviews-grid{grid-template-columns:repeat(3,1fr);}}
+      .review-card{
+        position:relative;border:1px solid rgba(255,255,255,.08);padding:28px;
+        background:linear-gradient(135deg,rgba(255,255,255,.03) 0%,rgba(255,255,255,.01) 100%);
+        transition:border-color .3s;
+      }
+      .review-card:hover{border-color:rgba(245,158,11,.3);}
+      .review-card .quote-mark{position:absolute;top:14px;right:20px;font-size:3.6rem;color:rgba(245,158,11,.12);font-family:'Playfair Display',serif;}
+      .review-card p{color:rgba(255,255,255,.65);font-size:.92rem;line-height:1.7;margin:16px 0 24px;font-weight:300;}
+      .review-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;}
+      .review-foot .name{color:#fff;font-size:.9rem;font-weight:600;}
+      .review-foot .source{color:rgba(245,158,11,.6);font-size:.72rem;border:1px solid rgba(245,158,11,.25);padding:4px 10px;letter-spacing:.05em;}
+
+      /* ===== PRENOTA CTA ===== */
+      #prenota{padding:120px 24px;background:#090909;text-align:center;position:relative;overflow:hidden;}
+      #prenota .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;height:420px;border-radius:50%;background:radial-gradient(circle, rgba(245,158,11,.06) 0%, transparent 70%);pointer-events:none;}
+      #prenota .wrap{position:relative;z-index:5;max-width:640px;margin:0 auto;}
+      #prenota h2{color:#fff;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;margin:1rem 0 1.5rem;}
+      #prenota p.desc{color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:2.5rem;}
+      .prenota-buttons{display:flex;flex-direction:column;gap:16px;justify-content:center;align-items:center;}
+      @media(min-width:600px){.prenota-buttons{flex-direction:row;}}
+      .prenota-buttons .btn{min-width:220px;width:100%;}
+      @media(min-width:600px){.prenota-buttons .btn{width:auto;}}
+      #prenota .addr{color:rgba(255,255,255,.25);font-size:.72rem;margin-top:2rem;letter-spacing:.2em;text-transform:uppercase;}
+
+      /* ===== FOOTER ===== */
+      footer{position:relative;width:100%;overflow:hidden;}
+      footer .bg{position:absolute;inset:0;background-image:url('images/bg-footer.jpg');background-size:cover;background-position:center;}
+      footer .overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);}
+      footer .top-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(245,158,11,.5),transparent);}
+      .footer-content{position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:90px 24px 50px;}
+      .footer-grid{display:grid;grid-template-columns:1fr;gap:48px;margin-bottom:60px;align-items:start;}
+      @media(min-width:900px){.footer-grid{grid-template-columns:1.15fr 1fr 1.15fr;gap:56px;}}
+      .footer-col-brand img{height:120px;width:auto;margin-bottom:18px;}
+      .footer-col-brand p{color:rgba(255,255,255,.45);font-size:.9rem;line-height:1.7;font-weight:300;max-width:320px;margin-bottom:20px;}
+      .social-row{display:flex;gap:12px;}
+      .social-row a{
+        width:38px;height:38px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;
+        color:rgba(255,255,255,.45);transition:all .3s;
+      }
+      .social-row a:hover{color:var(--amber-light);border-color:rgba(245,158,11,.5);}
+      .footer-col h3{color:var(--amber-light);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;font-weight:500;margin-bottom:26px;}
+
+      /* orari accordion */
+      .hours-list{display:flex;flex-direction:column;}
+      .hours-day{border-bottom:1px solid rgba(255,255,255,.07);}
+      .hours-day-btn{
+        width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;
+        background:none;border:none;cursor:pointer;padding:13px 0;text-align:left;
+      }
+      .hours-day-btn .day-name{color:rgba(255,255,255,.72);font-size:.9rem;font-weight:400;font-family:'Montserrat',sans-serif;}
+      .hours-day-btn .day-status{display:flex;align-items:center;gap:10px;}
+      .hours-day-btn .status-text{font-size:.82rem;color:rgba(255,255,255,.4);}
+      .hours-day-btn .status-text.open{color:var(--amber-light);}
+      .hours-day-btn .chevron{width:9px;height:9px;border-right:1.5px solid rgba(255,255,255,.4);border-bottom:1.5px solid rgba(255,255,255,.4);transform:rotate(45deg);transition:transform .3s;}
+      .hours-day.expanded .chevron{transform:rotate(225deg);}
+      .hours-day.closed .hours-day-btn{cursor:default;}
+      .hours-panel{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+      .hours-day.expanded .hours-panel{max-height:120px;}
+      .hours-panel-inner{padding:2px 0 16px;display:flex;flex-direction:column;gap:8px;}
+      .hours-panel-inner .row{display:flex;justify-content:space-between;font-size:.82rem;}
+      .hours-panel-inner .label{color:rgba(255,255,255,.4);}
+      .hours-panel-inner .time{color:rgba(255,255,255,.7);}
+
+      /* contatti + mappa */
+      .contact-list{display:flex;flex-direction:column;gap:16px;margin-bottom:22px;}
+      .contact-list .row{display:flex;align-items:flex-start;gap:12px;}
+      .contact-list svg{flex-shrink:0;margin-top:2px;color:var(--amber-light);width:16px;height:16px;}
+      .contact-list p{color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.6;}
+      .contact-list a{color:rgba(255,255,255,.6);transition:color .3s;}
+      .contact-list a:hover{color:var(--amber-light);}
+      .map-wrap{position:relative;width:100%;height:320px;border:1px solid rgba(255,255,255,.12);margin-top:24px;}
+      .map-wrap iframe{width:100%;height:100%;border:0;filter:invert(92%) hue-rotate(180deg) brightness(.92) contrast(.92);}
+      .map-directions{
+        position:absolute;bottom:16px;right:16px;z-index:5;
+        display:flex;align-items:center;gap:8px;background:rgba(10,10,10,.95);
+        color:var(--amber-light);border:1px solid rgba(245,158,11,.55);
+        padding:10px 18px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
+        transition:all .3s;box-shadow:0 6px 16px rgba(0,0,0,.4);
+      }
+      .map-directions:hover{background:var(--amber);color:#000;}
+
+      .footer-bottom{
+        position:relative;z-index:5;background:#000;
+        border-top:1px solid rgba(255,255,255,.08);
+        padding:22px 24px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;
+      }
+      @media(min-width:700px){.footer-bottom{flex-direction:row;justify-content:space-between;text-align:left;}}
+      .footer-bottom p{color:rgba(255,255,255,.35);font-size:.8rem;}
+      .footer-bottom .links{display:flex;gap:20px;}
+      .footer-bottom .links a{color:rgba(255,255,255,.35);font-size:.8rem;transition:color .3s;}
+      .footer-bottom .links a:hover{color:var(--amber-light);}
+    </style>
+  </head>
+  <body>
+
+    <!-- NAV -->
+    <nav id="mainNav">
+      <div class="nav-inner">
+        <div class="nav-logo" onclick="goTo('hero')">
+          <img src="images/logo.png" alt="Il Picasso della Carne" />
+        </div>
+        <div class="nav-links">
+          <button onclick="goTo('benvenuto')">Chi Siamo</button>
+          <button onclick="goTo('arte')">La Nostra Arte</button>
+          <button onclick="goTo('galleria')">Galleria</button>
+          <button onclick="goTo('recensioni')">Recensioni</button>
+          <button onclick="goTo('footer')">Contatti</button>
+          <button class="nav-book" onclick="goTo('prenota')">Prenota</button>
+        </div>
+        <button class="nav-toggle" id="navToggle" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <button onclick="goTo('benvenuto')">Chi Siamo</button>
+        <button onclick="goTo('arte')">La Nostra Arte</button>
+        <button onclick="goTo('galleria')">Galleria</button>
+        <button onclick="goTo('recensioni')">Recensioni</button>
+        <button onclick="goTo('prenota')">Prenota</button>
+        <button onclick="goTo('footer')">Contatti</button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="bg"></div>
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <div class="hero-top">
+          <img class="hero-logo" src="images/logo.png" alt="Il Picasso della Carne" />
+          <h1>Il Picasso della Carne</h1>
+          <p class="subtitle">Braceria</p>
+          <div class="divider-dot"><div class="line"></div><div class="dot"></div><div class="line"></div></div>
+        </div>
+        <div class="hero-buttons">
+          <a href="tel:+393791523590" class="btn btn-solid">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Prenota Ora
+          </a>
+          <a href="https://www.thefork.it/ristorante/il-picasso-della-carne-r843923#booking=" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Prenota Online
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENVENUTO -->
+    <section id="benvenuto">
+      <div class="top-line"></div>
+      <div class="wrap fade-in">
+        <p class="eyebrow" style="text-align:center;">Benvenuti</p>
+        <h2>Un Luogo dove la <span class="italic-amber">Carne</span> diventa Arte</h2>
+        <div class="divider-dot" style="justify-content:center;margin-bottom:2.4rem;">
+          <div class="line"></div>
+          <svg width="16" height="16" fill="var(--amber)" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          <div class="line"></div>
+        </div>
+        <p>Benvenuti da <strong>Il Picasso della Carne</strong>, la braceria di Fabrizio Lombardi nel cuore di Apricena, dove ogni taglio esposto al banco diventa un'opera da ammirare prima ancora che da assaggiare.</p>
+        <p>Al nostro banco trovi razze pregiate da tutto il mondo — Wagyu, Chianina, Fasona Romagnola, Rubia Gallega, Bavarese, Scottona — selezionate una ad una e cotte alla brace viva, per portare in tavola sapore autentico e cotture precise.</p>
+        <p>Qui non si mangia semplicemente — si vive il rito della brace, si condivide la tavola, ci si lascia guidare dalla passione di chi la carne la conosce davvero.</p>
+      </div>
+    </section>
+
+    <!-- LA NOSTRA ARTE -->
+    <section id="arte" class="split-section right">
+      <div class="split-bg" style="background-image:url('images/bg-arte.jpg');"></div>
+      <div class="split-blur"></div>
+      <div class="split-content">
+        <div class="split-inner fade-in">
+          <p class="eyebrow">La Nostra Filosofia</p>
+          <h2>L'Arte della <span class="italic-amber">Carne</span></h2>
+          <div class="mini-divider"><div class="line"></div><div class="dot"></div></div>
+          <p>Ogni pezzo di carne che arriva sulla nostra griglia è stato scelto con cura maniacale. Frolliamo e selezioniamo razze pregiate come Wagyu, Chianina, Fasona Romagnola e Rubia Gallega, garantendo carni tenere, saporite e di altissima qualità.</p>
+          <p>La brace è un'arte antica: il calore del fuoco vivo esalta i sapori naturali della carne, creando quella crosticina dorata e quel cuore rosato che fanno la differenza tra un semplice pasto e un'esperienza gastronomica.</p>
+          <p>Fabrizio e il suo team conoscono ogni segreto del fuoco: temperatura, tempo, distanza. Ogni taglio viene sezionato e trattato a vista, con rispetto e passione.</p>
+          <div class="tags">
+            <span>Carni Selezionate</span><span>Brace Viva</span><span>Tagli a Vista</span><span>Km Zero</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERIA -->
+    <section id="galleria">
+      <div class="section-head fade-in">
+        <p class="eyebrow">Le Nostre Immagini</p>
+        <h2>Galleria</h2>
+        <div class="divider-dot" style="justify-content:center;margin-top:1.2rem;">
+          <div class="line"></div><div class="dot"></div><div class="line"></div>
+        </div>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <div class="lightbox" id="lightbox">
+      <button class="close-btn" onclick="closeLightbox()" aria-label="Chiudi">&times;</button>
+      <button class="nav-btn prev-btn" onclick="navLightbox(-1)" aria-label="Precedente">&#8249;</button>
+      <img id="lightboxImg" src="" alt="" />
+      <button class="nav-btn next-btn" onclick="navLightbox(1)" aria-label="Successiva">&#8250;</button>
+    </div>
+
+    <!-- DALLA TERRA ALLA TAVOLA -->
+    <section id="qualita" class="split-section left">
+      <div class="split-bg" style="background-image:url('images/bg-qualita.jpg');background-position:center 78%;"></div>
+      <div class="split-blur"></div>
+      <div class="split-content">
+        <div class="split-inner fade-in">
+          <p class="eyebrow">La Nostra Qualità</p>
+          <h2>Dalla Terra alla <span class="italic-amber">Tavola</span></h2>
+          <div class="mini-divider"><div class="dot"></div><div class="line"></div></div>
+          <p>Il segreto della nostra braceria è la qualità assoluta delle materie prime. Al banco trovi tagli pregiati da tutto il mondo — Wagyu, Shimenthal, Bavarese, Rubia Gallega, Chianina, Fasona Romagnola, Prussiana — scelti e sezionati a vista.</p>
+          <p>Accanto alle grandi bistecche, la nostra selezione di arrosticini e torcinelli alla brace, insieme a primi piatti fatti in casa e contorni preparati ogni giorno.</p>
+          <div class="bullet-list">
+            <div class="item"><div class="b"></div><p>Cottura su brace viva</p></div>
+            <div class="item"><div class="b"></div><p>Tagli pregiati sezionati a vista al banco</p></div>
+            <div class="item"><div class="b"></div><p>Arrosticini e torcinelli fatti in casa</p></div>
+            <div class="item"><div class="b"></div><p>Primi piatti e contorni preparati ogni giorno</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECENSIONI -->
+    <section id="recensioni">
+      <div class="section-head fade-in">
+        <p class="eyebrow">Cosa Dicono di Noi</p>
+        <h2>Le Recensioni</h2>
+        <div class="stars">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <p class="rating-line">9,2/10 su TheFork · oltre 260 recensioni</p>
+      </div>
+      <div class="reviews-grid" id="reviewsGrid"></div>
+    </section>
+
+    <!-- IL NOSTRO LOCALE -->
+    <section class="split-section left">
+      <div class="split-bg" style="background-image:url('images/bg-locale.jpg');"></div>
+      <div class="split-blur"></div>
+      <div class="split-content">
+        <div class="split-inner fade-in">
+          <p class="eyebrow">Dove Siamo</p>
+          <h2>Il Nostro <span class="italic-amber">Locale</span></h2>
+          <div class="mini-divider"><div class="dot"></div><div class="line"></div></div>
+          <p style="margin-bottom:1.6rem;">Ci troviamo in Via Luigi Cadorna 56, ad Apricena. Un locale accogliente e curato nei dettagli, perfetto per una cena romantica, una serata tra amici o un'occasione speciale, con il banco carni a vista e il profumo della brace che accompagna la serata.</p>
+          <div class="icon-list">
+            <div class="item">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <p>Via Luigi Cadorna 56, 71011 Apricena (FG)</p>
+            </div>
+            <div class="item">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <p>379 152 3590</p>
+            </div>
+            <div class="item">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <p>lombardifabrizio11@gmail.com</p>
+            </div>
+            <div class="item">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p>Chiuso il mercoledì · altri giorni 9:00–15:00 e 19:30–23:45</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRENOTA -->
+    <section id="prenota">
+      <div class="glow"></div>
+      <div class="wrap fade-in">
+        <div class="divider-dot" style="justify-content:center;">
+          <div class="line"></div>
+          <svg width="18" height="18" fill="var(--amber)" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div class="line"></div>
+        </div>
+        <p class="eyebrow" style="text-align:center;">Riserva il Tuo Posto</p>
+        <h2>Prenota la tua <span class="italic-amber">Serata</span></h2>
+        <p class="desc">Non perdere l'opportunità di vivere un'esperienza gastronomica unica. Prenota il tuo tavolo e lascia che il fuoco della nostra brace ti conquisti.</p>
+        <div class="prenota-buttons">
+          <a href="tel:+393791523590" class="btn btn-solid">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Chiama Ora
+          </a>
+          <a href="https://www.thefork.it/ristorante/il-picasso-della-carne-r843923#booking=" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border-color:rgba(245,158,11,.6);color:var(--amber-light);">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Prenota Online
+          </a>
+        </div>
+        <p class="addr">Via Luigi Cadorna 56, Apricena (FG)</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="bg"></div>
+      <div class="overlay"></div>
+      <div class="top-line"></div>
+      <div class="footer-content">
+        <div class="footer-grid">
+          <div class="footer-col-brand">
+            <img src="images/logo.png" alt="Il Picasso della Carne" />
+            <p>Braceria ad Apricena. Tagli pregiati selezionati al banco, arrosticini e torcinelli alla brace, cucinati con passione da Fabrizio e dal suo team.</p>
+            <div class="social-row">
+              <a href="https://www.instagram.com/il.picasso.della.carne" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href="https://www.facebook.com/fabiolombardi78/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <a href="https://www.thefork.it/ristorante/il-picasso-della-carne-r843923#booking=" target="_blank" rel="noopener noreferrer" aria-label="TheFork">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h3>Orari di Apertura</h3>
+            <div class="hours-list" id="hoursList"></div>
+          </div>
+
+          <div class="footer-col">
+            <h3>Contatti &amp; Dove Siamo</h3>
+            <div class="contact-list">
+              <div class="row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <p>Via Luigi Cadorna 56<br/>71011 Apricena (FG)</p>
+              </div>
+              <div class="row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                <p><a href="tel:+393791523590">379 152 3590</a></p>
+              </div>
+              <div class="row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <p><a href="mailto:lombardifabrizio11@gmail.com">lombardifabrizio11@gmail.com</a></p>
+              </div>
+            </div>
+            <div class="map-wrap">
+              <iframe
+                src="https://www.google.com/maps?q=Via+Luigi+Cadorna+56,+71011+Apricena+FG&z=16&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Mappa Il Picasso della Carne"></iframe>
+              <a class="map-directions"
+                 href="https://www.google.com/maps/dir/?api=1&destination=Via+Luigi+Cadorna+56,+71011+Apricena+(FG)"
+                 target="_blank" rel="noopener noreferrer">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 5l7 7-7 7M5 12h14"/></svg>
+                Indicazioni
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Il Picasso della Carne — Tutti i diritti riservati</p>
+        <div class="links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ---------- NAV ----------
+      function goTo(id){
+        const el = document.getElementById(id);
+        if(el) el.scrollIntoView({behavior:'smooth'});
+        closeMobileMenu();
+      }
+      function toggleMobileMenu(){
+        document.getElementById('navToggle').classList.toggle('open');
+        document.getElementById('mobileMenu').classList.toggle('open');
+      }
+      function closeMobileMenu(){
+        document.getElementById('navToggle').classList.remove('open');
+        document.getElementById('mobileMenu').classList.remove('open');
+      }
+      window.addEventListener('scroll', () => {
+        document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+      });
+
+      // ---------- FADE-IN ON SCROLL ----------
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+      }, {threshold:.15});
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+      // ---------- GALLERY ----------
+      const galleryImages = [
+        {url:'images/gallery-1-banco.jpg', alt:'Banco carni Il Picasso della Carne'},
+        {url:'images/gallery-2-bistecca-griglia.jpg', alt:'Bistecca sulla griglia'},
+        {url:'images/gallery-3-torcinelli.jpg', alt:'Torcinelli su bruschetta'},
+        {url:'images/gallery-4-burger.jpg', alt:'Hamburger gourmet con patate'},
+        {url:'images/gallery-6-spiedini.jpg', alt:'Spiedini di carne pronti per la brace'},
+        {url:'images/gallery-9-carpaccio.jpg', alt:'Carpaccio con rucola e grana'},
+        {url:'images/gallery-10-fiamma.jpg', alt:'Fiammata in padella'},
+        {url:'images/gallery-12-formaggio.jpg', alt:'Selezione di formaggi'}
+      ];
+      const grid = document.getElementById('galleryGrid');
+      galleryImages.forEach((img, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Apri immagine: ' + img.alt);
+        btn.onclick = () => openLightbox(i);
+        const image = document.createElement('img');
+        image.src = img.url; image.alt = img.alt; image.loading = 'lazy';
+        btn.appendChild(image);
+        grid.appendChild(btn);
+      });
+      let currentImg = null;
+      function openLightbox(i){
+        currentImg = i;
+        document.getElementById('lightboxImg').src = galleryImages[i].url;
+        document.getElementById('lightboxImg').alt = galleryImages[i].alt;
+        document.getElementById('lightbox').classList.add('open');
+      }
+      function closeLightbox(){
+        document.getElementById('lightbox').classList.remove('open');
+        currentImg = null;
+      }
+      function navLightbox(dir){
+        if(currentImg === null) return;
+        currentImg = (currentImg + dir + galleryImages.length) % galleryImages.length;
+        document.getElementById('lightboxImg').src = galleryImages[currentImg].url;
+        document.getElementById('lightboxImg').alt = galleryImages[currentImg].alt;
+      }
+      window.addEventListener('keydown', (e) => {
+        if(currentImg === null) return;
+        if(e.key === 'Escape') closeLightbox();
+        if(e.key === 'ArrowRight') navLightbox(1);
+        if(e.key === 'ArrowLeft') navLightbox(-1);
+      });
+
+      // ---------- REVIEWS ----------
+      const reviews = [
+        {name:'Lucia M.', text:"Personale gentilissimo: mentre aspettavamo le grigliate ci hanno offerto un assaggio di polpettine e bruschette. La grigliata di suino era ottima, buonissime anche le bombette."},
+        {name:'Matteo D.', text:'Ottimo cibo, ambiente familiare, servizio perfetto. Si consiglia di passarci.'},
+        {name:'Rocco B.', text:'Accoglienza eccezionale e qualità e cottura della carne davvero ottime. Complimenti a tutto lo staff.'},
+        {name:'Filippo I.', text:"Una vera perla nella città di Apricena, con un'ottima scelta al banco carne. Personale giovane ma attento, proprietari molto cordiali."},
+        {name:'Carmine O.', text:'Ottima scoperta: qualità della carne eccellente, pane e olio buonissimi. Servizio cortese e gentile.'},
+        {name:'Massimo R.', text:'È sempre un piacere tornare per gustare carne cucinata a perfezione. Consigliato ai veri amanti della carne.'}
+      ];
+      const starSvg = '<svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+      const reviewsGrid = document.getElementById('reviewsGrid');
+      reviews.forEach((r, i) => {
+        const card = document.createElement('div');
+        card.className = 'review-card fade-in';
+        card.style.transitionDelay = (i*80) + 'ms';
+        card.innerHTML = `
+          <div class="quote-mark">"</div>
+          <div class="stars">${starSvg.repeat(5)}</div>
+          <p>"${r.text}"</p>
+          <div class="review-foot">
+            <span class="name">${r.name}</span>
+            <span class="source">TheFork</span>
+          </div>`;
+        reviewsGrid.appendChild(card);
+        observer.observe(card);
+      });
+
+      // ---------- ORARI ACCORDION ----------
+      const hoursData = [
+        {day:'Lunedì', open:true},
+        {day:'Martedì', open:true},
+        {day:'Mercoledì', open:false},
+        {day:'Giovedì', open:true},
+        {day:'Venerdì', open:true},
+        {day:'Sabato', open:true},
+        {day:'Domenica', open:true},
+      ];
+      const hoursList = document.getElementById('hoursList');
+      hoursData.forEach((d, i) => {
+        const item = document.createElement('div');
+        item.className = 'hours-day' + (d.open ? '' : ' closed');
+        item.innerHTML = `
+          <button class="hours-day-btn" ${d.open ? '' : 'disabled'}>
+            <span class="day-name">${d.day}</span>
+            <span class="day-status">
+              <span class="status-text ${d.open ? 'open' : ''}">${d.open ? 'Aperto' : 'Chiuso'}</span>
+              ${d.open ? '<span class="chevron"></span>' : ''}
+            </span>
+          </button>
+          ${d.open ? `<div class="hours-panel">
+            <div class="hours-panel-inner">
+              <div class="row"><span class="label">Pranzo</span><span class="time">9:00 – 15:00</span></div>
+              <div class="row"><span class="label">Cena</span><span class="time">19:30 – 23:45</span></div>
+            </div>
+          </div>` : ''}
+        `;
+        if(d.open){
+          item.querySelector('.hours-day-btn').addEventListener('click', () => {
+            item.classList.toggle('expanded');
+          });
+        }
+        hoursList.appendChild(item);
+      });
+    </script>
+  </body>
+</html>
