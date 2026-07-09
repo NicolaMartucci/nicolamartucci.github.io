@@ -379,11 +379,11 @@
           <div class="contact-fact"><strong>Modalità</strong> Da remoto, in tutta Italia</div>
           <div class="contact-fact"><strong>Email</strong> <a href="mailto:martucci.nicola87@gmail.com" style="color:var(--cyan);">martucci.nicola87@gmail.com</a></div>
         </div>
-        <form action="https://formsubmit.co/martucci.nicola87@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="Nuova richiesta dal sito nicolamartucci.com">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="df424aca-fc36-499c-a01e-65804769de40">
+          <input type="hidden" name="subject" value="Nuova richiesta dal sito nicolamartucci.com">
+          <input type="hidden" name="from_name" value="nicolamartucci.com">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
           <div class="field">
             <label for="nome">Nome</label>
             <input id="nome" name="nome" type="text" placeholder="Come ti chiami" required>
@@ -394,12 +394,13 @@
           </div>
           <div class="field">
             <label for="messaggio">Il tuo progetto</label>
-            <textarea id="messaggio" name="messaggio" placeholder="Che attività hai e cosa deve fare il sito"></textarea>
+            <textarea id="messaggio" name="messaggio" placeholder="Che attività hai e cosa deve fare il sito" required></textarea>
           </div>
           <div class="submit-row">
-            <button type="submit" class="btn-primary">Invia richiesta</button>
+            <button type="submit" class="btn-primary" id="contactSubmitBtn">Invia richiesta</button>
             <span class="form-note">Nessuno spam, solo una risposta vera.</span>
           </div>
+          <p id="contactFormMsg" role="status" aria-live="polite" style="font-size:14px; margin-top:14px; display:none;"></p>
           <p style="color:var(--text-dimmer); font-size:13px; margin-top:14px;">Se il form non dovesse funzionare, scrivimi direttamente a <a href="mailto:martucci.nicola87@gmail.com" style="color:var(--cyan);">martucci.nicola87@gmail.com</a>.</p>
         </form>
       </div>
@@ -513,6 +514,49 @@
     div.style.animationDelay = line.delay + 'ms';
     container.appendChild(div);
   });
+
+  // Invio form di contatto tramite Web3Forms (fetch, senza redirect di pagina)
+  (function(){
+    const form = document.getElementById('contactForm');
+    const msg = document.getElementById('contactFormMsg');
+    const btn = document.getElementById('contactSubmitBtn');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      const originalBtnText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Invio in corso…';
+      msg.style.display = 'none';
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
+        const result = await response.json();
+
+        if (response.status === 200 && result.success) {
+          msg.textContent = 'Messaggio inviato! Ti risponderò il prima possibile.';
+          msg.style.color = 'var(--cyan)';
+          msg.style.display = 'block';
+          form.reset();
+        } else {
+          throw new Error(result.message || 'Invio non riuscito');
+        }
+      } catch (err) {
+        msg.textContent = 'Non sono riuscito a inviare il messaggio. Scrivimi pure direttamente a martucci.nicola87@gmail.com.';
+        msg.style.color = '#e05555';
+        msg.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+      }
+    });
+  })();
 
   // Cookie banner
   (function(){
