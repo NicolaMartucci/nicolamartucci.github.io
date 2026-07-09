@@ -18,7 +18,7 @@
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
-  html{ scroll-behavior: smooth; }
+  html{ scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
   body{
     background: var(--bg);
@@ -356,7 +356,7 @@
   .field input, .field textarea{
     width:100%; background: var(--bg-panel-2); border: 1px solid var(--border-strong);
     border-radius: 10px; padding: 13px 15px; color: var(--text); font-family: var(--font-display);
-    font-size: 14.5px; transition: border-color .2s ease;
+    font-size: 16px; transition: border-color .2s ease;
   }
   .field textarea{ resize: vertical; min-height: 96px; }
   .field input:focus, .field textarea:focus{ border-color: var(--cyan); }
@@ -419,6 +419,14 @@
     .burger{ width: 30px; height: 30px; padding: 6px; }
     .cta-full{ display:none; }
     .cta-short{ display:inline; }
+    .contact-panel{ padding: 26px 18px; gap: 8px; }
+    .contact-panel h2{ margin-bottom: 12px; }
+    .contact-panel .lead-note{ font-size: 14px; margin-bottom: 20px; }
+    .contact-fact{ font-size: 13px; gap: 8px; }
+    .contact-fact strong{ min-width: 90px; }
+    form{ gap: 12px; margin-top: 6px; }
+    .field input, .field textarea{ padding: 12px 13px; }
+    .submit-row{ flex-wrap: wrap; gap: 10px; }
   }
 
   @media (prefers-reduced-motion: reduce){
