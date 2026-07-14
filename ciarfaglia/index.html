@@ -84,6 +84,104 @@
     transition: transform .25s ease, background-color .25s ease;
   }
   .info-btn:hover { transform: translateY(-2px); }
+
+  /* RICONOSCIMENTI — tab cards */
+  .award-tab {
+    border: 1px solid rgba(255,255,255,0.1);
+    background: linear-gradient(160deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 65%);
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), border-color .4s ease, background .4s ease;
+  }
+  .award-tab:hover {
+    transform: translateY(-8px);
+    border-color: var(--gold);
+    background: linear-gradient(160deg, rgba(201,162,75,0.1), rgba(255,255,255,0) 70%);
+  }
+  .award-tab-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 3.2rem;
+    line-height: 1;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+    color: transparent;
+    transition: -webkit-text-stroke .4s ease;
+  }
+  .award-tab:hover .award-tab-number {
+    -webkit-text-stroke: 1px var(--gold);
+  }
+  .award-tab-icon {
+    transition: transform .4s ease, color .4s ease;
+    color: rgba(255,255,255,0.5);
+  }
+  .award-tab:hover .award-tab-icon {
+    transform: scale(1.12) rotate(-4deg);
+    color: var(--gold);
+  }
+  .award-tab-line {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px; width: 0;
+    background: var(--gold);
+    transition: width .5s ease;
+  }
+  .award-tab:hover .award-tab-line { width: 100%; }
+
+  /* PRENOTA — sezione aggressiva */
+  .book-section { position: relative; overflow: hidden; background:#0a0a0a; }
+  .book-diagonal {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      linear-gradient(115deg, transparent 0%, transparent 58%, rgba(201,162,75,0.07) 58%, rgba(201,162,75,0.07) 60%, transparent 60%, transparent 100%),
+      radial-gradient(circle at 85% 15%, rgba(201,162,75,0.08), transparent 55%),
+      #0d0d0d;
+  }
+  .book-card {
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+    padding: 2rem 1.75rem;
+    text-align: left;
+    transition: border-color .3s ease, transform .3s ease, background .3s ease;
+  }
+  .book-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    background: rgba(201,162,75,0.05);
+  }
+  .book-card svg { transition: transform .3s ease, color .3s ease; color: rgba(255,255,255,0.6); }
+  .book-card:hover svg { transform: scale(1.15); color: var(--gold); }
+  .book-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-top: .85rem;
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    transition: gap .3s ease;
+  }
+  .book-mini-btn:hover { gap: .6rem; }
+  .book-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    color: #0a0a0a;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    padding: 1.3rem 3rem;
+    font-size: 1rem;
+    border-radius: 3px;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .book-cta:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 14px 34px rgba(255,255,255,0.2);
+  }
 </style>
 </head>
 
@@ -116,25 +214,50 @@
 
 <!-- RICONOSCIMENTI -->
 <section id="riconoscimenti" class="py-24 sm:py-32 md:py-40 px-5 sm:px-8 md:px-10 max-w-6xl mx-auto">
-  <div class="text-center mb-14 md:mb-20" data-aos="fade-up">
-    <h2 class="text-3xl sm:text-4xl md:text-5xl uppercase mb-4">I nostri riconoscimenti</h2>
-    <p class="opacity-60 text-sm sm:text-base max-w-xl mx-auto">Anni di dedizione, tecnica e passione per il mestiere, premiati nelle competizioni di settore.</p>
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-14 md:mb-20" data-aos="fade-up">
+    <div>
+      <span class="gold text-[11px] sm:text-xs uppercase tracking-[0.4em] block mb-3">Eccellenza certificata</span>
+      <h2 class="text-3xl sm:text-4xl md:text-5xl uppercase leading-[0.95]">I nostri<br>riconoscimenti</h2>
+    </div>
+    <p class="opacity-50 text-sm sm:text-base max-w-xs sm:text-right">Anni di dedizione, tecnica e passione per il mestiere, premiati nelle competizioni di settore.</p>
   </div>
+
   <div class="grid sm:grid-cols-3 gap-5 md:gap-6">
-    <div class="award-card rounded-xl p-7 md:p-8 text-center" data-aos="fade-up">
-      <div class="gold text-3xl mb-4">01</div>
+    <div class="award-tab relative rounded-2xl p-7 md:p-9 overflow-hidden" data-aos="fade-up">
+      <div class="award-tab-number mb-6">01</div>
+      <svg class="award-tab-icon w-8 h-8 mb-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M7 4h10v3.5c0 2.9-2.2 5.3-5 5.5-2.8-.2-5-2.6-5-5.5V4z"/>
+        <path d="M7 5H3.5A2.5 2.5 0 0 0 6 8.5"/>
+        <path d="M17 5h3.5A2.5 2.5 0 0 1 18 8.5"/>
+        <path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 17h4v3h-4z"/>
+      </svg>
       <h3 class="syne text-base sm:text-lg uppercase mb-2 leading-snug">Razor Fade</h3>
-      <p class="opacity-60 text-xs sm:text-sm uppercase tracking-widest">Trofeo Normanno 2K23</p>
+      <p class="opacity-50 text-xs sm:text-sm uppercase tracking-[0.2em]">Trofeo Normanno · 2K23</p>
+      <div class="award-tab-line"></div>
     </div>
-    <div class="award-card rounded-xl p-7 md:p-8 text-center" data-aos="fade-up" data-aos-delay="100">
-      <div class="gold text-3xl mb-4">02</div>
+
+    <div class="award-tab relative rounded-2xl p-7 md:p-9 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+      <div class="award-tab-number mb-6">02</div>
+      <svg class="award-tab-icon w-8 h-8 mb-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M7 4h10v3.5c0 2.9-2.2 5.3-5 5.5-2.8-.2-5-2.6-5-5.5V4z"/>
+        <path d="M7 5H3.5A2.5 2.5 0 0 0 6 8.5"/>
+        <path d="M17 5h3.5A2.5 2.5 0 0 1 18 8.5"/>
+        <path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 17h4v3h-4z"/>
+      </svg>
       <h3 class="syne text-base sm:text-lg uppercase mb-2 leading-snug">Razor Fade</h3>
-      <p class="opacity-60 text-xs sm:text-sm uppercase tracking-widest">Moda e Arte 2K23</p>
+      <p class="opacity-50 text-xs sm:text-sm uppercase tracking-[0.2em]">Moda e Arte · 2K23</p>
+      <div class="award-tab-line"></div>
     </div>
-    <div class="award-card rounded-xl p-7 md:p-8 text-center" data-aos="fade-up" data-aos-delay="200">
-      <div class="gold text-3xl mb-4">03</div>
+
+    <div class="award-tab relative rounded-2xl p-7 md:p-9 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+      <div class="award-tab-number mb-6">03</div>
+      <svg class="award-tab-icon w-8 h-8 mb-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M6 3h12l-1 8-5 2-5-2-1-8z"/>
+        <path d="M12 13v4"/><path d="M8 21h8"/><path d="M10 17h4v4h-4z"/>
+      </svg>
       <h3 class="syne text-base sm:text-lg uppercase mb-2 leading-snug">Sfida tra Barbieri</h3>
-      <p class="opacity-60 text-xs sm:text-sm uppercase tracking-widest">2K23</p>
+      <p class="opacity-50 text-xs sm:text-sm uppercase tracking-[0.2em]">2K23</p>
+      <div class="award-tab-line"></div>
     </div>
   </div>
 </section>
@@ -207,26 +330,36 @@
 </section>
 
 <!-- BOOKING / INFO -->
-<section id="book" class="py-24 sm:py-32 md:py-40 px-5 sm:px-8 md:px-10 bg-zinc-950">
-  <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-4xl sm:text-5xl md:text-6xl mb-4 uppercase" data-aos="fade-up">Prenota il tuo taglio</h2>
-    <p class="opacity-60 text-sm sm:text-base mb-12 md:mb-16" data-aos="fade-up">Chiamaci o vieni a trovarci in negozio</p>
+<section id="book" class="book-section py-24 sm:py-32 md:py-40 px-5 sm:px-8 md:px-10">
+  <div class="book-diagonal"></div>
+  <div class="relative z-10 max-w-4xl mx-auto text-center">
+    <span class="gold text-[11px] sm:text-xs uppercase tracking-[0.4em] block mb-4" data-aos="fade-up">Non aspettare</span>
+    <h2 class="text-4xl sm:text-6xl md:text-7xl mb-5 uppercase leading-[0.9]" data-aos="fade-up">Prenota<br><span class="outline">il tuo taglio</span></h2>
+    <p class="opacity-60 text-sm sm:text-base mb-14 md:mb-16" data-aos="fade-up">Chiamaci o vieni a trovarci in negozio — ti aspettiamo.</p>
 
-    <div class="grid sm:grid-cols-3 gap-6 md:gap-8 mb-16 md:mb-20 text-left" data-aos="fade-up">
-      <div class="border border-white/10 rounded-xl p-6">
+    <div class="grid sm:grid-cols-3 gap-4 md:gap-5 mb-14 md:mb-16" data-aos="fade-up">
+      <div class="book-card">
+        <svg class="w-7 h-7 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M4 4c0 9.4 6.6 16 16 16l2-4-6-2-2 2c-2.4-1-4-2.6-5-5l2-2-2-6z"/>
+        </svg>
         <h3 class="syne text-xs uppercase tracking-[0.25em] gold mb-3">Telefono</h3>
-        <a href="tel:+393501093802" class="text-lg sm:text-xl block hover:opacity-70 transition">350 109 3802</a>
+        <a href="tel:+393501093802" class="text-lg sm:text-xl font-semibold block hover:opacity-70 transition">350 109 3802</a>
       </div>
-      <div class="border border-white/10 rounded-xl p-6">
+      <div class="book-card">
+        <svg class="w-7 h-7 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/>
+        </svg>
         <h3 class="syne text-xs uppercase tracking-[0.25em] gold mb-3">Indirizzo</h3>
-        <p class="text-sm sm:text-base leading-relaxed mb-3">Via Amendola 23<br>71011 Apricena (FG)</p>
+        <p class="text-sm sm:text-base leading-relaxed">Via Amendola 23<br>71011 Apricena (FG)</p>
         <a href="https://www.google.com/maps/dir/?api=1&destination=41.78306432375838,15.447004681530169"
-           target="_blank" rel="noopener"
-           class="info-btn inline-block text-xs uppercase tracking-widest border border-white/30 rounded-full px-4 py-2 hover:bg-white hover:text-black">
-          Indicazioni
+           target="_blank" rel="noopener" class="book-mini-btn">
+          Indicazioni <span>→</span>
         </a>
       </div>
-      <div class="border border-white/10 rounded-xl p-6">
+      <div class="book-card">
+        <svg class="w-7 h-7 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>
+        </svg>
         <h3 class="syne text-xs uppercase tracking-[0.25em] gold mb-3">Orari</h3>
         <p class="text-sm sm:text-base leading-relaxed">
           Lunedì: chiuso<br>
@@ -235,8 +368,8 @@
       </div>
     </div>
 
-    <a href="tel:+393501093802" class="inline-block bg-white text-black px-10 sm:px-12 py-4 sm:py-5 rounded-full text-base sm:text-lg uppercase tracking-widest hover:bg-gold hover:scale-105 transition" data-aos="fade-up">
-      Riserva ora
+    <a href="tel:+393501093802" class="book-cta" data-aos="fade-up">
+      <span>Riserva ora</span>
     </a>
 
     <div class="flex justify-center gap-4 mt-14 md:mt-16" data-aos="fade-up">
