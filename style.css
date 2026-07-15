@@ -95,11 +95,12 @@
   /* ---------- HERO ---------- */
   .hero{
     position: relative;
-    height: 92vh;
-    min-height: 620px;
+    min-height: 92vh;
+    height: auto;
+    padding-top: 120px;
     display:flex;
     align-items:flex-end;
-    overflow: hidden;
+    overflow: visible;
     border-top: none;
   }
   .hero-media{
