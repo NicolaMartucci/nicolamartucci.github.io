@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1721000001",
+    "titolo": "Consegnato il cantiere di Villa sul Gargano",
+    "testo": "Si è conclusa questa settimana la consegna della Villa sul Gargano, un intervento che ha visto lavorare fianco a fianco lo studio tecnico e l'impresa dalla prima ipotesi progettuale fino alle finiture. Un ringraziamento speciale va a tutta la squadra di cantiere che ha rispettato tempi e capitolato.",
+    "immagine": "https://picsum.photos/seed/news1/800/500",
+    "data": "2026-06-02",
+    "stato": "pubblicato"
+  },
+  {
+    "id": "1721000002",
+    "titolo": "Al via lo studio preliminare per la piazza del mercato",
+    "testo": "La parte tecnica ha avviato il rilievo e le prime ipotesi progettuali per la riqualificazione della piazza del mercato. Nelle prossime settimane presenteremo due scenari alternativi, con particolare attenzione alla permeabilità delle superfici e all'illuminazione serale.",
+    "immagine": "https://picsum.photos/seed/news2/800/500",
+    "data": "2026-05-18",
+    "stato": "pubblicato"
+  },
+  {
+    "id": "1721000003",
+    "titolo": "Studio Arké cerca un tecnico impianti",
+    "testo": "Apriamo una nuova posizione per un tecnico impianti da inserire nel team di progettazione. Se ti appassiona il dettaglio impiantistico e vuoi lavorare a stretto contatto con il cantiere, trovi tutte le informazioni nella sezione Lavora con noi.",
+    "immagine": "https://picsum.photos/seed/news3/800/500",
+    "data": "2026-04-30",
+    "stato": "pubblicato"
+  }
+]
