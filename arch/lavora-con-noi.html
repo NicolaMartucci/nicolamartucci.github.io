@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lavora con noi — Studio FParchitetto</title>
+<meta name="description" content="Posizioni aperte in impresa e in studio tecnico. Invia la tua candidatura a Studio FParchitetto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header -solid">
+  <a href="index.html" class="logo">FParchitetto</a>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="impresa.html">Impresa</a></li>
+      <li><a href="tecnica.html">Parte Tecnica</a></li>
+      <li><a href="news.php">News</a></li>
+      <li><a href="lavora-con-noi.html" class="-active">Lavora con noi</a></li>
+      <li><a href="preventivo.html">Preventivo</a></li>
+      <li><a href="contatti.html">Contatti</a></li>
+    </ul>
+  </nav>
+  <button class="nav-toggle" aria-label="Apri menu"><span></span><span></span><span></span></button>
+</header>
+
+<section class="section" style="padding-top:170px;">
+  <div class="container">
+    <div class="eyebrow">Lavora con noi</div>
+    <h1 class="section-title">Crescere tra cantiere e tavolo da disegno</h1>
+    <p class="section-lead">Cerchiamo persone per l'impresa e per lo studio tecnico. Candidati anche senza una posizione aperta: leggiamo ogni curriculum.</p>
+
+    <div class="open-roles">
+      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Capocantiere</h4><span>Impresa · Tempo pieno</span></div>
+      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Progettista junior</h4><span>Parte tecnica · Tempo pieno</span></div>
+      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Tecnico impianti</h4><span>Parte tecnica · Stage / Tempo pieno</span></div>
+    </div>
+
+    <form class="job-form" action="admin/api/candidatura.php" method="post" enctype="multipart/form-data">
+      <div class="field-row">
+        <div class="field">
+          <label for="nome">Nome e cognome</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="reparto">Reparto di interesse</label>
+          <select id="reparto" name="reparto">
+            <option>Impresa</option>
+            <option>Parte tecnica</option>
+            <option>Non so, ditemi voi</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cv">Curriculum (PDF)</label>
+          <input type="file" id="cv" name="cv" accept="application/pdf">
+        </div>
+      </div>
+      <div class="field">
+        <label for="messaggio">Messaggio</label>
+        <textarea id="messaggio" name="messaggio" placeholder="Raccontaci brevemente la tua esperienza..."></textarea>
+      </div>
+      <button type="submit" class="btn" style="align-self:flex-start;">Invia candidatura</button>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>STUDIO FPARCHITETTO</h4>
+        <p style="color:var(--c-base-2); max-width:280px; font-size:.92rem;">Un'unica realtà, due anime: l'impresa che costruisce e lo studio tecnico che progetta.</p>
+      </div>
+      <div>
+        <h4>REPARTI</h4>
+        <a href="impresa.html">Impresa</a>
+        <a href="tecnica.html">Parte Tecnica</a>
+        <a href="news.php">News</a>
+      </div>
+      <div>
+        <h4>STUDIO</h4>
+        <a href="lavora-con-noi.html">Lavora con noi</a>
+        <a href="preventivo.html">Richiedi un preventivo</a>
+        <a href="impresa.html#chi-siamo">Chi siamo</a>
+      </div>
+      <div>
+        <h4>CONTATTI</h4>
+        <a href="mailto:info@fparchitetto.it">info@fparchitetto.it</a>
+        <a href="tel:+390000000000">+39 000 000 0000</a>
+        <a href="contatti.html">Vieni a trovarci →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Studio FParchitetto — P.IVA 00000000000</span>
+      <span>Contenuti e foto di esempio, da sostituire</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
