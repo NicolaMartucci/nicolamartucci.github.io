@@ -37,8 +37,8 @@
 
 <section class="split-hero">
 
-  <a href="impresa.html" class="split-panel -impresa" data-href="impresa.html"
-     style="background-image:url('https://picsum.photos/seed/fparchitetto-cantiere-edile/1200/1400');">
+  <a href="impresa.html" class="split-panel -impresa" data-href="impresa.html">
+    <div class="split-bg" style="background-image:url('assets/img/hero-impresa.svg');"></div>
     <div class="split-content">
       <div class="split-kicker">01 — Costruire</div>
       <h1 class="split-title">Impresa</h1>
@@ -47,8 +47,8 @@
     </div>
   </a>
 
-  <a href="tecnica.html" class="split-panel -tecnica" data-href="tecnica.html"
-     style="background-image:url('https://picsum.photos/seed/fparchitetto-progetto/1200/1400');">
+  <a href="tecnica.html" class="split-panel -tecnica" data-href="tecnica.html">
+    <div class="split-bg" style="background-image:url('assets/img/hero-tecnica.svg');"></div>
     <div class="split-content" style="text-align:right; margin-left:auto;">
       <div class="split-kicker">02 — Progettare</div>
       <h1 class="split-title">Parte Tecnica</h1>
@@ -58,7 +58,12 @@
   </a>
 
   <div class="split-seam"></div>
-  <div class="split-mark"><img src="assets/img/logo-fparchitetto.jpg" alt="FParchitetto"></div>
+  <div class="split-mark">
+    <picture>
+      <source srcset="assets/img/logo-fparchitetto.webp" type="image/webp">
+      <img src="assets/img/logo-fparchitetto.jpg" alt="FParchitetto">
+    </picture>
+  </div>
 </section>
 
 <footer class="site-footer">

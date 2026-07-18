@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.site-header');
   if (header) {
     const onScroll = () => {
-      header.classList.toggle('-solid', window.scrollY > 40);
+      header.classList.toggle('-solid', window.scrollY > 8);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
