@@ -28,6 +28,11 @@ function anteprimaTesto(string $testo, int $len = 140): string {
     }
     return strlen($testo) > $len ? substr($testo, 0, $len) . '…' : $testo;
 }
+function baseUrl() {
+    $protocollo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    return $protocollo . '://' . $host . rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+}
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -36,6 +41,20 @@ function anteprimaTesto(string $testo, int $len = 140): string {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>News — Studio FParchitetto</title>
 <meta name="description" content="Novità dai cantieri e dallo studio tecnico di Studio FParchitetto.">
+<link rel="canonical" href="<?= baseUrl() ?>/news.php">
+
+<!-- Anteprima social -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Studio FParchitetto">
+<meta property="og:title" content="News — Studio FParchitetto">
+<meta property="og:description" content="Novità dai cantieri e dallo studio tecnico di Studio FParchitetto.">
+<meta property="og:image" content="<?= baseUrl() ?>/assets/img/logo-fparchitetto.jpg">
+<meta property="og:url" content="<?= baseUrl() ?>/news.php">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="News — Studio FParchitetto">
+<meta name="twitter:description" content="Novità dai cantieri e dallo studio tecnico di Studio FParchitetto.">
+<meta name="twitter:image" content="<?= baseUrl() ?>/assets/img/logo-fparchitetto.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -44,11 +63,12 @@ function anteprimaTesto(string $testo, int $len = 140): string {
 <body>
 
 <header class="site-header -solid">
-  <a href="index.html" class="logo">FParchitetto</a>
+  <a href="index.html" class="logo">architettopotenza.it</a>
   <nav class="main-nav">
     <ul>
-      <li><a href="impresa.html">Impresa</a></li>
-      <li><a href="tecnica.html">Parte Tecnica</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="impresa.html">Azienda</a></li>
+      <li><a href="tecnica.html">Ufficio Tecnico</a></li>
       <li><a href="news.php" class="-active">News</a></li>
       <li><a href="lavora-con-noi.html">Lavora con noi</a></li>
       <li><a href="preventivo.html">Preventivo</a></li>
@@ -69,14 +89,15 @@ function anteprimaTesto(string $testo, int $len = 140): string {
     <?php else: ?>
       <div class="news-grid">
         <?php foreach ($news as $n): ?>
-          <article class="news-card">
+          <a class="news-card" href="news-articolo.php?id=<?= urlencode($n['id'] ?? '') ?>">
             <div class="news-thumb" style="background-image:url('<?= escape($n['immagine'] ?? '') ?>');"></div>
             <div class="news-body">
-              <div class="news-date"><?= escape(formatDataIt($n['data'] ?? '', $mesi)) ?></div>
+              <div class="news-date"><?= escape(formatDataIt($n['data'] ?? '', $mesi)) ?><?php if (!empty($n['allegato'])): ?> · <span class="news-attach-tag">📎 Allegato</span><?php endif; ?></div>
               <h3><?= escape($n['titolo'] ?? '') ?></h3>
               <p><?= escape(anteprimaTesto($n['testo'] ?? '')) ?></p>
+              <span class="news-readmore">Leggi la news →</span>
             </div>
-          </article>
+          </a>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>
@@ -88,12 +109,12 @@ function anteprimaTesto(string $testo, int $len = 140): string {
     <div class="footer-grid">
       <div>
         <h4>STUDIO FPARCHITETTO</h4>
-        <p style="color:var(--c-base-2); max-width:280px; font-size:.92rem;">Un'unica realtà, due anime: l'impresa che costruisce e lo studio tecnico che progetta.</p>
+        <p style="color:var(--c-base-2); max-width:280px; font-size:.92rem;">Un'unica realtà, due anime: l'azienda che costruisce e l'ufficio tecnico che progetta.</p>
       </div>
       <div>
         <h4>REPARTI</h4>
-        <a href="impresa.html">Impresa</a>
-        <a href="tecnica.html">Parte Tecnica</a>
+        <a href="impresa.html">Azienda</a>
+        <a href="tecnica.html">Ufficio Tecnico</a>
         <a href="news.php">News</a>
       </div>
       <div>
@@ -105,12 +126,12 @@ function anteprimaTesto(string $testo, int $len = 140): string {
       <div>
         <h4>CONTATTI</h4>
         <a href="mailto:info@fparchitetto.it">info@fparchitetto.it</a>
-        <a href="tel:+390000000000">+39 000 000 0000</a>
+        <a href="tel:+390882421153">0882 421153</a>
         <a href="contatti.html">Vieni a trovarci →</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Studio FParchitetto — P.IVA 00000000000</span>
+      <span>© 2026 Studio FParchitetto — Power Building P.IVA 03977340714 · Fp Architetto P.IVA 04065840714 — Corso Garibaldi, 20, 71011 Apricena (FG)</span>
       <span>Contenuti e foto di esempio, da sostituire</span>
     </div>
   </div>

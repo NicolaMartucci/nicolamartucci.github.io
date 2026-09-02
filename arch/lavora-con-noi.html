@@ -3,21 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
 <title>Lavora con noi — Studio FParchitetto</title>
-<meta name="description" content="Posizioni aperte in impresa e in studio tecnico. Invia la tua candidatura a Studio FParchitetto.">
+<meta name="description" content="Posizioni aperte in azienda e in ufficio tecnico. Invia la tua candidatura a Studio FParchitetto.">
+<link rel="canonical" href="https://www.architettopotenza.it/lavora-con-noi.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Studio FParchitetto">
+<meta property="og:title" content="Lavora con noi — Studio FParchitetto">
+<meta property="og:description" content="Posizioni aperte in azienda e in ufficio tecnico. Invia la tua candidatura a Studio FParchitetto.">
+<meta property="og:image" content="https://www.architettopotenza.it/assets/img/logo-fparchitetto.jpg">
+<meta property="og:url" content="https://www.architettopotenza.it/lavora-con-noi.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+  /* Stile locale alla pagina Lavora con noi */
+  .apply-layout{ display:grid; grid-template-columns:1.3fr 1fr; gap:70px; margin-top:50px; align-items:start; }
+  @media (max-width:900px){ .apply-layout{ grid-template-columns:1fr; gap:36px; } }
+  .apply-note{ font-size:.9rem; color:var(--c-ink-soft); margin-top:26px; padding-top:20px; border-top:1px solid var(--c-line); }
+</style>
 </head>
 <body>
 
 <header class="site-header -solid">
-  <a href="index.html" class="logo">FParchitetto</a>
+  <a href="index.html" class="logo">architettopotenza.it</a>
   <nav class="main-nav">
     <ul>
-      <li><a href="impresa.html">Impresa</a></li>
-      <li><a href="tecnica.html">Parte Tecnica</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="impresa.html">Azienda</a></li>
+      <li><a href="tecnica.html">Ufficio Tecnico</a></li>
       <li><a href="news.php">News</a></li>
       <li><a href="lavora-con-noi.html" class="-active">Lavora con noi</a></li>
       <li><a href="preventivo.html">Preventivo</a></li>
@@ -31,45 +47,58 @@
   <div class="container">
     <div class="eyebrow">Lavora con noi</div>
     <h1 class="section-title">Crescere tra cantiere e tavolo da disegno</h1>
-    <p class="section-lead">Cerchiamo persone per l'impresa e per lo studio tecnico. Candidati anche senza una posizione aperta: leggiamo ogni curriculum.</p>
+    <p class="section-lead">Cerchiamo persone per l'azienda e per l'ufficio tecnico. Candidati anche senza una posizione aperta: leggiamo ogni curriculum.</p>
 
-    <div class="open-roles">
-      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Capocantiere</h4><span>Impresa · Tempo pieno</span></div>
-      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Progettista junior</h4><span>Parte tecnica · Tempo pieno</span></div>
-      <div class="role-item"><h4 style="margin:0; text-transform:none; font-size:1.05rem;">Tecnico impianti</h4><span>Parte tecnica · Stage / Tempo pieno</span></div>
+    <img src="assets/img/lavora-con-noi-cantiere.jpg" alt="Squadra al lavoro in cantiere al tramonto" style="width:100%; height:clamp(200px, 30vw, 380px); object-fit:cover; border-radius:3px; margin:36px 0;">
+
+    <div class="apply-layout">
+      <form class="job-form" action="admin/api/candidatura.php" method="post" enctype="multipart/form-data">
+        <div class="field-row">
+          <div class="field">
+            <label for="nome">Nome e cognome</label>
+            <input type="text" id="nome" name="nome" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="reparto">Reparto di interesse</label>
+            <select id="reparto" name="reparto">
+              <option>Capocantiere</option>
+              <option>Operaio specializzato</option>
+              <option>Operaio qualificato</option>
+              <option>Manovale edile</option>
+              <option>Progettista</option>
+              <option>Area contabile</option>
+              <option>Non so, ditemi voi</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cv">Curriculum (PDF)</label>
+            <input type="file" id="cv" name="cv" accept="application/pdf">
+          </div>
+        </div>
+        <div class="field">
+          <label for="messaggio">Messaggio</label>
+          <textarea id="messaggio" name="messaggio" placeholder="Raccontaci brevemente la tua esperienza..."></textarea>
+        </div>
+        <button type="submit" class="btn" style="align-self:flex-start;">Invia candidatura</button>
+        <p class="apply-note">I dati personali inseriti in questo modulo sono trattati da Studio FParchitetto, in qualità di titolare del trattamento, ai sensi del Regolamento (UE) 2016/679 (GDPR), al solo fine di valutare la presente candidatura. I dati non saranno ceduti a terzi né utilizzati per finalità diverse da quella indicata.</p>
+      </form>
+
+      <div>
+        <h2 class="section-title" style="font-size:1.4rem;">Come funziona</h2>
+        <p style="color:var(--c-ink-soft);">Ogni candidatura viene letta personalmente: se il profilo è in linea con una posizione aperta o con le esigenze future dello studio, ti ricontattiamo per un primo colloquio conoscitivo.</p>
+        <p style="color:var(--c-ink-soft);">Se preferisci, puoi anche scriverci direttamente:</p>
+        <p style="margin-top:18px;">
+          <a href="mailto:info@fparchitetto.it" style="font-family:var(--font-mono); font-size:.9rem;">info@fparchitetto.it</a><br>
+          <a href="tel:+390882421153" style="font-family:var(--font-mono); font-size:.9rem;">0882 421153</a>
+        </p>
+      </div>
     </div>
-
-    <form class="job-form" action="admin/api/candidatura.php" method="post" enctype="multipart/form-data">
-      <div class="field-row">
-        <div class="field">
-          <label for="nome">Nome e cognome</label>
-          <input type="text" id="nome" name="nome" required>
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="reparto">Reparto di interesse</label>
-          <select id="reparto" name="reparto">
-            <option>Impresa</option>
-            <option>Parte tecnica</option>
-            <option>Non so, ditemi voi</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="cv">Curriculum (PDF)</label>
-          <input type="file" id="cv" name="cv" accept="application/pdf">
-        </div>
-      </div>
-      <div class="field">
-        <label for="messaggio">Messaggio</label>
-        <textarea id="messaggio" name="messaggio" placeholder="Raccontaci brevemente la tua esperienza..."></textarea>
-      </div>
-      <button type="submit" class="btn" style="align-self:flex-start;">Invia candidatura</button>
-    </form>
   </div>
 </section>
 
@@ -78,12 +107,12 @@
     <div class="footer-grid">
       <div>
         <h4>STUDIO FPARCHITETTO</h4>
-        <p style="color:var(--c-base-2); max-width:280px; font-size:.92rem;">Un'unica realtà, due anime: l'impresa che costruisce e lo studio tecnico che progetta.</p>
+        <p style="color:var(--c-base-2); max-width:280px; font-size:.92rem;">Un'unica realtà, due anime: l'azienda che costruisce e l'ufficio tecnico che progetta.</p>
       </div>
       <div>
         <h4>REPARTI</h4>
-        <a href="impresa.html">Impresa</a>
-        <a href="tecnica.html">Parte Tecnica</a>
+        <a href="impresa.html">Azienda</a>
+        <a href="tecnica.html">Ufficio Tecnico</a>
         <a href="news.php">News</a>
       </div>
       <div>
@@ -95,12 +124,12 @@
       <div>
         <h4>CONTATTI</h4>
         <a href="mailto:info@fparchitetto.it">info@fparchitetto.it</a>
-        <a href="tel:+390000000000">+39 000 000 0000</a>
+        <a href="tel:+390882421153">0882 421153</a>
         <a href="contatti.html">Vieni a trovarci →</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Studio FParchitetto — P.IVA 00000000000</span>
+      <span>© 2026 Studio FParchitetto — Power Building P.IVA 03977340714 · Fp Architetto P.IVA 04065840714 — Corso Garibaldi, 20, 71011 Apricena (FG)</span>
       <span>Contenuti e foto di esempio, da sostituire</span>
     </div>
   </div>
